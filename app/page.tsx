@@ -1,3 +1,9 @@
+import { UsersPage } from "@/modules/users"
+
 export default function Home() {
-    return <div>Hello World</div>
+    return (
+        <>
+            <UsersPage />
+        </>
+    )
 }

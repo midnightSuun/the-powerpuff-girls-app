@@ -8,9 +8,11 @@
         "start": "next start",
         "format": "prettier --write .",
         "lint": "eslint . --fix",
+        "codegen": "graphql-codegen",
         "prepare": "husky"
     },
     "dependencies": {
+        "graphql-request": "^7.4.0",
         "next": "16.3.6",
         "react": "19.2.8",
         "react-dom": "19.2.8"
@@ -18,6 +20,8 @@
     "devDependencies": {
         "@commitlint/cli": "^21.2.3",
         "@commitlint/config-conventional": "^21.2.3",
+        "@graphql-codegen/cli": "^7.4.2",
+        "@graphql-codegen/client-preset": "^6.2.0",
         "@tailwindcss/postcss": "^4",
         "@types/node": "^20",
         "@types/react": "^19",
