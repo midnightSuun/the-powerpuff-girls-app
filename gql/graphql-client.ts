@@ -1,4 +1,4 @@
-import { ACCESS_TOKEN_COOKIE } from "@/modules/consts"
+import { ACCESS_TOKEN_COOKIE } from "@/modules/auth/consts"
 import { GraphQLClient } from "graphql-request"
 import { cookies } from "next/headers"
 
