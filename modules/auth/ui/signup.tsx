@@ -3,14 +3,14 @@
 import Link from "next/link"
 import { useActionState } from "react"
 
-import { login } from "../api/login"
+import { signup } from "../api/signup"
 
-export function Login() {
-    const [state, formAction, isPending] = useActionState(login, {})
+export function Signup() {
+    const [state, formAction, isPending] = useActionState(signup, {})
 
     return (
         <main className="mx-auto max-w-md p-6">
-            <h1 className="mb-6 text-2xl font-semibold">Вход</h1>
+            <h1 className="mb-6 text-2xl font-semibold">Регистрация</h1>
             <form className="space-y-4" action={formAction}>
                 <p className="space-y-1">
                     <label htmlFor="email">Email</label>
@@ -32,6 +32,16 @@ export function Login() {
                         required
                     />
                 </p>
+                <p className="space-y-1">
+                    <label htmlFor="confirmPassword">Подтвердите пароль</label>
+                    <input
+                        className="block w-full border px-3 py-2"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        type="password"
+                        required
+                    />
+                </p>
                 {state.error && (
                     <p className="text-sm text-red-700" role="alert">
                         {state.error}
@@ -42,11 +52,11 @@ export function Login() {
                     type="submit"
                     disabled={isPending}
                 >
-                    {isPending ? "Входим..." : "Войти"}
+                    {isPending ? "Регистрируем..." : "Зарегистрироваться"}
                 </button>
             </form>
             <p className="mt-4 text-sm">
-                Нет аккаунта? <Link href="/register">Зарегистрироваться</Link>
+                Уже есть аккаунт? <Link href="/login">Войти</Link>
             </p>
         </main>
     )

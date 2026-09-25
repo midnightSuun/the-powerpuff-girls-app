@@ -2,8 +2,8 @@ import { cookies } from "next/headers"
 
 import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from "../consts"
 
-const ACCESS_TOKEN_MAX_AGE = 9 * 60 // 9 min
-const REFRESH_TOKEN_MAX_AGE = 7 * 24 * 60 * 60 - 60 // 7 days - 1 min
+const ACCESS_TOKEN_MAX_AGE = 9 * 60
+const REFRESH_TOKEN_MAX_AGE = 7 * 24 * 60 * 60 - 60
 
 const baseCookieOptions = {
     httpOnly: true,
