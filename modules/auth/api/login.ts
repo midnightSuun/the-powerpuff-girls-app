@@ -6,16 +6,37 @@ import { getGql, LoginDocument } from "@/gql"
 
 import { setTokens } from "../helpers/tokens"
 
-type Props = {
-    email: string
-    password: string
+export type AuthActionState = {
+    error?: string
 }
 
-export async function login({ email, password }: Props) {
-    const gql = await getGql()
-    const data = await gql.request(LoginDocument, { auth: { email, password } })
+export async function login(
+    _previousState: AuthActionState,
+    formData: FormData,
+): Promise<AuthActionState> {
+    const email = String(formData.get("email") ?? "").trim()
+    const password = String(formData.get("password") ?? "")
 
-    await setTokens(data.login.access_token, data.login.refresh_token)
+    if (!email || !password) {
+        return { error: "Введите email и пароль." }
+    }
 
+    let tokens: { accessToken: string; refreshToken: string }
+
+    try {
+        const gql = await getGql()
+        const data = await gql.request(LoginDocument, {
+            auth: { email, password },
+        })
+
+        tokens = {
+            accessToken: data.login.access_token,
+            refreshToken: data.login.refresh_token,
+        }
+    } catch {
+        return { error: "Не удалось войти. Проверьте email и пароль." }
+    }
+
+    await setTokens(tokens.accessToken, tokens.refreshToken)
     redirect("/")
 }
