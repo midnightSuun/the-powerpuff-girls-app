@@ -1,6 +1,6 @@
 query GetUsers($params: SearchPaginationInput) {
     users(params: $params) {
-      items {
+        items {
             id
             email
         }
