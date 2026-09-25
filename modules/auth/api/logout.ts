@@ -3,10 +3,7 @@
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 
-import {
-    ACCESS_TOKEN_COOKIE,
-    REFRESH_TOKEN_COOKIE,
-} from "@/modules/auth/consts"
+import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from "../consts"
 
 export async function logout() {
     const cookieStore = await cookies()
