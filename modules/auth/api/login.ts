@@ -4,7 +4,7 @@ import { redirect } from "next/navigation"
 
 import { getGql, LoginDocument } from "@/gql"
 
-import { setTokens } from "../tokens"
+import { setTokens } from "../helpers/tokens"
 
 type Props = {
     email: string

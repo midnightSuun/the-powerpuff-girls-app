@@ -1,0 +1,6 @@
+mutation RefreshToken {
+  updateToken {
+    access_token
+    refresh_token
+  }
+}
