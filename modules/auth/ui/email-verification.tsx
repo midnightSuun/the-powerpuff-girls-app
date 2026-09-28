@@ -4,22 +4,32 @@ import { Button } from "@/components/ui/button"
 
 import { useEmailVerification } from "../hooks/use-email-verification"
 
-export function EmailVerification() {
+type EmailVerificationProps = {
+    email: string
+    sendFailed: boolean
+}
+
+export function EmailVerification({
+    email,
+    sendFailed,
+}: EmailVerificationProps) {
     const {
         isDarkMode,
         setIsDarkMode,
         serverError,
+        statusMessage,
         isPending,
         inputRefs,
         handleSubmit,
         onSubmit,
+        handleResend,
         handleLater,
         handleChange,
         handleKeyDown,
         codeValue,
         errors,
         isValid,
-    } = useEmailVerification()
+    } = useEmailVerification(email, sendFailed)
 
     return (
         <div
@@ -42,7 +52,8 @@ export function EmailVerification() {
                         Email verification
                     </h1>
                     <p className="text-xs text-muted-foreground">
-                        Enter the verification code we sent to your email
+                        Enter the verification code we sent to{" "}
+                        {email || "your email"}
                     </p>
                 </div>
 
@@ -92,6 +103,15 @@ export function EmailVerification() {
                         </p>
                     )}
 
+                    {statusMessage && (
+                        <p
+                            className="text-xs text-green-600 text-center w-full"
+                            role="status"
+                        >
+                            {statusMessage}
+                        </p>
+                    )}
+
                     <div className="w-full flex flex-col items-center pt-4 space-y-4">
                         <Button
                             type="submit"
@@ -104,6 +124,15 @@ export function EmailVerification() {
                         >
                             {isPending ? "CHECKING..." : "CONFIRM"}
                         </Button>
+
+                        <button
+                            type="button"
+                            onClick={handleResend}
+                            disabled={!email || isPending}
+                            className="text-[11px] font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                            {isPending ? "SENDING..." : "RESEND EMAIL"}
+                        </button>
 
                         <button
                             type="button"

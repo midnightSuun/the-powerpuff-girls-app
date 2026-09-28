@@ -5,15 +5,21 @@ import { useRouter } from "next/navigation"
 import { useRef, useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 
+import { sendVerificationAction, verifyMailAction } from "../api/verification"
 import {
     type VerificationFormValues,
     verificationSchema,
 } from "../schemas/verification"
 
-export function useEmailVerification() {
+export function useEmailVerification(email: string, sendFailed: boolean) {
     const router = useRouter()
     const [isDarkMode, setIsDarkMode] = useState<boolean>(false)
-    const [serverError, setServerError] = useState<string | null>(null)
+    const [serverError, setServerError] = useState<string | null>(
+        sendFailed
+            ? "We couldn't send the verification email. Please try again."
+            : null,
+    )
+    const [statusMessage, setStatusMessage] = useState<string | null>(null)
     const [isPending, startTransition] = useTransition()
 
     const inputRefs = useRef<(HTMLInputElement | null)[]>([])
@@ -61,18 +67,38 @@ export function useEmailVerification() {
 
     const onSubmit = (data: VerificationFormValues) => {
         setServerError(null)
+        setStatusMessage(null)
 
         startTransition(async () => {
-            console.log("Verified code:", data.code)
+            const result = await verifyMailAction(data.code)
+
+            if (result.error) {
+                setServerError(result.error)
+                return
+            }
 
             router.push("/")
             router.refresh()
         })
     }
 
-    const handleLater = () => {
-        console.log("Verification skipped for later")
+    const handleResend = () => {
+        setServerError(null)
+        setStatusMessage(null)
 
+        startTransition(async () => {
+            const result = await sendVerificationAction(email)
+
+            if (result.error) {
+                setServerError(result.error)
+                return
+            }
+
+            setStatusMessage("A new verification email has been sent.")
+        })
+    }
+
+    const handleLater = () => {
         router.push("/")
         router.refresh()
     }
@@ -81,10 +107,12 @@ export function useEmailVerification() {
         isDarkMode,
         setIsDarkMode,
         serverError,
+        statusMessage,
         isPending,
         inputRefs,
         handleSubmit,
         onSubmit,
+        handleResend,
         handleLater,
         handleChange,
         handleKeyDown,
