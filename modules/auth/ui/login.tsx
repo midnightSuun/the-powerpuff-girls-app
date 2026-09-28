@@ -1,55 +1,26 @@
 "use client"
 
-import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { useState, useTransition } from "react"
-import { useForm } from "react-hook-form"
 
 import { Button } from "@/components/ui/button"
 
-import { type AuthActionState, login } from "../api/login"
-import { type LoginFormData, loginSchema } from "../schemas/login"
+import { useLogin } from "../hooks/use-login"
 import { AuthTabs } from "./components/authTabs"
 
 export function Login() {
-    const router = useRouter()
-    const [isDarkMode, setIsDarkMode] = useState<boolean>(false)
-    const [showPassword, setShowPassword] = useState(false)
-    const [serverError, setServerError] = useState<string | undefined>(
-        undefined,
-    )
-    const [isPending, startTransition] = useTransition()
-
     const {
+        isDarkMode,
+        setIsDarkMode,
+        showPassword,
+        setShowPassword,
+        serverError,
+        isPending,
         register,
         handleSubmit,
-        formState: { errors, isValid },
-    } = useForm<LoginFormData>({
-        resolver: zodResolver(loginSchema),
-        mode: "onChange",
-    })
-
-    const onSubmit = (data: LoginFormData) => {
-        setServerError(undefined)
-
-        startTransition(async () => {
-            const formData = new FormData()
-            formData.append("email", data.email)
-            formData.append("password", data.password)
-
-            const initialState: AuthActionState = { error: undefined }
-            const result = await login(initialState, formData)
-
-            if (result?.error) {
-                setServerError(result.error)
-            } else {
-                // Перенаправляем на страницу верификации при успешном входе
-                router.push("/verify")
-                router.refresh()
-            }
-        })
-    }
+        onSubmit,
+        errors,
+        isValid,
+    } = useLogin()
 
     return (
         <div

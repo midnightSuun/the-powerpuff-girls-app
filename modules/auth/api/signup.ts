@@ -53,5 +53,6 @@ export async function signup(
     }
 
     await setTokens(tokens.accessToken, tokens.refreshToken)
-    redirect("/")
+
+    redirect("/verification")
 }
