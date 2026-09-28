@@ -2,12 +2,14 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 
 import { Button } from "@/components/ui/button"
 
+import { AuthActionState } from "../api/login"
+import { signup } from "../api/signup"
 import { AuthTabs } from "./components/authTabs"
 
 const signUpSchema = z
@@ -29,7 +31,8 @@ export function Signup() {
     const [isDarkMode, setIsDarkMode] = useState<boolean>(false)
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-    const [isPending, setIsPending] = useState(false)
+    const [serverError, setServerError] = useState<string | null>(null)
+    const [isPending, startTransition] = useTransition()
 
     const {
         register,
@@ -41,11 +44,21 @@ export function Signup() {
     })
 
     const onSubmit = (data: SignUpFormValues) => {
-        setIsPending(true)
-        setTimeout(() => {
-            setIsPending(false)
-            console.log("Register submitted:", data)
-        }, 1000)
+        setServerError(null)
+
+        startTransition(async () => {
+            const formData = new FormData()
+            formData.append("email", data.email)
+            formData.append("password", data.password)
+            formData.append("confirmPassword", data.confirmPassword)
+
+            const initialState = {} as AuthActionState
+            const result = await signup(initialState, formData)
+
+            if (result?.error) {
+                setServerError(result.error)
+            }
+        })
     }
 
     return (
@@ -212,6 +225,15 @@ export function Signup() {
                             </span>
                         )}
                     </div>
+
+                    {serverError && (
+                        <p
+                            className="text-xs text-red-400 text-center w-full"
+                            role="alert"
+                        >
+                            {serverError}
+                        </p>
+                    )}
 
                     <div className="w-full flex flex-col items-center pt-6 space-y-6">
                         <Button

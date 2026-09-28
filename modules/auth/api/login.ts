@@ -8,6 +8,7 @@ import { setTokens } from "../helpers/tokens"
 
 export type AuthActionState = {
     error?: string
+    field?: string
 }
 
 export async function login(
@@ -18,7 +19,7 @@ export async function login(
     const password = String(formData.get("password") ?? "")
 
     if (!email || !password) {
-        return { error: "Введите email и пароль." }
+        return { error: "Email and password are required." }
     }
 
     let tokens: { accessToken: string; refreshToken: string }
@@ -34,7 +35,9 @@ export async function login(
             refreshToken: data.login.refresh_token,
         }
     } catch {
-        return { error: "Не удалось войти. Проверьте email и пароль." }
+        return {
+            error: "Failed to sign in. Please check your email and password.",
+        }
     }
 
     await setTokens(tokens.accessToken, tokens.refreshToken)

@@ -2,17 +2,24 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 
 import { Button } from "@/components/ui/button"
 
+import { type AuthActionState, login } from "../api/login"
 import { AuthTabs } from "./components/authTabs"
 
 const loginSchema = z.object({
-    email: z.string().email({ message: "Введите корректный email" }),
-    password: z.string().min(6, { message: "Минимум 6 символов" }),
+    email: z
+        .string()
+        .min(1, { message: "Email is required" })
+        .email({ message: "Please enter a valid email address" }),
+    password: z
+        .string()
+        .min(1, { message: "Password is required" })
+        .min(6, { message: "Password must be at least 6 characters long" }),
 })
 
 type LoginFormData = z.infer<typeof loginSchema>
@@ -20,8 +27,8 @@ type LoginFormData = z.infer<typeof loginSchema>
 export function Login() {
     const [isDarkMode, setIsDarkMode] = useState<boolean>(false)
     const [showPassword, setShowPassword] = useState(false)
-    const [isPending, setIsPending] = useState(false)
-    const [error, setError] = useState("")
+    const [serverError, setServerError] = useState<string | null>(null)
+    const [isPending, startTransition] = useTransition()
 
     const {
         register,
@@ -32,13 +39,21 @@ export function Login() {
         mode: "onChange",
     })
 
-    const onSubmit = async (data: LoginFormData) => {
-        setIsPending(true)
-        setError("")
-        setTimeout(() => {
-            setIsPending(false)
-            console.log("Login submitted:", data)
-        }, 1000)
+    const onSubmit = (data: LoginFormData) => {
+        setServerError(null)
+
+        startTransition(async () => {
+            const formData = new FormData()
+            formData.append("email", data.email)
+            formData.append("password", data.password)
+
+            const initialState = {} as AuthActionState
+            const result = await login(initialState, formData)
+
+            if (result?.error) {
+                setServerError(result.error)
+            }
+        })
     }
 
     return (
@@ -57,7 +72,7 @@ export function Login() {
                         : "border-neutral-300 text-neutral-800 hover:bg-neutral-100"
                 }`}
             >
-                Тема: {isDarkMode ? "Dark" : "Light"}
+                Theme: {isDarkMode ? "Dark" : "Light"}
             </button>
 
             <AuthTabs activeTab="signin" isDarkMode={isDarkMode} />
@@ -153,12 +168,12 @@ export function Login() {
                         )}
                     </div>
 
-                    {error && (
+                    {serverError && (
                         <p
-                            className="text-sm text-red-400 text-center w-full"
+                            className="text-xs text-red-400 text-center w-full"
                             role="alert"
                         >
-                            {error}
+                            {serverError}
                         </p>
                     )}
 

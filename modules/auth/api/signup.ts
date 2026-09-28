@@ -16,11 +16,11 @@ export async function signup(
     const confirmPassword = String(formData.get("confirmPassword") ?? "")
 
     if (!email || !password || !confirmPassword) {
-        return { error: "Заполните все поля." }
+        return { error: "Please fill in all fields." }
     }
 
     if (password !== confirmPassword) {
-        return { error: "Пароли не совпадают." }
+        return { error: "Passwords do not match." }
     }
 
     let tokens: { accessToken: string; refreshToken: string }
@@ -46,7 +46,9 @@ export async function signup(
                 refreshToken: data.login.refresh_token,
             }
         } catch {
-            return { error: "Не удалось зарегистрироваться. Проверьте данные." }
+            return {
+                error: "Failed to sign up. Please check your credentials.",
+            }
         }
     }
 
