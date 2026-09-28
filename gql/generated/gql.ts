@@ -17,6 +17,7 @@ type Documents = {
     "mutation ForgotPassword($email: String!) {\n  forgotPassword(auth: {email: $email})\n}": typeof types.ForgotPasswordDocument,
     "mutation Login($auth: AuthInput!) {\n  login(auth: $auth) {\n    access_token\n    refresh_token\n  }\n}": typeof types.LoginDocument,
     "mutation RefreshToken {\n  updateToken {\n    access_token\n    refresh_token\n  }\n}": typeof types.RefreshTokenDocument,
+    "mutation ResetPassword($auth: ResetPasswordInput!) {\n  resetPassword(auth: $auth)\n}": typeof types.ResetPasswordDocument,
     "mutation Signup($auth: SignupInput!) {\n  signup(auth: $auth) {\n    access_token\n    refresh_token\n  }\n}": typeof types.SignupDocument,
     "query GetUsers($params: SearchPaginationInput) {\n  users(params: $params) {\n    items {\n      id\n      email\n    }\n    limit\n    total_pages\n  }\n}": typeof types.GetUsersDocument,
 };
@@ -24,6 +25,7 @@ const documents: Documents = {
     "mutation ForgotPassword($email: String!) {\n  forgotPassword(auth: {email: $email})\n}": types.ForgotPasswordDocument,
     "mutation Login($auth: AuthInput!) {\n  login(auth: $auth) {\n    access_token\n    refresh_token\n  }\n}": types.LoginDocument,
     "mutation RefreshToken {\n  updateToken {\n    access_token\n    refresh_token\n  }\n}": types.RefreshTokenDocument,
+    "mutation ResetPassword($auth: ResetPasswordInput!) {\n  resetPassword(auth: $auth)\n}": types.ResetPasswordDocument,
     "mutation Signup($auth: SignupInput!) {\n  signup(auth: $auth) {\n    access_token\n    refresh_token\n  }\n}": types.SignupDocument,
     "query GetUsers($params: SearchPaginationInput) {\n  users(params: $params) {\n    items {\n      id\n      email\n    }\n    limit\n    total_pages\n  }\n}": types.GetUsersDocument,
 };
@@ -54,6 +56,10 @@ export function graphql(source: "mutation Login($auth: AuthInput!) {\n  login(au
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "mutation RefreshToken {\n  updateToken {\n    access_token\n    refresh_token\n  }\n}"): (typeof documents)["mutation RefreshToken {\n  updateToken {\n    access_token\n    refresh_token\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "mutation ResetPassword($auth: ResetPasswordInput!) {\n  resetPassword(auth: $auth)\n}"): (typeof documents)["mutation ResetPassword($auth: ResetPasswordInput!) {\n  resetPassword(auth: $auth)\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

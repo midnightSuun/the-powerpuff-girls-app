@@ -4,21 +4,15 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
-import * as z from "zod"
 
 import { Button } from "@/components/ui/button"
 
 import { requestPasswordReset } from "../api/forgot-password"
 import type { AuthActionState } from "../api/login"
-
-const forgotPasswordSchema = z.object({
-    email: z
-        .string()
-        .min(1, { message: "Email is required" })
-        .email({ message: "Please enter a valid email address" }),
-})
-
-type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>
+import {
+    type ForgotPasswordFormValues,
+    forgotPasswordSchema,
+} from "../schemas/forgot-password"
 
 export function ForgotPasswordPage() {
     const [isDarkMode, setIsDarkMode] = useState<boolean>(false)
@@ -54,20 +48,14 @@ export function ForgotPasswordPage() {
 
     return (
         <div
-            className={`min-h-screen w-full flex flex-col items-center justify-center transition-colors duration-300 relative ${
-                isDarkMode
-                    ? "bg-[#454545] text-[#F5F5F7]"
-                    : "bg-white text-neutral-900"
+            className={`min-h-screen w-full flex flex-col items-center justify-center transition-colors duration-300 relative bg-background text-foreground ${
+                isDarkMode ? "dark" : ""
             }`}
         >
             <button
                 type="button"
                 onClick={() => setIsDarkMode(!isDarkMode)}
-                className={`absolute top-6 right-6 px-3 py-1.5 text-xs font-medium rounded border transition-colors ${
-                    isDarkMode
-                        ? "border-[#F5F5F7]/30 text-[#F5F5F7] hover:bg-white/10"
-                        : "border-neutral-300 text-neutral-800 hover:bg-neutral-100"
-                }`}
+                className="absolute top-6 right-6 px-3 py-1.5 text-xs font-medium rounded border border-auth-card-border text-foreground hover:bg-muted transition-colors"
             >
                 Theme: {isDarkMode ? "Dark" : "Light"}
             </button>
@@ -77,13 +65,7 @@ export function ForgotPasswordPage() {
                     <h1 className="text-3xl tracking-tight mb-2">
                         Forgot password
                     </h1>
-                    <p
-                        className={`text-sm ${
-                            isDarkMode
-                                ? "text-[#F5F5F7]/70"
-                                : "text-neutral-500"
-                        }`}
-                    >
+                    <p className="text-sm text-muted-foreground">
                         We will send you an email with further instructions
                     </p>
                 </div>
@@ -95,11 +77,7 @@ export function ForgotPasswordPage() {
                     <div className="w-full space-y-1">
                         <label
                             htmlFor="email"
-                            className={`block text-xs uppercase tracking-wider ${
-                                isDarkMode
-                                    ? "text-[#F5F5F7]/70"
-                                    : "text-neutral-500"
-                            }`}
+                            className="block text-xs uppercase tracking-wider text-muted-foreground"
                         >
                             Email
                         </label>
@@ -108,12 +86,10 @@ export function ForgotPasswordPage() {
                             type="email"
                             placeholder="example@email.com"
                             {...register("email")}
-                            className={`w-full bg-transparent border rounded-md px-4 py-3 text-sm focus:outline-none focus:border-red-500 transition-colors ${
-                                errors.email ? "border-red-500" : ""
-                            } ${
-                                isDarkMode
-                                    ? "border-[#F5F5F7] text-[#F5F5F7] placeholder:text-[#F5F5F7]/50"
-                                    : "border-neutral-300 text-neutral-900 placeholder:text-neutral-400"
+                            className={`w-full bg-transparent border rounded-md px-4 py-3 text-sm focus:outline-none focus:border-red-500 transition-colors placeholder:text-muted-foreground ${
+                                errors.email
+                                    ? "border-red-500"
+                                    : "border-auth-card-border"
                             }`}
                         />
                         {errors.email && (
@@ -147,11 +123,7 @@ export function ForgotPasswordPage() {
 
                         <Link
                             href="/login"
-                            className={`text-[11px] font-medium tracking-widest uppercase transition-colors ${
-                                isDarkMode
-                                    ? "text-[#F5F5F7]/70 hover:text-[#F5F5F7]"
-                                    : "text-neutral-500 hover:text-neutral-900"
-                            }`}
+                            className="text-[11px] font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors"
                         >
                             Cancel
                         </Link>
