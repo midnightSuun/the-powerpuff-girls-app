@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 
@@ -12,6 +13,7 @@ import { type LoginFormData, loginSchema } from "../schemas/login"
 import { AuthTabs } from "./components/authTabs"
 
 export function Login() {
+    const router = useRouter()
     const [isDarkMode, setIsDarkMode] = useState<boolean>(false)
     const [showPassword, setShowPassword] = useState(false)
     const [serverError, setServerError] = useState<string | undefined>(
@@ -41,6 +43,10 @@ export function Login() {
 
             if (result?.error) {
                 setServerError(result.error)
+            } else {
+                // Перенаправляем на страницу верификации при успешном входе
+                router.push("/verify")
+                router.refresh()
             }
         })
     }
