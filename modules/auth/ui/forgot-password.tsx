@@ -8,25 +8,20 @@ import * as z from "zod"
 
 import { Button } from "@/components/ui/button"
 
-import { type AuthActionState, login } from "../api/login"
-import { AuthTabs } from "./components/authTabs"
+import { requestPasswordReset } from "../api/forgot-password"
+import type { AuthActionState } from "../api/login"
 
-const loginSchema = z.object({
+const forgotPasswordSchema = z.object({
     email: z
         .string()
         .min(1, { message: "Email is required" })
         .email({ message: "Please enter a valid email address" }),
-    password: z
-        .string()
-        .min(1, { message: "Password is required" })
-        .min(6, { message: "Password must be at least 6 characters long" }),
 })
 
-type LoginFormData = z.infer<typeof loginSchema>
+type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>
 
-export function Login() {
+export function ForgotPasswordPage() {
     const [isDarkMode, setIsDarkMode] = useState<boolean>(false)
-    const [showPassword, setShowPassword] = useState(false)
     const [serverError, setServerError] = useState<string | undefined>(
         undefined,
     )
@@ -36,21 +31,20 @@ export function Login() {
         register,
         handleSubmit,
         formState: { errors, isValid },
-    } = useForm<LoginFormData>({
-        resolver: zodResolver(loginSchema),
+    } = useForm<ForgotPasswordFormValues>({
+        resolver: zodResolver(forgotPasswordSchema),
         mode: "onChange",
     })
 
-    const onSubmit = (data: LoginFormData) => {
+    const onSubmit = (data: ForgotPasswordFormValues) => {
         setServerError(undefined)
 
         startTransition(async () => {
             const formData = new FormData()
             formData.append("email", data.email)
-            formData.append("password", data.password)
 
             const initialState: AuthActionState = { error: undefined }
-            const result = await login(initialState, formData)
+            const result = await requestPasswordReset(initialState, formData)
 
             if (result?.error) {
                 setServerError(result.error)
@@ -78,12 +72,10 @@ export function Login() {
                 Theme: {isDarkMode ? "Dark" : "Light"}
             </button>
 
-            <AuthTabs activeTab="signin" isDarkMode={isDarkMode} />
-
-            <div className="w-full max-w-125 px-6 flex flex-col items-center mt-12">
+            <div className="w-full max-w-125 px-6 flex flex-col items-center">
                 <div className="text-center mb-10">
-                    <h1 className="text-3xl font-semibold tracking-tight mb-2">
-                        Welcome back
+                    <h1 className="text-3xl tracking-tight mb-2">
+                        Forgot password
                     </h1>
                     <p
                         className={`text-sm ${
@@ -92,7 +84,7 @@ export function Login() {
                                 : "text-neutral-500"
                         }`}
                     >
-                        Hello again! Sign in to continue
+                        We will send you an email with further instructions
                     </p>
                 </div>
 
@@ -101,9 +93,20 @@ export function Login() {
                     className="w-full flex flex-col items-center space-y-6"
                 >
                     <div className="w-full space-y-1">
+                        <label
+                            htmlFor="email"
+                            className={`block text-xs uppercase tracking-wider ${
+                                isDarkMode
+                                    ? "text-[#F5F5F7]/70"
+                                    : "text-neutral-500"
+                            }`}
+                        >
+                            Email
+                        </label>
                         <input
+                            id="email"
                             type="email"
-                            placeholder="Email"
+                            placeholder="example@email.com"
                             {...register("email")}
                             className={`w-full bg-transparent border rounded-md px-4 py-3 text-sm focus:outline-none focus:border-red-500 transition-colors ${
                                 errors.email ? "border-red-500" : ""
@@ -116,61 +119,6 @@ export function Login() {
                         {errors.email && (
                             <span className="text-xs text-red-400">
                                 {errors.email.message}
-                            </span>
-                        )}
-                    </div>
-
-                    <div className="w-full relative space-y-1">
-                        <div className="relative">
-                            <input
-                                type={showPassword ? "text" : "password"}
-                                placeholder="Password"
-                                {...register("password")}
-                                className={`w-full bg-transparent border rounded-md px-4 py-3 text-sm focus:outline-none focus:border-red-500 transition-colors pr-12 ${
-                                    errors.password ? "border-red-500" : ""
-                                } ${
-                                    isDarkMode
-                                        ? "border-[#F5F5F7] text-[#F5F5F7] placeholder:text-[#F5F5F7]/50"
-                                        : "border-neutral-300 text-neutral-900 placeholder:text-neutral-400"
-                                }`}
-                            />
-
-                            <button
-                                type="button"
-                                onClick={() => setShowPassword(!showPassword)}
-                                className={`absolute right-3 top-1/2 -translate-y-1/2 p-1 transition-colors ${
-                                    isDarkMode
-                                        ? "text-[#F5F5F7]/70 hover:text-[#F5F5F7]"
-                                        : "text-neutral-400 hover:text-neutral-700"
-                                }`}
-                            >
-                                <svg
-                                    className="w-4 h-4"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                >
-                                    {showPassword ? (
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={1.5}
-                                            d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
-                                        />
-                                    ) : (
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={1.5}
-                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                                        />
-                                    )}
-                                </svg>
-                            </button>
-                        </div>
-                        {errors.password && (
-                            <span className="text-xs text-red-400">
-                                {errors.password.message}
                             </span>
                         )}
                     </div>
@@ -188,24 +136,24 @@ export function Login() {
                         <Button
                             type="submit"
                             disabled={!isValid || isPending}
-                            className={`w-40 text-white transition-opacity ${
+                            className={`w-44 text-white transition-opacity ${
                                 !isValid || isPending
                                     ? "bg-red-600/50 cursor-not-allowed"
                                     : "bg-red-600 hover:bg-red-700 cursor-pointer"
                             }`}
                         >
-                            {isPending ? "SIGNING IN..." : "SIGN IN"}
+                            {isPending ? "SENDING..." : "RESET PASSWORD"}
                         </Button>
 
                         <Link
-                            href="/forgot-password"
+                            href="/login"
                             className={`text-[11px] font-medium tracking-widest uppercase transition-colors ${
                                 isDarkMode
                                     ? "text-[#F5F5F7]/70 hover:text-[#F5F5F7]"
                                     : "text-neutral-500 hover:text-neutral-900"
                             }`}
                         >
-                            FORGOT PASSWORD
+                            Cancel
                         </Link>
                     </div>
                 </form>
