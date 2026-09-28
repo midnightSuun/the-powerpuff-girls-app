@@ -8,6 +8,8 @@ import * as z from "zod"
 
 import { Button } from "@/components/ui/button"
 
+import { AuthTabs } from "./components/authTabs"
+
 const loginSchema = z.object({
     email: z.string().email({ message: "Введите корректный email" }),
     password: z.string().min(6, { message: "Минимум 6 символов" }),
@@ -16,7 +18,7 @@ const loginSchema = z.object({
 type LoginFormData = z.infer<typeof loginSchema>
 
 export function Login() {
-    const [isDarkMode, setIsDarkMode] = useState<boolean>(true)
+    const [isDarkMode, setIsDarkMode] = useState<boolean>(false)
     const [showPassword, setShowPassword] = useState(false)
     const [isPending, setIsPending] = useState(false)
     const [error, setError] = useState("")
@@ -35,7 +37,7 @@ export function Login() {
         setError("")
         setTimeout(() => {
             setIsPending(false)
-            console.log("Submitted:", data)
+            console.log("Login submitted:", data)
         }, 1000)
     }
 
@@ -58,20 +60,7 @@ export function Login() {
                 Тема: {isDarkMode ? "Dark" : "Light"}
             </button>
 
-            <div className="absolute top-12 left-1/2 -translate-x-1/2 flex space-x-16 text-sm font-semibold tracking-wider">
-                <div className="relative pb-3 cursor-pointer text-red-500">
-                    <span>SIGN IN</span>
-                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-24 h-0.5 bg-red-500" />
-                </div>
-                <Link
-                    href="/signup"
-                    className={`pb-3 transition-opacity hover:opacity-80 ${
-                        isDarkMode ? "text-[#F5F5F7]" : "text-neutral-500"
-                    }`}
-                >
-                    SIGN UP
-                </Link>
-            </div>
+            <AuthTabs activeTab="signin" isDarkMode={isDarkMode} />
 
             <div className="w-full max-w-125 px-6 flex flex-col items-center mt-12">
                 <div className="text-center mb-10">
@@ -79,7 +68,11 @@ export function Login() {
                         Welcome back
                     </h1>
                     <p
-                        className={`text-sm ${isDarkMode ? "text-[#F5F5F7]/70" : "text-neutral-500"}`}
+                        className={`text-sm ${
+                            isDarkMode
+                                ? "text-[#F5F5F7]/70"
+                                : "text-neutral-500"
+                        }`}
                     >
                         Hello again! Sign in to continue
                     </p>
@@ -130,7 +123,7 @@ export function Login() {
                                 }`}
                             >
                                 <svg
-                                    className="size-4"
+                                    className="w-4 h-4"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     stroke="currentColor"
