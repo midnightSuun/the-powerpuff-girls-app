@@ -1,13 +1,113 @@
+import Link from "next/link"
+import { Suspense } from "react"
+
+import { PaginationComponent } from "@/components/pagination"
+import { SearchInput } from "@/components/search-input"
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table"
+
 import { getUsers } from "../api/get-users"
 
-export async function UsersPage() {
-    const { users } = await getUsers(10, 1, "")
+type Props = {
+    limit: number
+    page: number
+    search: string
+}
+
+type UserAvatarProps = {
+    avatar: string | null
+    firstName: string | null
+}
+
+const UserAvatar = ({ avatar, firstName }: UserAvatarProps) => {
+    const initial = firstName?.trim().charAt(0).toUpperCase() || "?"
+
+    if (!avatar) {
+        return (
+            <span className="flex size-8 items-center justify-center rounded-full bg-muted text-xs font-medium text-muted-foreground">
+                {initial}
+            </span>
+        )
+    }
 
     return (
-        <ul>
-            {users.map((user) => (
-                <li key={user.id}>{user.email}</li>
-            ))}
-        </ul>
+        <img src={avatar} alt="" className="size-8 rounded-full object-cover" />
+    )
+}
+
+async function UsersListAsync({ limit, page, search }: Props) {
+    const { users, totalPages } = await getUsers(limit, page, search)
+
+    return (
+        <>
+            <div className="flex flex-col gap-3 px-4 pt-4 pb-3">
+                <p className="text-sm text-muted-foreground">Employees</p>
+                <SearchInput limit={limit} search={search} />
+            </div>
+            <Table>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead className="w-12">
+                            <span className="sr-only">Avatar</span>
+                        </TableHead>
+                        <TableHead>First Name</TableHead>
+                        <TableHead>Last Name</TableHead>
+                        <TableHead>Email</TableHead>
+                        <TableHead>Department</TableHead>
+                        <TableHead>Position</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {users.map((user) => (
+                        <TableRow
+                            key={user.id}
+                            className="relative cursor-pointer"
+                        >
+                            <TableCell className="w-12">
+                                <UserAvatar
+                                    avatar={user.profile.avatar}
+                                    firstName={user.profile.first_name}
+                                />
+                            </TableCell>
+                            <TableCell>
+                                <Link
+                                    href={`/users/${user.id}`}
+                                    className="after:absolute after:inset-0 after:content-['']"
+                                >
+                                    {user.profile.first_name}
+                                </Link>
+                            </TableCell>
+                            <TableCell>{user.profile.last_name}</TableCell>
+                            <TableCell>{user.email}</TableCell>
+                            <TableCell>{user.department?.name}</TableCell>
+                            <TableCell>{user.position?.name}</TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+            <PaginationComponent
+                totalPages={totalPages}
+                page={page}
+                limit={limit}
+                search={search}
+                path="users"
+            />
+        </>
+    )
+}
+
+export async function UsersPage({ limit, page, search }: Props) {
+    return (
+        <div>
+            <Suspense fallback={<p className="p-4">Loading users...</p>}>
+                <UsersListAsync limit={limit} page={page} search={search} />
+            </Suspense>
+        </div>
     )
 }
