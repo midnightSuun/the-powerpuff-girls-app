@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/table"
 
 import { getUsers } from "../api/get-users"
+import { UserAvatar } from "./user-avatar"
 
 type Props = {
     limit: number
@@ -20,36 +21,11 @@ type Props = {
     search: string
 }
 
-type UserAvatarProps = {
-    avatar: string | null
-    firstName: string | null
-}
-
-const UserAvatar = ({ avatar, firstName }: UserAvatarProps) => {
-    const initial = firstName?.trim().charAt(0).toUpperCase() || "?"
-
-    if (!avatar) {
-        return (
-            <span className="flex size-8 items-center justify-center rounded-full bg-muted text-xs font-medium text-muted-foreground">
-                {initial}
-            </span>
-        )
-    }
-
-    return (
-        <img src={avatar} alt="" className="size-8 rounded-full object-cover" />
-    )
-}
-
 async function UsersListAsync({ limit, page, search }: Props) {
     const { users, totalPages } = await getUsers(limit, page, search)
 
     return (
         <>
-            <div className="flex flex-col gap-3 px-4 pt-4 pb-3">
-                <p className="text-sm text-muted-foreground">Employees</p>
-                <SearchInput limit={limit} search={search} />
-            </div>
             <Table>
                 <TableHeader>
                     <TableRow>
@@ -71,8 +47,9 @@ async function UsersListAsync({ limit, page, search }: Props) {
                         >
                             <TableCell className="w-12">
                                 <UserAvatar
-                                    avatar={user.profile.avatar}
+                                    src={user.profile.avatar}
                                     firstName={user.profile.first_name}
+                                    lastName={user.profile.last_name}
                                 />
                             </TableCell>
                             <TableCell>
@@ -105,6 +82,10 @@ async function UsersListAsync({ limit, page, search }: Props) {
 export async function UsersPage({ limit, page, search }: Props) {
     return (
         <div>
+            <div className="flex flex-col gap-3 px-4 pt-4 pb-3">
+                <p className="text-sm text-muted-foreground">Employees</p>
+                <SearchInput limit={limit} search={search} />
+            </div>
             <Suspense fallback={<p className="p-4">Loading users...</p>}>
                 <UsersListAsync limit={limit} page={page} search={search} />
             </Suspense>
