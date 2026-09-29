@@ -7,11 +7,13 @@ import { useEmailVerification } from "../hooks/use-email-verification"
 type EmailVerificationProps = {
     email: string
     sendFailed: boolean
+    accessToken?: string
 }
 
 export function EmailVerification({
     email,
     sendFailed,
+    accessToken,
 }: EmailVerificationProps) {
     const {
         isDarkMode,
@@ -19,17 +21,19 @@ export function EmailVerification({
         serverError,
         statusMessage,
         isPending,
+        isResending,
         inputRefs,
         handleSubmit,
         onSubmit,
         handleResend,
         handleLater,
         handleChange,
+        handlePaste,
         handleKeyDown,
         codeValue,
         errors,
         isValid,
-    } = useEmailVerification(email, sendFailed)
+    } = useEmailVerification(email, sendFailed, accessToken)
 
     return (
         <div
@@ -78,6 +82,7 @@ export function EmailVerification({
                                     onChange={(e) =>
                                         handleChange(e.target.value, index)
                                     }
+                                    onPaste={handlePaste}
                                     onKeyDown={(e) => handleKeyDown(e, index)}
                                     className="w-11 h-12 text-center text-lg bg-transparent border border-input rounded-md focus:outline-none focus:border-primary transition-colors text-foreground"
                                 />
@@ -128,10 +133,10 @@ export function EmailVerification({
                         <button
                             type="button"
                             onClick={handleResend}
-                            disabled={!email || isPending}
+                            disabled={!email || isResending}
                             className="text-[11px] font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors disabled:cursor-not-allowed disabled:opacity-50"
                         >
-                            {isPending ? "SENDING..." : "RESEND EMAIL"}
+                            {isResending ? "SENDING..." : "RESEND EMAIL"}
                         </button>
 
                         <button

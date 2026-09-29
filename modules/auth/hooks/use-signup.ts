@@ -1,6 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useRouter } from "next/navigation"
 import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 
@@ -9,6 +10,7 @@ import { signup } from "../api/signup"
 import { type SignUpFormValues, signUpSchema } from "../schemas/signup"
 
 export function useSignup() {
+    const router = useRouter()
     const [isDarkMode, setIsDarkMode] = useState<boolean>(false)
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -38,6 +40,8 @@ export function useSignup() {
 
             if (result?.error) {
                 setServerError(result.error)
+            } else if (result?.redirectTo) {
+                router.push(result.redirectTo)
             }
         })
     }

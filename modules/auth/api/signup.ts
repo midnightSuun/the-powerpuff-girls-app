@@ -1,7 +1,6 @@
 "use server"
 
 import { ClientError } from "graphql-request"
-import { redirect } from "next/navigation"
 
 import { getGql, LoginDocument, SignupDocument } from "@/gql"
 
@@ -11,7 +10,7 @@ import type { AuthActionState } from "./login"
 export async function signup(
     _previousState: AuthActionState,
     formData: FormData,
-): Promise<AuthActionState> {
+): Promise<AuthActionState & { redirectTo?: string }> {
     const email = String(formData.get("email") ?? "").trim()
     const password = String(formData.get("password") ?? "")
     const confirmPassword = String(formData.get("confirmPassword") ?? "")
@@ -37,12 +36,16 @@ export async function signup(
             refreshToken: data.signup.refresh_token,
         }
     } catch (error) {
+        console.error("🔴 FULL SIGNUP ERROR:", error)
+
         const errorMessage =
             error instanceof ClientError
                 ? (error.response.errors
                       ?.map(({ message }) => message)
                       .join(" ") ?? "")
-                : ""
+                : String(error)
+
+        console.log("🔴 PARSED ERROR MESSAGE:", errorMessage)
 
         const isUserExists =
             errorMessage.includes("userAlreadyExists") ||
@@ -66,18 +69,22 @@ export async function signup(
                     accessToken: loginData.login.access_token,
                     refreshToken: loginData.login.refresh_token,
                 }
-            } catch {
+            } catch (loginError) {
+                console.error("🔴 LOGIN FALLBACK ERROR:", loginError)
                 return {
                     error: "Failed to sign up due to mail server error. Please try again later.",
                 }
             }
         } else {
             return {
-                error: "Failed to sign up. Please check your credentials or try again later.",
+                error: `Server Error: ${errorMessage || "Unknown error"}`,
             }
         }
     }
 
     await setTokens(tokens.accessToken, tokens.refreshToken)
-    redirect("/")
+
+    return {
+        redirectTo: `/verify-email?email=${encodeURIComponent(email)}`,
+    }
 }

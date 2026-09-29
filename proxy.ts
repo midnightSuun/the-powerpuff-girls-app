@@ -39,14 +39,20 @@ const refreshSession = async (request: NextRequest) => {
     }
 }
 
+const guestOnlyRoutes = ["/login", "/register", "/forgot-password"]
+const publicRoutes = [
+    ...guestOnlyRoutes,
+    "/logout",
+    "/reset-password",
+    "/verify-email",
+]
+
 function isPublic(route: string) {
-    return [
-        "/login",
-        "/register",
-        "/logout",
-        "/forgot-password",
-        "/reset-password",
-    ].includes(route)
+    return publicRoutes.includes(route)
+}
+
+function isGuestOnly(route: string) {
+    return guestOnlyRoutes.includes(route)
 }
 
 export async function proxy(request: NextRequest) {
@@ -64,7 +70,7 @@ export async function proxy(request: NextRequest) {
     const authorized = isAuthorized(request.cookies)
 
     const response =
-        authorized && isPublic(targetPage)
+        authorized && isGuestOnly(targetPage)
             ? NextResponse.redirect(new URL("/", request.url))
             : !authorized && !isPublic(targetPage)
               ? NextResponse.redirect(new URL("/login", request.url))

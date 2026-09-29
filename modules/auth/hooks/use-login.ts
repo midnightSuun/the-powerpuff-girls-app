@@ -9,7 +9,6 @@ import { type AuthActionState, login } from "../api/login"
 import { type LoginFormData, loginSchema } from "../schemas/login"
 
 export function useLogin() {
-    const router = useRouter()
     const [isDarkMode, setIsDarkMode] = useState<boolean>(false)
     const [showPassword, setShowPassword] = useState(false)
     const [serverError, setServerError] = useState<string | undefined>(
@@ -39,9 +38,6 @@ export function useLogin() {
 
             if (result?.error) {
                 setServerError(result.error)
-            } else {
-                router.push("/verify")
-                router.refresh()
             }
         })
     }

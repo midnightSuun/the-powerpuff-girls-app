@@ -1,32 +1,28 @@
 "use server"
 
-import { redirect } from "next/navigation"
+import { ClientError } from "graphql-request"
 
 import { ForgotPasswordDocument, getGql } from "@/gql"
 
-import type { AuthActionState } from "./login"
-
 export async function requestPasswordReset(
-    _previousState: AuthActionState,
-    formData: FormData,
-): Promise<AuthActionState> {
-    const email = String(formData.get("email") ?? "").trim()
-
-    if (!email) {
-        return { error: "Email is required" }
-    }
-
-    const gql = await getGql()
-
+    email: string,
+): Promise<{ error?: string }> {
     try {
-        await gql.request(ForgotPasswordDocument, {
-            email,
-        })
-    } catch {
+        const gql = await getGql()
+        await gql.request(ForgotPasswordDocument, { email: email.trim() })
+        return {}
+    } catch (error) {
+        const message =
+            error instanceof ClientError
+                ? (error.response.errors
+                      ?.map(({ message }) => message)
+                      .join(" ") ?? "")
+                : ""
+
         return {
-            error: "Failed to send reset instructions. Please check your email and try again.",
+            error:
+                message ||
+                "Failed to send reset instructions. Please try again.",
         }
     }
-
-    redirect("/login?reset=sent")
 }

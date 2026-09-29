@@ -5,7 +5,6 @@ import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 
 import { requestPasswordReset } from "../api/forgot-password"
-import type { AuthActionState } from "../api/login"
 import {
     type ForgotPasswordFormValues,
     forgotPasswordSchema,
@@ -16,6 +15,7 @@ export function useForgotPassword() {
     const [serverError, setServerError] = useState<string | undefined>(
         undefined,
     )
+    const [successMessage, setSuccessMessage] = useState<string | null>(null)
     const [isPending, startTransition] = useTransition()
 
     const {
@@ -29,16 +29,15 @@ export function useForgotPassword() {
 
     const onSubmit = (data: ForgotPasswordFormValues) => {
         setServerError(undefined)
+        setSuccessMessage(null)
 
         startTransition(async () => {
-            const formData = new FormData()
-            formData.append("email", data.email)
-
-            const initialState: AuthActionState = { error: undefined }
-            const result = await requestPasswordReset(initialState, formData)
+            const result = await requestPasswordReset(data.email)
 
             if (result?.error) {
                 setServerError(result.error)
+            } else {
+                setSuccessMessage("Instructions have been sent to your email.")
             }
         })
     }
@@ -47,6 +46,7 @@ export function useForgotPassword() {
         isDarkMode,
         setIsDarkMode,
         serverError,
+        successMessage,
         isPending,
         register,
         handleSubmit,
