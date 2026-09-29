@@ -7,7 +7,6 @@ import { getGql, SignupDocument } from "@/gql"
 
 import { setTokens } from "../helpers/tokens"
 import type { AuthActionState } from "./login"
-import { sendVerificationAction } from "./verification"
 
 export async function signup(
     _previousState: AuthActionState,
@@ -64,9 +63,5 @@ export async function signup(
 
     await setTokens(tokens.accessToken, tokens.refreshToken)
 
-    const verificationResult = await sendVerificationAction(email)
-
-    const queryParam = verificationResult.error ? "?sendFailed=true" : ""
-
-    redirect(`/verify-email${queryParam}`)
+    redirect(`/verify-email?email=${encodeURIComponent(email)}`)
 }
