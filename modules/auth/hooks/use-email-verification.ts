@@ -21,6 +21,7 @@ export function useEmailVerification(email: string, sendFailed: boolean) {
     )
     const [statusMessage, setStatusMessage] = useState<string | null>(null)
     const [isPending, startTransition] = useTransition()
+    const [isResending, startResendTransition] = useTransition()
 
     const inputRefs = useRef<(HTMLInputElement | null)[]>([])
 
@@ -86,7 +87,7 @@ export function useEmailVerification(email: string, sendFailed: boolean) {
         setServerError(null)
         setStatusMessage(null)
 
-        startTransition(async () => {
+        startResendTransition(async () => {
             const result = await sendVerificationAction(email)
 
             if (result.error) {
@@ -109,6 +110,7 @@ export function useEmailVerification(email: string, sendFailed: boolean) {
         serverError,
         statusMessage,
         isPending,
+        isResending,
         inputRefs,
         handleSubmit,
         onSubmit,

@@ -2,7 +2,7 @@
 
 import { getGql } from "@/gql"
 
-type VerificationActionState = {
+export type VerificationActionState = {
     error?: string
 }
 

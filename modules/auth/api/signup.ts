@@ -3,10 +3,11 @@
 import { ClientError } from "graphql-request"
 import { redirect } from "next/navigation"
 
-import { getGql, LoginDocument, SignupDocument } from "@/gql"
+import { getGql, SignupDocument } from "@/gql"
 
 import { setTokens } from "../helpers/tokens"
 import type { AuthActionState } from "./login"
+import { sendVerificationAction } from "./verification"
 
 export async function signup(
     _previousState: AuthActionState,
@@ -56,28 +57,16 @@ export async function signup(
             }
         }
 
-        if (errorMessage.includes("failedToSendEmail")) {
-            try {
-                const loginData = await gql.request(LoginDocument, {
-                    auth: { email, password },
-                })
-
-                tokens = {
-                    accessToken: loginData.login.access_token,
-                    refreshToken: loginData.login.refresh_token,
-                }
-            } catch {
-                return {
-                    error: "Failed to sign up due to mail server error. Please try again later.",
-                }
-            }
-        } else {
-            return {
-                error: "Failed to sign up. Please check your credentials or try again later.",
-            }
+        return {
+            error: "Failed to sign up. Please check your credentials or try again later.",
         }
     }
 
     await setTokens(tokens.accessToken, tokens.refreshToken)
-    redirect("/")
+
+    const verificationResult = await sendVerificationAction(email)
+
+    const queryParam = verificationResult.error ? "?sendFailed=true" : ""
+
+    redirect(`/verify-email${queryParam}`)
 }

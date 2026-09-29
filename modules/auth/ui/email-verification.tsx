@@ -19,6 +19,7 @@ export function EmailVerification({
         serverError,
         statusMessage,
         isPending,
+        isResending,
         inputRefs,
         handleSubmit,
         onSubmit,
@@ -128,10 +129,10 @@ export function EmailVerification({
                         <button
                             type="button"
                             onClick={handleResend}
-                            disabled={!email || isPending}
+                            disabled={!email || isResending}
                             className="text-[11px] font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors disabled:cursor-not-allowed disabled:opacity-50"
                         >
-                            {isPending ? "SENDING..." : "RESEND EMAIL"}
+                            {isResending ? "SENDING..." : "RESEND EMAIL"}
                         </button>
 
                         <button
