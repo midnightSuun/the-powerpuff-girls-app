@@ -19,6 +19,7 @@ export async function UserPage({ userId }: Props) {
                 src={user.profile.avatar}
                 firstName={user.profile.first_name}
                 lastName={user.profile.last_name}
+                email={user.email}
             />
         </div>
     )

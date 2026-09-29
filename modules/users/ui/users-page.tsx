@@ -1,3 +1,4 @@
+import { ChevronRight } from "lucide-react"
 import Link from "next/link"
 import { Suspense } from "react"
 
@@ -35,6 +36,9 @@ async function UsersListAsync({ limit, page, search }: Props) {
                         <TableHead>Email</TableHead>
                         <TableHead>Department</TableHead>
                         <TableHead>Position</TableHead>
+                        <TableHead className="w-10">
+                            <span className="sr-only">View</span>
+                        </TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -48,6 +52,7 @@ async function UsersListAsync({ limit, page, search }: Props) {
                                     src={user.profile.avatar}
                                     firstName={user.profile.first_name}
                                     lastName={user.profile.last_name}
+                                    email={user.email}
                                 />
                             </TableCell>
                             <TableCell>
@@ -56,13 +61,16 @@ async function UsersListAsync({ limit, page, search }: Props) {
                                     aria-label={`View ${user.profile.last_name}`}
                                     className="after:absolute after:inset-0 after:content-['']"
                                 >
-                                    {user.profile.first_name ?? "—"}
+                                    {user.profile.first_name}
                                 </Link>
                             </TableCell>
                             <TableCell>{user.profile.last_name}</TableCell>
                             <TableCell>{user.email}</TableCell>
                             <TableCell>{user.department?.name}</TableCell>
                             <TableCell>{user.position?.name}</TableCell>
+                            <TableCell className="w-10 pr-4 text-muted-foreground">
+                                <ChevronRight className="size-4" />
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
