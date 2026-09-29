@@ -1,0 +1,12 @@
+query GetUser($id: ID!) {
+  user(userId: $id) {
+    id
+    email
+    role
+    profile {
+      first_name
+      last_name
+      avatar
+    }
+  }
+}
