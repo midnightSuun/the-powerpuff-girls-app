@@ -7,11 +7,13 @@ import { useEmailVerification } from "../hooks/use-email-verification"
 type EmailVerificationProps = {
     email: string
     sendFailed: boolean
+    accessToken?: string
 }
 
 export function EmailVerification({
     email,
     sendFailed,
+    accessToken,
 }: EmailVerificationProps) {
     const {
         isDarkMode,
@@ -26,11 +28,12 @@ export function EmailVerification({
         handleResend,
         handleLater,
         handleChange,
+        handlePaste,
         handleKeyDown,
         codeValue,
         errors,
         isValid,
-    } = useEmailVerification(email, sendFailed)
+    } = useEmailVerification(email, sendFailed, accessToken)
 
     return (
         <div
@@ -79,6 +82,7 @@ export function EmailVerification({
                                     onChange={(e) =>
                                         handleChange(e.target.value, index)
                                     }
+                                    onPaste={handlePaste}
                                     onKeyDown={(e) => handleKeyDown(e, index)}
                                     className="w-11 h-12 text-center text-lg bg-transparent border border-input rounded-md focus:outline-none focus:border-primary transition-colors text-foreground"
                                 />

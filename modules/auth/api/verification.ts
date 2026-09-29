@@ -1,5 +1,7 @@
 "use server"
 
+import { ClientError } from "graphql-request"
+
 import { getGql } from "@/gql"
 
 export type VerificationActionState = {
@@ -17,6 +19,16 @@ const VERIFY_MAIL_MUTATION = `
         verifyMail(mail: $mail)
     }
 `
+
+const graphqlErrorMessage = (error: unknown) => {
+    if (error instanceof ClientError) {
+        return (
+            error.response.errors?.map(({ message }) => message).join(" ") ?? ""
+        )
+    }
+
+    return error instanceof Error ? error.message : ""
+}
 
 export async function sendVerificationAction(
     email: string,
@@ -42,14 +54,31 @@ export async function sendVerificationAction(
 
 export async function verifyMailAction(
     otp: string,
+    accessToken?: string,
 ): Promise<VerificationActionState> {
+    const normalizedOtp = otp.replace(/\D/g, "")
+
+    if (normalizedOtp.length !== 6) {
+        return {
+            error: "The verification code is invalid or has expired. Please try again.",
+        }
+    }
+
     try {
-        const gql = await getGql()
+        const gql = await getGql(accessToken)
         await gql.request<unknown, { mail: { otp: string } }>(
             VERIFY_MAIL_MUTATION,
-            { mail: { otp } },
+            { mail: { otp: normalizedOtp } },
         )
-    } catch {
+    } catch (error) {
+        const message = graphqlErrorMessage(error)
+
+        if (/unauthor/i.test(message)) {
+            return {
+                error: "Your session expired. Please sign in and try again.",
+            }
+        }
+
         return {
             error: "The verification code is invalid or has expired. Please try again.",
         }

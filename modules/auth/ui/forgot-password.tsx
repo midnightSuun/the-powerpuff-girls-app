@@ -11,6 +11,7 @@ export function ForgotPasswordPage() {
         isDarkMode,
         setIsDarkMode,
         serverError,
+        successMessage,
         isPending,
         register,
         handleSubmit,
@@ -78,6 +79,15 @@ export function ForgotPasswordPage() {
                             role="alert"
                         >
                             {serverError}
+                        </p>
+                    )}
+
+                    {successMessage && (
+                        <p
+                            className="text-xs text-green-600 text-center w-full"
+                            role="status"
+                        >
+                            {successMessage}
                         </p>
                     )}
 

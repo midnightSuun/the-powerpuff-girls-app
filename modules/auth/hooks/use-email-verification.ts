@@ -11,7 +11,11 @@ import {
     verificationSchema,
 } from "../schemas/verification"
 
-export function useEmailVerification(email: string, sendFailed: boolean) {
+export function useEmailVerification(
+    email: string,
+    sendFailed: boolean,
+    accessToken?: string,
+) {
     const router = useRouter()
     const [isDarkMode, setIsDarkMode] = useState<boolean>(false)
     const [serverError, setServerError] = useState<string | null>(
@@ -40,17 +44,41 @@ export function useEmailVerification(email: string, sendFailed: boolean) {
 
     const codeValue = watch("code") || ""
 
+    const setCode = (nextCode: string) => {
+        setValue("code", nextCode.slice(0, 6), { shouldValidate: true })
+    }
+
     const handleChange = (val: string, index: number) => {
-        const digit = val.replace(/\D/g, "").slice(-1)
-        const codeArray = codeValue.padEnd(6, "").split("")
-        codeArray[index] = digit || ""
-        const newCode = codeArray.join("").trim()
+        const digits = val.replace(/\D/g, "")
 
-        setValue("code", newCode, { shouldValidate: true })
+        if (digits.length > 1) {
+            setCode(digits)
+            inputRefs.current[Math.min(digits.length, 5)]?.focus()
+            return
+        }
 
-        if (digit && index < 5) {
+        const codeArray = Array.from(
+            { length: 6 },
+            (_, slot) => codeValue[slot] ?? "",
+        )
+        codeArray[index] = digits.slice(-1)
+        setCode(codeArray.join(""))
+
+        if (digits && index < 5) {
             inputRefs.current[index + 1]?.focus()
         }
+    }
+
+    const handlePaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
+        const digits = event.clipboardData.getData("text").replace(/\D/g, "")
+
+        if (!digits) {
+            return
+        }
+
+        event.preventDefault()
+        setCode(digits)
+        inputRefs.current[Math.min(digits.length, 5)]?.focus()
     }
 
     const handleKeyDown = (
@@ -71,7 +99,7 @@ export function useEmailVerification(email: string, sendFailed: boolean) {
         setStatusMessage(null)
 
         startTransition(async () => {
-            const result = await verifyMailAction(data.code)
+            const result = await verifyMailAction(data.code, accessToken)
 
             if (result.error) {
                 setServerError(result.error)
@@ -117,6 +145,7 @@ export function useEmailVerification(email: string, sendFailed: boolean) {
         handleResend,
         handleLater,
         handleChange,
+        handlePaste,
         handleKeyDown,
         codeValue,
         errors,

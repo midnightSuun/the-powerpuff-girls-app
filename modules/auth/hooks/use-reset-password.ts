@@ -1,6 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useSearchParams } from "next/navigation"
 import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 
@@ -16,6 +17,8 @@ export function useResetPassword() {
         undefined,
     )
     const [isPending, startTransition] = useTransition()
+    const searchParams = useSearchParams()
+    const token = searchParams.get("token") || undefined
 
     const {
         register,
@@ -29,15 +32,28 @@ export function useResetPassword() {
     const onSubmit = (data: ResetPasswordFormValues) => {
         setServerError(undefined)
 
+        if (!token) {
+            setServerError(
+                "Reset token is missing or invalid. Open the link from your email again.",
+            )
+            return
+        }
+
         startTransition(async () => {
-            try {
-                await resetPasswordAction({
+            const result = await resetPasswordAction(
+                {
                     newPassword: data.newPassword,
                     confirmPassword: data.confirmPassword,
-                })
-            } catch {
-                setServerError("Failed to reset password. Please try again.")
+                },
+                token,
+            )
+
+            if (result.error) {
+                setServerError(result.error)
+                return
             }
+
+            window.location.href = "/login?reset=success"
         })
     }
 

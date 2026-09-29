@@ -1,20 +1,26 @@
+"use client"
+
+import { useSearchParams } from "next/navigation"
 import { Suspense } from "react"
 
 import { EmailVerification } from "@/modules/auth/ui/email-verification"
 
-type PageProps = {
-    searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+function VerificationContent() {
+    const searchParams = useSearchParams()
+    const email = searchParams.get("email") || ""
+    const sendFailed = searchParams.get("sendFailed") === "true"
+    const accessToken = searchParams.get("token") || undefined
+
+    return (
+        <EmailVerification
+            email={email}
+            sendFailed={sendFailed}
+            accessToken={accessToken}
+        />
+    )
 }
 
-async function VerificationContent({ searchParams }: PageProps) {
-    const params = await searchParams
-    const email = typeof params.email === "string" ? params.email : ""
-    const sendFailed = params.sendFailed === "true"
-
-    return <EmailVerification email={email} sendFailed={sendFailed} />
-}
-
-export default function VerificationPage({ searchParams }: PageProps) {
+export default function VerificationPage() {
     return (
         <Suspense
             fallback={
@@ -23,7 +29,7 @@ export default function VerificationPage({ searchParams }: PageProps) {
                 </div>
             }
         >
-            <VerificationContent searchParams={searchParams} />
+            <VerificationContent />
         </Suspense>
     )
 }
