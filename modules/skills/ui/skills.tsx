@@ -33,28 +33,35 @@ export async function Skills({ userId }: SkillsProps) {
     )
 
     return (
-        <div className="mx-auto max-w-4xl p-6">
-            {categories.map((category) => (
-                <SkillCategory
-                    key={category.id}
-                    title={category.title}
-                    skills={category.skills}
-                />
-            ))}
+        <div className="flex items-start gap-16">
+            <div className="flex-1 max-w-[852px] pl-50 pt-6">
+                <div className="space-y-8">
+                    {categories.map((category) => (
+                        <SkillCategory
+                            key={category.id}
+                            title={category.title}
+                            skills={category.skills}
+                        />
+                    ))}
+                </div>
 
-            <div className="mt-8 flex items-center justify-end gap-6 text-xs font-medium tracking-wider text-gray-700">
-                <Button
-                    variant="primaryV2"
-                    className="gap-2 border-transparent"
-                >
-                    <Plus className="h-5 w-5" />
-                    ADD SKILL
-                </Button>
+                <div className="mt-8 flex items-center justify-end gap-6 text-xs font-medium tracking-wider text-gray-700">
+                    <Button
+                        variant="primaryV2"
+                        className="gap-2 border-transparent"
+                    >
+                        <Plus className="h-5 w-5" />
+                        ADD SKILL
+                    </Button>
 
-                <Button variant="ghost" className="gap-2 border-transparent">
-                    <Trash2 className="h-5 w-5" />
-                    REMOVE SKILLS
-                </Button>
+                    <Button
+                        variant="ghost"
+                        className="gap-2 border-transparent"
+                    >
+                        <Trash2 className="h-5 w-5" />
+                        REMOVE SKILLS
+                    </Button>
+                </div>
             </div>
         </div>
     )
