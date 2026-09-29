@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { Suspense } from "react"
 
+import { PageHeader } from "@/components/page-header"
 import { PaginationComponent } from "@/components/pagination"
 import { SearchInput } from "@/components/search-input"
 import {
@@ -11,15 +12,12 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import { type PaginationSearchParams } from "@/lib/pagination-search-params"
 
 import { getUsers } from "../api/get-users"
 import { UserAvatar } from "./user-avatar"
 
-type Props = {
-    limit: number
-    page: number
-    search: string
-}
+type Props = PaginationSearchParams
 
 async function UsersListAsync({ limit, page, search }: Props) {
     const { users, totalPages } = await getUsers(limit, page, search)
@@ -55,9 +53,10 @@ async function UsersListAsync({ limit, page, search }: Props) {
                             <TableCell>
                                 <Link
                                     href={`/users/${user.id}`}
+                                    aria-label={`View ${user.profile.last_name}`}
                                     className="after:absolute after:inset-0 after:content-['']"
                                 >
-                                    {user.profile.first_name}
+                                    {user.profile.first_name ?? "—"}
                                 </Link>
                             </TableCell>
                             <TableCell>{user.profile.last_name}</TableCell>
@@ -82,11 +81,13 @@ async function UsersListAsync({ limit, page, search }: Props) {
 export async function UsersPage({ limit, page, search }: Props) {
     return (
         <div>
-            <div className="flex flex-col gap-3 px-4 pt-4 pb-3">
-                <p className="text-sm text-muted-foreground">Employees</p>
+            <PageHeader title="Employees">
                 <SearchInput limit={limit} search={search} />
-            </div>
-            <Suspense fallback={<p className="p-4">Loading users...</p>}>
+            </PageHeader>
+            <Suspense
+                key={page}
+                fallback={<p className="p-4">Loading users...</p>}
+            >
                 <UsersListAsync limit={limit} page={page} search={search} />
             </Suspense>
         </div>
