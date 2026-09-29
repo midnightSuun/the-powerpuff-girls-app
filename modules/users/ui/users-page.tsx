@@ -1,22 +1,55 @@
 import { ChevronRight } from "lucide-react"
-import Link from "next/link"
 import { Suspense } from "react"
 
 import { PageHeader } from "@/components/page-header"
 import { PaginationComponent } from "@/components/pagination"
 import { SearchInput } from "@/components/search-input"
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
+import { type TableColumn, TableComponent } from "@/components/table"
+import { type GetUsersQuery } from "@/gql"
 import { type PaginationSearchParams } from "@/lib/pagination-search-params"
 
 import { getUsers } from "../api/get-users"
 import { UserAvatar } from "./user-avatar"
+
+type User = GetUsersQuery["users"]["items"][number]
+
+const columns: TableColumn<User>[] = [
+    {
+        label: "Avatar",
+        render: (user) => (
+            <UserAvatar
+                src={user.profile.avatar}
+                firstName={user.profile.first_name}
+                lastName={user.profile.last_name}
+                email={user.email}
+            />
+        ),
+    },
+    {
+        label: "First Name",
+        render: (user) => user.profile.first_name,
+    },
+    {
+        label: "Last Name",
+        render: (user) => user.profile.last_name,
+    },
+    {
+        label: "Email",
+        render: (user) => user.email,
+    },
+    {
+        label: "Department",
+        render: (user) => user.department?.name,
+    },
+    {
+        label: "Position",
+        render: (user) => user.position?.name,
+    },
+    {
+        label: "",
+        render: () => <ChevronRight className="size-4 text-muted-foreground" />,
+    },
+]
 
 type Props = PaginationSearchParams
 
@@ -25,56 +58,11 @@ async function UsersListAsync({ limit, page, search }: Props) {
 
     return (
         <>
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead className="w-12">
-                            <span className="sr-only">Avatar</span>
-                        </TableHead>
-                        <TableHead>First Name</TableHead>
-                        <TableHead>Last Name</TableHead>
-                        <TableHead>Email</TableHead>
-                        <TableHead>Department</TableHead>
-                        <TableHead>Position</TableHead>
-                        <TableHead className="w-10">
-                            <span className="sr-only">View</span>
-                        </TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {users.map((user) => (
-                        <TableRow
-                            key={user.id}
-                            className="relative cursor-pointer"
-                        >
-                            <TableCell className="w-12">
-                                <UserAvatar
-                                    src={user.profile.avatar}
-                                    firstName={user.profile.first_name}
-                                    lastName={user.profile.last_name}
-                                    email={user.email}
-                                />
-                            </TableCell>
-                            <TableCell>
-                                <Link
-                                    href={`/users/${user.id}`}
-                                    aria-label={`View ${user.profile.last_name}`}
-                                    className="after:absolute after:inset-0 after:content-['']"
-                                >
-                                    {user.profile.first_name}
-                                </Link>
-                            </TableCell>
-                            <TableCell>{user.profile.last_name}</TableCell>
-                            <TableCell>{user.email}</TableCell>
-                            <TableCell>{user.department?.name}</TableCell>
-                            <TableCell>{user.position?.name}</TableCell>
-                            <TableCell className="w-10 pr-4 text-muted-foreground">
-                                <ChevronRight className="size-4" />
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+            <TableComponent
+                data={users}
+                columns={columns}
+                getRowHref={(user) => `/users/${user.id}`}
+            />
             <PaginationComponent
                 totalPages={totalPages}
                 page={page}

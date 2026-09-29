@@ -31,6 +31,7 @@ export type SignupInput = {
 export type UserRole =
   | 'Admin'
   | 'Employee';
+
 export type ForgotPasswordMutationVariables = Exact<{
   email: string;
 }>;
