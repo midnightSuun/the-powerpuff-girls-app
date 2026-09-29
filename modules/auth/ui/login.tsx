@@ -1,94 +1,50 @@
 "use client"
 
-import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
-import { useState, useTransition } from "react"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
 
 import { Button } from "@/components/ui/button"
 
-import { type AuthActionState, login } from "../api/login"
+import { useLogin } from "../hooks/use-login"
 import { AuthTabs } from "./components/authTabs"
 
-const loginSchema = z.object({
-    email: z
-        .string()
-        .min(1, { message: "Email is required" })
-        .email({ message: "Please enter a valid email address" }),
-    password: z
-        .string()
-        .min(1, { message: "Password is required" })
-        .min(6, { message: "Password must be at least 6 characters long" }),
-})
-
-type LoginFormData = z.infer<typeof loginSchema>
-
 export function Login() {
-    const [isDarkMode, setIsDarkMode] = useState<boolean>(false)
-    const [showPassword, setShowPassword] = useState(false)
-    const [serverError, setServerError] = useState<string | null>(null)
-    const [isPending, startTransition] = useTransition()
-
     const {
+        isDarkMode,
+        setIsDarkMode,
+        showPassword,
+        setShowPassword,
+        serverError,
+        isPending,
         register,
         handleSubmit,
-        formState: { errors, isValid },
-    } = useForm<LoginFormData>({
-        resolver: zodResolver(loginSchema),
-        mode: "onChange",
-    })
-
-    const onSubmit = (data: LoginFormData) => {
-        setServerError(null)
-
-        startTransition(async () => {
-            const formData = new FormData()
-            formData.append("email", data.email)
-            formData.append("password", data.password)
-
-            const initialState = {} as AuthActionState
-            const result = await login(initialState, formData)
-
-            if (result?.error) {
-                setServerError(result.error)
-            }
-        })
-    }
+        onSubmit,
+        errors,
+        isValid,
+    } = useLogin()
 
     return (
         <div
-            className={`min-h-screen w-full flex flex-col items-center justify-center transition-colors duration-300 relative ${
-                isDarkMode
-                    ? "bg-[#454545] text-[#F5F5F7]"
-                    : "bg-white text-neutral-900"
+            className={`min-h-screen w-full flex flex-col items-center justify-center transition-colors duration-300 relative bg-background text-foreground ${
+                isDarkMode ? "dark" : ""
             }`}
         >
             <button
+                type="button"
                 onClick={() => setIsDarkMode(!isDarkMode)}
-                className={`absolute top-6 right-6 px-3 py-1.5 text-xs font-medium rounded border transition-colors ${
-                    isDarkMode
-                        ? "border-[#F5F5F7]/30 text-[#F5F5F7] hover:bg-white/10"
-                        : "border-neutral-300 text-neutral-800 hover:bg-neutral-100"
-                }`}
+                aria-label="Toggle color theme"
+                className="absolute top-6 right-6 px-3 py-1.5 text-xs font-medium rounded border border-border text-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
             >
                 Theme: {isDarkMode ? "Dark" : "Light"}
             </button>
 
             <AuthTabs activeTab="signin" isDarkMode={isDarkMode} />
 
-            <div className="w-full max-w-125 px-6 flex flex-col items-center mt-12">
+            <div className="w-full max-w-md px-6 flex flex-col items-center mt-12">
                 <div className="text-center mb-10">
                     <h1 className="text-3xl font-semibold tracking-tight mb-2">
                         Welcome back
                     </h1>
-                    <p
-                        className={`text-sm ${
-                            isDarkMode
-                                ? "text-[#F5F5F7]/70"
-                                : "text-neutral-500"
-                        }`}
-                    >
+                    <p className="text-sm text-muted-foreground">
                         Hello again! Sign in to continue
                     </p>
                 </div>
@@ -96,20 +52,29 @@ export function Login() {
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     className="w-full flex flex-col items-center space-y-6"
+                    noValidate
                 >
                     <div className="w-full space-y-1">
                         <input
                             type="email"
                             placeholder="Email"
+                            aria-invalid={!!errors.email}
+                            aria-describedby={
+                                errors.email ? "email-error" : undefined
+                            }
                             {...register("email")}
-                            className={`w-full bg-transparent border rounded-md px-4 py-3 text-sm focus:outline-none focus:border-red-500 transition-colors ${
-                                isDarkMode
-                                    ? "border-[#F5F5F7] text-[#F5F5F7] placeholder:text-[#F5F5F7]/50"
-                                    : "border-neutral-300 text-neutral-900 placeholder:text-neutral-400"
+                            className={`w-full bg-transparent border rounded-md px-4 py-3 text-sm focus:outline-none focus:border-red-500 transition-colors text-foreground placeholder:text-muted-foreground ${
+                                errors.email
+                                    ? "border-destructive"
+                                    : "border-input"
                             }`}
                         />
                         {errors.email && (
-                            <span className="text-xs text-red-400">
+                            <span
+                                id="email-error"
+                                className="text-xs text-destructive"
+                                role="alert"
+                            >
                                 {errors.email.message}
                             </span>
                         )}
@@ -120,22 +85,29 @@ export function Login() {
                             <input
                                 type={showPassword ? "text" : "password"}
                                 placeholder="Password"
+                                aria-invalid={!!errors.password}
+                                aria-describedby={
+                                    errors.password
+                                        ? "password-error"
+                                        : undefined
+                                }
                                 {...register("password")}
-                                className={`w-full bg-transparent border rounded-md px-4 py-3 text-sm focus:outline-none focus:border-red-500 transition-colors pr-12 ${
-                                    isDarkMode
-                                        ? "border-[#F5F5F7] text-[#F5F5F7] placeholder:text-[#F5F5F7]/50"
-                                        : "border-neutral-300 text-neutral-900 placeholder:text-neutral-400"
+                                className={`w-full bg-transparent border rounded-md px-4 py-3 text-sm focus:outline-none focus:border-red-500 transition-colors pr-12 text-foreground placeholder:text-muted-foreground ${
+                                    errors.password
+                                        ? "border-destructive"
+                                        : "border-input"
                                 }`}
                             />
 
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className={`absolute right-3 top-1/2 -translate-y-1/2 p-1 transition-colors ${
-                                    isDarkMode
-                                        ? "text-[#F5F5F7]/70 hover:text-[#F5F5F7]"
-                                        : "text-neutral-400 hover:text-neutral-700"
-                                }`}
+                                aria-label={
+                                    showPassword
+                                        ? "Hide password"
+                                        : "Show password"
+                                }
+                                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground transition-colors"
                             >
                                 <svg
                                     className="w-4 h-4"
@@ -162,7 +134,11 @@ export function Login() {
                             </button>
                         </div>
                         {errors.password && (
-                            <span className="text-xs text-red-400">
+                            <span
+                                id="password-error"
+                                className="text-xs text-destructive"
+                                role="alert"
+                            >
                                 {errors.password.message}
                             </span>
                         )}
@@ -170,7 +146,7 @@ export function Login() {
 
                     {serverError && (
                         <p
-                            className="text-xs text-red-400 text-center w-full"
+                            className="text-xs text-destructive text-center w-full"
                             role="alert"
                         >
                             {serverError}
@@ -182,9 +158,9 @@ export function Login() {
                             type="submit"
                             disabled={!isValid || isPending}
                             className={`w-40 text-white transition-opacity ${
-                                !isValid
-                                    ? "bg-red-600/50 cursor-not-allowed"
-                                    : "bg-red-600 hover:bg-red-700 cursor-pointer"
+                                !isValid || isPending
+                                    ? "bg-button-primary-default/50 cursor-not-allowed"
+                                    : "bg-button-primary-default hover:bg-button-primary-default/90 cursor-pointer"
                             }`}
                         >
                             {isPending ? "SIGNING IN..." : "SIGN IN"}
@@ -192,11 +168,7 @@ export function Login() {
 
                         <Link
                             href="/forgot-password"
-                            className={`text-[11px] font-medium tracking-widest uppercase transition-colors ${
-                                isDarkMode
-                                    ? "text-[#F5F5F7]/70 hover:text-[#F5F5F7]"
-                                    : "text-neutral-500 hover:text-neutral-900"
-                            }`}
+                            className="text-[11px] font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors"
                         >
                             FORGOT PASSWORD
                         </Link>

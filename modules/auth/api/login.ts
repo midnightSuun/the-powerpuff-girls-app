@@ -41,5 +41,6 @@ export async function login(
     }
 
     await setTokens(tokens.accessToken, tokens.refreshToken)
+
     redirect("/")
 }
