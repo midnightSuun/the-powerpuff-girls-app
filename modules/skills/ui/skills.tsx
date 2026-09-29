@@ -7,9 +7,10 @@ import { SkillCategory } from "./components/skill-catergory"
 
 interface SkillsProps {
     userId: string
+    isDarkMode: boolean
 }
 
-export async function Skills({ userId }: SkillsProps) {
+export async function Skills({ userId, isDarkMode = false }: SkillsProps) {
     const userSkills = await getUserSkills(userId)
     const groupedSkills = userSkills.reduce<Record<string, typeof userSkills>>(
         (acc, skill) => {
@@ -33,7 +34,7 @@ export async function Skills({ userId }: SkillsProps) {
     )
 
     return (
-        <div className="flex items-start gap-16">
+        <div className={`flex items-start gap-16`}>
             <div className="flex-1 max-w-[852px] pl-50 pt-6">
                 <div className="space-y-8">
                     {categories.map((category) => (
@@ -47,17 +48,16 @@ export async function Skills({ userId }: SkillsProps) {
 
                 <div className="mt-8 flex items-center justify-end gap-6 text-xs font-medium tracking-wider text-gray-700">
                     <Button
-                        variant="primaryV2"
-                        className="gap-2 border-transparent"
+                        variant="ghost"
+                        className={`gap-2 border-transparent ${
+                            isDarkMode ? "text-[#C4C4C6]" : "text-[#626262]"
+                        }`}
                     >
                         <Plus className="h-5 w-5" />
                         ADD SKILL
                     </Button>
 
-                    <Button
-                        variant="ghost"
-                        className="gap-2 border-transparent"
-                    >
+                    <Button variant="primaryV2" className="gap-2">
                         <Trash2 className="h-5 w-5" />
                         REMOVE SKILLS
                     </Button>
