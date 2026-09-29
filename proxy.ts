@@ -40,7 +40,13 @@ const refreshSession = async (request: NextRequest) => {
 }
 
 function isPublic(route: string) {
-    return ["/login", "/register", "/logout"].includes(route)
+    return [
+        "/login",
+        "/register",
+        "/logout",
+        "/forgot-password",
+        "/reset-password",
+    ].includes(route)
 }
 
 export async function proxy(request: NextRequest) {

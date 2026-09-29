@@ -1,5 +1,6 @@
 "use server"
 
+import { ClientError } from "graphql-request"
 import { redirect } from "next/navigation"
 
 import { getGql, LoginDocument, SignupDocument } from "@/gql"
@@ -35,19 +36,44 @@ export async function signup(
             accessToken: data.signup.access_token,
             refreshToken: data.signup.refresh_token,
         }
-    } catch {
-        try {
-            const data = await gql.request(LoginDocument, {
-                auth: { email, password },
-            })
+    } catch (error) {
+        const errorMessage =
+            error instanceof ClientError
+                ? (error.response.errors
+                      ?.map(({ message }) => message)
+                      .join(" ") ?? "")
+                : ""
 
-            tokens = {
-                accessToken: data.login.access_token,
-                refreshToken: data.login.refresh_token,
-            }
-        } catch {
+        const isUserExists =
+            errorMessage.includes("userAlreadyExists") ||
+            /(?:email.{0,40}(?:already|exist|registered|taken|in use)|(?:already|exist|registered|taken|in use).{0,40}email|duplicate.{0,40}email)/i.test(
+                errorMessage,
+            )
+
+        if (isUserExists) {
             return {
-                error: "Failed to sign up. Please check your credentials.",
+                error: "This email is already taken. Please use a different one or log in.",
+            }
+        }
+
+        if (errorMessage.includes("failedToSendEmail")) {
+            try {
+                const loginData = await gql.request(LoginDocument, {
+                    auth: { email, password },
+                })
+
+                tokens = {
+                    accessToken: loginData.login.access_token,
+                    refreshToken: loginData.login.refresh_token,
+                }
+            } catch {
+                return {
+                    error: "Failed to sign up due to mail server error. Please try again later.",
+                }
+            }
+        } else {
+            return {
+                error: "Failed to sign up. Please check your credentials or try again later.",
             }
         }
     }
