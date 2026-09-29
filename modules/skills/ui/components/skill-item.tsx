@@ -21,13 +21,13 @@ const MASTERY_LEVELS: Record<
     1: {
         width: "25%",
         color: "#626262",
-        lightBg: "#454545",
+        lightBg: "#AEAEAE",
         darkBg: "#454545",
     },
     Novice: {
         width: "25%",
         color: "#626262",
-        lightBg: "#454545",
+        lightBg: "#AEAEAE",
         darkBg: "#454545",
     },
 
