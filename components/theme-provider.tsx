@@ -1,3 +1,4 @@
+"X-Client-Side"
 "use client"
 
 import { ThemeProvider as NextThemesProvider } from "next-themes"

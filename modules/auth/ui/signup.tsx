@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 
 import { PasswordField } from "@/components/password-field"
 import { Button } from "@/components/ui/button"
@@ -9,6 +10,7 @@ import { useSignup } from "../hooks/use-signup"
 import { AuthTabs } from "./components/authTabs"
 
 export function Signup() {
+    const t = useTranslations("Auth.Signup")
     const {
         serverError,
         isPending,
@@ -26,10 +28,10 @@ export function Signup() {
             <div className="w-full max-w-125 px-6 flex flex-col items-center mt-12">
                 <div className="text-center mb-10">
                     <h1 className="text-3xl font-semibold tracking-tight mb-2">
-                        Sign up now
+                        {t("title")}
                     </h1>
                     <p className="text-sm text-muted-foreground">
-                        Welcome! Sign up to continue
+                        {t("subtitle")}
                     </p>
                 </div>
 
@@ -41,7 +43,7 @@ export function Signup() {
                     <div className="w-full space-y-1">
                         <input
                             type="email"
-                            placeholder="Email"
+                            placeholder={t("emailPlaceholder")}
                             aria-invalid={!!errors.email}
                             aria-describedby={
                                 errors.email ? "email-error" : undefined
@@ -65,13 +67,13 @@ export function Signup() {
                     </div>
 
                     <PasswordField
-                        placeholder="Password"
+                        placeholder={t("passwordPlaceholder")}
                         error={errors.password?.message}
                         {...register("password")}
                     />
 
                     <PasswordField
-                        placeholder="Confirm Password"
+                        placeholder={t("confirmPasswordPlaceholder")}
                         error={errors.confirmPassword?.message}
                         {...register("confirmPassword")}
                     />
@@ -95,14 +97,16 @@ export function Signup() {
                                     : "bg-button-primary-default hover:bg-button-primary-default/90 cursor-pointer"
                             }`}
                         >
-                            {isPending ? "CREATING..." : "CREATE ACCOUNT"}
+                            {isPending
+                                ? t("submittingButton")
+                                : t("submitButton")}
                         </Button>
 
                         <Link
                             href="/login"
                             className="text-[11px] font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors"
                         >
-                            I HAVE AN ACCOUNT
+                            {t("haveAccount")}
                         </Link>
                     </div>
                 </form>

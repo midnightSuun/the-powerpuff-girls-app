@@ -1,20 +1,29 @@
+"use client"
+
 import { Plus, Trash2 } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 import { Button } from "@/components/ui/button"
 
-import { getUserSkills } from "../api/skills"
 import { SkillCategory } from "./components/skill-catergory"
+
+interface Skill {
+    name: string
+    mastery: string | number
+    categoryId?: string | null
+}
 
 interface SkillsProps {
     userId: string
-    isDarkMode: boolean
+    userSkills: Skill[]
 }
 
-export async function Skills({ userId, isDarkMode = false }: SkillsProps) {
-    const userSkills = await getUserSkills(userId)
-    const groupedSkills = userSkills.reduce<Record<string, typeof userSkills>>(
+export function Skills({ userSkills }: SkillsProps) {
+    const t = useTranslations("Skills")
+
+    const groupedSkills = userSkills.reduce<Record<string, Skill[]>>(
         (acc, skill) => {
-            const categoryKey = skill.categoryId ?? "Other"
+            const categoryKey = skill.categoryId ?? "other"
 
             if (!acc[categoryKey]) {
                 acc[categoryKey] = []
@@ -26,16 +35,24 @@ export async function Skills({ userId, isDarkMode = false }: SkillsProps) {
     )
 
     const categories = Object.entries(groupedSkills).map(
-        ([categoryId, skills]) => ({
-            id: categoryId,
-            title: getCategoryTitle(categoryId),
-            skills,
-        }),
+        ([categoryId, skills]) => {
+            const translationKey = `categories.${categoryId}` as const
+
+            const title = t.has(translationKey)
+                ? t(translationKey)
+                : t("categories.other")
+
+            return {
+                id: categoryId,
+                title,
+                skills,
+            }
+        },
     )
 
     return (
-        <div className={`flex items-start gap-16`}>
-            <div className="flex-1 max-w-[852px] pl-50 pt-6">
+        <div className="flex items-start gap-16">
+            <div className="flex-1 max-w-213 pl-50 pt-6">
                 <div className="space-y-8">
                     {categories.map((category) => (
                         <SkillCategory
@@ -46,34 +63,21 @@ export async function Skills({ userId, isDarkMode = false }: SkillsProps) {
                     ))}
                 </div>
 
-                <div className="mt-8 flex items-center justify-end gap-6 text-xs font-medium tracking-wider text-gray-700">
+                <div className="mt-8 flex items-center justify-end gap-6 text-xs font-medium tracking-wider text-muted-foreground">
                     <Button
                         variant="ghost"
-                        className={`gap-2 border-transparent ${
-                            isDarkMode ? "text-[#C4C4C6]" : "text-[#626262]"
-                        }`}
+                        className="gap-2 border-transparent text-muted-foreground hover:text-foreground"
                     >
                         <Plus className="h-5 w-5" />
-                        ADD SKILL
+                        {t("actions.add")}
                     </Button>
 
                     <Button variant="primaryV2" className="gap-2">
                         <Trash2 className="h-5 w-5" />
-                        REMOVE SKILLS
+                        {t("actions.remove")}
                     </Button>
                 </div>
             </div>
         </div>
     )
-}
-
-function getCategoryTitle(categoryId: string): string {
-    const CATEGORY_MAP: Record<string, string> = {
-        "1": "Programming languages",
-        "2": "Frontend",
-        "3": "Backend",
-        "4": "Source control systems",
-    }
-
-    return CATEGORY_MAP[categoryId] ?? "General Skills"
 }

@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 
 import { Button } from "@/components/ui/button"
 
@@ -8,6 +9,7 @@ import { PasswordField } from "../../../components/password-field"
 import { useResetPassword } from "../hooks/use-reset-password"
 
 export function ResetPasswordPage() {
+    const t = useTranslations("Auth.ResetPassword")
     const {
         serverError,
         isPending,
@@ -23,10 +25,10 @@ export function ResetPasswordPage() {
             <div className="w-full max-w-125 px-6 flex flex-col items-center">
                 <div className="text-center mb-10">
                     <h1 className="text-3xl font-semibold tracking-tight mb-2">
-                        Reset password
+                        {t("title")}
                     </h1>
                     <p className="text-sm text-muted-foreground">
-                        Here you should write a new password and confirm it
+                        {t("subtitle")}
                     </p>
                 </div>
 
@@ -37,7 +39,7 @@ export function ResetPasswordPage() {
                 >
                     <div className="w-full space-y-1">
                         <PasswordField
-                            placeholder="New password"
+                            placeholder={t("newPasswordPlaceholder")}
                             aria-invalid={!!errors.newPassword}
                             aria-describedby={
                                 errors.newPassword
@@ -60,7 +62,7 @@ export function ResetPasswordPage() {
 
                     <div className="w-full space-y-1">
                         <PasswordField
-                            placeholder="Confirm password"
+                            placeholder={t("confirmPasswordPlaceholder")}
                             aria-invalid={!!errors.confirmPassword}
                             aria-describedby={
                                 errors.confirmPassword
@@ -100,14 +102,16 @@ export function ResetPasswordPage() {
                                     : "bg-button-primary-default hover:bg-button-primary-default/90 cursor-pointer"
                             }`}
                         >
-                            {isPending ? "SUBMITTING..." : "SUBMIT"}
+                            {isPending
+                                ? t("submittingButton")
+                                : t("submitButton")}
                         </Button>
 
                         <Link
                             href="/login"
                             className="text-[11px] font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors"
                         >
-                            GO TO SIGN IN
+                            {t("goToSignIn")}
                         </Link>
                     </div>
                 </form>

@@ -1,5 +1,7 @@
 "use client"
 
+import { useTranslations } from "next-intl"
+
 import { Button } from "@/components/ui/button"
 
 import { useEmailVerification } from "../hooks/use-email-verification"
@@ -15,6 +17,7 @@ export function EmailVerification({
     sendFailed,
     accessToken,
 }: EmailVerificationProps) {
+    const t = useTranslations("Auth.EmailVerification")
     const {
         serverError,
         statusMessage,
@@ -38,11 +41,10 @@ export function EmailVerification({
             <div className="w-full max-w-125 px-6 flex flex-col items-center">
                 <div className="text-center mb-8">
                     <h1 className="text-2xl font-semibold tracking-tight mb-2">
-                        Email verification
+                        {t("title")}
                     </h1>
                     <p className="text-xs text-muted-foreground">
-                        Enter the verification code we sent to{" "}
-                        {email || "your email"}
+                        {t("subtitle")} {email || t("fallbackEmail")}
                     </p>
                 </div>
 
@@ -112,7 +114,9 @@ export function EmailVerification({
                                     : "bg-button-primary-default hover:bg-button-primary-default/90 cursor-pointer"
                             }`}
                         >
-                            {isPending ? "CHECKING..." : "CONFIRM"}
+                            {isPending
+                                ? t("submittingButton")
+                                : t("submitButton")}
                         </Button>
 
                         <button
@@ -121,7 +125,9 @@ export function EmailVerification({
                             disabled={!email || isResending}
                             className="text-[11px] font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors disabled:cursor-not-allowed disabled:opacity-50"
                         >
-                            {isResending ? "SENDING..." : "RESEND EMAIL"}
+                            {isResending
+                                ? t("resendingButton")
+                                : t("resendButton")}
                         </button>
 
                         <button
@@ -129,7 +135,7 @@ export function EmailVerification({
                             onClick={handleLater}
                             className="text-[11px] font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors pt-2"
                         >
-                            LATER
+                            {t("laterButton")}
                         </button>
                     </div>
                 </form>

@@ -1,7 +1,7 @@
 "use client"
 
 import { ChevronDown } from "lucide-react"
-import { useTheme } from "next-themes"
+import { useTranslations } from "next-intl"
 
 import { PasswordField } from "@/components/password-field"
 import { Button } from "@/components/ui/button"
@@ -10,8 +10,9 @@ import { LogoutButton } from "@/modules/auth/ui/logout-button"
 import { useSettings } from "../hooks/use-settings"
 
 export function SettingsPage() {
-    const { setTheme } = useTheme()
+    const t = useTranslations("Settings")
     const {
+        locale,
         serverError,
         successMessage,
         isPending,
@@ -20,15 +21,18 @@ export function SettingsPage() {
         onSubmit,
         errors,
         isValid,
+        setTheme,
+        handleLanguageChange,
     } = useSettings()
 
     const themeRegistration = register("theme")
+    const languageRegistration = register("language")
 
     return (
         <main className="min-h-screen w-full bg-background text-foreground px-6 py-8 flex flex-col transition-colors duration-300">
             <div className="w-full max-w-2xl mx-auto mb-8 flex items-center justify-between">
                 <h1 className="text-xl font-medium tracking-tight text-muted-foreground">
-                    Settings
+                    {t("title")}
                 </h1>
                 <LogoutButton />
             </div>
@@ -58,7 +62,7 @@ export function SettingsPage() {
                 >
                     <div className="space-y-1.5">
                         <label className="text-xs text-muted-foreground block">
-                            Theme
+                            {t("theme.label")}
                         </label>
                         <div className="relative">
                             <select
@@ -77,88 +81,52 @@ export function SettingsPage() {
                                     value="Light"
                                     className="bg-background text-foreground"
                                 >
-                                    Light
+                                    {t("theme.light")}
                                 </option>
                                 <option
                                     value="Dark"
                                     className="bg-background text-foreground"
                                 >
-                                    Dark
+                                    {t("theme.dark")}
                                 </option>
                                 <option
                                     value="Device settings"
                                     className="bg-background text-foreground"
                                 >
-                                    Device settings
+                                    {t("theme.deviceSettings")}
                                 </option>
                             </select>
                             <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
                         </div>
                     </div>
 
-                    {/* Language Selector */}
                     <div className="space-y-1.5">
                         <label className="text-xs text-muted-foreground block">
-                            Language
+                            {t("language.label")}
                         </label>
                         <div className="relative">
                             <select
-                                {...register("language")}
+                                {...languageRegistration}
+                                value={locale}
+                                onChange={(e) => {
+                                    languageRegistration.onChange(e)
+                                    handleLanguageChange(
+                                        e.target.value as "en" | "ru",
+                                    )
+                                }}
                                 className="w-full h-11 px-4 pr-10 text-sm bg-transparent border border-border rounded-lg appearance-none focus:outline-none focus:ring-1 focus:ring-ring cursor-pointer text-foreground"
                             >
                                 <option
-                                    value="English"
+                                    value="en"
                                     className="bg-background text-foreground"
                                 >
-                                    English
+                                    {t("language.english")}
                                 </option>
                                 <option
-                                    value="French"
+                                    value="ru"
                                     className="bg-background text-foreground"
                                 >
-                                    French
-                                </option>
-                                <option
-                                    value="German"
-                                    className="bg-background text-foreground"
-                                >
-                                    German
-                                </option>
-                                <option
-                                    value="Italian"
-                                    className="bg-background text-foreground"
-                                >
-                                    Italian
-                                </option>
-                                <option
-                                    value="Polish"
-                                    className="bg-background text-foreground"
-                                >
-                                    Polish
-                                </option>
-                                <option
-                                    value="Portuguese"
-                                    className="bg-background text-foreground"
-                                >
-                                    Portuguese
-                                </option>
-                                <option
-                                    value="Russian"
-                                    className="bg-background text-foreground"
-                                >
-                                    Russian
-                                </option>
-                                <option
-                                    value="Spanish"
-                                    className="bg-background text-foreground"
-                                >
-                                    Spanish
-                                </option>
-                                <option
-                                    value="Ukrainian"
-                                    className="bg-background text-foreground"
-                                >
-                                    Ukrainian
+                                    {t("language.russian")}
                                 </option>
                             </select>
                             <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
@@ -166,11 +134,15 @@ export function SettingsPage() {
                     </div>
 
                     <div className="pt-4 space-y-4">
-                        <h2 className="text-sm font-medium">Change password</h2>
+                        <h2 className="text-sm font-medium">
+                            {t("passwordSection.title")}
+                        </h2>
 
                         <div className="space-y-1">
                             <PasswordField
-                                placeholder="Password"
+                                placeholder={t(
+                                    "passwordSection.currentPlaceholder",
+                                )}
                                 error={errors.password?.message}
                                 {...register("password")}
                             />
@@ -186,7 +158,9 @@ export function SettingsPage() {
 
                         <div className="space-y-1">
                             <PasswordField
-                                placeholder="New Password"
+                                placeholder={t(
+                                    "passwordSection.newPlaceholder",
+                                )}
                                 error={errors.newPassword?.message}
                                 {...register("newPassword")}
                             />
@@ -202,7 +176,9 @@ export function SettingsPage() {
 
                         <div className="space-y-1">
                             <PasswordField
-                                placeholder="Confirm Password"
+                                placeholder={t(
+                                    "passwordSection.confirmPlaceholder",
+                                )}
                                 error={errors.confirmPassword?.message}
                                 {...register("confirmPassword")}
                             />
@@ -227,7 +203,9 @@ export function SettingsPage() {
                                     : "bg-button-primary-default hover:bg-button-primary-default/90 cursor-pointer"
                             }`}
                         >
-                            {isPending ? "CHANGING..." : "CHANGE"}
+                            {isPending
+                                ? t("passwordSection.submittingButton")
+                                : t("passwordSection.submitButton")}
                         </Button>
                     </div>
                 </form>

@@ -1,12 +1,14 @@
 "use client"
 
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 
 import { Button } from "@/components/ui/button"
 
 import { useForgotPassword } from "../hooks/use-forgot-password"
 
 export function ForgotPasswordPage() {
+    const t = useTranslations("Auth.ForgotPassword")
     const {
         serverError,
         successMessage,
@@ -23,10 +25,10 @@ export function ForgotPasswordPage() {
             <div className="w-full max-w-125 px-6 flex flex-col items-center">
                 <div className="text-center mb-10">
                     <h1 className="text-3xl tracking-tight mb-2">
-                        Forgot password
+                        {t("title")}
                     </h1>
                     <p className="text-sm text-muted-foreground">
-                        We will send you an email with further instructions
+                        {t("subtitle")}
                     </p>
                 </div>
 
@@ -39,12 +41,12 @@ export function ForgotPasswordPage() {
                             htmlFor="email"
                             className="block text-xs uppercase tracking-wider text-muted-foreground"
                         >
-                            Email
+                            {t("emailLabel")}
                         </label>
                         <input
                             id="email"
                             type="email"
-                            placeholder="example@email.com"
+                            placeholder={t("emailPlaceholder")}
                             {...register("email")}
                             className={`w-full bg-transparent border rounded-md px-4 py-3 text-sm focus:outline-none focus:border-red-500 transition-colors placeholder:text-muted-foreground ${
                                 errors.email
@@ -87,14 +89,16 @@ export function ForgotPasswordPage() {
                                     : "bg-red-600 hover:bg-red-700 cursor-pointer"
                             }`}
                         >
-                            {isPending ? "SENDING..." : "RESET PASSWORD"}
+                            {isPending
+                                ? t("submittingButton")
+                                : t("submitButton")}
                         </Button>
 
                         <Link
                             href="/login"
                             className="text-[11px] font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors"
                         >
-                            Cancel
+                            {t("cancelButton")}
                         </Link>
                     </div>
                 </form>
