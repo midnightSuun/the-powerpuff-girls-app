@@ -13,7 +13,6 @@ import {
 
 export function useResetPassword() {
     const router = useRouter()
-    const [isDarkMode, setIsDarkMode] = useState<boolean>(false)
     const [serverError, setServerError] = useState<string | undefined>(
         undefined,
     )
@@ -59,8 +58,6 @@ export function useResetPassword() {
     }
 
     return {
-        isDarkMode,
-        setIsDarkMode,
         serverError,
         isPending,
         register,

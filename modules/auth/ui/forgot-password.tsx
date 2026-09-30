@@ -8,8 +8,6 @@ import { useForgotPassword } from "../hooks/use-forgot-password"
 
 export function ForgotPasswordPage() {
     const {
-        isDarkMode,
-        setIsDarkMode,
         serverError,
         successMessage,
         isPending,
@@ -21,19 +19,7 @@ export function ForgotPasswordPage() {
     } = useForgotPassword()
 
     return (
-        <div
-            className={`min-h-screen w-full flex flex-col items-center justify-center transition-colors duration-300 relative bg-background text-foreground ${
-                isDarkMode ? "dark" : ""
-            }`}
-        >
-            <button
-                type="button"
-                onClick={() => setIsDarkMode(!isDarkMode)}
-                className="absolute top-6 right-6 px-3 py-1.5 text-xs font-medium rounded border border-auth-card-border text-foreground hover:bg-muted transition-colors"
-            >
-                Theme: {isDarkMode ? "Dark" : "Light"}
-            </button>
-
+        <main className="min-h-screen w-full flex flex-col items-center justify-center transition-colors duration-300 relative bg-background text-foreground">
             <div className="w-full max-w-125 px-6 flex flex-col items-center">
                 <div className="text-center mb-10">
                     <h1 className="text-3xl tracking-tight mb-2">
@@ -113,6 +99,6 @@ export function ForgotPasswordPage() {
                     </div>
                 </form>
             </div>
-        </div>
+        </main>
     )
 }

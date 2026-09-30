@@ -3,6 +3,8 @@ import "./globals.css"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono, Roboto } from "next/font/google"
 
+import { ThemeProvider } from "@/components/theme-provider"
+
 const geistSans = Geist({
     variable: "--font-geist-sans",
     subsets: ["latin"],
@@ -27,11 +29,19 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
     return (
         <html
+            suppressHydrationWarning
             lang="en"
             className={`${geistSans.variable} ${geistMono.variable} ${roboto.variable} h-full antialiased`}
         >
             <body className="min-h-full flex flex-col font-sans">
-                {children}
+                <ThemeProvider
+                    attribute="class"
+                    defaultTheme="system"
+                    enableSystem
+                    disableTransitionOnChange
+                >
+                    {children}
+                </ThemeProvider>
             </body>
         </html>
     )

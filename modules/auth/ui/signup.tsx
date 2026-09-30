@@ -10,8 +10,6 @@ import { AuthTabs } from "./components/authTabs"
 
 export function Signup() {
     const {
-        isDarkMode,
-        setIsDarkMode,
         serverError,
         isPending,
         register,
@@ -22,21 +20,8 @@ export function Signup() {
     } = useSignup()
 
     return (
-        <div
-            className={`min-h-screen w-full flex flex-col items-center justify-center transition-colors duration-300 relative bg-background text-foreground ${
-                isDarkMode ? "dark" : ""
-            }`}
-        >
-            <button
-                type="button"
-                onClick={() => setIsDarkMode(!isDarkMode)}
-                aria-label="Toggle color theme"
-                className="absolute top-6 right-6 px-3 py-1.5 text-xs font-medium rounded border border-border text-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
-            >
-                Theme: {isDarkMode ? "Dark" : "Light"}
-            </button>
-
-            <AuthTabs activeTab="signup" isDarkMode={isDarkMode} />
+        <main className="min-h-screen w-full flex flex-col items-center justify-center transition-colors duration-300 relative bg-background text-foreground">
+            <AuthTabs activeTab="signup" />
 
             <div className="w-full max-w-125 px-6 flex flex-col items-center mt-12">
                 <div className="text-center mb-10">
@@ -122,6 +107,6 @@ export function Signup() {
                     </div>
                 </form>
             </div>
-        </div>
+        </main>
     )
 }

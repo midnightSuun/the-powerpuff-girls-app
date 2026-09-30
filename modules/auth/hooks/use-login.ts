@@ -8,7 +8,6 @@ import { type AuthActionState, login } from "../api/login"
 import { type LoginFormData, loginSchema } from "../schemas/login"
 
 export function useLogin() {
-    const [isDarkMode, setIsDarkMode] = useState<boolean>(false)
     const [showPassword, setShowPassword] = useState(false)
     const [serverError, setServerError] = useState<string | undefined>(
         undefined,
@@ -42,8 +41,6 @@ export function useLogin() {
     }
 
     return {
-        isDarkMode,
-        setIsDarkMode,
         showPassword,
         setShowPassword,
         serverError,

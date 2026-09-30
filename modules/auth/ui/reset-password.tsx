@@ -9,8 +9,6 @@ import { useResetPassword } from "../hooks/use-reset-password"
 
 export function ResetPasswordPage() {
     const {
-        isDarkMode,
-        setIsDarkMode,
         serverError,
         isPending,
         register,
@@ -21,20 +19,7 @@ export function ResetPasswordPage() {
     } = useResetPassword()
 
     return (
-        <div
-            className={`min-h-screen w-full flex flex-col items-center justify-center transition-colors duration-300 relative bg-background text-foreground ${
-                isDarkMode ? "dark" : ""
-            }`}
-        >
-            <button
-                type="button"
-                onClick={() => setIsDarkMode(!isDarkMode)}
-                aria-label="Toggle color theme"
-                className="absolute top-6 right-6 px-3 py-1.5 text-xs font-medium rounded border border-border text-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
-            >
-                Theme: {isDarkMode ? "Dark" : "Light"}
-            </button>
-
+        <main className="min-h-screen w-full flex flex-col items-center justify-center transition-colors duration-300 relative bg-background text-foreground">
             <div className="w-full max-w-125 px-6 flex flex-col items-center">
                 <div className="text-center mb-10">
                     <h1 className="text-3xl font-semibold tracking-tight mb-2">
@@ -61,11 +46,6 @@ export function ResetPasswordPage() {
                             }
                             error={errors.newPassword?.message}
                             {...register("newPassword")}
-                            className={`w-full bg-transparent border rounded-md px-4 py-3 text-sm focus:outline-none focus:border-red-500 transition-colors pr-10 text-foreground placeholder:text-muted-foreground ${
-                                errors.newPassword
-                                    ? "border-destructive"
-                                    : "border-input"
-                            }`}
                         />
                         {errors.newPassword && (
                             <span
@@ -89,11 +69,6 @@ export function ResetPasswordPage() {
                             }
                             error={errors.confirmPassword?.message}
                             {...register("confirmPassword")}
-                            className={`w-full bg-transparent border rounded-md px-4 py-3 text-sm focus:outline-none focus:border-red-500 transition-colors pr-10 text-foreground placeholder:text-muted-foreground ${
-                                errors.confirmPassword
-                                    ? "border-destructive"
-                                    : "border-input"
-                            }`}
                         />
                         {errors.confirmPassword && (
                             <span
@@ -137,6 +112,6 @@ export function ResetPasswordPage() {
                     </div>
                 </form>
             </div>
-        </div>
+        </main>
     )
 }

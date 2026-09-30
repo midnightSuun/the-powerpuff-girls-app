@@ -17,7 +17,6 @@ export function useEmailVerification(
     accessToken?: string,
 ) {
     const router = useRouter()
-    const [isDarkMode, setIsDarkMode] = useState<boolean>(false)
     const [serverError, setServerError] = useState<string | null>(
         sendFailed
             ? "We couldn't send the verification email. Please try again."
@@ -133,8 +132,6 @@ export function useEmailVerification(
     }
 
     return {
-        isDarkMode,
-        setIsDarkMode,
         serverError,
         statusMessage,
         isPending,

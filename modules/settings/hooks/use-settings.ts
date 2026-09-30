@@ -1,19 +1,26 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useTheme } from "next-themes"
 import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 
-import { updateSettingsPasswordAction } from "../api/update-password" // Импортируем отдельный серверный экшен
+import { updateSettingsPasswordAction } from "../api/update-password"
 import { type SettingsFormValues, settingsSchema } from "../schemas/settings"
 
 export function useSettings() {
-    const [isDarkMode, setIsDarkMode] = useState<boolean>(false)
+    const { theme } = useTheme()
     const [serverError, setServerError] = useState<string | undefined>(
         undefined,
     )
     const [successMessage, setSuccessMessage] = useState<string | null>(null)
     const [isPending, startTransition] = useTransition()
+
+    const getInitialTheme = () => {
+        if (theme === "dark") return "Dark"
+        if (theme === "light") return "Light"
+        return "Device settings"
+    }
 
     const {
         register,
@@ -23,7 +30,7 @@ export function useSettings() {
         resolver: zodResolver(settingsSchema),
         mode: "onChange",
         defaultValues: {
-            theme: "Device settings",
+            theme: getInitialTheme(),
             language: "English",
             password: "",
             newPassword: "",
@@ -36,7 +43,6 @@ export function useSettings() {
         setSuccessMessage(null)
 
         startTransition(async () => {
-            // Вызываем созданный нами отдельный серверный экшен для настроек
             const result = await updateSettingsPasswordAction({
                 password: data.password,
                 newPassword: data.newPassword,
@@ -48,13 +54,11 @@ export function useSettings() {
                 return
             }
 
-            setSuccessMessage("Password successfully updated.")
+            setSuccessMessage("Settings and password successfully updated.")
         })
     }
 
     return {
-        isDarkMode,
-        setIsDarkMode,
         serverError,
         successMessage,
         isPending,

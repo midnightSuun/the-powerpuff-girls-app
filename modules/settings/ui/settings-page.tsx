@@ -1,6 +1,7 @@
 "use client"
 
 import { ChevronDown } from "lucide-react"
+import { useTheme } from "next-themes"
 
 import { PasswordField } from "@/components/password-field"
 import { Button } from "@/components/ui/button"
@@ -9,6 +10,7 @@ import { LogoutButton } from "@/modules/auth/ui/logout-button"
 import { useSettings } from "../hooks/use-settings"
 
 export function SettingsPage() {
+    const { setTheme } = useTheme()
     const {
         serverError,
         successMessage,
@@ -19,6 +21,8 @@ export function SettingsPage() {
         errors,
         isValid,
     } = useSettings()
+
+    const themeRegistration = register("theme")
 
     return (
         <main className="min-h-screen w-full bg-background text-foreground px-6 py-8 flex flex-col transition-colors duration-300">
@@ -58,12 +62,33 @@ export function SettingsPage() {
                         </label>
                         <div className="relative">
                             <select
-                                {...register("theme")}
-                                className="w-full h-10 px-3 pr-10 text-sm bg-card border border-border rounded-md appearance-none focus:outline-none focus:ring-1 focus:ring-ring cursor-pointer text-foreground"
+                                {...themeRegistration}
+                                onChange={(e) => {
+                                    themeRegistration.onChange(e)
+                                    const value = e.target.value
+                                    if (value === "Dark") setTheme("dark")
+                                    else if (value === "Light")
+                                        setTheme("light")
+                                    else setTheme("system")
+                                }}
+                                className="w-full h-11 px-4 pr-10 text-sm bg-transparent border border-border rounded-lg appearance-none focus:outline-none focus:ring-1 focus:ring-ring cursor-pointer text-foreground"
                             >
-                                <option value="Light">Light</option>
-                                <option value="Dark">Dark</option>
-                                <option value="Device settings">
+                                <option
+                                    value="Light"
+                                    className="bg-background text-foreground"
+                                >
+                                    Light
+                                </option>
+                                <option
+                                    value="Dark"
+                                    className="bg-background text-foreground"
+                                >
+                                    Dark
+                                </option>
+                                <option
+                                    value="Device settings"
+                                    className="bg-background text-foreground"
+                                >
                                     Device settings
                                 </option>
                             </select>
@@ -71,6 +96,7 @@ export function SettingsPage() {
                         </div>
                     </div>
 
+                    {/* Language Selector */}
                     <div className="space-y-1.5">
                         <label className="text-xs text-muted-foreground block">
                             Language
@@ -78,17 +104,62 @@ export function SettingsPage() {
                         <div className="relative">
                             <select
                                 {...register("language")}
-                                className="w-full h-10 px-3 pr-10 text-sm bg-card border border-border rounded-md appearance-none focus:outline-none focus:ring-1 focus:ring-ring cursor-pointer text-foreground"
+                                className="w-full h-11 px-4 pr-10 text-sm bg-transparent border border-border rounded-lg appearance-none focus:outline-none focus:ring-1 focus:ring-ring cursor-pointer text-foreground"
                             >
-                                <option value="English">English</option>
-                                <option value="French">French</option>
-                                <option value="German">German</option>
-                                <option value="Italian">Italian</option>
-                                <option value="Polish">Polish</option>
-                                <option value="Portuguese">Portuguese</option>
-                                <option value="Russian">Russian</option>
-                                <option value="Spanish">Spanish</option>
-                                <option value="Ukrainian">Ukrainian</option>
+                                <option
+                                    value="English"
+                                    className="bg-background text-foreground"
+                                >
+                                    English
+                                </option>
+                                <option
+                                    value="French"
+                                    className="bg-background text-foreground"
+                                >
+                                    French
+                                </option>
+                                <option
+                                    value="German"
+                                    className="bg-background text-foreground"
+                                >
+                                    German
+                                </option>
+                                <option
+                                    value="Italian"
+                                    className="bg-background text-foreground"
+                                >
+                                    Italian
+                                </option>
+                                <option
+                                    value="Polish"
+                                    className="bg-background text-foreground"
+                                >
+                                    Polish
+                                </option>
+                                <option
+                                    value="Portuguese"
+                                    className="bg-background text-foreground"
+                                >
+                                    Portuguese
+                                </option>
+                                <option
+                                    value="Russian"
+                                    className="bg-background text-foreground"
+                                >
+                                    Russian
+                                </option>
+                                <option
+                                    value="Spanish"
+                                    className="bg-background text-foreground"
+                                >
+                                    Spanish
+                                </option>
+                                <option
+                                    value="Ukrainian"
+                                    className="bg-background text-foreground"
+                                >
+                                    Ukrainian
+                                </option>
                             </select>
                             <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
                         </div>
