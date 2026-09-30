@@ -12,6 +12,7 @@ interface SkillCategoryProps {
     isSelectionMode?: boolean
     selectedSkills?: string[]
     onSelectSkill?: (skillName: string) => void
+    onEditSkill?: (skill: Skill) => void
 }
 
 export function SkillCategory({
@@ -21,6 +22,7 @@ export function SkillCategory({
     isSelectionMode = false,
     selectedSkills = [],
     onSelectSkill,
+    onEditSkill,
 }: SkillCategoryProps) {
     if (skills.length === 0) return null
 
@@ -39,6 +41,7 @@ export function SkillCategory({
                         isSelectionMode={isSelectionMode}
                         isSelected={selectedSkills.includes(skill.name)}
                         onSelect={() => onSelectSkill?.(skill.name)}
+                        onEdit={() => onEditSkill?.(skill)}
                     />
                 ))}
             </div>

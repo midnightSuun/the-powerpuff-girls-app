@@ -2,14 +2,18 @@
 
 import { useState } from "react"
 
+import { Mastery } from "@/gql/generated/graphql"
+
+import { updateCvSkill } from "../../api/skills"
 import { AddSkillButton } from "./add-skill-button"
 import { SkillOption } from "./add-skill-modal"
 import { DeleteSkillsButton } from "./delete-skill-button"
+import { EditSkillModal } from "./edit-skill-modal"
 import { SkillCategory } from "./skill-catergory"
 
 interface Skill {
     name: string
-    mastery: string
+    mastery: string | number
     categoryId?: string | null
 }
 
@@ -36,6 +40,7 @@ export function SkillsView({
 }: SkillsViewProps) {
     const [isSelectionMode, setIsSelectionMode] = useState(false)
     const [selectedSkills, setSelectedSkills] = useState<string[]>([])
+    const [editingSkill, setEditingSkill] = useState<Skill | null>(null)
 
     const handleToggleSkill = (skillName: string) => {
         setSelectedSkills((prev) =>
@@ -43,6 +48,18 @@ export function SkillsView({
                 ? prev.filter((name) => name !== skillName)
                 : [...prev, skillName],
         )
+    }
+
+    const handleUpdateSkill = async (newMastery: Mastery) => {
+        if (!editingSkill) return
+
+        await updateCvSkill({
+            cvId,
+            name: editingSkill.name,
+            mastery: newMastery,
+        })
+
+        setEditingSkill(null)
     }
 
     return (
@@ -57,6 +74,7 @@ export function SkillsView({
                             isSelectionMode={isSelectionMode}
                             selectedSkills={selectedSkills}
                             onSelectSkill={handleToggleSkill}
+                            onEditSkill={(skill) => setEditingSkill(skill)}
                         />
                     ))}
                 </div>
@@ -80,6 +98,14 @@ export function SkillsView({
                     />
                 </div>
             </div>
+
+            <EditSkillModal
+                isOpen={Boolean(editingSkill)}
+                onClose={() => setEditingSkill(null)}
+                skillName={editingSkill?.name ?? ""}
+                currentMastery={String(editingSkill?.mastery ?? "")}
+                onUpdate={handleUpdateSkill}
+            />
         </div>
     )
 }

@@ -11,6 +11,8 @@ import {
     DeleteCvSkillInput,
     GetSkillsDocument,
     GetUserSkillsDocument,
+    UpdateCvSkillInput,
+    UpdateSkillDocument,
 } from "@/gql/generated/graphql"
 
 export async function getUserSkills(userId: string) {
@@ -62,6 +64,14 @@ export async function getAvailableSkills() {
 export async function addCvSkills(skill: AddCvSkillInput) {
     const gql = await getGql()
     const data = await gql.request(AddSkillDocument, { skill })
+
+    revalidatePath("/skills")
+    return data
+}
+
+export async function updateCvSkill(skill: UpdateCvSkillInput) {
+    const gql = await getGql()
+    const data = await gql.request(UpdateSkillDocument, { skill })
 
     revalidatePath("/skills")
     return data

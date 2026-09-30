@@ -41,3 +41,12 @@ mutation DeleteCvSkill($skill: DeleteCvSkillInput!) {
     id
   }
 }
+mutation UpdateSkill($skill: UpdateCvSkillInput!) {
+    updateCvSkill(skill: $skill) {
+        id
+        skills {
+            name
+            mastery
+        }
+    }
+}

@@ -7,6 +7,7 @@ interface SkillItemProps {
     isSelectionMode?: boolean
     isSelected?: boolean
     onSelect?: () => void
+    onEdit?: () => void
 }
 
 const MASTERY_LEVELS: Record<
@@ -73,26 +74,28 @@ const MASTERY_LEVELS: Record<
 export function SkillItem({
     name,
     mastery,
-    isDarkMode: _isDarkMode = false,
     isSelectionMode = false,
     isSelected = false,
     onSelect,
+    onEdit,
 }: SkillItemProps) {
     const config = MASTERY_LEVELS[mastery] ?? MASTERY_LEVELS[4]
 
     const handleClick = () => {
-        if (isSelectionMode && onSelect) {
-            onSelect()
+        if (isSelectionMode) {
+            onSelect?.()
+        } else {
+            onEdit?.()
         }
     }
 
     return (
         <div
             onClick={handleClick}
-            className={`flex items-center gap-3 py-1.5 px-2 rounded transition-colors ${
+            className={`flex items-center gap-3 py-1.5 px-2 rounded transition-colors cursor-pointer ${
                 isSelectionMode
-                    ? "cursor-pointer hover:bg-accent dark:hover:bg-accent/50"
-                    : ""
+                    ? "hover:bg-accent dark:hover:bg-accent/50"
+                    : "hover:bg-accent/50"
             } ${
                 isSelected
                     ? "bg-red-50 ring-1 ring-red-500 dark:bg-red-950/30"
