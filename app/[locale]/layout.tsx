@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation"
-import { connection } from "next/server"
-import { NextIntlClientProvider } from "next-intl"
-import { hasLocale } from "next-intl"
+import { hasLocale, NextIntlClientProvider } from "next-intl"
+import { setRequestLocale } from "next-intl/server"
 
 import { routing } from "@/i18n/routing"
 
@@ -18,11 +17,11 @@ export default async function LocaleLayout({
 }) {
     const { locale } = await params
 
-    await connection()
-
     if (!hasLocale(routing.locales, locale)) {
         notFound()
     }
+
+    setRequestLocale(locale)
 
     const messages = (await import(`../../messages/${locale}.json`)).default
 

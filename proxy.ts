@@ -1,5 +1,4 @@
-import type { NextRequest } from "next/server"
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import createMiddleware from "next-intl/middleware"
 
 import { refreshTokens } from "@/modules/auth/api/refresh"
@@ -76,32 +75,71 @@ function getCleanPathname(pathname: string) {
     return segments.join("/") || "/"
 }
 
+function getLocale(pathname: string) {
+    const segment = pathname.split("/")[1]
+
+    if (routing.locales.includes(segment as (typeof routing.locales)[number])) {
+        return segment
+    }
+
+    return routing.defaultLocale
+}
+
+function localizedPath(locale: string, pathname: string) {
+    if (locale === routing.defaultLocale) {
+        return pathname
+    }
+
+    if (pathname === "/") {
+        return `/${locale}`
+    }
+
+    return `/${locale}${pathname}`
+}
+
+function pathnameHeaders(request: NextRequest) {
+    const requestHeaders = new Headers(request.headers)
+    requestHeaders.set("x-pathname", getCleanPathname(request.nextUrl.pathname))
+
+    return requestHeaders
+}
+
+function nextWithPathname(request: NextRequest) {
+    return NextResponse.next({
+        request: {
+            headers: pathnameHeaders(request),
+        },
+    })
+}
+
 export async function proxy(request: NextRequest) {
     const originalPathname = request.nextUrl.pathname
     const targetPage = getCleanPathname(originalPathname)
+    const currentLocale = getLocale(originalPathname)
 
     const tokens = await refreshSession(request)
 
     if (tokens === "failed") {
         const response = isPublic(targetPage)
-            ? NextResponse.next()
-            : NextResponse.redirect(new URL(`/en/login`, request.url))
+            ? nextWithPathname(request)
+            : NextResponse.redirect(
+                  new URL(localizedPath(currentLocale, "/login"), request.url),
+              )
 
-        return clearTokens(response as NextResponse)
+        return clearTokens(response)
     }
 
     const authorized = isAuthorized(request.cookies)
-    const currentLocale = originalPathname.split("/")[1] || "en"
 
     let customResponse: NextResponse | null = null
 
     if (authorized && isGuestOnly(targetPage)) {
         customResponse = NextResponse.redirect(
-            new URL(`/${currentLocale}`, request.url),
+            new URL(localizedPath(currentLocale, "/"), request.url),
         )
     } else if (!authorized && !isPublic(targetPage)) {
         customResponse = NextResponse.redirect(
-            new URL(`/${currentLocale}/login`, request.url),
+            new URL(localizedPath(currentLocale, "/login"), request.url),
         )
     }
 
@@ -113,7 +151,9 @@ export async function proxy(request: NextRequest) {
         return customResponse
     }
 
-    const intlResponse = intlMiddleware(request)
+    const intlResponse = intlMiddleware(
+        new NextRequest(request, { headers: pathnameHeaders(request) }),
+    )
 
     if (tokens) {
         intlResponse.cookies.set(accessTokenCookie(tokens.accessToken))
