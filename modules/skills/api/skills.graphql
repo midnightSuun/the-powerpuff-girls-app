@@ -36,3 +36,8 @@ query GetSkills {
     }
   }
 }
+mutation DeleteCvSkill($skill: DeleteCvSkillInput!) {
+  deleteCvSkill(skill: $skill) {
+    id
+  }
+}

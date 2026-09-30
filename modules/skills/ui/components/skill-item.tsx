@@ -1,10 +1,12 @@
-import { FlightDataSegment } from "next/dist/shared/lib/app-router-types"
 import React from "react"
 
 interface SkillItemProps {
     name: string
     mastery: string | number
     isDarkMode?: boolean
+    isSelectionMode?: boolean
+    isSelected?: boolean
+    onSelect?: () => void
 }
 
 const MASTERY_LEVELS: Record<
@@ -17,7 +19,6 @@ const MASTERY_LEVELS: Record<
         lightBg: "#454545",
         darkBg: "#454545",
     },
-
     1: {
         width: "25%",
         color: "#626262",
@@ -30,7 +31,6 @@ const MASTERY_LEVELS: Record<
         lightBg: "#AEAEAE",
         darkBg: "#454545",
     },
-
     2: {
         width: "45%",
         color: "#0288D1",
@@ -43,7 +43,6 @@ const MASTERY_LEVELS: Record<
         lightBg: "#9ED1ED",
         darkBg: "#145B7B",
     },
-
     3: {
         width: "60%",
         color: "#2E7D32",
@@ -56,7 +55,6 @@ const MASTERY_LEVELS: Record<
         lightBg: "#AFCDB1",
         darkBg: "#335D35",
     },
-
     4: {
         width: "75%",
         color: "#FFB800",
@@ -69,7 +67,6 @@ const MASTERY_LEVELS: Record<
         lightBg: "#FFE49E",
         darkBg: "#7F5C00",
     },
-
     5: {
         width: "100%",
         color: "#C63031",
@@ -88,14 +85,34 @@ export function SkillItem({
     name,
     mastery,
     isDarkMode = false,
+    isSelectionMode = false,
+    isSelected = false,
+    onSelect,
 }: SkillItemProps) {
     const config = MASTERY_LEVELS[mastery] ?? MASTERY_LEVELS[4]
     const trackBgColor = isDarkMode ? config.darkBg : config.lightBg
 
+    const handleClick = () => {
+        if (isSelectionMode && onSelect) {
+            onSelect()
+        }
+    }
+
     return (
-        <div className="flex items-center gap-3 py-1.5">
+        <div
+            onClick={handleClick}
+            className={`flex items-center gap-3 py-1.5 px-2 rounded transition-colors ${
+                isSelectionMode
+                    ? "cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800/50"
+                    : ""
+            } ${
+                isSelected
+                    ? "bg-red-50 ring-1 ring-red-500 dark:bg-red-950/30"
+                    : ""
+            }`}
+        >
             <div
-                className="relative h-1.5 w-16 overflow-hidden"
+                className="relative h-1.5 w-16 shrink-0 overflow-hidden"
                 style={{ backgroundColor: trackBgColor }}
             >
                 <div
@@ -107,7 +124,13 @@ export function SkillItem({
                 />
             </div>
 
-            <span className="text-sm font-normal text-gray-500">{name}</span>
+            <span
+                className={`text-sm font-normal ${
+                    isSelected ? "text-red-600 font-medium" : "text-gray-500"
+                }`}
+            >
+                {name}
+            </span>
         </div>
     )
 }

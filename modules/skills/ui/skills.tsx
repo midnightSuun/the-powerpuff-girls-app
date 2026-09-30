@@ -1,10 +1,5 @@
-import { Plus, Trash2 } from "lucide-react"
-
-import { Button } from "@/components/ui/button"
-
 import { getAvailableSkills, getUserSkills } from "../api/skills"
-import { AddSkillButton } from "./components/add-skill-button"
-import { SkillCategory } from "./components/skill-catergory"
+import { SkillsView } from "./components/skills-view"
 
 interface SkillsProps {
     userId: string
@@ -47,33 +42,13 @@ export async function Skills({ userId, isDarkMode = false }: SkillsProps) {
     )
 
     return (
-        <div className="flex items-start gap-16">
-            <div className="flex-1 max-w-[852px] pl-50 pt-6">
-                <div className="space-y-8">
-                    {categories.map((category) => (
-                        <SkillCategory
-                            key={category.id}
-                            title={category.title}
-                            skills={category.skills}
-                        />
-                    ))}
-                </div>
-
-                <div className="mt-8 flex items-center justify-end gap-6 text-xs font-medium tracking-wider text-gray-700">
-                    <AddSkillButton
-                        cvId={cvId}
-                        isDarkMode={isDarkMode}
-                        existingSkills={typedSkills}
-                        availableSkills={availableSkills}
-                    />
-
-                    <Button variant="primaryV2" className="gap-2">
-                        <Trash2 className="h-5 w-5" />
-                        REMOVE SKILLS
-                    </Button>
-                </div>
-            </div>
-        </div>
+        <SkillsView
+            cvId={cvId}
+            categories={categories}
+            typedSkills={typedSkills}
+            availableSkills={availableSkills}
+            isDarkMode={isDarkMode}
+        />
     )
 }
 
