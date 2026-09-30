@@ -1,5 +1,4 @@
-import { FlightDataSegment } from "next/dist/shared/lib/app-router-types"
-import React from "react"
+// import { FlightDataSegment } from "next/dist/shared/lib/app-router-types"
 
 interface SkillItemProps {
     name: string
