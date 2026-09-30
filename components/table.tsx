@@ -1,4 +1,3 @@
-import Link from "next/link"
 import type { ReactNode } from "react"
 
 import {
@@ -9,6 +8,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import { Link } from "@/i18n/navigation"
 
 export type TableColumn<T> = {
     label: string

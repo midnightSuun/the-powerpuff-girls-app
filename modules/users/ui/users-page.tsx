@@ -1,88 +1,29 @@
-import { ChevronRight } from "lucide-react"
+import { getTranslations } from "next-intl/server"
 import { Suspense } from "react"
 
 import { PageHeader } from "@/components/page-header"
-import { PaginationComponent } from "@/components/pagination"
 import { SearchInput } from "@/components/search-input"
-import { type TableColumn, TableComponent } from "@/components/table"
 import { type PaginationSearchParams } from "@/lib/pagination-search-params"
-import { type User } from "@/types"
 
-import { getUsers } from "../api/get-users"
-import { UserAvatar } from "./user-avatar"
-
-const columns: TableColumn<User>[] = [
-    {
-        label: "Avatar",
-        render: (user) => (
-            <UserAvatar
-                src={user.profile.avatar}
-                firstName={user.profile.first_name}
-                lastName={user.profile.last_name}
-                email={user.email}
-            />
-        ),
-    },
-    {
-        label: "First Name",
-        render: (user) => user.profile.first_name,
-    },
-    {
-        label: "Last Name",
-        render: (user) => user.profile.last_name,
-    },
-    {
-        label: "Email",
-        render: (user) => user.email,
-    },
-    {
-        label: "Department",
-        render: (user) => user.department?.name,
-    },
-    {
-        label: "Position",
-        render: (user) => user.position?.name,
-    },
-    {
-        label: "",
-        render: () => <ChevronRight className="size-4 text-muted-foreground" />,
-    },
-]
+import { UsersList } from "./users-list"
 
 type Props = PaginationSearchParams
 
-async function UsersListAsync({ limit, page, search }: Props) {
-    const { users, totalPages } = await getUsers(limit, page, search)
-
-    return (
-        <>
-            <TableComponent
-                data={users}
-                columns={columns}
-                getRowHref={(user) => `/users/${user.id}`}
-            />
-            <PaginationComponent
-                totalPages={totalPages}
-                page={page}
-                limit={limit}
-                search={search}
-                path="users"
-            />
-        </>
-    )
-}
-
 export async function UsersPage({ limit, page, search }: Props) {
+    const t = await getTranslations("Users")
+
     return (
         <div>
-            <PageHeader title="Employees">
+            <PageHeader title={t("title")}>
                 <SearchInput limit={limit} search={search} />
             </PageHeader>
             <Suspense
                 key={page}
-                fallback={<p className="p-4">Loading users...</p>}
+                fallback={
+                    <p className="p-4 text-muted-foreground">{t("loading")}</p>
+                }
             >
-                <UsersListAsync limit={limit} page={page} search={search} />
+                <UsersList limit={limit} page={page} search={search} />
             </Suspense>
         </div>
     )
