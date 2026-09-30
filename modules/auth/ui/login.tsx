@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 
 import { Button } from "@/components/ui/button"
 
@@ -8,9 +9,8 @@ import { useLogin } from "../hooks/use-login"
 import { AuthTabs } from "./components/authTabs"
 
 export function Login() {
+    const t = useTranslations("Auth.Login")
     const {
-        isDarkMode,
-        setIsDarkMode,
         showPassword,
         setShowPassword,
         serverError,
@@ -23,29 +23,16 @@ export function Login() {
     } = useLogin()
 
     return (
-        <div
-            className={`min-h-screen w-full flex flex-col items-center justify-center transition-colors duration-300 relative bg-background text-foreground ${
-                isDarkMode ? "dark" : ""
-            }`}
-        >
-            <button
-                type="button"
-                onClick={() => setIsDarkMode(!isDarkMode)}
-                aria-label="Toggle color theme"
-                className="absolute top-6 right-6 px-3 py-1.5 text-xs font-medium rounded border border-border text-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
-            >
-                Theme: {isDarkMode ? "Dark" : "Light"}
-            </button>
-
-            <AuthTabs activeTab="signin" isDarkMode={isDarkMode} />
+        <main className="min-h-screen w-full flex flex-col items-center justify-center transition-colors duration-300 relative bg-background text-foreground">
+            <AuthTabs activeTab="signin" />
 
             <div className="w-full max-w-md px-6 flex flex-col items-center mt-12">
                 <div className="text-center mb-10">
                     <h1 className="text-3xl font-semibold tracking-tight mb-2">
-                        Welcome back
+                        {t("title")}
                     </h1>
                     <p className="text-sm text-muted-foreground">
-                        Hello again! Sign in to continue
+                        {t("subtitle")}
                     </p>
                 </div>
 
@@ -57,7 +44,7 @@ export function Login() {
                     <div className="w-full space-y-1">
                         <input
                             type="email"
-                            placeholder="Email"
+                            placeholder={t("emailPlaceholder")}
                             aria-invalid={!!errors.email}
                             aria-describedby={
                                 errors.email ? "email-error" : undefined
@@ -84,7 +71,7 @@ export function Login() {
                         <div className="relative">
                             <input
                                 type={showPassword ? "text" : "password"}
-                                placeholder="Password"
+                                placeholder={t("passwordPlaceholder")}
                                 aria-invalid={!!errors.password}
                                 aria-describedby={
                                     errors.password
@@ -104,8 +91,8 @@ export function Login() {
                                 onClick={() => setShowPassword(!showPassword)}
                                 aria-label={
                                     showPassword
-                                        ? "Hide password"
-                                        : "Show password"
+                                        ? t("hidePassword")
+                                        : t("showPassword")
                                 }
                                 className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground transition-colors"
                             >
@@ -163,18 +150,20 @@ export function Login() {
                                     : "bg-button-primary-default hover:bg-button-primary-default/90 cursor-pointer"
                             }`}
                         >
-                            {isPending ? "SIGNING IN..." : "SIGN IN"}
+                            {isPending
+                                ? t("submittingButton")
+                                : t("submitButton")}
                         </Button>
 
                         <Link
                             href="/forgot-password"
                             className="text-[11px] font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors"
                         >
-                            FORGOT PASSWORD
+                            {t("forgotPassword")}
                         </Link>
                     </div>
                 </form>
             </div>
-        </div>
+        </main>
     )
 }
