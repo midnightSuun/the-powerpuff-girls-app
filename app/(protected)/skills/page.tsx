@@ -14,11 +14,7 @@ interface SkillsPageProps {
 async function SkillsContent({ isDarkMode = false }: { isDarkMode?: boolean }) {
     const userId = await getAuthUserId()
 
-    if (!userId) {
-        redirect("/login")
-    }
-
-    return <Skills userId={userId} isDarkMode={isDarkMode} />
+    return <Skills userId={userId ?? ""} isDarkMode={isDarkMode} />
 }
 
 export default function SkillsPage({ isDarkMode = false }: SkillsPageProps) {

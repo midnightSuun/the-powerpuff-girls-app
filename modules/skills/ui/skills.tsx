@@ -2,17 +2,30 @@ import { Plus, Trash2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 
-import { getUserSkills } from "../api/skills"
+import { getAvailableSkills, getUserSkills } from "../api/skills"
+import { AddSkillButton } from "./components/add-skill-button"
 import { SkillCategory } from "./components/skill-catergory"
 
 interface SkillsProps {
     userId: string
-    isDarkMode: boolean
+    isDarkMode?: boolean
+}
+
+type UserSkill = {
+    name: string
+    mastery: string
+    categoryId?: string | null
 }
 
 export async function Skills({ userId, isDarkMode = false }: SkillsProps) {
-    const userSkills = await getUserSkills(userId)
-    const groupedSkills = userSkills.reduce<Record<string, typeof userSkills>>(
+    const [{ cvId, skills: userSkills }, availableSkills] = await Promise.all([
+        getUserSkills(userId),
+        getAvailableSkills(),
+    ])
+
+    const typedSkills = (userSkills ?? []) as UserSkill[]
+
+    const groupedSkills = typedSkills.reduce<Record<string, UserSkill[]>>(
         (acc, skill) => {
             const categoryKey = skill.categoryId ?? "Other"
 
@@ -34,7 +47,7 @@ export async function Skills({ userId, isDarkMode = false }: SkillsProps) {
     )
 
     return (
-        <div className={`flex items-start gap-16`}>
+        <div className="flex items-start gap-16">
             <div className="flex-1 max-w-[852px] pl-50 pt-6">
                 <div className="space-y-8">
                     {categories.map((category) => (
@@ -47,15 +60,12 @@ export async function Skills({ userId, isDarkMode = false }: SkillsProps) {
                 </div>
 
                 <div className="mt-8 flex items-center justify-end gap-6 text-xs font-medium tracking-wider text-gray-700">
-                    <Button
-                        variant="ghost"
-                        className={`gap-2 border-transparent ${
-                            isDarkMode ? "text-[#C4C4C6]" : "text-[#626262]"
-                        }`}
-                    >
-                        <Plus className="h-5 w-5" />
-                        ADD SKILL
-                    </Button>
+                    <AddSkillButton
+                        cvId={cvId}
+                        isDarkMode={isDarkMode}
+                        existingSkills={typedSkills}
+                        availableSkills={availableSkills}
+                    />
 
                     <Button variant="primaryV2" className="gap-2">
                         <Trash2 className="h-5 w-5" />

@@ -1,9 +1,38 @@
 query GetUserSkills($userId: ID!) {
-  profile(userId: $userId) {
-    skills {
+  user(userId: $userId) {
+    cvs {
+      id
+      skills {
+        name
+        mastery
+        categoryId
+      }
+    }
+  }
+}
+
+mutation CreateCv($cv: CreateCvInput!) {
+  createCv(cv: $cv) {
+    id
+  }
+}
+
+mutation AddSkill($skill: AddCvSkillInput!) {
+  addCvSkill(skill: $skill) {
+    id
+  }
+}
+
+
+query GetSkills {
+  skills(params: { limit: 100 }) {
+    items {
+      id
       name
-      mastery
-      categoryId
+      category {
+        id
+        name
+      }
     }
   }
 }
