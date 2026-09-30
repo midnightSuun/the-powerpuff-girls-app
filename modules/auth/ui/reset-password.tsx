@@ -1,16 +1,16 @@
 "use client"
 
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 
 import { Button } from "@/components/ui/button"
 
+import { PasswordField } from "../../../components/password-field"
 import { useResetPassword } from "../hooks/use-reset-password"
-import { PasswordField } from "./components/password-field"
 
 export function ResetPasswordPage() {
+    const t = useTranslations("Auth.ResetPassword")
     const {
-        isDarkMode,
-        setIsDarkMode,
         serverError,
         isPending,
         register,
@@ -21,27 +21,14 @@ export function ResetPasswordPage() {
     } = useResetPassword()
 
     return (
-        <div
-            className={`min-h-screen w-full flex flex-col items-center justify-center transition-colors duration-300 relative bg-background text-foreground ${
-                isDarkMode ? "dark" : ""
-            }`}
-        >
-            <button
-                type="button"
-                onClick={() => setIsDarkMode(!isDarkMode)}
-                aria-label="Toggle color theme"
-                className="absolute top-6 right-6 px-3 py-1.5 text-xs font-medium rounded border border-border text-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
-            >
-                Theme: {isDarkMode ? "Dark" : "Light"}
-            </button>
-
+        <main className="min-h-screen w-full flex flex-col items-center justify-center transition-colors duration-300 relative bg-background text-foreground">
             <div className="w-full max-w-125 px-6 flex flex-col items-center">
                 <div className="text-center mb-10">
                     <h1 className="text-3xl font-semibold tracking-tight mb-2">
-                        Reset password
+                        {t("title")}
                     </h1>
                     <p className="text-sm text-muted-foreground">
-                        Here you should write a new password and confirm it
+                        {t("subtitle")}
                     </p>
                 </div>
 
@@ -52,7 +39,7 @@ export function ResetPasswordPage() {
                 >
                     <div className="w-full space-y-1">
                         <PasswordField
-                            placeholder="New password"
+                            placeholder={t("newPasswordPlaceholder")}
                             aria-invalid={!!errors.newPassword}
                             aria-describedby={
                                 errors.newPassword
@@ -61,11 +48,6 @@ export function ResetPasswordPage() {
                             }
                             error={errors.newPassword?.message}
                             {...register("newPassword")}
-                            className={`w-full bg-transparent border rounded-md px-4 py-3 text-sm focus:outline-none focus:border-red-500 transition-colors pr-10 text-foreground placeholder:text-muted-foreground ${
-                                errors.newPassword
-                                    ? "border-destructive"
-                                    : "border-input"
-                            }`}
                         />
                         {errors.newPassword && (
                             <span
@@ -80,7 +62,7 @@ export function ResetPasswordPage() {
 
                     <div className="w-full space-y-1">
                         <PasswordField
-                            placeholder="Confirm password"
+                            placeholder={t("confirmPasswordPlaceholder")}
                             aria-invalid={!!errors.confirmPassword}
                             aria-describedby={
                                 errors.confirmPassword
@@ -89,11 +71,6 @@ export function ResetPasswordPage() {
                             }
                             error={errors.confirmPassword?.message}
                             {...register("confirmPassword")}
-                            className={`w-full bg-transparent border rounded-md px-4 py-3 text-sm focus:outline-none focus:border-red-500 transition-colors pr-10 text-foreground placeholder:text-muted-foreground ${
-                                errors.confirmPassword
-                                    ? "border-destructive"
-                                    : "border-input"
-                            }`}
                         />
                         {errors.confirmPassword && (
                             <span
@@ -125,18 +102,20 @@ export function ResetPasswordPage() {
                                     : "bg-button-primary-default hover:bg-button-primary-default/90 cursor-pointer"
                             }`}
                         >
-                            {isPending ? "SUBMITTING..." : "SUBMIT"}
+                            {isPending
+                                ? t("submittingButton")
+                                : t("submitButton")}
                         </Button>
 
                         <Link
                             href="/login"
                             className="text-[11px] font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors"
                         >
-                            GO TO SIGN IN
+                            {t("goToSignIn")}
                         </Link>
                     </div>
                 </form>
             </div>
-        </div>
+        </main>
     )
 }

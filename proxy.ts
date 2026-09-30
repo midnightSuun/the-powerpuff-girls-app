@@ -1,5 +1,5 @@
-import type { NextRequest } from "next/server"
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
+import createMiddleware from "next-intl/middleware"
 
 import { refreshTokens } from "@/modules/auth/api/refresh"
 import {
@@ -7,11 +7,18 @@ import {
     REFRESH_TOKEN_COOKIE,
 } from "@/modules/auth/consts"
 
+import { routing } from "./i18n/routing"
 import { isAuthorized } from "./modules/auth/helpers/is-authorized"
 import {
     accessTokenCookie,
     refreshTokenCookie,
 } from "./modules/auth/helpers/tokens"
+
+const intlMiddleware = createMiddleware({
+    locales: routing.locales,
+    defaultLocale: routing.defaultLocale,
+    localePrefix: "as-needed",
+})
 
 const clearTokens = (response: NextResponse) => {
     response.cookies.delete(ACCESS_TOKEN_COOKIE)
@@ -55,41 +62,107 @@ function isGuestOnly(route: string) {
     return guestOnlyRoutes.includes(route)
 }
 
+function getCleanPathname(pathname: string) {
+    const segments = pathname.split("/")
+
+    if (
+        routing.locales.includes(
+            segments[1] as (typeof routing.locales)[number],
+        )
+    ) {
+        segments.splice(1, 1)
+    }
+    return segments.join("/") || "/"
+}
+
+function getLocale(pathname: string) {
+    const segment = pathname.split("/")[1]
+
+    if (routing.locales.includes(segment as (typeof routing.locales)[number])) {
+        return segment
+    }
+
+    return routing.defaultLocale
+}
+
+function localizedPath(locale: string, pathname: string) {
+    if (locale === routing.defaultLocale) {
+        return pathname
+    }
+
+    if (pathname === "/") {
+        return `/${locale}`
+    }
+
+    return `/${locale}${pathname}`
+}
+
+function pathnameHeaders(request: NextRequest) {
+    const requestHeaders = new Headers(request.headers)
+    requestHeaders.set("x-pathname", getCleanPathname(request.nextUrl.pathname))
+
+    return requestHeaders
+}
+
+function nextWithPathname(request: NextRequest) {
+    return NextResponse.next({
+        request: {
+            headers: pathnameHeaders(request),
+        },
+    })
+}
+
 export async function proxy(request: NextRequest) {
+    const originalPathname = request.nextUrl.pathname
+    const targetPage = getCleanPathname(originalPathname)
+    const currentLocale = getLocale(originalPathname)
+
     const tokens = await refreshSession(request)
-    const targetPage = request.nextUrl.pathname
 
     if (tokens === "failed") {
         const response = isPublic(targetPage)
-            ? NextResponse.next()
-            : NextResponse.redirect(new URL("/login", request.url))
+            ? nextWithPathname(request)
+            : NextResponse.redirect(
+                  new URL(localizedPath(currentLocale, "/login"), request.url),
+              )
 
         return clearTokens(response)
     }
 
     const authorized = isAuthorized(request.cookies)
 
-    const response =
-        authorized && isGuestOnly(targetPage)
-            ? NextResponse.redirect(new URL("/", request.url))
-            : !authorized && !isPublic(targetPage)
-              ? NextResponse.redirect(new URL("/login", request.url))
-              : NextResponse.next({
-                    request: {
-                        headers: new Headers(request.headers),
-                    },
-                })
+    let customResponse: NextResponse | null = null
 
-    if (tokens) {
-        response.cookies.set(accessTokenCookie(tokens.accessToken))
-        response.cookies.set(refreshTokenCookie(tokens.refreshToken))
+    if (authorized && isGuestOnly(targetPage)) {
+        customResponse = NextResponse.redirect(
+            new URL(localizedPath(currentLocale, "/"), request.url),
+        )
+    } else if (!authorized && !isPublic(targetPage)) {
+        customResponse = NextResponse.redirect(
+            new URL(localizedPath(currentLocale, "/login"), request.url),
+        )
     }
 
-    return response
+    if (customResponse) {
+        if (tokens) {
+            customResponse.cookies.set(accessTokenCookie(tokens.accessToken))
+            customResponse.cookies.set(refreshTokenCookie(tokens.refreshToken))
+        }
+        return customResponse
+    }
+
+    const intlResponse = intlMiddleware(
+        new NextRequest(request, { headers: pathnameHeaders(request) }),
+    )
+
+    if (tokens) {
+        intlResponse.cookies.set(accessTokenCookie(tokens.accessToken))
+        intlResponse.cookies.set(refreshTokenCookie(tokens.refreshToken))
+    }
+
+    return intlResponse
 }
 
 export const config = {
-    matcher: [
-        "/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
-    ],
+    matcher: ["/((?!api|_next|_vercel|.*\\..*).*)"],
 }

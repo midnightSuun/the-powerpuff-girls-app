@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 
@@ -12,7 +12,7 @@ import {
 } from "../schemas/reset-password"
 
 export function useResetPassword() {
-    const [isDarkMode, setIsDarkMode] = useState<boolean>(false)
+    const router = useRouter()
     const [serverError, setServerError] = useState<string | undefined>(
         undefined,
     )
@@ -53,13 +53,11 @@ export function useResetPassword() {
                 return
             }
 
-            window.location.href = "/login?reset=success"
+            router.push("/login?reset=success")
         })
     }
 
     return {
-        isDarkMode,
-        setIsDarkMode,
         serverError,
         isPending,
         register,

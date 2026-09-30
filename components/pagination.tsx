@@ -1,3 +1,5 @@
+import { getTranslations } from "next-intl/server"
+
 import {
     Pagination,
     PaginationContent,
@@ -43,7 +45,7 @@ const getPageItems = (totalPages: number, page: number): PageItem[] => {
     return items
 }
 
-export function PaginationComponent({
+export async function PaginationComponent({
     totalPages,
     page,
     limit,
@@ -53,6 +55,8 @@ export function PaginationComponent({
     if (totalPages <= 1) {
         return null
     }
+
+    const t = await getTranslations("Pagination")
 
     const hrefForPage = (pageNumber: number) =>
         `/${path}?page=${pageNumber}&limit=${limit}&search=${encodeURIComponent(search)}`
@@ -68,6 +72,7 @@ export function PaginationComponent({
                     <PaginationPrevious
                         href={hrefForPage(previousPage)}
                         isDisabled={page <= 1}
+                        text={t("previous")}
                     />
                 </PaginationItem>
                 {pageItems.map((item, index) =>
@@ -90,6 +95,7 @@ export function PaginationComponent({
                     <PaginationNext
                         href={hrefForPage(nextPage)}
                         isDisabled={page >= totalPages}
+                        text={t("next")}
                     />
                 </PaginationItem>
             </PaginationContent>

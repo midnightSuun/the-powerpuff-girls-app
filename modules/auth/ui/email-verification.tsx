@@ -1,5 +1,7 @@
 "use client"
 
+import { useTranslations } from "next-intl"
+
 import { Button } from "@/components/ui/button"
 
 import { useEmailVerification } from "../hooks/use-email-verification"
@@ -15,9 +17,8 @@ export function EmailVerification({
     sendFailed,
     accessToken,
 }: EmailVerificationProps) {
+    const t = useTranslations("Auth.EmailVerification")
     const {
-        isDarkMode,
-        setIsDarkMode,
         serverError,
         statusMessage,
         isPending,
@@ -36,28 +37,14 @@ export function EmailVerification({
     } = useEmailVerification(email, sendFailed, accessToken)
 
     return (
-        <div
-            className={`min-h-screen w-full flex flex-col items-center justify-center transition-colors duration-300 relative bg-background text-foreground ${
-                isDarkMode ? "dark" : ""
-            }`}
-        >
-            <button
-                type="button"
-                onClick={() => setIsDarkMode(!isDarkMode)}
-                aria-label="Toggle color theme"
-                className="absolute top-6 right-6 px-3 py-1.5 text-xs font-medium rounded border border-border text-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
-            >
-                Theme: {isDarkMode ? "Dark" : "Light"}
-            </button>
-
+        <main className="min-h-screen w-full flex flex-col items-center justify-center transition-colors duration-300 relative bg-background text-foreground">
             <div className="w-full max-w-125 px-6 flex flex-col items-center">
                 <div className="text-center mb-8">
                     <h1 className="text-2xl font-semibold tracking-tight mb-2">
-                        Email verification
+                        {t("title")}
                     </h1>
                     <p className="text-xs text-muted-foreground">
-                        Enter the verification code we sent to{" "}
-                        {email || "your email"}
+                        {t("subtitle")} {email || t("fallbackEmail")}
                     </p>
                 </div>
 
@@ -127,7 +114,9 @@ export function EmailVerification({
                                     : "bg-button-primary-default hover:bg-button-primary-default/90 cursor-pointer"
                             }`}
                         >
-                            {isPending ? "CHECKING..." : "CONFIRM"}
+                            {isPending
+                                ? t("submittingButton")
+                                : t("submitButton")}
                         </Button>
 
                         <button
@@ -136,7 +125,9 @@ export function EmailVerification({
                             disabled={!email || isResending}
                             className="text-[11px] font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors disabled:cursor-not-allowed disabled:opacity-50"
                         >
-                            {isResending ? "SENDING..." : "RESEND EMAIL"}
+                            {isResending
+                                ? t("resendingButton")
+                                : t("resendButton")}
                         </button>
 
                         <button
@@ -144,11 +135,11 @@ export function EmailVerification({
                             onClick={handleLater}
                             className="text-[11px] font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors pt-2"
                         >
-                            LATER
+                            {t("laterButton")}
                         </button>
                     </div>
                 </form>
             </div>
-        </div>
+        </main>
     )
 }

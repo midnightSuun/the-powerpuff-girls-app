@@ -1,0 +1,135 @@
+{
+    "Auth": {
+        "EmailVerification": {
+            "title": "Подтверждение email",
+            "subtitle": "Введите код подтверждения, который мы отправили на",
+            "fallbackEmail": "ваш email",
+            "submitButton": "ПОДТВЕРДИТЬ",
+            "submittingButton": "ПРОВЕРКА...",
+            "resendButton": "ПОВТОРИТЬ ОТПРАВКУ",
+            "resendingButton": "ОТПРАВКА...",
+            "laterButton": "ПОЗЖЕ"
+        },
+        "ForgotPassword": {
+            "title": "Забыли пароль",
+            "subtitle": "Мы отправим вам электронное письмо с дальнейшими инструкциями",
+            "emailLabel": "Эл. почта",
+            "emailPlaceholder": "example@email.com",
+            "submitButton": "СБРОСИТЬ ПАРОЛЬ",
+            "submittingButton": "ОТПРАВКА...",
+            "cancelButton": "Отмена"
+        },
+        "Login": {
+            "title": "С возвращением",
+            "subtitle": "Снова здравствуйте! Войдите для продолжения",
+            "emailPlaceholder": "Эл. почта",
+            "passwordPlaceholder": "Пароль",
+            "submitButton": "ВОЙТИ",
+            "submittingButton": "ВХОД...",
+            "forgotPassword": "ЗАБЫЛИ ПАРОЛЬ",
+            "hidePassword": "Скрыть пароль",
+            "showPassword": "Показать пароль"
+        },
+        "ResetPassword": {
+            "title": "Сброс пароля",
+            "subtitle": "Здесь вы можете ввести новый пароль и подтвердить его",
+            "newPasswordPlaceholder": "Новый пароль",
+            "confirmPasswordPlaceholder": "Подтвердите пароль",
+            "submitButton": "ПОДТВЕРДИТЬ",
+            "submittingButton": "ОТПРАВКА...",
+            "goToSignIn": "ПЕРЕЙТИ К ВХОДУ"
+        },
+        "Signup": {
+            "title": "Регистрация",
+            "subtitle": "Добро пожаловать! Зарегистрируйтесь, чтобы продолжить",
+            "emailPlaceholder": "Эл. почта",
+            "passwordPlaceholder": "Пароль",
+            "confirmPasswordPlaceholder": "Подтвердите пароль",
+            "submitButton": "СОЗДАТЬ АККАУНТ",
+            "submittingButton": "СОЗДАНИЕ...",
+            "haveAccount": "У МЕНЯ УЖЕ ЕСТЬ АККАУНТ"
+        },
+        "Tabs": {
+            "signIn": "ВОЙТИ",
+            "signup": "РЕГИСТРАЦИЯ"
+        }
+    },
+    "Common": {
+        "retry": "ПОВТОРИТЬ"
+    },
+    "Errors": {
+        "NoInternet": {
+            "title": "Упс",
+            "description": "Что-то пошло не так. Мы уже работаем над устранением проблемы.\nПожалуйста, попробуйте снова или вернитесь назад.",
+            "actionText": "ПОВТОРИТЬ"
+        },
+        "NotFound": {
+            "title": "Страница не найдена",
+            "description": "Запрашиваемая вами страница могла быть удалена,\nее название изменилось или она временно недоступна.",
+            "actionText": "НА ГЛАВНУЮ"
+        }
+    },
+    "Settings": {
+        "title": "Настройки",
+        "theme": {
+            "label": "Тема",
+            "light": "Светлая",
+            "dark": "Темная",
+            "deviceSettings": "Как на устройстве"
+        },
+        "language": {
+            "label": "Язык",
+            "english": "Английский",
+            "french": "Французский",
+            "german": "Немецкий",
+            "italian": "Итальянский",
+            "polish": "Польский",
+            "portuguese": "Португальский",
+            "russian": "Русский",
+            "spanish": "Испанский",
+            "ukrainian": "Украинский"
+        },
+        "passwordSection": {
+            "title": "Изменить пароль",
+            "currentPlaceholder": "Пароль",
+            "newPlaceholder": "Новый пароль",
+            "confirmPlaceholder": "Подтвердите пароль",
+            "submitButton": "ИЗМЕНИТЬ",
+            "submittingButton": "ИЗМЕНЕНИЕ..."
+        }
+    },
+    "Skills": {
+        "categories": {
+            "1": "Языки программирования",
+            "2": "Фронтенд",
+            "3": "Бэкенд",
+            "4": "Системы контроля версий",
+            "other": "Общие навыки"
+        },
+        "actions": {
+            "add": "ДОБАВИТЬ НАВЫК",
+            "remove": "УДАЛИТЬ НАВЫКИ"
+        }
+    },
+    "User": {
+        "title": "Профиль пользователя",
+        "email": "Электронная почта",
+        "role": "Роль"
+    },
+    "Users": {
+        "title": "Сотрудники",
+        "loading": "Загрузка пользователей...",
+        "columns": {
+            "avatar": "Аватар",
+            "firstName": "Имя",
+            "lastName": "Фамилия",
+            "email": "Электронная почта",
+            "department": "Отдел",
+            "position": "Должность"
+        }
+    },
+    "Pagination": {
+        "previous": "Назад",
+        "next": "Вперёд"
+    }
+}
