@@ -5,13 +5,11 @@ import { PageHeader } from "@/components/page-header"
 import { PaginationComponent } from "@/components/pagination"
 import { SearchInput } from "@/components/search-input"
 import { type TableColumn, TableComponent } from "@/components/table"
-import { type GetUsersQuery } from "@/gql"
 import { type PaginationSearchParams } from "@/lib/pagination-search-params"
+import { type User } from "@/types"
 
 import { getUsers } from "../api/get-users"
 import { UserAvatar } from "./user-avatar"
-
-type User = GetUsersQuery["users"]["items"][number]
 
 const columns: TableColumn<User>[] = [
     {

@@ -55,6 +55,17 @@ function isGuestOnly(route: string) {
     return guestOnlyRoutes.includes(route)
 }
 
+const nextWithPathname = (request: NextRequest) => {
+    const requestHeaders = new Headers(request.headers)
+    requestHeaders.set("x-pathname", request.nextUrl.pathname)
+
+    return NextResponse.next({
+        request: {
+            headers: requestHeaders,
+        },
+    })
+}
+
 export async function proxy(request: NextRequest) {
     const tokens = await refreshSession(request)
     const targetPage = request.nextUrl.pathname
@@ -74,11 +85,7 @@ export async function proxy(request: NextRequest) {
             ? NextResponse.redirect(new URL("/", request.url))
             : !authorized && !isPublic(targetPage)
               ? NextResponse.redirect(new URL("/login", request.url))
-              : NextResponse.next({
-                    request: {
-                        headers: new Headers(request.headers),
-                    },
-                })
+              : nextWithPathname(request)
 
     if (tokens) {
         response.cookies.set(accessTokenCookie(tokens.accessToken))
