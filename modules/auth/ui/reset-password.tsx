@@ -4,8 +4,8 @@ import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 
+import { PasswordField } from "../../../components/password-field"
 import { useResetPassword } from "../hooks/use-reset-password"
-import { PasswordField } from "./components/password-field"
 
 export function ResetPasswordPage() {
     const {
