@@ -1,9 +1,10 @@
 "use client"
 
 import { useTranslations } from "next-intl"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 import type { Mastery } from "@/gql/generated/graphql"
+import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock"
 
 interface UseEditSkillModalProps {
     isOpen: boolean
@@ -44,14 +45,7 @@ export function useEditSkillModal({
         setError(null)
     }
 
-    useEffect(() => {
-        if (isOpen) {
-            document.body.style.overflow = "hidden"
-        }
-        return () => {
-            document.body.style.overflow = "unset"
-        }
-    }, [isOpen])
+    useBodyScrollLock(isOpen)
 
     const handleClose = () => {
         setError(null)

@@ -1,7 +1,9 @@
 "use client"
 
 import { useTranslations } from "next-intl"
-import { useEffect, useState } from "react"
+import { useState } from "react"
+
+import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock"
 
 interface UseDeleteSkillsModalProps {
     isOpen: boolean
@@ -18,14 +20,7 @@ export function useDeleteSkillsModal({
     const [isDeleting, setIsDeleting] = useState(false)
     const [error, setError] = useState<string | null>(null)
 
-    useEffect(() => {
-        if (isOpen) {
-            document.body.style.overflow = "hidden"
-        }
-        return () => {
-            document.body.style.overflow = "unset"
-        }
-    }, [isOpen])
+    useBodyScrollLock(isOpen)
 
     const handleConfirm = async () => {
         setIsDeleting(true)

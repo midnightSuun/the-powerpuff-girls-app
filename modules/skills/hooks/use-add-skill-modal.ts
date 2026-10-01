@@ -1,9 +1,10 @@
 "use client"
 
 import { useTranslations } from "next-intl"
-import { type FormEvent, useEffect, useState } from "react"
+import { type FormEvent, useState } from "react"
 
 import type { Mastery } from "@/gql/generated/graphql"
+import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock"
 
 import { addCvSkills } from "../api/skills"
 
@@ -38,14 +39,7 @@ export function useAddSkillModal({
     const [error, setError] = useState<string | null>(null)
     const [isSubmitting, setIsSubmitting] = useState(false)
 
-    useEffect(() => {
-        if (isOpen) {
-            document.body.style.overflow = "hidden"
-        }
-        return () => {
-            document.body.style.overflow = "unset"
-        }
-    }, [isOpen])
+    useBodyScrollLock(isOpen)
 
     const handleClose = () => {
         setSelectedSkillId("")
