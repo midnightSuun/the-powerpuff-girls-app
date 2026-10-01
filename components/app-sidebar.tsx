@@ -11,54 +11,16 @@ import {
     SidebarSeparator,
 } from "@/components/ui/sidebar"
 import { Skeleton } from "@/components/ui/skeleton"
-import { getAuthUserId } from "@/modules/skills/helpers/get-auth-user-id"
-import { UserAvatar } from "@/modules/users"
-import { getUser } from "@/modules/users/api/get-user"
-
-const SidebarUser = async () => {
-    const userId = await getAuthUserId()
-
-    if (!userId) {
-        return null
-    }
-
-    const user = await getUser(userId)
-    const firstName = user.profile.first_name
-    const lastName = user.profile.last_name
-    const fullName =
-        [firstName, lastName].filter(Boolean).join(" ") || user.email
-
-    return (
-        <div className="flex min-w-0 items-center gap-2 px-1 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
-            <UserAvatar
-                src={user.profile.avatar}
-                firstName={firstName}
-                lastName={lastName}
-                email={user.email}
-                fallbackClassName="bg-[#c63031] text-white"
-            />
-            <span className="truncate text-sm font-medium group-data-[collapsible=icon]:hidden">
-                {fullName}
-            </span>
-        </div>
-    )
-}
+import { NavUser } from "@/modules/users"
 
 const SidebarUserFallback = () => {
     return (
-        <div className="flex items-center gap-2 px-1 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
+        <div className="flex items-center gap-2 px-2 py-1.5 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
             <Skeleton className="size-8 rounded-full" />
-            <Skeleton className="h-4 w-28 group-data-[collapsible=icon]:hidden" />
-        </div>
-    )
-}
-
-const SidebarNavFallback = () => {
-    return (
-        <div className="flex flex-col gap-1 px-3 py-1">
-            {Array.from({ length: 4 }, (_, index) => (
-                <Skeleton key={index} className="h-10 rounded-full" />
-            ))}
+            <div className="grid flex-1 gap-1 group-data-[collapsible=icon]:hidden">
+                <Skeleton className="h-4 w-28" />
+                <Skeleton className="h-3 w-20" />
+            </div>
         </div>
     )
 }
@@ -76,13 +38,11 @@ export function AppSidebar() {
                 </div>
             </SidebarHeader>
             <SidebarContent>
-                <Suspense fallback={<SidebarNavFallback />}>
-                    <SidebarNav />
-                </Suspense>
+                <SidebarNav />
             </SidebarContent>
             <SidebarFooter>
                 <Suspense fallback={<SidebarUserFallback />}>
-                    <SidebarUser />
+                    <NavUser />
                 </Suspense>
                 <SidebarSeparator className="group-data-[collapsible=icon]:hidden" />
             </SidebarFooter>

@@ -114,7 +114,13 @@
     "User": {
         "title": "User Profile",
         "email": "Email",
-        "role": "Role"
+        "role": "Role",
+        "nav": {
+            "viewProfile": "View profile",
+            "profile": "Profile",
+            "settings": "Settings",
+            "logout": "Log out"
+        }
     },
     "Users": {
         "title": "Employees",
