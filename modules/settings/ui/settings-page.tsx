@@ -131,9 +131,9 @@ export function SettingsPage() {
                     </div>
 
                     <div className="pt-4 space-y-4">
-                        <h2 className="text-sm font-medium">
+                        <p className="text-sm font-medium">
                             {t("passwordSection.title")}
-                        </h2>
+                        </p>
 
                         <div className="space-y-1">
                             <PasswordField

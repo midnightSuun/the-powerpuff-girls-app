@@ -1,6 +1,6 @@
 import { ProgressItem } from "@/components/ui/progress-item"
 
-interface SkillItemProps {
+interface ProgressListItemProps {
     name: string
     mastery: string | number
     isSelectionMode?: boolean
@@ -9,14 +9,14 @@ interface SkillItemProps {
     onEdit?: () => void
 }
 
-export function SkillItem({
+export function ProgressListItem({
     name,
     mastery,
     isSelectionMode = false,
     isSelected = false,
     onSelect,
     onEdit,
-}: SkillItemProps) {
+}: ProgressListItemProps) {
     const handleClick = () => {
         if (isSelectionMode) {
             onSelect?.()

@@ -110,6 +110,14 @@
     "Skills": {
         "title": "Skills",
         "loading": "Loading profile skills...",
+        "masteryPlaceholder": "Skill mastery",
+        "masteryLevels": {
+            "novice": "Novice",
+            "advanced": "Advanced",
+            "competent": "Competent",
+            "proficient": "Proficient",
+            "expert": "Expert"
+        },
         "categories": {
             "1": "Programming languages",
             "2": "Frontend",
@@ -119,7 +127,47 @@
         },
         "actions": {
             "add": "ADD SKILL",
-            "remove": "REMOVE SKILLS"
+            "remove": "REMOVE SKILLS",
+            "cancel": "CANCEL",
+            "deleteSelected": "DELETE ({count})"
+        },
+        "add": {
+            "title": "Add skill",
+            "skillPlaceholder": "Skill",
+            "allSkillsAdded": "All available skills added",
+            "cancel": "CANCEL",
+            "submit": "ADD",
+            "adding": "ADDING...",
+            "errors": {
+                "selectSkill": "Please select a skill",
+                "selectMastery": "Please select skill mastery",
+                "notFound": "Selected skill not found",
+                "alreadyAdded": "This skill has already been added to your CV.",
+                "failed": "Failed to add skill. Please try again."
+            }
+        },
+        "edit": {
+            "title": "Update skill",
+            "skill": "Skill",
+            "mastery": "Skill mastery",
+            "cancel": "CANCEL",
+            "submit": "UPDATE",
+            "updating": "UPDATING...",
+            "errors": {
+                "masteryRequired": "Skill mastery is required",
+                "failed": "Failed to update skill. Please try again."
+            }
+        },
+        "delete": {
+            "titleSingular": "Remove skill",
+            "titlePlural": "Remove skills",
+            "confirmation": "Are you sure you want to remove {count, plural, one {# skill?} other {# skills?}}",
+            "cancel": "CANCEL",
+            "confirm": "CONFIRM",
+            "removing": "REMOVING...",
+            "errors": {
+                "failed": "Failed to remove skills. Please try again."
+            }
         }
     },
     "User": {
@@ -149,5 +197,58 @@
     "Pagination": {
         "previous": "Previous",
         "next": "Next"
+    },
+    "Languages": {
+        "currentLanguages": "Current languages",
+        "empty": "No languages added yet.",
+        "proficiencyPlaceholder": "Proficiency level",
+        "proficiencyLevels": {
+            "A1": "A1 - Beginner",
+            "A2": "A2 - Elementary",
+            "B1": "B1 - Intermediate",
+            "B2": "B2 - Upper intermediate",
+            "C1": "C1 - Advanced",
+            "C2": "C2 - Proficient",
+            "Native": "Native speaker"
+        },
+        "actions": {
+            "add": "ADD LANGUAGE",
+            "remove": "REMOVE LANGUAGES",
+            "cancel": "CANCEL",
+            "deleteSelected": "DELETE ({count})"
+        },
+        "add": {
+            "title": "Add language",
+            "languagePlaceholder": "Language",
+            "allLanguagesAdded": "All available languages added",
+            "cancel": "CANCEL",
+            "submit": "ADD",
+            "adding": "ADDING...",
+            "errors": {
+                "failed": "Failed to add language. Please try again."
+            }
+        },
+        "edit": {
+            "title": "Update language",
+            "language": "Language",
+            "proficiency": "Proficiency level",
+            "cancel": "CANCEL",
+            "submit": "UPDATE",
+            "updating": "UPDATING...",
+            "errors": {
+                "failed": "Failed to update language. Please try again."
+            }
+        },
+        "delete": {
+            "titleSingular": "Remove language",
+            "titlePlural": "Remove languages",
+            "confirmation": "Are you sure you want to remove {count, plural, one {# language?} other {# languages?}}",
+            "cancel": "CANCEL",
+            "confirm": "CONFIRM",
+            "removing": "REMOVING...",
+            "errors": {
+                "failed": "Failed to remove languages. Please try again."
+            }
+        }
     }
 }
