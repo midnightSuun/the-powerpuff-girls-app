@@ -1,0 +1,135 @@
+{
+    "Auth": {
+        "EmailVerification": {
+            "title": "Email verification",
+            "subtitle": "Enter the verification code we sent to",
+            "fallbackEmail": "your email",
+            "submitButton": "CONFIRM",
+            "submittingButton": "CHECKING...",
+            "resendButton": "RESEND EMAIL",
+            "resendingButton": "SENDING...",
+            "laterButton": "LATER"
+        },
+        "ForgotPassword": {
+            "title": "Forgot password",
+            "subtitle": "We will send you an email with further instructions",
+            "emailLabel": "Email",
+            "emailPlaceholder": "example@email.com",
+            "submitButton": "RESET PASSWORD",
+            "submittingButton": "SENDING...",
+            "cancelButton": "Cancel"
+        },
+        "Login": {
+            "title": "Welcome back",
+            "subtitle": "Hello again! Sign in to continue",
+            "emailPlaceholder": "Email",
+            "passwordPlaceholder": "Password",
+            "submitButton": "SIGN IN",
+            "submittingButton": "SIGNING IN...",
+            "forgotPassword": "FORGOT PASSWORD",
+            "hidePassword": "Hide password",
+            "showPassword": "Show password"
+        },
+        "ResetPassword": {
+            "title": "Reset password",
+            "subtitle": "Here you should write a new password and confirm it",
+            "newPasswordPlaceholder": "New password",
+            "confirmPasswordPlaceholder": "Confirm password",
+            "submitButton": "SUBMIT",
+            "submittingButton": "SUBMITTING...",
+            "goToSignIn": "GO TO SIGN IN"
+        },
+        "Signup": {
+            "title": "Sign up now",
+            "subtitle": "Welcome! Sign up to continue",
+            "emailPlaceholder": "Email",
+            "passwordPlaceholder": "Password",
+            "confirmPasswordPlaceholder": "Confirm Password",
+            "submitButton": "CREATE ACCOUNT",
+            "submittingButton": "CREATING...",
+            "haveAccount": "I HAVE AN ACCOUNT"
+        },
+        "Tabs": {
+            "signIn": "SIGN IN",
+            "signup": "SIGN UP"
+        }
+    },
+    "Common": {
+        "retry": "Retry"
+    },
+    "Errors": {
+        "NoInternet": {
+            "title": "Oops",
+            "description": "Something went wrong. We're already working on fixing it.\nPlease try again or go back.",
+            "actionText": "Retry"
+        },
+        "NotFound": {
+            "title": "Page Not Found",
+            "description": "The page you are looking for might have been removed,\nhad its name changed, or is temporarily unavailable.",
+            "actionText": "Go Home"
+        }
+    },
+    "Settings": {
+        "title": "Settings",
+        "theme": {
+            "label": "Theme",
+            "light": "Light",
+            "dark": "Dark",
+            "deviceSettings": "Device settings"
+        },
+        "language": {
+            "label": "Language",
+            "english": "English",
+            "french": "French",
+            "german": "German",
+            "italian": "Italian",
+            "polish": "Polish",
+            "portuguese": "Portuguese",
+            "russian": "Russian",
+            "spanish": "Spanish",
+            "ukrainian": "Ukrainian"
+        },
+        "passwordSection": {
+            "title": "Change password",
+            "currentPlaceholder": "Password",
+            "newPlaceholder": "New Password",
+            "confirmPlaceholder": "Confirm Password",
+            "submitButton": "CHANGE",
+            "submittingButton": "CHANGING..."
+        }
+    },
+    "Skills": {
+        "categories": {
+            "1": "Programming languages",
+            "2": "Frontend",
+            "3": "Backend",
+            "4": "Source control systems",
+            "other": "General Skills"
+        },
+        "actions": {
+            "add": "ADD SKILL",
+            "remove": "REMOVE SKILLS"
+        }
+    },
+    "User": {
+        "title": "User Profile",
+        "email": "Email",
+        "role": "Role"
+    },
+    "Users": {
+        "title": "Employees",
+        "loading": "Loading users...",
+        "columns": {
+            "avatar": "Avatar",
+            "firstName": "First Name",
+            "lastName": "Last Name",
+            "email": "Email",
+            "department": "Department",
+            "position": "Position"
+        }
+    },
+    "Pagination": {
+        "previous": "Previous",
+        "next": "Next"
+    }
+}

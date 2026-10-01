@@ -11,7 +11,6 @@ import {
 } from "../schemas/forgot-password"
 
 export function useForgotPassword() {
-    const [isDarkMode, setIsDarkMode] = useState<boolean>(false)
     const [serverError, setServerError] = useState<string | undefined>(
         undefined,
     )
@@ -43,8 +42,6 @@ export function useForgotPassword() {
     }
 
     return {
-        isDarkMode,
-        setIsDarkMode,
         serverError,
         successMessage,
         isPending,

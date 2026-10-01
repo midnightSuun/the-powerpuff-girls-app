@@ -5,6 +5,8 @@ import { Search } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
 import { ChangeEvent, useEffect, useMemo, useState } from "react"
 
+import { Input } from "@/components/ui/input"
+
 type Props = {
     limit: number
     search: string
@@ -57,7 +59,7 @@ export function SearchInput({ limit, search }: Props) {
     return (
         <label className="relative block w-72">
             <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
-            <input
+            <Input
                 type="text"
                 value={value}
                 onChange={handleSearch}

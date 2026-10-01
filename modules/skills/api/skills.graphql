@@ -1,9 +1,9 @@
 query GetUserSkills($userId: ID!) {
-  profile(userId: $userId) {
-    skills {
-      name
-      mastery
-      categoryId
+    profile(userId: $userId) {
+        skills {
+            name
+            mastery
+            categoryId
+        }
     }
-  }
 }
