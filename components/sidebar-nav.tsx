@@ -70,10 +70,10 @@ export const SidebarNav = async () => {
                                     tooltip={item.label}
                                     aria-current={isActive ? "page" : undefined}
                                     className={cn(
-                                        "h-10 rounded-full px-3 font-normal text-[#626262] no-underline",
-                                        "hover:bg-[#ececee] hover:text-[#626262] hover:no-underline",
+                                        "h-10 rounded-full px-3 font-normal text-button-secondary-default no-underline",
+                                        "hover:bg-[#ececee] hover:text-button-secondary-default hover:no-underline",
                                         "data-active:bg-[#e6e6e8] data-active:font-normal data-active:text-[#3a3a3a]",
-                                        "[&_svg]:size-[18px]",
+                                        "[&_svg]:size-4.5",
                                         "group-data-[collapsible=icon]:text-[#3a3a3a]",
                                         "group-data-[collapsible=icon]:data-active:bg-transparent",
                                         "group-data-[collapsible=icon]:data-active:text-[#3a3a3a]",

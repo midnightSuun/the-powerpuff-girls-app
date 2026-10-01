@@ -27,9 +27,9 @@ export function SkillCategory({
 
     return (
         <div className="mb-6">
-            <h3 className="mb-3 text-sm font-normal text-muted-foreground">
+            <p className="mb-3 text-sm font-normal text-muted-foreground">
                 {title}
-            </h3>
+            </p>
             <div className="grid grid-cols-1 gap-y-2 sm:grid-cols-2 md:grid-cols-3">
                 {skills.map((skill) => (
                     <SkillItem
