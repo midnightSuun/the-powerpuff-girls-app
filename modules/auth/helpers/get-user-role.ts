@@ -1,6 +1,18 @@
-import { getUser } from "@/modules/users/api/get-user"
+import { jwtVerify } from "jose"
+import { cookies } from "next/headers"
 
-export async function getUserRole(userId: string) {
-    const user = await getUser(userId)
-    return user?.role
+import { ACCESS_TOKEN_COOKIE } from "@/modules/auth/consts"
+
+export async function getRoleFromCookie() {
+    const cookieStore = await cookies()
+    const token = cookieStore.get(ACCESS_TOKEN_COOKIE)?.value
+    if (!token) return null
+
+    try {
+        const secret = new TextEncoder().encode(process.env.JWT_SECRET)
+        const { payload } = await jwtVerify(token, secret)
+        return payload.role as string
+    } catch {
+        return null
+    }
 }

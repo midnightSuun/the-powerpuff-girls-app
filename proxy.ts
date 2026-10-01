@@ -1,3 +1,4 @@
+import { jwtVerify } from "jose"
 import { NextRequest, NextResponse } from "next/server"
 import createMiddleware from "next-intl/middleware"
 
@@ -54,12 +55,40 @@ const publicRoutes = [
     "/verify-email",
 ]
 
+const employeeRoutes = [""]
+const adminRoutes = ["/departments", "/positions", "/projects"]
+
 function isPublic(route: string) {
     return publicRoutes.includes(route)
 }
 
 function isGuestOnly(route: string) {
     return guestOnlyRoutes.includes(route)
+}
+
+function isAdminRoute(route: string) {
+    return adminRoutes.some((r) => route.startsWith(r))
+}
+
+function isEmployeeRoute(route: string) {
+    return employeeRoutes.some((r) => route.startsWith(r))
+}
+
+interface JwtPayload {
+    sub: string
+    email: string
+    role: string
+}
+
+async function getJwtPayload(accessToken?: string): Promise<JwtPayload | null> {
+    if (!accessToken) return null
+    try {
+        const secret = new TextEncoder().encode(process.env.JWT_SECRET)
+        const { payload } = await jwtVerify(accessToken, secret)
+        return payload as unknown as JwtPayload
+    } catch {
+        return null
+    }
 }
 
 function getCleanPathname(pathname: string) {
@@ -130,7 +159,6 @@ export async function proxy(request: NextRequest) {
     }
 
     const authorized = isAuthorized(request.cookies)
-
     let customResponse: NextResponse | null = null
 
     if (authorized && isGuestOnly(targetPage)) {
@@ -141,6 +169,24 @@ export async function proxy(request: NextRequest) {
         customResponse = NextResponse.redirect(
             new URL(localizedPath(currentLocale, "/login"), request.url),
         )
+    } else if (authorized) {
+        const accessToken = request.cookies.get(ACCESS_TOKEN_COOKIE)?.value
+        const payload = await getJwtPayload(accessToken)
+        const userRole = payload?.role
+
+        if (isAdminRoute(targetPage) && userRole !== "ADMIN") {
+            customResponse = NextResponse.redirect(
+                new URL(localizedPath(currentLocale, "/"), request.url),
+            )
+        } else if (
+            isEmployeeRoute(targetPage) &&
+            userRole !== "ADMIN" &&
+            userRole !== "EMPLOYEE"
+        ) {
+            customResponse = NextResponse.redirect(
+                new URL(localizedPath(currentLocale, "/"), request.url),
+            )
+        }
     }
 
     if (customResponse) {
