@@ -35,7 +35,7 @@ export async function Skills({ userId, isDarkMode = false }: SkillsProps) {
 
     return (
         <div className={`flex items-start gap-16`}>
-            <div className="flex-1 max-w-[852px] pl-50 pt-6">
+            <div className="flex-1 max-w-213 pl-50 pt-6">
                 <div className="space-y-8">
                     {categories.map((category) => (
                         <SkillCategory
@@ -50,7 +50,9 @@ export async function Skills({ userId, isDarkMode = false }: SkillsProps) {
                     <Button
                         variant="ghost"
                         className={`gap-2 border-transparent ${
-                            isDarkMode ? "text-[#C4C4C6]" : "text-[#626262]"
+                            isDarkMode
+                                ? "text-[#C4C4C6]"
+                                : "text-button-secondary-default"
                         }`}
                     >
                         <Plus className="h-5 w-5" />
