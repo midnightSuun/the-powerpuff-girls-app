@@ -1,4 +1,4 @@
-import { jwtVerify } from "jose"
+import { type JWTPayload, jwtVerify } from "jose"
 import { NextRequest, NextResponse } from "next/server"
 import createMiddleware from "next-intl/middleware"
 
@@ -7,6 +7,7 @@ import {
     ACCESS_TOKEN_COOKIE,
     REFRESH_TOKEN_COOKIE,
 } from "@/modules/auth/consts"
+import { isUserRole } from "@/modules/auth/helpers/is-user-role"
 
 import { routing } from "./i18n/routing"
 import { isAuthorized } from "./modules/auth/helpers/is-authorized"
@@ -27,19 +28,34 @@ const clearTokens = (response: NextResponse) => {
     return response
 }
 
+async function getJwtPayload(accessToken?: string): Promise<JWTPayload | null> {
+    if (!accessToken) return null
+    try {
+        const secret = new TextEncoder().encode(process.env.JWT_SECRET)
+        const { payload } = await jwtVerify(accessToken, secret)
+        return payload
+    } catch {
+        return null
+    }
+}
+
 const refreshSession = async (request: NextRequest) => {
     const accessToken = request.cookies.get(ACCESS_TOKEN_COOKIE)?.value
     const refreshToken = request.cookies.get(REFRESH_TOKEN_COOKIE)?.value
+    const payload = await getJwtPayload(accessToken)
 
-    if (accessToken || !refreshToken) {
-        return null
+    if (payload || !refreshToken) {
+        return { tokens: null, payload }
     }
 
     try {
         const tokens = await refreshTokens(refreshToken)
         request.cookies.set(ACCESS_TOKEN_COOKIE, tokens.accessToken)
         request.cookies.set(REFRESH_TOKEN_COOKIE, tokens.refreshToken)
-        return tokens
+        return {
+            tokens,
+            payload: await getJwtPayload(tokens.accessToken),
+        }
     } catch {
         request.cookies.delete(ACCESS_TOKEN_COOKIE)
         request.cookies.delete(REFRESH_TOKEN_COOKIE)
@@ -72,23 +88,6 @@ function isAdminRoute(route: string) {
 
 function isEmployeeRoute(route: string) {
     return employeeRoutes.some((r) => route.startsWith(r))
-}
-
-interface JwtPayload {
-    sub: string
-    email: string
-    role: string
-}
-
-async function getJwtPayload(accessToken?: string): Promise<JwtPayload | null> {
-    if (!accessToken) return null
-    try {
-        const secret = new TextEncoder().encode(process.env.JWT_SECRET)
-        const { payload } = await jwtVerify(accessToken, secret)
-        return payload as unknown as JwtPayload
-    } catch {
-        return null
-    }
 }
 
 function getCleanPathname(pathname: string) {
@@ -146,9 +145,9 @@ export async function proxy(request: NextRequest) {
     const targetPage = getCleanPathname(originalPathname)
     const currentLocale = getLocale(originalPathname)
 
-    const tokens = await refreshSession(request)
+    const session = await refreshSession(request)
 
-    if (tokens === "failed") {
+    if (session === "failed") {
         const response = isPublic(targetPage)
             ? nextWithPathname(request)
             : NextResponse.redirect(
@@ -158,6 +157,7 @@ export async function proxy(request: NextRequest) {
         return clearTokens(response)
     }
 
+    const tokens = session.tokens
     const authorized = isAuthorized(request.cookies)
     let customResponse: NextResponse | null = null
 
@@ -170,18 +170,28 @@ export async function proxy(request: NextRequest) {
             new URL(localizedPath(currentLocale, "/login"), request.url),
         )
     } else if (authorized) {
-        const accessToken = request.cookies.get(ACCESS_TOKEN_COOKIE)?.value
-        const payload = await getJwtPayload(accessToken)
+        const payload = session.payload
         const userRole = payload?.role
 
-        if (isAdminRoute(targetPage) && userRole !== "ADMIN") {
+        if (!isUserRole(userRole)) {
+            return clearTokens(
+                NextResponse.redirect(
+                    new URL(
+                        localizedPath(currentLocale, "/login"),
+                        request.url,
+                    ),
+                ),
+            )
+        }
+
+        if (isAdminRoute(targetPage) && userRole !== "Admin") {
             customResponse = NextResponse.redirect(
                 new URL(localizedPath(currentLocale, "/"), request.url),
             )
         } else if (
             isEmployeeRoute(targetPage) &&
-            userRole !== "ADMIN" &&
-            userRole !== "EMPLOYEE"
+            userRole !== "Admin" &&
+            userRole !== "Employee"
         ) {
             customResponse = NextResponse.redirect(
                 new URL(localizedPath(currentLocale, "/"), request.url),

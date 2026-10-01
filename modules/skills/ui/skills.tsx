@@ -4,6 +4,7 @@ import { Plus, Trash2 } from "lucide-react"
 import { useTranslations } from "next-intl"
 
 import { Button } from "@/components/ui/button"
+import type { UserRole } from "@/gql"
 
 import { SkillCategory } from "./components/skill-catergory"
 
@@ -16,10 +17,13 @@ interface Skill {
 interface SkillsProps {
     userId: string
     userSkills: Skill[]
+    role?: UserRole | null
 }
 
-export function Skills({ userSkills }: SkillsProps) {
+export function Skills({ userSkills, role }: SkillsProps) {
     const t = useTranslations("Skills")
+
+    const canManageSkills = role === "Admin"
 
     const groupedSkills = userSkills.reduce<Record<string, Skill[]>>(
         (acc, skill) => {
@@ -63,20 +67,22 @@ export function Skills({ userSkills }: SkillsProps) {
                     ))}
                 </div>
 
-                <div className="mt-8 flex items-center justify-end gap-6 text-xs font-medium tracking-wider text-muted-foreground">
-                    <Button
-                        variant="ghost"
-                        className="gap-2 border-transparent text-muted-foreground hover:text-foreground"
-                    >
-                        <Plus className="h-5 w-5" />
-                        {t("actions.add")}
-                    </Button>
+                {canManageSkills && (
+                    <div className="mt-8 flex items-center justify-end gap-6 text-xs font-medium tracking-wider text-muted-foreground">
+                        <Button
+                            variant="ghost"
+                            className="gap-2 border-transparent text-muted-foreground hover:text-foreground"
+                        >
+                            <Plus className="h-5 w-5" />
+                            {t("actions.add")}
+                        </Button>
 
-                    <Button variant="primaryV2" className="gap-2">
-                        <Trash2 className="h-5 w-5" />
-                        {t("actions.remove")}
-                    </Button>
-                </div>
+                        <Button variant="primaryV2" className="gap-2">
+                            <Trash2 className="h-5 w-5" />
+                            {t("actions.remove")}
+                        </Button>
+                    </div>
+                )}
             </div>
         </div>
     )
