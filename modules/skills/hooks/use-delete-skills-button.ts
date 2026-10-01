@@ -1,0 +1,59 @@
+"use client"
+
+import { useTranslations } from "next-intl"
+import { useState } from "react"
+
+import { deleteCvSkills } from "@/modules/skills/api/skills"
+
+interface UseDeleteSkillsButtonProps {
+    cvId: string
+    selectedSkills: string[]
+    onToggleSelectionMode: (active: boolean) => void
+    onClearSelection: () => void
+}
+
+export function useDeleteSkillsButton({
+    cvId,
+    selectedSkills,
+    onToggleSelectionMode,
+    onClearSelection,
+}: UseDeleteSkillsButtonProps) {
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const t = useTranslations("Skills.actions")
+
+    const hasSelected = selectedSkills.length > 0
+
+    const handleDeleteConfirm = async () => {
+        try {
+            setIsSubmitting(true)
+            await deleteCvSkills({
+                cvId,
+                name: selectedSkills,
+            })
+
+            onClearSelection()
+            onToggleSelectionMode(false)
+            setIsModalOpen(false)
+        } catch (error) {
+            console.error("Failed to delete skills:", error)
+        } finally {
+            setIsSubmitting(false)
+        }
+    }
+
+    const handleCancel = () => {
+        onClearSelection()
+        onToggleSelectionMode(false)
+    }
+
+    return {
+        t,
+        isModalOpen,
+        setIsModalOpen,
+        isSubmitting,
+        hasSelected,
+        handleDeleteConfirm,
+        handleCancel,
+    }
+}

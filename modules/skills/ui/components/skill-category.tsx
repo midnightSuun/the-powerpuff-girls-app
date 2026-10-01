@@ -1,14 +1,16 @@
+import type { Mastery } from "@/gql/generated/graphql"
+
 import { SkillItem } from "./skill-item"
 
 export interface Skill {
     name: string
-    mastery: string | number
+    mastery: Mastery
+    categoryId?: string | null
 }
 
 interface SkillCategoryProps {
     title: string
     skills: Skill[]
-    isDarkMode?: boolean
     isSelectionMode?: boolean
     selectedSkills?: string[]
     onSelectSkill?: (skillName: string) => void
@@ -39,7 +41,9 @@ export function SkillCategory({
                         isSelectionMode={isSelectionMode}
                         isSelected={selectedSkills.includes(skill.name)}
                         onSelect={() => onSelectSkill?.(skill.name)}
-                        onEdit={() => onEditSkill?.(skill)}
+                        onEdit={
+                            onEditSkill ? () => onEditSkill(skill) : undefined
+                        }
                     />
                 ))}
             </div>

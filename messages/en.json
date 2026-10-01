@@ -99,6 +99,15 @@
         }
     },
     "Skills": {
+        "loading": "Loading profile skills...",
+        "masteryPlaceholder": "Skill mastery",
+        "masteryLevels": {
+            "novice": "Novice",
+            "advanced": "Advanced",
+            "competent": "Competent",
+            "proficient": "Proficient",
+            "expert": "Expert"
+        },
         "categories": {
             "1": "Programming languages",
             "2": "Frontend",
@@ -108,7 +117,47 @@
         },
         "actions": {
             "add": "ADD SKILL",
-            "remove": "REMOVE SKILLS"
+            "remove": "REMOVE SKILLS",
+            "cancel": "CANCEL",
+            "deleteSelected": "DELETE ({count})"
+        },
+        "add": {
+            "title": "Add skill",
+            "skillPlaceholder": "Skill",
+            "allSkillsAdded": "All available skills added",
+            "cancel": "CANCEL",
+            "submit": "ADD",
+            "adding": "ADDING...",
+            "errors": {
+                "selectSkill": "Please select a skill",
+                "selectMastery": "Please select skill mastery",
+                "notFound": "Selected skill not found",
+                "alreadyAdded": "This skill has already been added to your CV.",
+                "failed": "Failed to add skill. Please try again."
+            }
+        },
+        "edit": {
+            "title": "Update skill",
+            "skill": "Skill",
+            "mastery": "Skill mastery",
+            "cancel": "CANCEL",
+            "submit": "UPDATE",
+            "updating": "UPDATING...",
+            "errors": {
+                "masteryRequired": "Skill mastery is required",
+                "failed": "Failed to update skill. Please try again."
+            }
+        },
+        "delete": {
+            "titleSingular": "Remove skill",
+            "titlePlural": "Remove skills",
+            "confirmation": "Are you sure you want to remove {count, plural, one {# skill?} other {# skills?}}",
+            "cancel": "CANCEL",
+            "confirm": "CONFIRM",
+            "removing": "REMOVING...",
+            "errors": {
+                "failed": "Failed to remove skills. Please try again."
+            }
         }
     },
     "User": {

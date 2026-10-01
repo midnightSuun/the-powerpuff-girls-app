@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation"
+import { getTranslations } from "next-intl/server"
 import { Suspense } from "react"
 
 import { getUserRole } from "@/modules/auth/helpers/get-user-role"
@@ -18,15 +19,15 @@ async function SkillsContent() {
         getUserRole(),
     ])
 
-    return <Skills userId={userId} userSkills={userSkills} role={userRole} />
+    return <Skills userSkills={userSkills} role={userRole} />
 }
 
-export default function SkillsPage() {
+export default async function SkillsPage() {
+    const t = await getTranslations("Skills")
+
     return (
         <main className="min-h-screen w-full">
-            <Suspense
-                fallback={<div className="p-6">Loading profile skills...</div>}
-            >
+            <Suspense fallback={<div className="p-6">{t("loading")}</div>}>
                 <SkillsContent />
             </Suspense>
         </main>
