@@ -13,6 +13,17 @@ import {
 import { Skeleton } from "@/components/ui/skeleton"
 import { NavUser } from "@/modules/users"
 
+const SidebarNavFallback = () => {
+    return (
+        <div className="flex flex-col gap-1 px-3 py-1 group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:gap-3">
+            <Skeleton className="h-10 w-full rounded-full group-data-[collapsible=icon]:size-10" />
+            <Skeleton className="h-10 w-full rounded-full group-data-[collapsible=icon]:size-10" />
+            <Skeleton className="h-10 w-full rounded-full group-data-[collapsible=icon]:size-10" />
+            <Skeleton className="h-10 w-full rounded-full group-data-[collapsible=icon]:size-10" />
+        </div>
+    )
+}
+
 const SidebarUserFallback = () => {
     return (
         <div className="flex items-center gap-2 px-2 py-1.5 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
@@ -38,7 +49,9 @@ export function AppSidebar() {
                 </div>
             </SidebarHeader>
             <SidebarContent>
-                <SidebarNav />
+                <Suspense fallback={<SidebarNavFallback />}>
+                    <SidebarNav />
+                </Suspense>
             </SidebarContent>
             <SidebarFooter>
                 <Suspense fallback={<SidebarUserFallback />}>

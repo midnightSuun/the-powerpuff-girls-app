@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 import { hasLocale, NextIntlClientProvider } from "next-intl"
 import { setRequestLocale } from "next-intl/server"
+import { Suspense } from "react"
 
 import { routing } from "@/i18n/routing"
 
@@ -8,13 +9,12 @@ export function generateStaticParams() {
     return routing.locales.map((locale) => ({ locale }))
 }
 
-export default async function LocaleLayout({
-    children,
-    params,
-}: {
+type Props = {
     children: React.ReactNode
     params: Promise<{ locale: string }>
-}) {
+}
+
+const LocaleContent = async ({ children, params }: Props) => {
     const { locale } = await params
 
     if (!hasLocale(routing.locales, locale)) {
@@ -29,5 +29,13 @@ export default async function LocaleLayout({
         <NextIntlClientProvider messages={messages} locale={locale}>
             {children}
         </NextIntlClientProvider>
+    )
+}
+
+export default function LocaleLayout({ children, params }: Props) {
+    return (
+        <Suspense fallback={null}>
+            <LocaleContent params={params}>{children}</LocaleContent>
+        </Suspense>
     )
 }

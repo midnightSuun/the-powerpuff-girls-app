@@ -55,7 +55,10 @@
         }
     },
     "Common": {
-        "retry": "Retry"
+        "retry": "Retry",
+        "breadcrumb": "Breadcrumb",
+        "search": "Search",
+        "loading": "Loading..."
     },
     "Errors": {
         "NoInternet": {
@@ -98,7 +101,15 @@
             "submittingButton": "CHANGING..."
         }
     },
+    "Languages": {
+        "title": "Languages"
+    },
+    "Cvs": {
+        "title": "CVs"
+    },
     "Skills": {
+        "title": "Skills",
+        "loading": "Loading profile skills...",
         "categories": {
             "1": "Programming languages",
             "2": "Frontend",
@@ -113,6 +124,7 @@
     },
     "User": {
         "title": "User Profile",
+        "loading": "Loading...",
         "email": "Email",
         "role": "Role",
         "nav": {

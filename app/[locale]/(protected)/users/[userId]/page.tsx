@@ -1,5 +1,6 @@
 import { Suspense } from "react"
 
+import { LoadingText } from "@/components/loading-text"
 import { UserPage } from "@/modules/users"
 
 type Props = {
@@ -15,7 +16,11 @@ async function UserContent({ params }: Props) {
 export default function UserDetailRoute({ params }: Props) {
     return (
         <Suspense
-            fallback={<p className="p-4 text-muted-foreground">Loading...</p>}
+            fallback={
+                <p className="p-4 text-muted-foreground">
+                    <LoadingText namespace="User" />
+                </p>
+            }
         >
             <UserContent params={params} />
         </Suspense>

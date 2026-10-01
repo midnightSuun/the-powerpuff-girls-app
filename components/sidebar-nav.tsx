@@ -5,6 +5,7 @@ import {
     type LucideIcon,
     Users,
 } from "lucide-react"
+import { getTranslations } from "next-intl/server"
 
 import { SidebarNavItem } from "@/components/sidebar-nav-item"
 import {
@@ -19,30 +20,35 @@ type SidebarItem = {
     href: string
 }
 
-const sidebarItems: SidebarItem[] = [
-    {
-        label: "Employees",
-        icon: Users,
-        href: "/users",
-    },
-    {
-        label: "Skills",
-        icon: ChartLine,
-        href: "/skills",
-    },
-    {
-        label: "Languages",
-        icon: Languages,
-        href: "/languages",
-    },
-    {
-        label: "CVs",
-        icon: File,
-        href: "/cv",
-    },
-]
+export const SidebarNav = async () => {
+    const tUsers = await getTranslations("Users")
+    const tSkills = await getTranslations("Skills")
+    const tLanguages = await getTranslations("Languages")
+    const tCvs = await getTranslations("Cvs")
 
-export const SidebarNav = () => {
+    const sidebarItems: SidebarItem[] = [
+        {
+            label: tUsers("title"),
+            icon: Users,
+            href: "/users",
+        },
+        {
+            label: tSkills("title"),
+            icon: ChartLine,
+            href: "/skills",
+        },
+        {
+            label: tLanguages("title"),
+            icon: Languages,
+            href: "/languages",
+        },
+        {
+            label: tCvs("title"),
+            icon: File,
+            href: "/cv",
+        },
+    ]
+
     return (
         <SidebarGroup className="px-3 py-1">
             <SidebarGroupContent>
@@ -52,7 +58,7 @@ export const SidebarNav = () => {
 
                         return (
                             <SidebarNavItem
-                                key={item.label}
+                                key={item.href}
                                 href={item.href}
                                 label={item.label}
                             >
