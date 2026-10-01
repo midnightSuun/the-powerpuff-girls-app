@@ -20,8 +20,6 @@ interface AddSkillModalProps {
 }
 export function AddSkillModal(props: AddSkillModalProps) {
     const t = useTranslations("Skills.add")
-    const modalT = useTranslations("Skills.edit")
-
     const {
         isOpen,
         selectedSkillId,
@@ -41,8 +39,8 @@ export function AddSkillModal(props: AddSkillModalProps) {
             isOpen={isOpen}
             onClose={handleClose}
             title={t("title")}
-            skillPlaceholder={t("skillPlaceholder")}
-            allSkillsAddedText={t("allSkillsAdded")}
+            itemPlaceholder={t("skillPlaceholder")}
+            allItemsAddedText={t("allSkillsAdded")}
             addingText={t("adding")}
             submitText={t("submit")}
             cancelText={t("cancel")}
@@ -53,7 +51,7 @@ export function AddSkillModal(props: AddSkillModalProps) {
             onSelectChange={(val) => setSelectedSkillId(val ?? "")}
             availableOptions={unselectedSkills}
             onSubmit={handleSubmit}
-            proficiencySelectNode={
+            levelSelectNode={
                 <SkillMasterySelect
                     value={mastery}
                     onValueChange={setMastery}

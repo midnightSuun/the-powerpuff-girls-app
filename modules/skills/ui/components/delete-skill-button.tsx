@@ -12,6 +12,7 @@ interface DeleteSkillsButtonProps {
     isSelectionMode: boolean
     onToggleSelectionMode: (active: boolean) => void
     onClearSelection: () => void
+    disabled: boolean
 }
 
 export function DeleteSkillsButton({
@@ -20,6 +21,7 @@ export function DeleteSkillsButton({
     isSelectionMode,
     onToggleSelectionMode,
     onClearSelection,
+    disabled,
 }: DeleteSkillsButtonProps) {
     const {
         t,
@@ -74,6 +76,7 @@ export function DeleteSkillsButton({
         <RemoveItemsButton
             label={t("remove")}
             onClick={() => onToggleSelectionMode(true)}
+            disabled={disabled}
         />
     )
 }

@@ -4,69 +4,58 @@ interface ProgressItemProps {
     isSelected?: boolean
 }
 
-const MASTERY_LEVELS: Record<
-    string | number,
-    {
-        width: string
-        colorClass: string
-        trackBgClass: string
-    }
-> = {
-    0: {
+const PROGRESS_STYLES = {
+    none: {
         width: "0%",
         colorClass: "bg-transparent",
         trackBgClass: "bg-muted",
     },
-    1: {
+    beginner: {
         width: "25%",
         colorClass: "bg-neutral-500 dark:bg-neutral-400",
         trackBgClass: "bg-muted",
     },
-    Novice: {
-        width: "25%",
-        colorClass: "bg-neutral-500 dark:bg-neutral-400",
-        trackBgClass: "bg-muted",
-    },
-    2: {
+    intermediate: {
         width: "45%",
         colorClass: "bg-sky-500",
         trackBgClass: "bg-sky-200 dark:bg-sky-950/60",
     },
-    Advanced: {
-        width: "45%",
-        colorClass: "bg-sky-500",
-        trackBgClass: "bg-sky-200 dark:bg-sky-950/60",
-    },
-    3: {
+    competent: {
         width: "60%",
         colorClass: "bg-green-600",
         trackBgClass: "bg-green-200 dark:bg-green-950/60",
     },
-    Competent: {
-        width: "60%",
-        colorClass: "bg-green-600",
-        trackBgClass: "bg-green-200 dark:bg-green-950/60",
-    },
-    4: {
+    proficient: {
         width: "75%",
         colorClass: "bg-amber-500",
         trackBgClass: "bg-amber-200 dark:bg-amber-950/60",
     },
-    Proficient: {
-        width: "75%",
-        colorClass: "bg-amber-500",
-        trackBgClass: "bg-amber-200 dark:bg-amber-950/60",
-    },
-    5: {
+    expert: {
         width: "100%",
         colorClass: "bg-red-600",
         trackBgClass: "bg-red-200 dark:bg-red-950/60",
     },
-    Expert: {
-        width: "100%",
-        colorClass: "bg-red-600",
-        trackBgClass: "bg-red-200 dark:bg-red-950/60",
-    },
+} as const
+
+const MASTERY_LEVELS: Record<string | number, keyof typeof PROGRESS_STYLES> = {
+    0: "none",
+    A1: "beginner",
+    1: "beginner",
+    Novice: "beginner",
+    A2: "intermediate",
+    2: "intermediate",
+    Advanced: "intermediate",
+    B1: "competent",
+    3: "competent",
+    Competent: "competent",
+    B2: "proficient",
+    4: "proficient",
+    Proficient: "proficient",
+    C1: "expert",
+    5: "expert",
+    Expert: "expert",
+    C2: "expert",
+    Native: "expert",
 }
 
 export function ProgressItem({
@@ -74,7 +63,7 @@ export function ProgressItem({
     mastery,
     isSelected = false,
 }: ProgressItemProps) {
-    const config = MASTERY_LEVELS[mastery] ?? MASTERY_LEVELS[4]
+    const config = PROGRESS_STYLES[MASTERY_LEVELS[mastery] ?? "proficient"]
 
     return (
         <div className="flex items-center gap-3">

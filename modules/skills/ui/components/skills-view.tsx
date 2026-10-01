@@ -61,7 +61,7 @@ export function SkillsView({
                 </div>
 
                 {canManageSkills && (
-                    <div className="mt-8 flex items-center justify-end gap-6 text-xs font-medium tracking-wider text-muted-foreground">
+                    <div className="mt-8 flex flex-wrap items-center justify-end gap-6 text-xs font-medium tracking-wider text-muted-foreground">
                         {!isSelectionMode && (
                             <AddSkillButton
                                 cvId={cvId}
@@ -76,6 +76,7 @@ export function SkillsView({
                             isSelectionMode={isSelectionMode}
                             onToggleSelectionMode={setIsSelectionMode}
                             onClearSelection={clearSelection}
+                            disabled={typedSkills.length === 0}
                         />
                     </div>
                 )}

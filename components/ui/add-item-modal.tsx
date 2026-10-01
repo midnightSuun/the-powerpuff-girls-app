@@ -19,8 +19,8 @@ interface AddItemModalProps {
     isOpen: boolean
     onClose: () => void
     title: string
-    skillPlaceholder: string
-    allSkillsAddedText: string
+    itemPlaceholder: string
+    allItemsAddedText: string
     addingText: string
     submitText: string
     cancelText: string
@@ -32,7 +32,7 @@ interface AddItemModalProps {
     onSelectChange: (value: string | null) => void
     availableOptions: ItemOption[]
 
-    proficiencySelectNode: React.ReactNode
+    levelSelectNode: React.ReactNode
 
     onSubmit: (e: React.FormEvent<HTMLFormElement>) => void
 }
@@ -41,8 +41,8 @@ export function AddItemModal({
     isOpen,
     onClose,
     title,
-    skillPlaceholder,
-    allSkillsAddedText,
+    itemPlaceholder,
+    allItemsAddedText,
     addingText,
     submitText,
     cancelText,
@@ -52,7 +52,7 @@ export function AddItemModal({
     selectedId,
     onSelectChange,
     availableOptions,
-    proficiencySelectNode,
+    levelSelectNode,
     onSubmit,
 }: AddItemModalProps) {
     return (
@@ -70,10 +70,10 @@ export function AddItemModal({
         >
             <Select value={selectedId} onValueChange={onSelectChange}>
                 <SelectTrigger className="w-full border border-[#D1D1D1] dark:border-auth-card-border bg-[#ECECEC] dark:bg-[#454545] px-4 py-6 text-sm text-gray-800 dark:text-foreground shadow-none focus:ring-0 rounded-none">
-                    <SelectValue placeholder={skillPlaceholder}>
+                    <SelectValue placeholder={itemPlaceholder}>
                         {selectedId
                             ? availableOptions.find(
-                                  (s) => String(s.id) === selectedId,
+                                  (option) => String(option.id) === selectedId,
                               )?.name
                             : undefined}
                     </SelectValue>
@@ -94,13 +94,13 @@ export function AddItemModal({
                         ))
                     ) : (
                         <div className="p-3 text-center text-xs text-muted-foreground">
-                            {allSkillsAddedText}
+                            {allItemsAddedText}
                         </div>
                     )}
                 </SelectContent>
             </Select>
 
-            {proficiencySelectNode}
+            {levelSelectNode}
         </BaseModal>
     )
 }

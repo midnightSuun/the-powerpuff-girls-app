@@ -1,6 +1,5 @@
+import { ProgressListItem } from "@/components/ui/progress-list-item"
 import type { Mastery } from "@/gql/generated/graphql"
-
-import { SkillItem } from "./skill-item"
 
 export interface Skill {
     name: string
@@ -34,7 +33,7 @@ export function SkillCategory({
             </p>
             <div className="grid grid-cols-1 gap-y-2 sm:grid-cols-2 md:grid-cols-3">
                 {skills.map((skill) => (
-                    <SkillItem
+                    <ProgressListItem
                         key={skill.name}
                         name={skill.name}
                         mastery={skill.mastery}

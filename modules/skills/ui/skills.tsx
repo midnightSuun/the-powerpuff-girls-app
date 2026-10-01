@@ -16,7 +16,7 @@ interface SkillsProps {
 
 export async function Skills({ userSkills, role }: SkillsProps) {
     const t = await getTranslations("Skills")
-    const canManageSkills = role === "Admin"
+    const canManageSkills = role === "Employee"
     const availableSkills = canManageSkills ? await getAvailableSkills() : []
 
     const groupedSkills = userSkills.skills.reduce<Record<string, Skill[]>>(
