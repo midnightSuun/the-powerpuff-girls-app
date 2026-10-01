@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import { Suspense } from "react"
 
+import { getUserRole } from "@/modules/auth/helpers/get-user-role"
 import { getUserSkills } from "@/modules/skills/api/skills"
 import { getAuthUserId } from "@/modules/skills/helpers/get-auth-user-id"
 import { Skills } from "@/modules/skills/ui/skills"
@@ -12,9 +13,12 @@ async function SkillsContent() {
         redirect("/login")
     }
 
-    const userSkills = await getUserSkills(userId)
+    const [userSkills, userRole] = await Promise.all([
+        getUserSkills(userId),
+        getUserRole(),
+    ])
 
-    return <Skills userId={userId} userSkills={userSkills} />
+    return <Skills userId={userId} userSkills={userSkills} role={userRole} />
 }
 
 export default function SkillsPage() {
