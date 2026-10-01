@@ -1,11 +1,11 @@
 "use client"
 
 import { useTranslations } from "next-intl"
-import { useState } from "react"
 
 import { AddItemModal } from "@/components/ui/add-item-modal"
 import type { Proficiency } from "@/gql/generated/graphql"
 
+import { useAddLanguage } from "../../hooks/use-add-language"
 import { LanguageProficiencySelect } from "./language-proficiency-select"
 
 interface AddLanguageModalProps {
@@ -24,47 +24,24 @@ export function AddLanguageModal({
     existingLanguages,
 }: AddLanguageModalProps) {
     const t = useTranslations("Languages.add")
-    const [selectedLanguageId, setSelectedLanguageId] = useState("")
-    const [proficiency, setProficiency] = useState<Proficiency | "">("")
-    const [error, setError] = useState<string | null>(null)
-    const [isSubmitting, setIsSubmitting] = useState(false)
 
-    const availableOptions = availableLanguages.filter(
-        (language) =>
-            !existingLanguages.some(
-                (existingLanguage) => existingLanguage.name === language.name,
-            ),
-    )
-
-    const handleClose = () => {
-        setSelectedLanguageId("")
-        setProficiency("")
-        setError(null)
-        onClose()
-    }
-
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        const selectedLanguage = availableOptions.find(
-            (language) => language.id === selectedLanguageId,
-        )
-        if (!selectedLanguage || !proficiency) {
-            return
-        }
-
-        try {
-            setIsSubmitting(true)
-            setError(null)
-            await onAdd(selectedLanguage.name, proficiency)
-            handleClose()
-        } catch (error) {
-            setError(
-                error instanceof Error ? error.message : t("errors.failed"),
-            )
-        } finally {
-            setIsSubmitting(false)
-        }
-    }
+    const {
+        selectedLanguageId,
+        setSelectedLanguageId,
+        proficiency,
+        setProficiency,
+        error,
+        isSubmitting,
+        availableOptions,
+        handleClose,
+        handleSubmit,
+        isValid,
+    } = useAddLanguage({
+        onAdd,
+        availableLanguages,
+        existingLanguages,
+        onClose,
+    })
 
     return (
         <AddItemModal
@@ -78,7 +55,7 @@ export function AddLanguageModal({
             cancelText={t("cancel")}
             error={error}
             isSubmitting={isSubmitting}
-            isValid={Boolean(selectedLanguageId && proficiency)}
+            isValid={isValid}
             selectedId={selectedLanguageId}
             onSelectChange={(value) => setSelectedLanguageId(value ?? "")}
             availableOptions={availableOptions}

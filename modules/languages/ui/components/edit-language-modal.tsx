@@ -1,11 +1,11 @@
 "use client"
 
 import { useTranslations } from "next-intl"
-import { useState } from "react"
 
 import { EditItemModal } from "@/components/ui/edit-item-modal"
 import type { Proficiency } from "@/gql/generated/graphql"
 
+import { useEditLanguage } from "../../hooks/use-edit-language"
 import { LanguageProficiencySelect } from "./language-proficiency-select"
 
 interface EditLanguageModalProps {
@@ -24,26 +24,13 @@ export function EditLanguageModal({
     onSave,
 }: EditLanguageModalProps) {
     const t = useTranslations("Languages.edit")
-    const [proficiency, setProficiency] =
-        useState<Proficiency>(currentProficiency)
-    const [error, setError] = useState<string | null>(null)
-    const [isSubmitting, setIsSubmitting] = useState(false)
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        try {
-            setIsSubmitting(true)
-            setError(null)
-            await onSave(proficiency)
-            onClose()
-        } catch (error) {
-            setError(
-                error instanceof Error ? error.message : t("errors.failed"),
-            )
-        } finally {
-            setIsSubmitting(false)
-        }
-    }
+    const { proficiency, setProficiency, error, isSubmitting, handleSubmit } =
+        useEditLanguage({
+            currentProficiency,
+            onSave,
+            onClose,
+        })
 
     return (
         <EditItemModal

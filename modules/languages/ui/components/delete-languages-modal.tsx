@@ -1,9 +1,10 @@
 "use client"
 
 import { useTranslations } from "next-intl"
-import { useState } from "react"
 
 import { DeleteModal } from "@/components/ui/delete-item-modal"
+
+import { useDeleteLanguages } from "../../hooks/use-delete-languages"
 
 interface DeleteLanguagesModalProps {
     isOpen: boolean
@@ -19,23 +20,11 @@ export function DeleteLanguagesModal({
     onConfirm,
 }: DeleteLanguagesModalProps) {
     const t = useTranslations("Languages.delete")
-    const [error, setError] = useState<string | null>(null)
-    const [isPending, setIsPending] = useState(false)
 
-    const handleConfirm = async () => {
-        try {
-            setIsPending(true)
-            setError(null)
-            await onConfirm()
-            onClose()
-        } catch (error) {
-            setError(
-                error instanceof Error ? error.message : t("errors.failed"),
-            )
-        } finally {
-            setIsPending(false)
-        }
-    }
+    const { error, isPending, handleConfirm } = useDeleteLanguages({
+        onConfirm,
+        onClose,
+    })
 
     return (
         <DeleteModal
