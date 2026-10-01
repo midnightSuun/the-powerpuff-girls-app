@@ -2,7 +2,7 @@ import { redirect } from "next/navigation"
 import { getTranslations } from "next-intl/server"
 import { Suspense } from "react"
 
-import { getUserRole } from "@/modules/auth/helpers/get-user-role"
+import { getUserRole } from "@/modules/auth/helpers/get-current-session"
 import { getUserSkills } from "@/modules/skills/api/skills"
 import { getAuthUserId } from "@/modules/skills/helpers/get-auth-user-id"
 import { Skills } from "@/modules/skills/ui/skills"

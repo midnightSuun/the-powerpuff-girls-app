@@ -71,7 +71,7 @@ const publicRoutes = [
     "/verify-email",
 ]
 
-const employeeRoutes = [""]
+const employeeRoutes = ["/languages", "/skills", "/profile", "/settings"]
 const adminRoutes = ["/departments", "/positions", "/projects"]
 
 function isPublic(route: string) {
