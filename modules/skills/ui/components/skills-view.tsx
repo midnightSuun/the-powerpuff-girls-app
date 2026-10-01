@@ -1,21 +1,11 @@
 "use client"
 
-import { useState } from "react"
-
-import { Mastery } from "@/gql/generated/graphql"
-
-import { updateCvSkill } from "../../api/skills"
+import { SkillOption } from "../../hooks/use-add-skill-modal"
+import { useSkillsView } from "../../hooks/use-skills-view"
 import { AddSkillButton } from "./add-skill-button"
-import { SkillOption } from "./add-skill-modal"
 import { DeleteSkillsButton } from "./delete-skill-button"
 import { EditSkillModal } from "./edit-skill-modal"
-import { SkillCategory } from "./skill-catergory"
-
-interface Skill {
-    name: string
-    mastery: string | number
-    categoryId?: string | null
-}
+import { type Skill, SkillCategory } from "./skill-category"
 
 interface Category {
     id: string
@@ -28,7 +18,7 @@ interface SkillsViewProps {
     categories: Category[]
     typedSkills: Skill[]
     availableSkills: SkillOption[]
-    isDarkMode?: boolean
+    canManageSkills: boolean
 }
 
 export function SkillsView({
@@ -36,35 +26,22 @@ export function SkillsView({
     categories,
     typedSkills,
     availableSkills,
-    isDarkMode,
+    canManageSkills,
 }: SkillsViewProps) {
-    const [isSelectionMode, setIsSelectionMode] = useState(false)
-    const [selectedSkills, setSelectedSkills] = useState<string[]>([])
-    const [editingSkill, setEditingSkill] = useState<Skill | null>(null)
-
-    const handleToggleSkill = (skillName: string) => {
-        setSelectedSkills((prev) =>
-            prev.includes(skillName)
-                ? prev.filter((name) => name !== skillName)
-                : [...prev, skillName],
-        )
-    }
-
-    const handleUpdateSkill = async (newMastery: Mastery) => {
-        if (!editingSkill) return
-
-        await updateCvSkill({
-            cvId,
-            name: editingSkill.name,
-            mastery: newMastery,
-        })
-
-        setEditingSkill(null)
-    }
+    const {
+        isSelectionMode,
+        setIsSelectionMode,
+        selectedSkills,
+        clearSelection,
+        editingSkill,
+        setEditingSkill,
+        handleToggleSkill,
+        handleUpdateSkill,
+    } = useSkillsView({ cvId })
 
     return (
         <div className="flex items-start gap-16">
-            <div className="flex-1 max-w-[852px] pl-50 pt-6">
+            <div className="flex-1 max-w-213 pl-50 pt-6">
                 <div className="space-y-8">
                     {categories.map((category) => (
                         <SkillCategory
@@ -74,29 +51,34 @@ export function SkillsView({
                             isSelectionMode={isSelectionMode}
                             selectedSkills={selectedSkills}
                             onSelectSkill={handleToggleSkill}
-                            onEditSkill={(skill) => setEditingSkill(skill)}
+                            onEditSkill={
+                                canManageSkills
+                                    ? (skill) => setEditingSkill(skill)
+                                    : undefined
+                            }
                         />
                     ))}
                 </div>
 
-                <div className="mt-8 flex items-center justify-end gap-6 text-xs font-medium tracking-wider text-gray-700">
-                    {!isSelectionMode && (
-                        <AddSkillButton
-                            cvId={cvId}
-                            isDarkMode={isDarkMode}
-                            existingSkills={typedSkills}
-                            availableSkills={availableSkills}
-                        />
-                    )}
+                {canManageSkills && (
+                    <div className="mt-8 flex items-center justify-end gap-6 text-xs font-medium tracking-wider text-muted-foreground">
+                        {!isSelectionMode && (
+                            <AddSkillButton
+                                cvId={cvId}
+                                existingSkills={typedSkills}
+                                availableSkills={availableSkills}
+                            />
+                        )}
 
-                    <DeleteSkillsButton
-                        cvId={cvId}
-                        selectedSkills={selectedSkills}
-                        isSelectionMode={isSelectionMode}
-                        onToggleSelectionMode={setIsSelectionMode}
-                        onClearSelection={() => setSelectedSkills([])}
-                    />
-                </div>
+                        <DeleteSkillsButton
+                            cvId={cvId}
+                            selectedSkills={selectedSkills}
+                            isSelectionMode={isSelectionMode}
+                            onToggleSelectionMode={setIsSelectionMode}
+                            onClearSelection={clearSelection}
+                        />
+                    </div>
+                )}
             </div>
 
             <EditSkillModal

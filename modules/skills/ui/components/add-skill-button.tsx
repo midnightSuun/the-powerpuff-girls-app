@@ -1,37 +1,30 @@
 "use client"
 
-import { Plus } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { useState } from "react"
 
-import { Button } from "@/components/ui/button"
+import { AddItemButton } from "@/components/ui/list-management-buttons"
 
-import { AddSkillModal, SkillOption, UserSkill } from "./add-skill-modal"
+import { SkillOption, UserSkill } from "../../hooks/use-add-skill-modal"
+import { AddSkillModal } from "./add-skill-modal"
 
 interface AddSkillButtonProps {
     cvId: string
-    isDarkMode?: boolean
     existingSkills?: UserSkill[]
     availableSkills?: SkillOption[]
 }
 
 export function AddSkillButton({
     cvId,
-    isDarkMode,
     existingSkills = [],
     availableSkills = [],
 }: AddSkillButtonProps) {
     const [isOpen, setIsOpen] = useState(false)
+    const t = useTranslations("Skills.actions")
 
     return (
         <>
-            <Button
-                variant="ghost"
-                className="gap-2"
-                onClick={() => setIsOpen(true)}
-            >
-                <Plus className="h-5 w-5" />
-                ADD SKILL
-            </Button>
+            <AddItemButton label={t("add")} onClick={() => setIsOpen(true)} />
 
             <AddSkillModal
                 isOpen={isOpen}

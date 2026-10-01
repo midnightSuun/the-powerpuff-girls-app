@@ -1,14 +1,16 @@
+import type { Mastery } from "@/gql/generated/graphql"
+
 import { SkillItem } from "./skill-item"
 
 export interface Skill {
     name: string
-    mastery: string | number
+    mastery: Mastery
+    categoryId?: string | null
 }
 
 interface SkillCategoryProps {
     title: string
     skills: Skill[]
-    isDarkMode?: boolean
     isSelectionMode?: boolean
     selectedSkills?: string[]
     onSelectSkill?: (skillName: string) => void
@@ -27,9 +29,9 @@ export function SkillCategory({
 
     return (
         <div className="mb-6">
-            <h3 className="mb-3 text-sm font-normal text-muted-foreground">
+            <p className="mb-3 text-sm font-normal text-muted-foreground">
                 {title}
-            </h3>
+            </p>
             <div className="grid grid-cols-1 gap-y-2 sm:grid-cols-2 md:grid-cols-3">
                 {skills.map((skill) => (
                     <SkillItem
@@ -39,7 +41,9 @@ export function SkillCategory({
                         isSelectionMode={isSelectionMode}
                         isSelected={selectedSkills.includes(skill.name)}
                         onSelect={() => onSelectSkill?.(skill.name)}
-                        onEdit={() => onEditSkill?.(skill)}
+                        onEdit={
+                            onEditSkill ? () => onEditSkill(skill) : undefined
+                        }
                     />
                 ))}
             </div>

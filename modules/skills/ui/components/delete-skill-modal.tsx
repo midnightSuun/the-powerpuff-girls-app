@@ -1,9 +1,10 @@
 "use client"
 
 import { X } from "lucide-react"
-import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
+
+import { useDeleteSkillsModal } from "../../hooks/use-delete-skill-modal"
 
 interface DeleteSkillsModalProps {
     isOpen: boolean
@@ -12,42 +13,19 @@ interface DeleteSkillsModalProps {
     count: number
 }
 
-export function DeleteSkillsModal({
-    isOpen,
-    onClose,
-    onConfirm,
-    count,
-}: DeleteSkillsModalProps) {
-    const [isDeleting, setIsDeleting] = useState(false)
-    const [error, setError] = useState<string | null>(null)
+export function DeleteSkillsModal(props: DeleteSkillsModalProps) {
+    const { isOpen, onClose, count } = props
+    const { t, isDeleting, error, handleConfirm } = useDeleteSkillsModal(props)
 
     if (!isOpen) return null
-
-    const handleConfirm = async () => {
-        setIsDeleting(true)
-        setError(null)
-        try {
-            await onConfirm()
-            onClose()
-        } catch (err: unknown) {
-            const errorObj = err as Error
-            setError(
-                errorObj.message ||
-                    "Failed to remove skills. Please try again.",
-            )
-        } finally {
-            setIsDeleting(false)
-        }
-    }
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
             <div className="relative w-full max-w-155 rounded-none bg-background p-6 shadow-2xl border border-border">
-                {/* Заголовок и крестик */}
                 <div className="mb-4 flex items-center justify-between">
-                    <h2 className="text-lg font-semibold text-foreground">
-                        {count > 1 ? "Remove skills" : "Remove skill"}
-                    </h2>
+                    <p className="text-lg font-semibold text-foreground">
+                        {count > 1 ? t("titlePlural") : t("titleSingular")}
+                    </p>
                     <button
                         type="button"
                         onClick={onClose}
@@ -59,10 +37,7 @@ export function DeleteSkillsModal({
                 </div>
 
                 <p className="mb-8 text-sm text-muted-foreground">
-                    Are you sure you want to remove{" "}
-                    <span className="font-bold text-foreground">
-                        {count} {count === 1 ? "skill" : "skills"}?
-                    </span>
+                    {t("confirmation", { count })}
                 </p>
 
                 {error && (
@@ -78,7 +53,7 @@ export function DeleteSkillsModal({
                         onClick={onClose}
                         disabled={isDeleting}
                     >
-                        CANCEL
+                        {t("cancel")}
                     </Button>
                     <Button
                         type="button"
@@ -86,7 +61,7 @@ export function DeleteSkillsModal({
                         onClick={handleConfirm}
                         disabled={isDeleting}
                     >
-                        {isDeleting ? "REMOVING..." : "CONFIRM"}
+                        {isDeleting ? t("removing") : t("confirm")}
                     </Button>
                 </div>
             </div>

@@ -1,60 +1,25 @@
 import { getTranslations } from "next-intl/server"
 
-import { getAvailableSkills, getUserSkills } from "../api/skills"
-import { SkillOption } from "./components/add-skill-modal"
+import type { UserRole } from "@/gql"
+import { getAvailableSkills } from "@/modules/skills/api/skills"
+
+import type { Skill } from "./components/skill-category"
 import { SkillsView } from "./components/skills-view"
 
-interface Skill {
-    name: string
-    mastery: string | number
-    categoryId?: string | null
-}
-
 interface SkillsProps {
-    userId: string
-    userSkills?: Skill[]
-    isDarkMode?: boolean
-}
-
-type UserSkill = {
-    name: string
-    mastery: string
-    categoryId?: string | null
-}
-
-export async function Skills({
-    userId,
-    userSkills: initialUserSkills,
-    isDarkMode = false,
-}: SkillsProps) {
-    const t = await getTranslations("Skills")
-
-    let cvId = ""
-    let typedSkills: UserSkill[] = []
-    let availableSkills: SkillOption[] = []
-
-    if (initialUserSkills && Array.isArray(initialUserSkills)) {
-        typedSkills = initialUserSkills as UserSkill[]
-    } else if (userId) {
-        try {
-            const [userData, fetchedAvailable] = await Promise.all([
-                getUserSkills(userId),
-                getAvailableSkills(),
-            ])
-            cvId = userData?.cvId ?? ""
-            typedSkills = Array.isArray(userData?.skills)
-                ? (userData.skills as UserSkill[])
-                : []
-            availableSkills = fetchedAvailable ?? []
-        } catch (error) {
-            console.error("Failed to load user skills:", error)
-            typedSkills = []
-        }
+    userSkills: {
+        cvId: string
+        skills: Skill[]
     }
+    role?: UserRole | null
+}
 
-    const safeSkills = Array.isArray(typedSkills) ? typedSkills : []
+export async function Skills({ userSkills, role }: SkillsProps) {
+    const t = await getTranslations("Skills")
+    const canManageSkills = role === "Admin"
+    const availableSkills = canManageSkills ? await getAvailableSkills() : []
 
-    const groupedSkills = safeSkills.reduce<Record<string, UserSkill[]>>(
+    const groupedSkills = userSkills.skills.reduce<Record<string, Skill[]>>(
         (acc, skill) => {
             const categoryKey = skill.categoryId ?? "other"
 
@@ -71,13 +36,11 @@ export async function Skills({
         ([categoryId, skills]) => {
             const translationKey = `categories.${categoryId}` as const
 
-            const title = t.has(translationKey)
-                ? t(translationKey)
-                : t("categories.other")
-
             return {
                 id: categoryId,
-                title,
+                title: t.has(translationKey)
+                    ? t(translationKey)
+                    : t("categories.other"),
                 skills,
             }
         },
@@ -85,11 +48,11 @@ export async function Skills({
 
     return (
         <SkillsView
-            cvId={cvId}
+            cvId={userSkills.cvId}
             categories={categories}
-            typedSkills={safeSkills}
+            typedSkills={userSkills.skills}
             availableSkills={availableSkills}
-            isDarkMode={isDarkMode}
+            canManageSkills={canManageSkills}
         />
     )
 }

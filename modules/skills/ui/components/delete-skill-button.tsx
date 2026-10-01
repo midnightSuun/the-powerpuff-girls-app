@@ -1,11 +1,9 @@
 "use client"
 
-import { Trash2 } from "lucide-react"
-import { useState } from "react"
-
 import { Button } from "@/components/ui/button"
-import { deleteCvSkills } from "@/modules/skills/api/skills"
+import { RemoveItemsButton } from "@/components/ui/list-management-buttons"
 
+import { useDeleteSkillsButton } from "../../hooks/use-delete-skills-button"
 import { DeleteSkillsModal } from "./delete-skill-modal"
 
 interface DeleteSkillsButtonProps {
@@ -23,42 +21,42 @@ export function DeleteSkillsButton({
     onToggleSelectionMode,
     onClearSelection,
 }: DeleteSkillsButtonProps) {
-    const [isModalOpen, setIsModalOpen] = useState(false)
-
-    const hasSelected = selectedSkills.length > 0
-
-    const handleDeleteConfirm = async () => {
-        await deleteCvSkills({
-            cvId,
-            name: selectedSkills,
-        })
-
-        onClearSelection()
-        onToggleSelectionMode(false)
-    }
-    const handleCancel = () => {
-        onClearSelection()
-        onToggleSelectionMode(false)
-    }
+    const {
+        t,
+        isModalOpen,
+        setIsModalOpen,
+        isSubmitting,
+        hasSelected,
+        handleDeleteConfirm,
+        handleCancel,
+    } = useDeleteSkillsButton({
+        cvId,
+        selectedSkills,
+        onToggleSelectionMode,
+        onClearSelection,
+    })
 
     if (isSelectionMode) {
         return (
             <>
                 <div className="flex items-center gap-3">
                     <Button
+                        type="button"
                         variant="ghost"
                         onClick={handleCancel}
+                        disabled={isSubmitting}
                         className="rounded-none"
                     >
-                        CANCEL
+                        {t("cancel")}
                     </Button>
 
                     <Button
+                        type="button"
                         variant="primary"
-                        disabled={!hasSelected}
+                        disabled={!hasSelected || isSubmitting}
                         onClick={() => setIsModalOpen(true)}
                     >
-                        DELETE ({selectedSkills.length})
+                        {t("deleteSelected", { count: selectedSkills.length })}
                     </Button>
                 </div>
 
@@ -73,13 +71,9 @@ export function DeleteSkillsButton({
     }
 
     return (
-        <Button
-            variant="primaryV2"
-            className="gap-2"
+        <RemoveItemsButton
+            label={t("remove")}
             onClick={() => onToggleSelectionMode(true)}
-        >
-            <Trash2 className="h-5 w-5" />
-            REMOVE SKILLS
-        </Button>
+        />
     )
 }
