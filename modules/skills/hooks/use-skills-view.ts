@@ -5,7 +5,7 @@ import { useState } from "react"
 import type { Mastery } from "@/gql/generated/graphql"
 import { updateCvSkill } from "@/modules/skills/api/skills"
 
-import { Skill } from "../ui/components/skill-category"
+import { Skill } from "../ui/components/user/skill-category"
 
 interface UseSkillsViewProps {
     cvId: string

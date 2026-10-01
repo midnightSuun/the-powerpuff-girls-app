@@ -1,17 +1,34 @@
 import { redirect } from "next/navigation"
+import { Suspense } from "react"
 
-import { getCurrentSession } from "@/modules/auth/helpers/get-current-session"
+import {
+    getCurrentSession,
+    getUserRole,
+} from "@/modules/auth/helpers/get-current-session"
+import { getAdminLanguages } from "@/modules/languages/api/admin-languages"
 import {
     getAvailableLanguages,
     getUserLanguages,
 } from "@/modules/languages/api/languages"
+import { AdminLanguagesView } from "@/modules/languages/ui/components/admin/admin-languages-view"
 import { LanguagesPage } from "@/modules/languages/ui/languages-page"
 
-export default async function Page() {
+async function LanguagesContent() {
     const session = await getCurrentSession()
 
     if (!session) {
         redirect("/login")
+    }
+
+    const userRole = await getUserRole()
+    if (userRole === "Admin") {
+        const languages = await getAdminLanguages()
+
+        return (
+            <div className="p-6">
+                <AdminLanguagesView initialLanguages={languages} />
+            </div>
+        )
     }
 
     const { userId } = session
@@ -25,5 +42,15 @@ export default async function Page() {
             allSystemLanguages={allSystemLanguages}
             userId={userId}
         />
+    )
+}
+
+export default function Page() {
+    return (
+        <main className="min-h-screen w-full">
+            <Suspense fallback={<div className="p-6">Loading...</div>}>
+                <LanguagesContent />
+            </Suspense>
+        </main>
     )
 }

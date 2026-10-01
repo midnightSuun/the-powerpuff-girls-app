@@ -11,9 +11,9 @@ import { ProgressListItem } from "@/components/ui/progress-list-item"
 import type { Proficiency } from "@/gql/generated/graphql"
 
 import { useLanguagesPage } from "../hooks/use-languages-page"
-import { AddLanguageModal } from "./components/add-language-modal"
-import { DeleteLanguagesModal } from "./components/delete-languages-modal"
-import { EditLanguageModal } from "./components/edit-language-modal"
+import { AddLanguageModal } from "./components/user/add-language-modal"
+import { DeleteLanguagesModal } from "./components/user/delete-languages-modal"
+import { EditLanguageModal } from "./components/user/edit-language-modal"
 
 interface LanguagesPageProps {
     initialUserLanguages: Array<{ name: string; proficiency: Proficiency }>

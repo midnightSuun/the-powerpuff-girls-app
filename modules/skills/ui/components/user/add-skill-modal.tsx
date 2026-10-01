@@ -8,7 +8,7 @@ import {
     type SkillOption,
     useAddSkillModal,
     type UserSkill,
-} from "../../hooks/use-add-skill-modal"
+} from "../../../hooks/use-add-skill-modal"
 import { SkillMasterySelect } from "./skill-mastery-select"
 
 interface AddSkillModalProps {

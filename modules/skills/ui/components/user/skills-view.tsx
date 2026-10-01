@@ -1,7 +1,7 @@
 "use client"
 
-import { SkillOption } from "../../hooks/use-add-skill-modal"
-import { useSkillsView } from "../../hooks/use-skills-view"
+import { SkillOption } from "../../../hooks/use-add-skill-modal"
+import { useSkillsView } from "../../../hooks/use-skills-view"
 import { AddSkillButton } from "./add-skill-button"
 import { DeleteSkillsButton } from "./delete-skill-button"
 import { EditSkillModal } from "./edit-skill-modal"
