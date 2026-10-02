@@ -38,7 +38,7 @@ export function useAddLanguage({
         onClose()
     }
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault()
         const selectedLanguage = availableOptions.find(
             (language) => language.id === selectedLanguageId,

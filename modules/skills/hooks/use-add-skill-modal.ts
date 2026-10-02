@@ -55,7 +55,7 @@ export function useAddSkillModal({
             ),
     )
 
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault()
 
         if (!selectedSkillId) {

@@ -1,14 +1,14 @@
 import { useState } from "react"
 
-interface UseDeleteLanguageModalProps {
+interface UseDeleteSkillAdminModalProps {
     onClose: () => void
     onConfirm: () => Promise<void>
 }
 
-export function useDeleteLanguageModal({
+export function useDeleteSkillAdminModal({
     onClose,
     onConfirm,
-}: UseDeleteLanguageModalProps) {
+}: UseDeleteSkillAdminModalProps) {
     const [isDeleting, setIsDeleting] = useState(false)
     const [error, setError] = useState<string | null>(null)
 
@@ -21,7 +21,7 @@ export function useDeleteLanguageModal({
             onClose()
         } catch (err: unknown) {
             const message =
-                err instanceof Error ? err.message : "Failed to delete language"
+                err instanceof Error ? err.message : "Failed to delete skill"
             setError(message)
         } finally {
             setIsDeleting(false)

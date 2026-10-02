@@ -20,7 +20,7 @@ interface EditItemModalProps {
 
     levelSelectNode: React.ReactNode
 
-    onSubmit: (e: React.FormEvent<HTMLFormElement>) => void
+    onSubmit: (e: React.SyntheticEvent) => void
 }
 
 export function EditItemModal({
