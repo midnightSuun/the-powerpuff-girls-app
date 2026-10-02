@@ -181,6 +181,7 @@
     },
     "Users": {
         "title": "Employees",
+        "addEmployee": "Add Employee",
         "loading": "Loading users...",
         "columns": {
             "avatar": "Avatar",

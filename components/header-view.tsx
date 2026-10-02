@@ -2,28 +2,34 @@
 
 import { cn } from "cn"
 import { useTranslations } from "next-intl"
-import { ReactNode, Suspense, useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 
 import { SearchInput } from "@/components/search-input"
+import { Button } from "@/components/ui/button"
 import { Link, usePathname } from "@/i18n/navigation"
 
+export type HeaderCopyKey =
+    "users" | "skills" | "languages" | "settings" | "profile" | "addEmployee"
+
+type HeaderCopy = Record<HeaderCopyKey, string>
+
 type HeaderTab = {
-    label: string
+    label: HeaderCopyKey
     path: string
 }
 
 type HeaderDefaultPage = {
     type: "default"
     path: string
-    title: string
+    title: HeaderCopyKey
     showSearch?: boolean
-    actions?: ReactNode
+    action?: "addEmployee"
 }
 
 type HeaderTabsPage = {
     type: "tabs"
     path: string
-    firstBreadcrumb: string
+    firstBreadcrumb: HeaderCopyKey
     tabs: HeaderTab[]
 }
 
@@ -133,6 +139,23 @@ const resolvePage = (pages: HeaderPage[], pathname: string) => {
     return matches[0] ?? null
 }
 
+const useHeaderCopy = (): HeaderCopy => {
+    const tUsers = useTranslations("Users")
+    const tSkills = useTranslations("Skills")
+    const tLanguages = useTranslations("Languages")
+    const tSettings = useTranslations("Settings")
+    const tNav = useTranslations("User.nav")
+
+    return {
+        users: tUsers("title"),
+        skills: tSkills("title"),
+        languages: tLanguages("title"),
+        settings: tSettings("title"),
+        profile: tNav("profile"),
+        addEmployee: tUsers("addEmployee"),
+    }
+}
+
 const ChevronIcon = () => {
     return (
         <img
@@ -157,13 +180,35 @@ const UserIcon = () => {
     )
 }
 
-const DefaultPageHeader = ({ page }: { page: HeaderDefaultPage }) => {
-    const showToolbar = Boolean(page.showSearch || page.actions)
+const PlusIcon = () => {
+    return (
+        <svg
+            aria-hidden
+            width={24}
+            height={24}
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="size-6 shrink-0"
+        >
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="#C63031" />
+        </svg>
+    )
+}
+
+const DefaultPageHeader = ({
+    page,
+    copy,
+}: {
+    page: HeaderDefaultPage
+    copy: HeaderCopy
+}) => {
+    const showToolbar = Boolean(page.showSearch || page.action)
 
     return (
         <header className="w-full shrink-0 bg-[#f5f5f7] dark:bg-[#2e2e2e]">
             <div className="flex h-14 items-center px-5">
-                <p className={crumbClassName}>{page.title}</p>
+                <p className={crumbClassName}>{copy[page.title]}</p>
             </div>
             {showToolbar ? (
                 <div className="flex h-14 items-center px-5">
@@ -172,8 +217,16 @@ const DefaultPageHeader = ({ page }: { page: HeaderDefaultPage }) => {
                             <SearchInput />
                         </Suspense>
                     ) : null}
-                    {page.actions ? (
-                        <div className="ml-auto">{page.actions}</div>
+                    {page.action === "addEmployee" ? (
+                        <div className="ml-auto">
+                            <Button
+                                variant="primaryV2"
+                                className="h-10 w-[220px] gap-2 rounded-[40px] p-0 text-sm leading-[24.5px] font-medium tracking-[0.4px] uppercase hover:border-transparent active:border-transparent active:bg-transparent"
+                            >
+                                <PlusIcon />
+                                {copy.addEmployee}
+                            </Button>
+                        </div>
                     ) : null}
                 </div>
             ) : null}
@@ -185,10 +238,12 @@ const PageWithTabsHeader = ({
     page,
     match,
     secondBreadcrumb,
+    copy,
 }: {
     page: HeaderTabsPage
     match: PathMatch
     secondBreadcrumb: string | null
+    copy: HeaderCopy
 }) => {
     const t = useTranslations("Common")
     const basePath = fillPath(page.path, match.params)
@@ -206,7 +261,7 @@ const PageWithTabsHeader = ({
                             href={parentPath(page.path)}
                             className={crumbClassName}
                         >
-                            {page.firstBreadcrumb}
+                            {copy[page.firstBreadcrumb]}
                         </Link>
                     </li>
                     <li aria-hidden className="flex items-center">
@@ -231,7 +286,7 @@ const PageWithTabsHeader = ({
                                     aria-current="page"
                                     className={crumbClassName}
                                 >
-                                    {activeTab.label}
+                                    {copy[activeTab.label]}
                                 </span>
                             </li>
                         </>
@@ -255,7 +310,7 @@ const PageWithTabsHeader = ({
                             )}
                         >
                             <span className="flex h-12 w-full items-center justify-center">
-                                {tab.label}
+                                {copy[tab.label]}
                             </span>
                             <span
                                 className={cn(
@@ -278,6 +333,7 @@ export const HeaderView = ({
     initialBreadcrumb,
     loadSecondBreadcrumb,
 }: Props) => {
+    const copy = useHeaderCopy()
     const pathname = usePathname()
     const resolved = resolvePage(pages, pathname)
     const userId =
@@ -325,9 +381,10 @@ export const HeaderView = ({
                 page={resolved.page}
                 match={resolved.match}
                 secondBreadcrumb={secondBreadcrumb}
+                copy={copy}
             />
         )
     }
 
-    return <DefaultPageHeader page={resolved.page} />
+    return <DefaultPageHeader page={resolved.page} copy={copy} />
 }

@@ -1,25 +1,24 @@
 import { headers } from "next/headers"
 import { ReactNode } from "react"
 
-import type { HeaderPage } from "@/components/header-view"
+import type { HeaderCopyKey, HeaderPage } from "@/components/header-view"
 import { HeaderView } from "@/components/header-view"
-import { Button } from "@/components/ui/button"
 import { routing } from "@/i18n/routing"
 import { getUser } from "@/modules/users/api/get-user"
 
 type DefaultPage = {
     path: string
-    title: string
+    title: HeaderCopyKey
     showSearch?: boolean
-    actions?: ReactNode
+    action?: "addEmployee"
 }
 
 type PageWithTabs = {
     path: string
-    firstBreadcrumb: string
+    firstBreadcrumb: HeaderCopyKey
     getSecondBreadcrumb: (id: string) => Promise<ReactNode>
     tabs: {
-        label: string
+        label: HeaderCopyKey
         path: string
     }[]
 }
@@ -27,30 +26,30 @@ type PageWithTabs = {
 const PAGES: (DefaultPage | PageWithTabs)[] = [
     {
         path: "/users",
-        title: "Employees",
+        title: "users",
         showSearch: true,
-        actions: <Button>Add Employee</Button>,
+        action: "addEmployee",
     },
     {
         path: "/skills",
-        title: "Skills",
+        title: "skills",
     },
     {
         path: "/languages",
-        title: "Languages",
+        title: "languages",
     },
     {
         path: "/settings",
-        title: "Settings",
+        title: "settings",
     },
     {
         path: "/users/{userId}",
-        firstBreadcrumb: "Employees",
+        firstBreadcrumb: "users",
         getSecondBreadcrumb: async (id: string) => (await getUser(id)).email,
         tabs: [
-            { label: "Profile", path: "/profile" },
-            { label: "Skills", path: "/skills" },
-            { label: "Languages", path: "/languages" },
+            { label: "profile", path: "/profile" },
+            { label: "skills", path: "/skills" },
+            { label: "languages", path: "/languages" },
         ],
     },
 ]
@@ -107,7 +106,7 @@ const clientPages: HeaderPage[] = PAGES.map((page) => {
         path: page.path,
         title: page.title,
         showSearch: page.showSearch,
-        actions: page.actions,
+        action: page.action,
     }
 })
 

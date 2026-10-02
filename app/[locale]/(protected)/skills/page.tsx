@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import { Suspense } from "react"
 
+import { LoadingText } from "@/components/loading-text"
 import { getUserRole } from "@/modules/auth/helpers/get-current-session"
 import {
     getAdminSkills,
@@ -43,7 +44,13 @@ async function SkillsContent() {
 export default function SkillsPage() {
     return (
         <main className="min-h-screen w-full">
-            <Suspense fallback={<div className="p-6">Loading...</div>}>
+            <Suspense
+                fallback={
+                    <div className="p-6">
+                        <LoadingText namespace="Common" />
+                    </div>
+                }
+            >
                 <SkillsContent />
             </Suspense>
         </main>
