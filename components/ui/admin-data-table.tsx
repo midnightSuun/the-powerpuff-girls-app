@@ -96,15 +96,15 @@ export function AdminDataTable<T extends { id: string | number }>({
     }, [data, searchQuery, sortOrder, getSearchableString, getSortValue])
 
     return (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between gap-4">
                 <div className="relative w-full max-w-xs">
-                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
                     <Input
                         placeholder={effectiveSearchPlaceholder}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-9 border-[#D1D1D1] dark:border-auth-card-border bg-[#ECECEC] dark:bg-[#454545] rounded-none focus-visible:ring-0"
+                        className="h-9 w-full rounded-full border border-[#B8B8B8] dark:border-auth-card-border bg-transparent dark:bg-[#333333] pl-10 pr-4 text-sm text-foreground placeholder:text-gray-400 focus-visible:ring-1 focus-visible:ring-primary/40 focus-visible:border-primary transition-all outline-none"
                     />
                 </div>
 
@@ -120,14 +120,14 @@ export function AdminDataTable<T extends { id: string | number }>({
                 )}
             </div>
 
-            <div className="border border-border bg-background">
+            <div className="w-full overflow-x-auto">
                 <table className="w-full text-left text-sm">
-                    <thead className="border-b bg-muted/50 text-muted-foreground">
-                        <tr>
+                    <thead>
+                        <tr className="h-[73px] border-b border-[#AEAEAE] dark:border-gray-700">
                             {columns.map((col) => (
                                 <th
                                     key={col.key}
-                                    className={`p-4 font-medium ${
+                                    className={`px-4 font-medium text-foreground align-middle ${
                                         col.sortable
                                             ? "cursor-pointer select-none"
                                             : ""
@@ -152,7 +152,7 @@ export function AdminDataTable<T extends { id: string | number }>({
                                 </th>
                             ))}
                             {(onEditClick || onDeleteClick) && (
-                                <th className="p-4 w-10"></th>
+                                <th className="px-4 w-10 align-middle"></th>
                             )}
                         </tr>
                     </thead>
@@ -161,10 +161,13 @@ export function AdminDataTable<T extends { id: string | number }>({
                             processedData.map((item) => (
                                 <tr
                                     key={item.id}
-                                    className="border-b last:border-0 hover:bg-muted/30"
+                                    className="h-[73px] border-b border-[#AEAEAE] dark:border-gray-700 hover:bg-muted/30 transition-colors"
                                 >
                                     {columns.map((col) => (
-                                        <td key={col.key} className="p-4">
+                                        <td
+                                            key={col.key}
+                                            className="px-4 align-middle"
+                                        >
                                             {col.render
                                                 ? col.render(item)
                                                 : String(
@@ -178,7 +181,7 @@ export function AdminDataTable<T extends { id: string | number }>({
                                         </td>
                                     ))}
                                     {(onEditClick || onDeleteClick) && (
-                                        <td className="p-4 text-right relative">
+                                        <td className="px-4 text-right relative align-middle">
                                             <Button
                                                 type="button"
                                                 variant="ghost"
@@ -238,13 +241,13 @@ export function AdminDataTable<T extends { id: string | number }>({
                                 </tr>
                             ))
                         ) : (
-                            <tr>
+                            <tr className="h-[73px] border-b border-[#AEAEAE] dark:border-gray-700">
                                 <td
                                     colSpan={
                                         columns.length +
                                         (onEditClick || onDeleteClick ? 1 : 0)
                                     }
-                                    className="p-8 text-center text-muted-foreground"
+                                    className="px-4 text-center text-muted-foreground align-middle"
                                 >
                                     {emptyMessage}
                                 </td>

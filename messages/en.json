@@ -1,5 +1,30 @@
 {
     "Admin": {
+        "departments": {
+            "title": "Departments",
+            "createButton": "CREATE DEPARTMENT",
+            "empty": "No departments found",
+            "columns": {
+                "name": "Name"
+            },
+            "create": {
+                "title": "Create department",
+                "departmentName": "Department",
+                "departmentPlaceholder": "Department name",
+                "alreadyExists": "Department already exists",
+                "required": "Department name is required"
+            },
+            "edit": {
+                "title": "Edit department",
+                "departmentName": "Department",
+                "departmentPlaceholder": "Department name"
+            },
+            "delete": {
+                "title": "Delete department",
+                "confirmation": "Are you sure you want to delete department \"{name}\"?",
+                "inUseError": "Department cannot be deleted because it is currently in use"
+            }
+        },
         "common": {
             "search": "Search",
             "edit": "Edit",

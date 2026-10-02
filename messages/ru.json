@@ -1,5 +1,30 @@
 {
     "Admin": {
+        "departments": {
+            "title": "Отделы",
+            "createButton": "СОЗДАТЬ ОТДЕЛ",
+            "empty": "Отделы не найдены",
+            "columns": {
+                "name": "Название"
+            },
+            "create": {
+                "title": "Создать отдел",
+                "departmentName": "Отдел",
+                "departmentPlaceholder": "Название отдела",
+                "alreadyExists": "Отдел с таким названием уже существует",
+                "required": "Укажите название отдела"
+            },
+            "edit": {
+                "title": "Редактировать отдел",
+                "departmentName": "Отдел",
+                "departmentPlaceholder": "Название отдела"
+            },
+            "delete": {
+                "title": "Удалить отдел",
+                "confirmation": "Вы уверены, что хотите удалить отдел «{name}»?",
+                "inUseError": "Невозможно удалить отдел, так как он используется в системе"
+            }
+        },
         "common": {
             "search": "Поиск",
             "edit": "Редактировать",
@@ -218,7 +243,7 @@
         "delete": {
             "titleSingular": "Удалить навык",
             "titlePlural": "Удалить навыки",
-            "confirmation": "Вы уверены, что хотите удалить {count, plural, one {# навык?} few {# навыка?} many {# навыков?} other {# навыка?}}",
+            "confirmation": "Вы уверены, что хотите удалить {count, plural, one {# навык?} few {# языка?} many {# навыков?} other {# навыка?}}",
             "cancel": "ОТМЕНА",
             "confirm": "ПОДТВЕРДИТЬ",
             "removing": "УДАЛЕНИЕ...",
