@@ -7,6 +7,8 @@ import { ChangeEvent, useEffect, useRef, useState } from "react"
 
 import { Input } from "@/components/ui/input"
 import { usePathname, useRouter } from "@/i18n/navigation"
+import { buildListSearchParams } from "@/lib/list-search-params"
+import { type SortOrder } from "@/lib/user-sort"
 
 const SearchIcon = () => {
     return (
@@ -43,9 +45,12 @@ export function SearchInput() {
         Number.isInteger(limitParam) && limitParam > 0
             ? limitParam
             : DEFAULT_LIMIT
+    const sortBy = searchParams.get("sortBy") ?? ""
+    const sortOrderParam = searchParams.get("sortOrder")
+    const sortOrder: SortOrder = sortOrderParam === "desc" ? "desc" : "asc"
     const [value, setValue] = useState(search)
     const [prevSearch, setPrevSearch] = useState(search)
-    const latestRef = useRef({ limit, path, router })
+    const latestRef = useRef({ limit, path, router, sortBy, sortOrder })
     const updateSearchRef = useRef<(nextSearch: string) => void>(() => {})
 
     if (search !== prevSearch) {
@@ -55,19 +60,21 @@ export function SearchInput() {
     }
 
     useEffect(() => {
-        latestRef.current = { limit, path, router }
-    }, [limit, path, router])
+        latestRef.current = { limit, path, router, sortBy, sortOrder }
+    }, [limit, path, router, sortBy, sortOrder])
 
     useEffect(() => {
         const updateSearch = debounce((nextSearch: string) => {
             const current = latestRef.current
-            const params = new URLSearchParams({
-                page: "1",
-                limit: String(current.limit),
+            const params = buildListSearchParams({
+                page: 1,
+                limit: current.limit,
                 search: nextSearch,
+                sortBy: current.sortBy || undefined,
+                sortOrder: current.sortOrder,
             })
 
-            current.router.replace(`${current.path}?${params.toString()}`)
+            current.router.replace(`${current.path}?${params}`)
         }, SEARCH_DEBOUNCE_MS)
 
         updateSearchRef.current = updateSearch

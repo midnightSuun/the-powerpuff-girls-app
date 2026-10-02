@@ -1,5 +1,6 @@
 import type { ReactNode } from "react"
 
+import { SortArrow } from "@/components/sort-arrow"
 import {
     Table,
     TableBody,
@@ -9,9 +10,13 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { Link } from "@/i18n/navigation"
+import { type SortOrder } from "@/lib/user-sort"
 
 export type TableColumn<T> = {
+    id: string
     label: string
+    sortKey?: string
+    sortLabel?: string
     render: (data: T) => ReactNode
 }
 
@@ -20,6 +25,9 @@ type Props<T> = {
     columns: TableColumn<T>[]
     getRowHref?: (item: T) => string
     getRowLabel?: (item: T) => string
+    sortBy?: string
+    sortOrder?: SortOrder
+    getSortHref?: (sortKey: string) => string
 }
 
 export const TableComponent = <T,>(props: Props<T>) => {
@@ -27,9 +35,48 @@ export const TableComponent = <T,>(props: Props<T>) => {
         <Table>
             <TableHeader>
                 <TableRow>
-                    {props.columns.map((column) => (
-                        <TableHead key={column.label}>{column.label}</TableHead>
-                    ))}
+                    {props.columns.map((column) => {
+                        const isSorted = Boolean(
+                            column.sortKey && column.sortKey === props.sortBy,
+                        )
+                        const href =
+                            column.sortKey && props.getSortHref
+                                ? props.getSortHref(column.sortKey)
+                                : undefined
+                        const ariaSort = !column.sortKey
+                            ? undefined
+                            : isSorted
+                              ? props.sortOrder === "desc"
+                                  ? "descending"
+                                  : "ascending"
+                              : "none"
+
+                        return (
+                            <TableHead key={column.id} aria-sort={ariaSort}>
+                                {href ? (
+                                    <Link
+                                        href={href}
+                                        scroll={false}
+                                        aria-label={
+                                            column.sortLabel ?? column.label
+                                        }
+                                        className="inline-flex items-center gap-1"
+                                    >
+                                        {column.label}
+                                        {isSorted ? (
+                                            <SortArrow
+                                                descending={
+                                                    props.sortOrder === "desc"
+                                                }
+                                            />
+                                        ) : null}
+                                    </Link>
+                                ) : (
+                                    column.label
+                                )}
+                            </TableHead>
+                        )
+                    })}
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -45,7 +92,7 @@ export const TableComponent = <T,>(props: Props<T>) => {
                             }
                         >
                             {props.columns.map((column, columnIndex) => (
-                                <TableCell key={column.label}>
+                                <TableCell key={column.id}>
                                     {href && columnIndex === 0 ? (
                                         <Link
                                             href={href}

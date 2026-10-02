@@ -14,10 +14,18 @@ async function UsersContent({
     searchParams: Props["searchParams"]
 }) {
     const resolvedSearchParams = await searchParams
-    const { limit, page, search } =
+    const { limit, page, search, sortBy, sortOrder } =
         parsePaginationSearchParams(resolvedSearchParams)
 
-    return <UsersPage limit={limit} page={page} search={search} />
+    return (
+        <UsersPage
+            limit={limit}
+            page={page}
+            search={search}
+            sortBy={sortBy}
+            sortOrder={sortOrder}
+        />
+    )
 }
 
 export default function UsersRoute({ searchParams }: Props) {
