@@ -20,7 +20,7 @@ interface BaseModalProps {
 
     children: React.ReactNode
 
-    onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void
+    onSubmit?: (e: React.SyntheticEvent) => void
     onConfirm?: () => void
 }
 

@@ -5,7 +5,7 @@ import { useState } from "react"
 
 import { AddItemButton } from "@/components/ui/list-management-buttons"
 
-import { SkillOption, UserSkill } from "../../hooks/use-add-skill-modal"
+import { SkillOption, UserSkill } from "../../../hooks/use-add-skill-modal"
 import { AddSkillModal } from "./add-skill-modal"
 
 interface AddSkillButtonProps {

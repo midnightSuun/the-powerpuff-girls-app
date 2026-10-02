@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { RemoveItemsButton } from "@/components/ui/list-management-buttons"
 
-import { useDeleteSkillsButton } from "../../hooks/use-delete-skills-button"
+import { useDeleteSkillsButton } from "../../../hooks/use-delete-skills-button"
 import { DeleteSkillsModal } from "./delete-skill-modal"
 
 interface DeleteSkillsButtonProps {

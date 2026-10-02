@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl"
 import { AddItemModal } from "@/components/ui/add-item-modal"
 import type { Proficiency } from "@/gql/generated/graphql"
 
-import { useAddLanguage } from "../../hooks/use-add-language"
+import { useAddLanguage } from "../../../hooks/use-add-language"
 import { LanguageProficiencySelect } from "./language-proficiency-select"
 
 interface AddLanguageModalProps {

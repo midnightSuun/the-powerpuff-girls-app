@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl"
 
 import { DeleteModal } from "@/components/ui/delete-item-modal"
 
-import { useDeleteLanguages } from "../../hooks/use-delete-languages"
+import { useDeleteLanguageModal } from "../../../hooks/use-delete-languages"
 
 interface DeleteLanguagesModalProps {
     isOpen: boolean
@@ -21,7 +21,7 @@ export function DeleteLanguagesModal({
 }: DeleteLanguagesModalProps) {
     const t = useTranslations("Languages.delete")
 
-    const { error, isPending, handleConfirm } = useDeleteLanguages({
+    const { error, isDeleting, handleConfirm } = useDeleteLanguageModal({
         onConfirm,
         onClose,
     })
@@ -35,7 +35,7 @@ export function DeleteLanguagesModal({
             cancelText={t("cancel")}
             confirmText={t("confirm")}
             deletingText={t("removing")}
-            isDeleting={isPending}
+            isDeleting={isDeleting}
             error={error}
             onConfirm={handleConfirm}
         />

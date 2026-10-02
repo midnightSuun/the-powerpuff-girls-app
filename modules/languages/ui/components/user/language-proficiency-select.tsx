@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select"
 import type { Proficiency } from "@/gql/generated/graphql"
 
-import { useLanguageProficiencySelect } from "../../hooks/use-language-proficiency-select"
+import { useLanguageProficiencySelect } from "../../../hooks/use-language-proficiency-select"
 
 interface LanguageProficiencySelectProps {
     value: Proficiency | ""

@@ -2,7 +2,7 @@
 
 import { DeleteModal } from "@/components/ui/delete-item-modal"
 
-import { useDeleteSkillsModal } from "../../hooks/use-delete-skill-modal"
+import { useDeleteSkillsModal } from "../../../hooks/use-delete-skill-modal"
 
 interface DeleteSkillsModalProps {
     isOpen: boolean

@@ -1,10 +1,14 @@
 import { redirect } from "next/navigation"
-import { getTranslations } from "next-intl/server"
 import { Suspense } from "react"
 
 import { getUserRole } from "@/modules/auth/helpers/get-current-session"
+import {
+    getAdminSkills,
+    getSkillCategories,
+} from "@/modules/skills/api/admin-skills"
 import { getUserSkills } from "@/modules/skills/api/skills"
 import { getAuthUserId } from "@/modules/skills/helpers/get-auth-user-id"
+import { AdminSkillsView } from "@/modules/skills/ui/components/admin/admin-skills-view"
 import { Skills } from "@/modules/skills/ui/skills"
 
 async function SkillsContent() {
@@ -14,20 +18,32 @@ async function SkillsContent() {
         redirect("/login")
     }
 
-    const [userSkills, userRole] = await Promise.all([
-        getUserSkills(userId),
-        getUserRole(),
-    ])
+    const userRole = await getUserRole()
+    if (userRole === "Admin") {
+        const [skills, categories] = await Promise.all([
+            getAdminSkills(),
+            getSkillCategories(),
+        ])
+
+        return (
+            <div className="p-6">
+                <AdminSkillsView
+                    initialSkills={skills}
+                    categories={categories}
+                />
+            </div>
+        )
+    }
+
+    const userSkills = await getUserSkills(userId)
 
     return <Skills userSkills={userSkills} role={userRole} />
 }
 
-export default async function SkillsPage() {
-    const t = await getTranslations("Skills")
-
+export default function SkillsPage() {
     return (
         <main className="min-h-screen w-full">
-            <Suspense fallback={<div className="p-6">{t("loading")}</div>}>
+            <Suspense fallback={<div className="p-6">Loading...</div>}>
                 <SkillsContent />
             </Suspense>
         </main>

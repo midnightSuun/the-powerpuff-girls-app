@@ -3,8 +3,8 @@ import { getTranslations } from "next-intl/server"
 import type { UserRole } from "@/gql"
 import { getAvailableSkills } from "@/modules/skills/api/skills"
 
-import type { Skill } from "./components/skill-category"
-import { SkillsView } from "./components/skills-view"
+import type { Skill } from "./components/user/skill-category"
+import { SkillsView } from "./components/user/skills-view"
 
 interface SkillsProps {
     userSkills: {

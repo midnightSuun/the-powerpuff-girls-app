@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl"
 import { EditItemModal } from "@/components/ui/edit-item-modal"
 import type { Mastery } from "@/gql/generated/graphql"
 
-import { useEditSkillModal } from "../../hooks/use-edit-skill-modal"
+import { useEditSkillModal } from "../../../hooks/use-edit-skill-modal"
 import { SkillMasterySelect } from "./skill-mastery-select"
 
 interface EditSkillModalProps {
