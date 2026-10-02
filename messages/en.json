@@ -101,9 +101,6 @@
             "submittingButton": "CHANGING..."
         }
     },
-    "Languages": {
-        "title": "Languages"
-    },
     "Cvs": {
         "title": "CVs"
     },
@@ -199,6 +196,7 @@
         "next": "Next"
     },
     "Languages": {
+        "title": "Languages",
         "currentLanguages": "Current languages",
         "empty": "No languages added yet.",
         "proficiencyPlaceholder": "Proficiency level",

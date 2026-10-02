@@ -101,9 +101,6 @@
             "submittingButton": "ИЗМЕНЕНИЕ..."
         }
     },
-    "Languages": {
-        "title": "Языки"
-    },
     "Cvs": {
         "title": "Резюме"
     },
@@ -199,6 +196,7 @@
         "next": "Вперёд"
     },
     "Languages": {
+        "title": "Языки",
         "currentLanguages": "Текущие языки",
         "empty": "Языки ещё не добавлены.",
         "proficiencyPlaceholder": "Уровень владения",
