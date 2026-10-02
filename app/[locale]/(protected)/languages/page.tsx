@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import { Suspense } from "react"
 
+import { LoadingText } from "@/components/loading-text"
 import {
     getCurrentSession,
     getUserRole,
@@ -48,7 +49,13 @@ async function LanguagesContent() {
 export default function Page() {
     return (
         <main className="min-h-screen w-full">
-            <Suspense fallback={<div className="p-6">Loading...</div>}>
+            <Suspense
+                fallback={
+                    <div className="p-6">
+                        <LoadingText namespace="Common" />
+                    </div>
+                }
+            >
                 <LanguagesContent />
             </Suspense>
         </main>

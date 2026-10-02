@@ -1,10 +1,10 @@
 import { Suspense } from "react"
 
+import { LoadingText } from "@/components/loading-text"
 import { parsePaginationSearchParams } from "@/lib/pagination-search-params"
 import { UsersPage } from "@/modules/users"
 
 type Props = {
-    params: Promise<{ locale: string }>
     searchParams: Promise<Record<string, string | string[] | undefined>>
 }
 
@@ -20,13 +20,13 @@ async function UsersContent({
     return <UsersPage limit={limit} page={page} search={search} />
 }
 
-export default async function UsersRoute({ params, searchParams }: Props) {
-    await params
-
+export default function UsersRoute({ searchParams }: Props) {
     return (
         <Suspense
             fallback={
-                <p className="p-4 text-muted-foreground">Loading users...</p>
+                <p className="p-4 text-muted-foreground">
+                    <LoadingText namespace="Users" />
+                </p>
             }
         >
             <UsersContent searchParams={searchParams} />

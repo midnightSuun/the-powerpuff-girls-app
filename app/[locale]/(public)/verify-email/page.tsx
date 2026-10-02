@@ -1,8 +1,10 @@
 "use client"
 
 import { useSearchParams } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Suspense } from "react"
 
+import { LoadingText } from "@/components/loading-text"
 import { EmailVerification } from "@/modules/auth/ui/email-verification"
 
 function VerificationContent() {
@@ -21,11 +23,13 @@ function VerificationContent() {
 }
 
 export default function VerificationPage() {
+    const t = useTranslations("Common")
+
     return (
         <Suspense
             fallback={
                 <div className="min-h-screen flex items-center justify-center">
-                    Loading...
+                    <LoadingText namespace="Common" />
                 </div>
             }
         >

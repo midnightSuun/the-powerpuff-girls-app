@@ -1,24 +1,52 @@
 "use client"
 
 import debounce from "debounce"
-import { Search } from "lucide-react"
-import { usePathname, useRouter } from "next/navigation"
-import { ChangeEvent, useEffect, useMemo, useState } from "react"
+import { useSearchParams } from "next/navigation"
+import { useTranslations } from "next-intl"
+import { ChangeEvent, useEffect, useRef, useState } from "react"
 
 import { Input } from "@/components/ui/input"
+import { usePathname, useRouter } from "@/i18n/navigation"
 
-type Props = {
-    limit: number
-    search: string
+const SearchIcon = () => {
+    return (
+        <>
+            <img
+                alt=""
+                src="/header/search-light.svg"
+                width={24}
+                height={24}
+                className="dark:hidden"
+            />
+            <img
+                alt=""
+                src="/header/search-dark.svg"
+                width={24}
+                height={24}
+                className="hidden dark:block"
+            />
+        </>
+    )
 }
 
 const SEARCH_DEBOUNCE_MS = 500
+const DEFAULT_LIMIT = 10
 
-export function SearchInput({ limit, search }: Props) {
+export function SearchInput() {
+    const t = useTranslations("Common")
     const path = usePathname()
     const router = useRouter()
+    const searchParams = useSearchParams()
+    const search = searchParams.get("search") ?? ""
+    const limitParam = Number(searchParams.get("limit"))
+    const limit =
+        Number.isInteger(limitParam) && limitParam > 0
+            ? limitParam
+            : DEFAULT_LIMIT
     const [value, setValue] = useState(search)
     const [prevSearch, setPrevSearch] = useState(search)
+    const latestRef = useRef({ limit, path, router })
+    const updateSearchRef = useRef<(nextSearch: string) => void>(() => {})
 
     if (search !== prevSearch) {
         setPrevSearch(search)
@@ -26,45 +54,47 @@ export function SearchInput({ limit, search }: Props) {
         if (value === prevSearch) setValue(search)
     }
 
-    const updateSearch = useMemo(
-        () =>
-            debounce(
-                (nextPath: string, nextLimit: number, nextSearch: string) => {
-                    const params = new URLSearchParams({
-                        page: "1",
-                        limit: String(nextLimit),
-                        search: nextSearch,
-                    })
-
-                    router.replace(`${nextPath}?${params.toString()}`)
-                },
-                SEARCH_DEBOUNCE_MS,
-            ),
-        [router],
-    )
+    useEffect(() => {
+        latestRef.current = { limit, path, router }
+    }, [limit, path, router])
 
     useEffect(() => {
+        const updateSearch = debounce((nextSearch: string) => {
+            const current = latestRef.current
+            const params = new URLSearchParams({
+                page: "1",
+                limit: String(current.limit),
+                search: nextSearch,
+            })
+
+            current.router.replace(`${current.path}?${params.toString()}`)
+        }, SEARCH_DEBOUNCE_MS)
+
+        updateSearchRef.current = updateSearch
+
         return () => {
             updateSearch.clear()
         }
-    }, [updateSearch])
+    }, [])
 
     const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
         const nextValue = event.target.value
 
         setValue(nextValue)
-        updateSearch(path, limit, nextValue)
+        updateSearchRef.current(nextValue)
     }
 
     return (
-        <label className="relative block w-72">
-            <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+        <label className="relative block w-80 dark:drop-shadow-[0px_4px_2px_rgba(0,0,0,0.25)]">
+            <span className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2">
+                <SearchIcon />
+            </span>
             <Input
                 type="text"
                 value={value}
                 onChange={handleSearch}
-                placeholder="Search"
-                className="h-9 w-full rounded-full border border-input bg-background pr-4 pl-9 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+                placeholder={t("search")}
+                className="h-10 w-full rounded-full border border-[#aeaeae] bg-transparent pr-3 pl-[46px] text-base tracking-[0.15px] text-[#2e2e2e] shadow-none placeholder:text-[#c4c4c6] focus-visible:border-[#aeaeae] focus-visible:ring-0 md:text-base dark:bg-transparent dark:text-[#f5f5f7] dark:placeholder:text-[#626262]"
             />
         </label>
     )

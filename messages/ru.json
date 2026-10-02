@@ -55,7 +55,10 @@
         }
     },
     "Common": {
-        "retry": "ПОВТОРИТЬ"
+        "retry": "ПОВТОРИТЬ",
+        "breadcrumb": "Навигация",
+        "search": "Поиск",
+        "loading": "Загрузка..."
     },
     "Errors": {
         "NoInternet": {
@@ -98,7 +101,11 @@
             "submittingButton": "ИЗМЕНЕНИЕ..."
         }
     },
+    "Cvs": {
+        "title": "Резюме"
+    },
     "Skills": {
+        "title": "Навыки",
         "loading": "Загрузка навыков профиля...",
         "masteryPlaceholder": "Уровень владения",
         "masteryLevels": {
@@ -162,11 +169,19 @@
     },
     "User": {
         "title": "Профиль пользователя",
+        "loading": "Загрузка...",
         "email": "Электронная почта",
-        "role": "Роль"
+        "role": "Роль",
+        "nav": {
+            "viewProfile": "Смотреть профиль",
+            "profile": "Профиль",
+            "settings": "Настройки",
+            "logout": "Выйти"
+        }
     },
     "Users": {
         "title": "Сотрудники",
+        "addEmployee": "Добавить сотрудника",
         "loading": "Загрузка пользователей...",
         "columns": {
             "avatar": "Аватар",
@@ -182,6 +197,7 @@
         "next": "Вперёд"
     },
     "Languages": {
+        "title": "Языки",
         "currentLanguages": "Текущие языки",
         "empty": "Языки ещё не добавлены.",
         "proficiencyPlaceholder": "Уровень владения",

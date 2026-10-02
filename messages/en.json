@@ -55,7 +55,10 @@
         }
     },
     "Common": {
-        "retry": "Retry"
+        "retry": "Retry",
+        "breadcrumb": "Breadcrumb",
+        "search": "Search",
+        "loading": "Loading..."
     },
     "Errors": {
         "NoInternet": {
@@ -98,7 +101,11 @@
             "submittingButton": "CHANGING..."
         }
     },
+    "Cvs": {
+        "title": "CVs"
+    },
     "Skills": {
+        "title": "Skills",
         "loading": "Loading profile skills...",
         "masteryPlaceholder": "Skill mastery",
         "masteryLevels": {
@@ -162,11 +169,19 @@
     },
     "User": {
         "title": "User Profile",
+        "loading": "Loading...",
         "email": "Email",
-        "role": "Role"
+        "role": "Role",
+        "nav": {
+            "viewProfile": "View profile",
+            "profile": "Profile",
+            "settings": "Settings",
+            "logout": "Log out"
+        }
     },
     "Users": {
         "title": "Employees",
+        "addEmployee": "Add Employee",
         "loading": "Loading users...",
         "columns": {
             "avatar": "Avatar",
@@ -182,6 +197,7 @@
         "next": "Next"
     },
     "Languages": {
+        "title": "Languages",
         "currentLanguages": "Current languages",
         "empty": "No languages added yet.",
         "proficiencyPlaceholder": "Proficiency level",

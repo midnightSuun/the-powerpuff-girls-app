@@ -159,31 +159,21 @@ export async function proxy(request: NextRequest) {
 
     const tokens = session.tokens
     const authorized = isAuthorized(request.cookies)
+    const userRole = session.payload?.role
+    const sessionIsValid = isUserRole(userRole)
     let customResponse: NextResponse | null = null
 
-    if (authorized && isGuestOnly(targetPage)) {
+    if (sessionIsValid && isGuestOnly(targetPage)) {
         customResponse = NextResponse.redirect(
             new URL(localizedPath(currentLocale, "/"), request.url),
         )
-    } else if (!authorized && !isPublic(targetPage)) {
-        customResponse = NextResponse.redirect(
-            new URL(localizedPath(currentLocale, "/login"), request.url),
+    } else if (!sessionIsValid && !isPublic(targetPage)) {
+        return clearTokens(
+            NextResponse.redirect(
+                new URL(localizedPath(currentLocale, "/login"), request.url),
+            ),
         )
-    } else if (authorized) {
-        const payload = session.payload
-        const userRole = payload?.role
-
-        if (!isUserRole(userRole)) {
-            return clearTokens(
-                NextResponse.redirect(
-                    new URL(
-                        localizedPath(currentLocale, "/login"),
-                        request.url,
-                    ),
-                ),
-            )
-        }
-
+    } else if (sessionIsValid) {
         if (isAdminRoute(targetPage) && userRole !== "Admin") {
             customResponse = NextResponse.redirect(
                 new URL(localizedPath(currentLocale, "/"), request.url),
@@ -211,9 +201,11 @@ export async function proxy(request: NextRequest) {
         new NextRequest(request, { headers: pathnameHeaders(request) }),
     )
 
-    if (tokens) {
+    if (sessionIsValid && tokens) {
         intlResponse.cookies.set(accessTokenCookie(tokens.accessToken))
         intlResponse.cookies.set(refreshTokenCookie(tokens.refreshToken))
+    } else if (!sessionIsValid && authorized) {
+        clearTokens(intlResponse)
     }
 
     return intlResponse
