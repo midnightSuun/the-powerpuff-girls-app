@@ -1,5 +1,7 @@
 "use client"
 
+import { useTranslations } from "next-intl"
+
 import { BaseModal } from "@/components/ui/base-modal"
 import { Input } from "@/components/ui/input"
 import {
@@ -26,6 +28,9 @@ interface CreateSkillModalProps {
 
 export function CreateSkillModal(props: CreateSkillModalProps) {
     const { isOpen, onClose, categories } = props
+    const t = useTranslations("Admin.skills.create")
+    const tCommon = useTranslations("Admin.common")
+
     const {
         name,
         setName,
@@ -42,21 +47,23 @@ export function CreateSkillModal(props: CreateSkillModalProps) {
         <BaseModal
             isOpen={isOpen}
             onClose={onClose}
-            title="Create skill"
+            title={t("title")}
             error={error}
             isPending={isSubmitting}
             isValid={isValid}
-            cancelText="CANCEL"
-            confirmText="CREATE"
-            pendingText="CREATING..."
+            cancelText={tCommon("cancel")}
+            confirmText={tCommon("create")}
+            pendingText={tCommon("creating")}
             confirmButtonVariant="destructive"
             onSubmit={handleSubmit}
         >
             <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1">
-                    <span className="text-xs text-muted-foreground">Skill</span>
+                    <span className="text-xs text-muted-foreground">
+                        {t("skillName")}
+                    </span>
                     <Input
-                        placeholder="Skill"
+                        placeholder={t("skillPlaceholder")}
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         disabled={isSubmitting}
@@ -64,14 +71,14 @@ export function CreateSkillModal(props: CreateSkillModalProps) {
                     />
                     {inlineError && (
                         <span className="mt-1 text-xs text-red-500">
-                            {inlineError}
+                            {t("alreadyExists")}
                         </span>
                     )}
                 </div>
 
                 <div className="flex flex-col gap-1">
                     <span className="text-xs text-muted-foreground">
-                        Category
+                        {t("category")}
                     </span>
                     <Select
                         value={categoryId}
@@ -79,7 +86,9 @@ export function CreateSkillModal(props: CreateSkillModalProps) {
                         disabled={isSubmitting}
                     >
                         <SelectTrigger className="w-full border border-[#D1D1D1] dark:border-auth-card-border bg-[#ECECEC] dark:bg-[#454545] px-4 py-6 text-sm text-gray-800 dark:text-foreground shadow-none focus:ring-0 rounded-none">
-                            <SelectValue placeholder="Category" />
+                            <SelectValue
+                                placeholder={t("categoryPlaceholder")}
+                            />
                         </SelectTrigger>
                         <SelectContent
                             side="bottom"

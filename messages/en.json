@@ -1,4 +1,71 @@
 {
+    "Admin": {
+        "common": {
+            "search": "Search",
+            "edit": "Edit",
+            "delete": "Delete",
+            "cancel": "CANCEL",
+            "confirm": "CONFIRM",
+            "save": "SAVE",
+            "saving": "SAVING...",
+            "create": "CREATE",
+            "creating": "CREATING...",
+            "deleting": "DELETING..."
+        },
+        "skills": {
+            "title": "Skills",
+            "createButton": "CREATE SKILL",
+            "empty": "No skills found",
+            "columns": {
+                "name": "Name",
+                "category": "Category"
+            },
+            "create": {
+                "title": "Create skill",
+                "skillName": "Skill",
+                "skillPlaceholder": "Skill",
+                "category": "Category",
+                "categoryPlaceholder": "Category",
+                "alreadyExists": "Skill already exists"
+            },
+            "edit": {
+                "title": "Edit skill",
+                "skillName": "Skill Name",
+                "category": "Category"
+            },
+            "delete": {
+                "title": "Delete skill",
+                "confirmation": "Are you sure you want to delete skill \"{name}\"?"
+            }
+        },
+        "languages": {
+            "title": "Languages",
+            "createButton": "CREATE LANGUAGE",
+            "empty": "No languages found",
+            "columns": {
+                "name": "Name",
+                "iso2": "ISO Code"
+            },
+            "create": {
+                "title": "Create language",
+                "languageName": "Language Name",
+                "languagePlaceholder": "e.g. English",
+                "iso2": "ISO Code",
+                "iso2Placeholder": "e.g. en",
+                "alreadyExists": "Language already exists",
+                "invalidIso2": "ISO2 code must be exactly 2 characters"
+            },
+            "edit": {
+                "title": "Edit language",
+                "languageName": "Language Name",
+                "iso2": "ISO Code"
+            },
+            "delete": {
+                "title": "Delete language",
+                "confirmation": "Are you sure you want to delete language \"{name}\"?"
+            }
+        }
+    },
     "Auth": {
         "EmailVerification": {
             "title": "Email verification",

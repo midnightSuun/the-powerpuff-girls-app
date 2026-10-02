@@ -1,5 +1,7 @@
 "use client"
 
+import { useTranslations } from "next-intl"
+
 import { BaseModal } from "@/components/ui/base-modal"
 import { Input } from "@/components/ui/input"
 import {
@@ -33,6 +35,9 @@ interface EditSkillModalProps {
 
 export function EditSkillModal(props: EditSkillModalProps) {
     const { isOpen, onClose, categories } = props
+    const t = useTranslations("Admin.skills.edit")
+    const tCommon = useTranslations("Admin.common")
+
     const {
         name,
         setName,
@@ -48,23 +53,23 @@ export function EditSkillModal(props: EditSkillModalProps) {
         <BaseModal
             isOpen={isOpen}
             onClose={onClose}
-            title="Edit skill"
+            title={t("title")}
             error={error}
             isPending={isSubmitting}
             isValid={isValid}
-            cancelText="CANCEL"
-            confirmText="SAVE"
-            pendingText="SAVING..."
+            cancelText={tCommon("cancel")}
+            confirmText={tCommon("save")}
+            pendingText={tCommon("saving")}
             confirmButtonVariant="destructive"
             onSubmit={handleSubmit}
         >
             <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1">
                     <span className="text-xs text-muted-foreground">
-                        Skill Name
+                        {t("skillName")}
                     </span>
                     <Input
-                        placeholder="Skill"
+                        placeholder={t("skillName")}
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         disabled={isSubmitting}
@@ -74,7 +79,7 @@ export function EditSkillModal(props: EditSkillModalProps) {
 
                 <div className="flex flex-col gap-1">
                     <span className="text-xs text-muted-foreground">
-                        Category
+                        {t("category")}
                     </span>
                     <Select
                         value={categoryId}
@@ -82,7 +87,7 @@ export function EditSkillModal(props: EditSkillModalProps) {
                         disabled={isSubmitting}
                     >
                         <SelectTrigger className="w-full border border-[#D1D1D1] dark:border-auth-card-border bg-[#ECECEC] dark:bg-[#454545] px-4 py-6 text-sm text-gray-800 dark:text-foreground shadow-none focus:ring-0 rounded-none">
-                            <SelectValue placeholder="Category" />
+                            <SelectValue placeholder={t("category")} />
                         </SelectTrigger>
                         <SelectContent
                             side="bottom"

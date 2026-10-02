@@ -1,4 +1,71 @@
 {
+    "Admin": {
+        "common": {
+            "search": "Поиск",
+            "edit": "Редактировать",
+            "delete": "Удалить",
+            "cancel": "ОТМЕНА",
+            "confirm": "ПОДТВЕРДИТЬ",
+            "save": "СОХРАНИТЬ",
+            "saving": "СОХРАНЕНИЕ...",
+            "create": "СОЗДАТЬ",
+            "creating": "СОЗДАНИЕ...",
+            "deleting": "УДАЛЕНИЕ..."
+        },
+        "skills": {
+            "title": "Навыки",
+            "createButton": "СОЗДАТЬ НАВЫК",
+            "empty": "Навыки не найдены",
+            "columns": {
+                "name": "Название",
+                "category": "Категория"
+            },
+            "create": {
+                "title": "Создать навык",
+                "skillName": "Навык",
+                "skillPlaceholder": "Навык",
+                "category": "Категория",
+                "categoryPlaceholder": "Категория",
+                "alreadyExists": "Навык уже существует"
+            },
+            "edit": {
+                "title": "Изменить навык",
+                "skillName": "Название навыка",
+                "category": "Категория"
+            },
+            "delete": {
+                "title": "Удалить навык",
+                "confirmation": "Вы уверены, что хотите удалить навык «{name}»?"
+            }
+        },
+        "languages": {
+            "title": "Языки",
+            "createButton": "СОЗДАТЬ ЯЗЫК",
+            "empty": "Языки не найдены",
+            "columns": {
+                "name": "Название",
+                "iso2": "Код ISO"
+            },
+            "create": {
+                "title": "Создать язык",
+                "languageName": "Название языка",
+                "languagePlaceholder": "например: Русский",
+                "iso2": "Код ISO",
+                "iso2Placeholder": "например: ru",
+                "alreadyExists": "Язык уже существует",
+                "invalidIso2": "Код ISO2 должен состоять ровно из 2 символов"
+            },
+            "edit": {
+                "title": "Изменить язык",
+                "languageName": "Название языка",
+                "iso2": "Код ISO"
+            },
+            "delete": {
+                "title": "Удалить язык",
+                "confirmation": "Вы уверены, что хотите удалить язык «{name}»?"
+            }
+        }
+    },
     "Auth": {
         "EmailVerification": {
             "title": "Подтверждение email",

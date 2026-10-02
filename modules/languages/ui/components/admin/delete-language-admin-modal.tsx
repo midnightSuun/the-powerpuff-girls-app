@@ -1,5 +1,7 @@
 "use client"
 
+import { useTranslations } from "next-intl"
+
 import { DeleteModal } from "@/components/ui/delete-item-modal"
 import { useDeleteLanguageModal } from "@/modules/languages/hooks/use-delete-languages"
 
@@ -12,6 +14,9 @@ interface DeleteLanguageModalProps {
 
 export function DeleteLanguageModal(props: DeleteLanguageModalProps) {
     const { isOpen, onClose, languageName } = props
+    const t = useTranslations("Admin.languages.delete")
+    const tCommon = useTranslations("Admin.common")
+
     const { isDeleting, error, handleConfirm } = useDeleteLanguageModal(props)
 
     return (
@@ -19,11 +24,11 @@ export function DeleteLanguageModal(props: DeleteLanguageModalProps) {
             isOpen={isOpen}
             onClose={onClose}
             onConfirm={handleConfirm}
-            title="Delete language"
-            description={`Are you sure you want to delete language "${languageName}"?`}
-            cancelText="CANCEL"
-            confirmText="CONFIRM"
-            deletingText="DELETING..."
+            title={t("title")}
+            description={t("confirmation", { name: languageName })}
+            cancelText={tCommon("cancel")}
+            confirmText={tCommon("confirm")}
+            deletingText={tCommon("deleting")}
             isDeleting={isDeleting}
             error={error}
         />

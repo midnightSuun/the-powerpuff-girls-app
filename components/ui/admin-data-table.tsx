@@ -1,6 +1,7 @@
 "use client"
 
 import { ArrowUpDown, MoreVertical, Plus, Search } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { useEffect, useMemo, useRef, useState } from "react"
 
 import { Button } from "@/components/ui/button"
@@ -29,7 +30,7 @@ interface AdminDataTableProps<T> {
 export function AdminDataTable<T extends { id: string | number }>({
     data,
     columns,
-    searchPlaceholder = "Search",
+    searchPlaceholder,
     createButtonLabel,
     onCreateClick,
     onEditClick,
@@ -38,6 +39,8 @@ export function AdminDataTable<T extends { id: string | number }>({
     getSortValue,
     emptyMessage = "No items found",
 }: AdminDataTableProps<T>) {
+    const tCommon = useTranslations("Admin.common")
+
     const [searchQuery, setSearchQuery] = useState("")
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
     const [activeMenuId, setActiveMenuId] = useState<string | number | null>(
@@ -45,6 +48,8 @@ export function AdminDataTable<T extends { id: string | number }>({
     )
 
     const menuRef = useRef<HTMLDivElement | null>(null)
+
+    const effectiveSearchPlaceholder = searchPlaceholder ?? tCommon("search")
 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
@@ -96,7 +101,7 @@ export function AdminDataTable<T extends { id: string | number }>({
                 <div className="relative w-full max-w-xs">
                     <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
-                        placeholder={searchPlaceholder}
+                        placeholder={effectiveSearchPlaceholder}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="pl-9 border-[#D1D1D1] dark:border-auth-card-border bg-[#ECECEC] dark:bg-[#454545] rounded-none focus-visible:ring-0"
@@ -207,7 +212,7 @@ export function AdminDataTable<T extends { id: string | number }>({
                                                                 )
                                                             }}
                                                         >
-                                                            Edit
+                                                            {tCommon("edit")}
                                                         </button>
                                                     )}
                                                     {onDeleteClick && (
@@ -223,7 +228,7 @@ export function AdminDataTable<T extends { id: string | number }>({
                                                                 )
                                                             }}
                                                         >
-                                                            Delete
+                                                            {tCommon("delete")}
                                                         </button>
                                                     )}
                                                 </div>

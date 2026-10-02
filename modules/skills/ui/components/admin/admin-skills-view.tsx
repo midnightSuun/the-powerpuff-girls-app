@@ -1,5 +1,7 @@
 "use client"
 
+import { useTranslations } from "next-intl"
+
 import { AdminDataTable, type Column } from "@/components/ui/admin-data-table"
 import { useAdminSkillsView } from "@/modules/skills/hooks/use-admin-skills-view"
 
@@ -12,15 +14,13 @@ interface AdminSkillsViewProps {
     categories: CategoryOption[]
 }
 
-const SKILL_COLUMNS: Column<AdminSkillItem>[] = [
-    { key: "name", label: "Name", sortable: true },
-    { key: "category", label: "Category" },
-]
-
 export function AdminSkillsView({
     initialSkills,
     categories,
 }: AdminSkillsViewProps) {
+    const t = useTranslations("Admin.skills")
+    const tCommon = useTranslations("Admin.common")
+
     const {
         skills,
         isCreateOpen,
@@ -34,19 +34,24 @@ export function AdminSkillsView({
         handleDeleteConfirm,
     } = useAdminSkillsView({ initialSkills })
 
+    const columns: Column<AdminSkillItem>[] = [
+        { key: "name", label: t("columns.name"), sortable: true },
+        { key: "category", label: t("columns.category") },
+    ]
+
     return (
         <div className="w-full">
             <AdminDataTable
                 data={skills}
-                columns={SKILL_COLUMNS}
-                searchPlaceholder="Search"
-                createButtonLabel="CREATE SKILL"
+                columns={columns}
+                searchPlaceholder={tCommon("search")}
+                createButtonLabel={t("createButton")}
                 onCreateClick={() => setIsCreateOpen(true)}
                 onEditClick={(skill) => setEditingSkill(skill)}
                 onDeleteClick={(skill) => setDeletingSkill(skill)}
                 getSearchableString={(skill) => skill.name}
                 getSortValue={(skill) => skill.name}
-                emptyMessage="No skills found"
+                emptyMessage={t("empty")}
             />
 
             <CreateSkillModal

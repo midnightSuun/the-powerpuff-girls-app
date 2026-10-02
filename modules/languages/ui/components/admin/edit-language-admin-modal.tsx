@@ -1,5 +1,7 @@
 "use client"
 
+import { useTranslations } from "next-intl"
+
 import { BaseModal } from "@/components/ui/base-modal"
 import { Input } from "@/components/ui/input"
 import {
@@ -21,6 +23,9 @@ interface EditLanguageModalProps {
 
 export function EditLanguageModal(props: EditLanguageModalProps) {
     const { isOpen, onClose } = props
+    const t = useTranslations("Admin.languages.edit")
+    const tCommon = useTranslations("Admin.common")
+
     const {
         name,
         setName,
@@ -36,23 +41,23 @@ export function EditLanguageModal(props: EditLanguageModalProps) {
         <BaseModal
             isOpen={isOpen}
             onClose={onClose}
-            title="Edit language"
+            title={t("title")}
             error={error}
             isPending={isSubmitting}
             isValid={isValid}
-            cancelText="CANCEL"
-            confirmText="SAVE"
-            pendingText="SAVING..."
+            cancelText={tCommon("cancel")}
+            confirmText={tCommon("save")}
+            pendingText={tCommon("saving")}
             confirmButtonVariant="destructive"
             onSubmit={handleSubmit}
         >
             <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1">
                     <span className="text-xs text-muted-foreground">
-                        Language Name
+                        {t("languageName")}
                     </span>
                     <Input
-                        placeholder="Language"
+                        placeholder={t("languageName")}
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         disabled={isSubmitting}
@@ -62,10 +67,10 @@ export function EditLanguageModal(props: EditLanguageModalProps) {
 
                 <div className="flex flex-col gap-1">
                     <span className="text-xs text-muted-foreground">
-                        ISO Code
+                        {t("iso2")}
                     </span>
                     <Input
-                        placeholder="ISO2"
+                        placeholder={t("iso2")}
                         value={iso2}
                         onChange={(e) => setIso2(e.target.value)}
                         disabled={isSubmitting}
