@@ -52,10 +52,54 @@
         "Tabs": {
             "signIn": "SIGN IN",
             "signup": "SIGN UP"
+        },
+        "validation": {
+            "emailRequired": "Email is required",
+            "invalidEmail": "Please enter a valid email address",
+            "passwordRequired": "Password is required",
+            "passwordMin": "Password must be at least 6 characters long",
+            "passwordMin8": "Password must be at least 8 characters",
+            "confirmPassword": "Please confirm your password",
+            "passwordsDoNotMatch": "Passwords do not match",
+            "codeLength": "Verification code must be exactly 6 digits.",
+            "codeDigits": "Verification code must contain only numbers."
+        },
+        "messages": {
+            "loginRequired": "Email and password are required.",
+            "loginFailed": "Failed to sign in. Please check your email and password.",
+            "signupRequired": "Please fill in all fields.",
+            "passwordsDoNotMatch": "Passwords do not match.",
+            "emailAlreadyTaken": "This email is already taken. Please use a different one or log in.",
+            "serverError": "Server Error: {message}",
+            "unknownError": "Unknown error",
+            "signupEmailFailed": "Failed to sign up due to mail server error. Please try again later.",
+            "forgotFailed": "Failed to send reset instructions. Please try again.",
+            "forgotInstructionsSent": "Instructions have been sent to your email.",
+            "resetTokenInvalid": "Reset token is missing or invalid. Open the link from your email again.",
+            "resetExpired": "This reset link has expired. Please request a new one.",
+            "resetFailed": "Failed to reset password. Please try again.",
+            "verificationEmailUnavailable": "Email address is unavailable. Please sign in again.",
+            "verificationSendFailed": "We couldn't send the verification email. Please try again.",
+            "verificationInvalid": "The verification code is invalid or has expired. Please try again.",
+            "verificationSent": "A new verification email has been sent.",
+            "sessionExpired": "Your session expired. Please sign in and try again."
         }
     },
     "Common": {
-        "retry": "Retry"
+        "retry": "Retry",
+        "search": "Search",
+        "edit": "Edit",
+        "delete": "Delete",
+        "loading": "Loading...",
+        "toggleSidebar": "Toggle sidebar",
+        "sidebarTitle": "Sidebar",
+        "sidebarDescription": "Navigation sidebar"
+    },
+    "Navigation": {
+        "employees": "Employees",
+        "skills": "Skills",
+        "languages": "Languages",
+        "cvs": "CVs"
     },
     "Errors": {
         "NoInternet": {
@@ -71,6 +115,7 @@
     },
     "Settings": {
         "title": "Settings",
+        "logout": "Logout",
         "theme": {
             "label": "Theme",
             "light": "Light",
@@ -96,6 +141,17 @@
             "confirmPlaceholder": "Confirm Password",
             "submitButton": "CHANGE",
             "submittingButton": "CHANGING..."
+        },
+        "validation": {
+            "passwordRequired": "Password is required",
+            "newPasswordRequired": "Password must meet application security requirements",
+            "confirmPasswordRequired": "Confirm Password is required",
+            "passwordsDoNotMatch": "Passwords do not match"
+        },
+        "messages": {
+            "updated": "Settings and password successfully updated.",
+            "sessionExpired": "Your session has expired. Please log in again.",
+            "passwordUpdateFailed": "Failed to update password. Please check your current password."
         }
     },
     "Skills": {
@@ -158,6 +214,116 @@
             "errors": {
                 "failed": "Failed to remove skills. Please try again."
             }
+        },
+        "admin": {
+            "name": "Name",
+            "category": "Category",
+            "search": "Search",
+            "create": "CREATE SKILL",
+            "empty": "No skills found",
+            "createTitle": "Create skill",
+            "editTitle": "Edit skill",
+            "deleteTitle": "Delete skill",
+            "skill": "Skill",
+            "duplicate": "Skill already exists",
+            "cancel": "CANCEL",
+            "save": "SAVE",
+            "saving": "SAVING...",
+            "creating": "CREATING...",
+            "confirm": "CONFIRM",
+            "deleting": "DELETING...",
+            "deleteConfirmation": "Are you sure you want to delete skill \"{name}\"?",
+            "createError": "Failed to create skill. Please try again.",
+            "updateError": "Failed to update skill. Please try again.",
+            "deleteError": "Failed to delete skill. Please try again."
+        }
+    },
+    "CV": {
+        "tabListLabel": "CV sections",
+        "tabs": {
+            "details": "DETAILS",
+            "skills": "SKILLS",
+            "projects": "PROJECTS",
+            "preview": "PREVIEW"
+        },
+        "previewUnavailable": "Resume preview is not available yet.",
+        "list": {
+            "create": "CREATE CV",
+            "name": "Name",
+            "education": "Education",
+            "employee": "Employee",
+            "view": "View",
+            "edit": "Edit",
+            "delete": "Delete",
+            "noResults": "No CVs found",
+            "empty": "You have no CVs yet",
+            "createError": "Failed to create CV. Please try again.",
+            "updateError": "Failed to update CV. Please try again.",
+            "deleteError": "Failed to delete CV. Please try again."
+        },
+        "form": {
+            "name": "Name",
+            "education": "Education",
+            "description": "Description",
+            "update": "UPDATE",
+            "updating": "UPDATING...",
+            "updateError": "Failed to update CV. Please try again.",
+            "createTitle": "Create CV",
+            "create": "CREATE",
+            "creating": "CREATING...",
+            "updateTitle": "Update CV",
+            "save": "SAVE",
+            "saving": "SAVING...",
+            "nameRequired": "Name is required",
+            "educationRequired": "Education is required",
+            "descriptionRequired": "Description is required",
+            "cancel": "CANCEL",
+            "deleteTitle": "Delete CV",
+            "deleteConfirmation": "Are you sure you want to delete CV \"{name}\"?",
+            "confirm": "CONFIRM",
+            "deleting": "DELETING..."
+        },
+        "projects": {
+            "search": "Search",
+            "searchLabel": "Search projects",
+            "noAvailableProjects": "There are no available projects to add.",
+            "addProject": "ADD PROJECT",
+            "sortByName": "Sort projects by name ({direction})",
+            "ascending": "ascending",
+            "descending": "descending",
+            "name": "Name",
+            "domain": "Domain",
+            "startDate": "Start Date",
+            "endDate": "End Date",
+            "actions": "Actions",
+            "actionsFor": "Actions for {name}",
+            "tillNow": "Till now",
+            "edit": "Edit",
+            "remove": "Remove",
+            "noSearchResults": "No projects match your search.",
+            "empty": "No projects have been added to this CV yet.",
+            "removeTitle": "Remove project",
+            "removeConfirmation": "Remove \"{name}\" from this CV?",
+            "cancel": "CANCEL",
+            "removing": "REMOVING...",
+            "removeError": "Failed to remove project. Please try again.",
+            "form": {
+                "editTitle": "Edit project",
+                "addTitle": "Add project",
+                "cancel": "CANCEL",
+                "update": "UPDATE",
+                "add": "ADD",
+                "updating": "UPDATING...",
+                "adding": "ADDING...",
+                "project": "Project",
+                "selectProject": "Select a project",
+                "noAvailableProjects": "There are no projects available to add.",
+                "startDate": "Start date",
+                "endDate": "End date",
+                "roles": "Roles (one per line)",
+                "responsibilities": "Responsibilities (one per line)",
+                "saveError": "Failed to save project. Please try again."
+            }
         }
     },
     "User": {
@@ -179,7 +345,11 @@
     },
     "Pagination": {
         "previous": "Previous",
-        "next": "Next"
+        "next": "Next",
+        "label": "Pagination",
+        "previousLabel": "Go to previous page",
+        "nextLabel": "Go to next page",
+        "morePages": "More pages"
     },
     "Languages": {
         "currentLanguages": "Current languages",
@@ -231,6 +401,48 @@
             "removing": "REMOVING...",
             "errors": {
                 "failed": "Failed to remove languages. Please try again."
+            }
+        },
+        "admin": {
+            "columns": {
+                "name": "Name",
+                "isoCode": "ISO Code"
+            },
+            "search": "Search",
+            "createButton": "CREATE LANGUAGE",
+            "empty": "No languages found",
+            "create": {
+                "title": "Create language",
+                "languageName": "Language Name",
+                "languagePlaceholder": "e.g. English",
+                "isoCode": "ISO Code",
+                "isoCodePlaceholder": "e.g. en",
+                "cancel": "CANCEL",
+                "create": "CREATE",
+                "creating": "CREATING..."
+            },
+            "edit": {
+                "title": "Edit language",
+                "languageName": "Language Name",
+                "languagePlaceholder": "Language",
+                "isoCode": "ISO Code",
+                "isoCodePlaceholder": "ISO2",
+                "cancel": "CANCEL",
+                "save": "SAVE",
+                "saving": "SAVING..."
+            },
+            "delete": {
+                "title": "Delete language",
+                "confirmation": "Are you sure you want to delete language \"{name}\"?",
+                "cancel": "CANCEL",
+                "confirm": "CONFIRM",
+                "deleting": "DELETING..."
+            },
+            "errors": {
+                "duplicate": "Language already exists",
+                "createFailed": "Failed to create language",
+                "updateFailed": "Failed to update language",
+                "invalidData": "Invalid language data or ISO2 code"
             }
         }
     }

@@ -12,9 +12,14 @@ interface SkillsProps {
         skills: Skill[]
     }
     role?: UserRole | null
+    compact?: boolean
 }
 
-export async function Skills({ userSkills, role }: SkillsProps) {
+export async function Skills({
+    userSkills,
+    role,
+    compact = false,
+}: SkillsProps) {
     const t = await getTranslations("Skills")
     const canManageSkills = role === "Employee"
     const availableSkills = canManageSkills ? await getAvailableSkills() : []
@@ -53,6 +58,7 @@ export async function Skills({ userSkills, role }: SkillsProps) {
             typedSkills={userSkills.skills}
             availableSkills={availableSkills}
             canManageSkills={canManageSkills}
+            compact={compact}
         />
     )
 }

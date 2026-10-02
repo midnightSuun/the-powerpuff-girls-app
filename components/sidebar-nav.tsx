@@ -8,6 +8,7 @@ import {
 } from "lucide-react"
 import { headers } from "next/headers"
 import Link from "next/link"
+import { getTranslations } from "next-intl/server"
 
 import {
     SidebarGroup,
@@ -18,29 +19,29 @@ import {
 } from "@/components/ui/sidebar"
 
 type SidebarItem = {
-    label: string
+    label: "employees" | "skills" | "languages" | "cvs"
     icon: LucideIcon
     href: string
 }
 
 const sidebarItems: SidebarItem[] = [
     {
-        label: "Employees",
+        label: "employees",
         icon: Users,
         href: "/users",
     },
     {
-        label: "Skills",
+        label: "skills",
         icon: ChartLine,
         href: "/skills",
     },
     {
-        label: "Languages",
+        label: "languages",
         icon: Languages,
         href: "/languages",
     },
     {
-        label: "CVs",
+        label: "cvs",
         icon: File,
         href: "/cv",
     },
@@ -48,6 +49,7 @@ const sidebarItems: SidebarItem[] = [
 
 export const SidebarNav = async () => {
     const pathname = (await headers()).get("x-pathname") ?? ""
+    const t = await getTranslations("Navigation")
 
     return (
         <SidebarGroup className="px-3 py-1">
@@ -67,21 +69,21 @@ export const SidebarNav = async () => {
                                 <SidebarMenuButton
                                     render={<Link href={item.href} />}
                                     isActive={isActive}
-                                    tooltip={item.label}
+                                    tooltip={t(item.label)}
                                     aria-current={isActive ? "page" : undefined}
                                     className={cn(
                                         "h-10 rounded-full px-3 font-normal text-button-secondary-default no-underline",
-                                        "hover:bg-[#ececee] hover:text-button-secondary-default hover:no-underline",
-                                        "data-active:bg-[#e6e6e8] data-active:font-normal data-active:text-[#3a3a3a]",
+                                        "hover:bg-[#ececee] hover:text-button-secondary-default hover:no-underline dark:hover:bg-white/10 dark:hover:text-foreground",
+                                        "data-active:bg-[#e6e6e8] data-active:font-normal data-active:text-[#3a3a3a] dark:data-active:bg-white/15 dark:data-active:text-foreground",
                                         "[&_svg]:size-4.5",
-                                        "group-data-[collapsible=icon]:text-[#3a3a3a]",
+                                        "group-data-[collapsible=icon]:text-[#3a3a3a] dark:group-data-[collapsible=icon]:text-foreground",
                                         "group-data-[collapsible=icon]:data-active:bg-transparent",
-                                        "group-data-[collapsible=icon]:data-active:text-[#3a3a3a]",
+                                        "group-data-[collapsible=icon]:data-active:text-[#3a3a3a] dark:group-data-[collapsible=icon]:data-active:text-foreground",
                                     )}
                                 >
                                     <Icon strokeWidth={1.75} />
                                     <span className="group-data-[collapsible=icon]:sr-only">
-                                        {item.label}
+                                        {t(item.label)}
                                     </span>
                                 </SidebarMenuButton>
                             </SidebarMenuItem>

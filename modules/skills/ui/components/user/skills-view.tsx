@@ -19,6 +19,7 @@ interface SkillsViewProps {
     typedSkills: Skill[]
     availableSkills: SkillOption[]
     canManageSkills: boolean
+    compact?: boolean
 }
 
 export function SkillsView({
@@ -27,6 +28,7 @@ export function SkillsView({
     typedSkills,
     availableSkills,
     canManageSkills,
+    compact = false,
 }: SkillsViewProps) {
     const {
         isSelectionMode,
@@ -41,7 +43,11 @@ export function SkillsView({
 
     return (
         <div className="flex items-start gap-16">
-            <div className="flex-1 max-w-213 pl-50 pt-6">
+            <div
+                className={`flex-1 pt-6 ${
+                    compact ? "w-full max-w-none pl-0" : "max-w-213 pl-50"
+                }`}
+            >
                 <div className="space-y-8">
                     {categories.map((category) => (
                         <SkillCategory

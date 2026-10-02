@@ -51,7 +51,7 @@ export function LanguagesPage({
     return (
         <div className="flex items-start gap-16">
             <div className="flex-1 max-w-213 pl-50 pt-6">
-                <p className="font-roboto text-[16px] font-normal leading-6 tracking-[0.15px] text-[#2E2E2E] mb-4">
+                <p className="font-roboto text-[16px] font-normal leading-6 tracking-[0.15px] text-foreground mb-4">
                     {t("currentLanguages")}
                 </p>
 

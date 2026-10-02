@@ -2,6 +2,7 @@
 
 import { ClientError } from "graphql-request"
 import { cookies } from "next/headers"
+import { getTranslations } from "next-intl/server"
 
 import { ChangePasswordDocument, getGql } from "@/gql"
 import { ACCESS_TOKEN_COOKIE } from "@/modules/auth/consts"
@@ -14,6 +15,7 @@ export async function updateSettingsPasswordAction(
         "password" | "newPassword" | "confirmPassword"
     >,
 ): Promise<{ error?: string }> {
+    const t = await getTranslations("Settings.messages")
     try {
         const cookieStore = await cookies()
         const token = cookieStore.get(ACCESS_TOKEN_COOKIE)?.value || ""
@@ -37,14 +39,12 @@ export async function updateSettingsPasswordAction(
 
         if (/expired|unauthor/i.test(message)) {
             return {
-                error: "Your session has expired. Please log in again.",
+                error: t("sessionExpired"),
             }
         }
 
         return {
-            error:
-                message ||
-                "Failed to update password. Please check your current password.",
+            error: message || t("passwordUpdateFailed"),
         }
     }
 

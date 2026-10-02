@@ -1,0 +1,32 @@
+query GetAdminCvs($params: SearchPaginationInput) {
+    cvs(params: $params) {
+        items {
+            id
+            created_at
+            name
+            education
+            description
+            user {
+                id
+                email
+                role
+            }
+            projects {
+                id
+                name
+            }
+            skills {
+                name
+                mastery
+            }
+            languages {
+                name
+                proficiency
+            }
+        }
+        total
+        page
+        limit
+        total_pages
+    }
+}

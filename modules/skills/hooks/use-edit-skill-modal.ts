@@ -67,9 +67,8 @@ export function useEditSkillModal({
             await onUpdate(mastery as Mastery)
             handleClose()
         } catch (err: unknown) {
-            const errorObj = err as Error
-            console.error("Failed to update skill:", errorObj)
-            setError(errorObj.message || t("errors.failed"))
+            console.error("Failed to update skill:", err)
+            setError(t("errors.failed"))
         } finally {
             setIsSubmitting(false)
         }

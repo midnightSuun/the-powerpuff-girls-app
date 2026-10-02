@@ -3,6 +3,7 @@
 import debounce from "debounce"
 import { Search } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { ChangeEvent, useEffect, useMemo, useState } from "react"
 
 import { Input } from "@/components/ui/input"
@@ -15,6 +16,7 @@ type Props = {
 const SEARCH_DEBOUNCE_MS = 500
 
 export function SearchInput({ limit, search }: Props) {
+    const t = useTranslations("Common")
     const path = usePathname()
     const router = useRouter()
     const [value, setValue] = useState(search)
@@ -63,7 +65,7 @@ export function SearchInput({ limit, search }: Props) {
                 type="text"
                 value={value}
                 onChange={handleSearch}
-                placeholder="Search"
+                placeholder={t("search")}
                 className="h-9 w-full rounded-full border border-input bg-background pr-4 pl-9 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
             />
         </label>

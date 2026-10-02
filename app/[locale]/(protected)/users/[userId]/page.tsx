@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server"
 import { Suspense } from "react"
 
 import { UserPage } from "@/modules/users"
@@ -12,10 +13,14 @@ async function UserContent({ params }: Props) {
     return <UserPage userId={userId} />
 }
 
-export default function UserDetailRoute({ params }: Props) {
+export default async function UserDetailRoute({ params }: Props) {
+    const t = await getTranslations("Common")
+
     return (
         <Suspense
-            fallback={<p className="p-4 text-muted-foreground">Loading...</p>}
+            fallback={
+                <p className="p-4 text-muted-foreground">{t("loading")}</p>
+            }
         >
             <UserContent params={params} />
         </Suspense>

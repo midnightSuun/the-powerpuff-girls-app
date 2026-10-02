@@ -48,7 +48,7 @@ export function SettingsPage() {
                 )}
                 {successMessage && (
                     <div
-                        className="p-3 text-xs text-green-600 bg-green-500/10 rounded-md"
+                        className="p-3 text-xs text-green-600 bg-green-500/10 rounded-md dark:text-green-400"
                         role="status"
                     >
                         {successMessage}

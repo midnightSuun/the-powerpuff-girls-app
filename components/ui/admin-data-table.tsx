@@ -1,6 +1,7 @@
 "use client"
 
-import { ArrowUpDown, MoreVertical, Plus, Trash2 } from "lucide-react"
+import { ArrowUpDown, MoreVertical } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { useEffect, useMemo, useRef, useState } from "react"
 
 import { Button } from "@/components/ui/button"
@@ -45,6 +46,7 @@ export function AdminDataTable<T extends { id: string | number }>({
     search = "",
     createButtonClassName,
 }: AdminDataTableProps<T>) {
+    const t = useTranslations("Common")
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
     const [activeMenuId, setActiveMenuId] = useState<string | number | null>(
         null,
@@ -202,7 +204,7 @@ export function AdminDataTable<T extends { id: string | number }>({
                                                                 )
                                                             }}
                                                         >
-                                                            Edit
+                                                            {t("edit")}
                                                         </button>
                                                     )}
                                                     {onDeleteClick && (
@@ -218,7 +220,7 @@ export function AdminDataTable<T extends { id: string | number }>({
                                                                 )
                                                             }}
                                                         >
-                                                            Delete
+                                                            {t("delete")}
                                                         </button>
                                                     )}
                                                 </div>

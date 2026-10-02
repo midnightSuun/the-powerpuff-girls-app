@@ -1,5 +1,7 @@
 "use client"
 
+import { useTranslations } from "next-intl"
+
 import { DeleteModal } from "@/components/ui/delete-item-modal"
 import { useDeleteSkillsModal } from "@/modules/skills/hooks/use-delete-skill-modal"
 
@@ -12,6 +14,7 @@ interface DeleteSkillModalProps {
 
 export function DeleteSkillModal(props: DeleteSkillModalProps) {
     const { isOpen, onClose, skillName } = props
+    const t = useTranslations("Skills.admin")
     const { isDeleting, error, handleConfirm } = useDeleteSkillsModal(props)
 
     return (
@@ -19,11 +22,11 @@ export function DeleteSkillModal(props: DeleteSkillModalProps) {
             isOpen={isOpen}
             onClose={onClose}
             onConfirm={handleConfirm}
-            title="Delete skill"
-            description={`Are you sure you want to delete skill "${skillName}"?`}
-            cancelText="CANCEL"
-            confirmText="CONFIRM"
-            deletingText="DELETING..."
+            title={t("deleteTitle")}
+            description={t("deleteConfirmation", { name: skillName })}
+            cancelText={t("cancel")}
+            confirmText={t("confirm")}
+            deletingText={t("deleting")}
             isDeleting={isDeleting}
             error={error}
         />

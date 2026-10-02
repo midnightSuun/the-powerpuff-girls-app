@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl"
 import { useState } from "react"
 
 export interface AdminSkillItem {
@@ -21,6 +22,7 @@ export function useEditSkillAdminModal({
     onClose,
     onUpdate,
 }: UseEditSkillAdminModalProps) {
+    const t = useTranslations("Skills.admin")
     const [name, setName] = useState("")
     const [categoryId, setCategoryId] = useState("")
     const [error, setError] = useState<string | null>(null)
@@ -49,9 +51,8 @@ export function useEditSkillAdminModal({
             await onUpdate(skill.id, { name: name.trim(), categoryId })
             onClose()
         } catch (err: unknown) {
-            setError(
-                err instanceof Error ? err.message : "Failed to update skill",
-            )
+            console.error("Failed to update skill:", err)
+            setError(t("updateError"))
         } finally {
             setIsSubmitting(false)
         }

@@ -2,13 +2,14 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { useRef, useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 
 import { sendVerificationAction, verifyMailAction } from "../api/verification"
 import {
+    createVerificationSchema,
     type VerificationFormValues,
-    verificationSchema,
 } from "../schemas/verification"
 
 export function useEmailVerification(
@@ -16,11 +17,11 @@ export function useEmailVerification(
     sendFailed: boolean,
     accessToken?: string,
 ) {
+    const validation = useTranslations("Auth.validation")
+    const t = useTranslations("Auth.messages")
     const router = useRouter()
     const [serverError, setServerError] = useState<string | null>(
-        sendFailed
-            ? "We couldn't send the verification email. Please try again."
-            : null,
+        sendFailed ? t("verificationSendFailed") : null,
     )
     const [statusMessage, setStatusMessage] = useState<string | null>(null)
     const [isPending, startTransition] = useTransition()
@@ -34,7 +35,12 @@ export function useEmailVerification(
         watch,
         formState: { errors, isValid },
     } = useForm<VerificationFormValues>({
-        resolver: zodResolver(verificationSchema),
+        resolver: zodResolver(
+            createVerificationSchema({
+                codeLength: validation("codeLength"),
+                codeDigits: validation("codeDigits"),
+            }),
+        ),
         mode: "onChange",
         defaultValues: {
             code: "",
@@ -122,7 +128,7 @@ export function useEmailVerification(
                 return
             }
 
-            setStatusMessage("A new verification email has been sent.")
+            setStatusMessage(t("verificationSent"))
         })
     }
 

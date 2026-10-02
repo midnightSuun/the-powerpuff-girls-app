@@ -12,7 +12,6 @@ function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
     return (
         <nav
             role="navigation"
-            aria-label="pagination"
             data-slot="pagination"
             className={cn("mx-auto flex w-full justify-center", className)}
             {...props}
@@ -91,15 +90,11 @@ const PaginationLink = ({
 
 const PaginationPrevious = ({
     className,
-    text = "Previous",
+    text,
     ...props
-}: React.ComponentProps<typeof PaginationLink> & { text?: string }) => {
+}: React.ComponentProps<typeof PaginationLink> & { text: string }) => {
     return (
-        <PaginationLink
-            aria-label="Go to previous page"
-            className={cn("px-3", className)}
-            {...props}
-        >
+        <PaginationLink className={cn("px-3", className)} {...props}>
             <ChevronLeftIcon className="size-4" />
             <span className="hidden sm:inline">{text}</span>
         </PaginationLink>
@@ -108,15 +103,11 @@ const PaginationPrevious = ({
 
 const PaginationNext = ({
     className,
-    text = "Next",
+    text,
     ...props
-}: React.ComponentProps<typeof PaginationLink> & { text?: string }) => {
+}: React.ComponentProps<typeof PaginationLink> & { text: string }) => {
     return (
-        <PaginationLink
-            aria-label="Go to next page"
-            className={cn("px-3", className)}
-            {...props}
-        >
+        <PaginationLink className={cn("px-3", className)} {...props}>
             <span className="hidden sm:inline">{text}</span>
             <ChevronRightIcon className="size-4" />
         </PaginationLink>
@@ -125,8 +116,9 @@ const PaginationNext = ({
 
 const PaginationEllipsis = ({
     className,
+    label,
     ...props
-}: React.ComponentProps<"span">) => {
+}: React.ComponentProps<"span"> & { label: string }) => {
     return (
         <span
             aria-hidden
@@ -138,7 +130,7 @@ const PaginationEllipsis = ({
             {...props}
         >
             <MoreHorizontalIcon className="size-4" />
-            <span className="sr-only">More pages</span>
+            <span className="sr-only">{label}</span>
         </span>
     )
 }

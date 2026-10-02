@@ -71,6 +71,7 @@ export function BaseModal({
                     variant="secondary"
                     onClick={onClose}
                     disabled={isPending}
+                    className="rounded-full px-8 py-2.5 h-auto text-sm font-normal border border-input bg-background hover:bg-accent hover:text-accent-foreground shadow-none"
                 >
                     {cancelText}
                 </Button>
@@ -83,6 +84,7 @@ export function BaseModal({
                     }
                     onClick={onConfirm}
                     disabled={!isValid || isPending}
+                    className="rounded-full px-8 py-2.5 h-auto text-sm font-normal shadow-none bg-[#C93B32] hover:bg-[#B5332B] text-white"
                 >
                     {isPending ? pendingText : confirmText}
                 </Button>
