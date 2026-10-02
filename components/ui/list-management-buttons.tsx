@@ -6,17 +6,21 @@ interface ListActionButtonProps {
     label: string
     onClick: () => void
     disabled?: boolean
+    className?: string
 }
-
 export function AddItemButton({
     label,
     onClick,
     disabled,
+    className,
 }: ListActionButtonProps) {
     return (
         <Button
+            type="button"
             variant="ghost"
-            className="inline-flex items-center justify-center gap-2 px-4 border-transparent text-muted-foreground hover:text-foreground whitespace-nowrap"
+            className={`inline-flex items-center justify-center gap-2 px-4 border-transparent text-muted-foreground hover:text-foreground whitespace-nowrap ${
+                className || ""
+            }`}
             onClick={onClick}
             disabled={disabled}
         >
@@ -30,11 +34,15 @@ export function RemoveItemsButton({
     label,
     onClick,
     disabled,
+    className,
 }: ListActionButtonProps) {
     return (
         <Button
+            type="button"
             variant="primaryV2"
-            className="inline-flex w-auto max-w-full items-center justify-center gap-2 px-4 whitespace-normal"
+            className={`inline-flex w-auto max-w-full items-center justify-center gap-2 px-4 whitespace-normal ${
+                className || ""
+            }`}
             onClick={onClick}
             disabled={disabled}
         >

@@ -42,6 +42,7 @@ export function AdminSkillsView({
                 searchPlaceholder="Search"
                 createButtonLabel="CREATE SKILL"
                 onCreateClick={() => setIsCreateOpen(true)}
+                createButtonClassName="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30"
                 onEditClick={(skill) => setEditingSkill(skill)}
                 onDeleteClick={(skill) => setDeletingSkill(skill)}
                 getSearchableString={(skill) => skill.name}

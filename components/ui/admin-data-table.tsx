@@ -1,10 +1,12 @@
 "use client"
 
-import { ArrowUpDown, MoreVertical, Plus, Search } from "lucide-react"
+import { ArrowUpDown, MoreVertical, Plus, Trash2 } from "lucide-react"
 import { useEffect, useMemo, useRef, useState } from "react"
 
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+
+import { SearchInput } from "../search-input"
+import { AddItemButton } from "./list-management-buttons"
 
 export interface Column<T> {
     key: string
@@ -24,12 +26,14 @@ interface AdminDataTableProps<T> {
     getSearchableString?: (item: T) => string
     getSortValue?: (item: T) => string
     emptyMessage?: string
+    limit?: number
+    search?: string
+    createButtonClassName?: string
 }
 
 export function AdminDataTable<T extends { id: string | number }>({
     data,
     columns,
-    searchPlaceholder = "Search",
     createButtonLabel,
     onCreateClick,
     onEditClick,
@@ -37,8 +41,10 @@ export function AdminDataTable<T extends { id: string | number }>({
     getSearchableString,
     getSortValue,
     emptyMessage = "No items found",
+    limit = 10,
+    search = "",
+    createButtonClassName,
 }: AdminDataTableProps<T>) {
-    const [searchQuery, setSearchQuery] = useState("")
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
     const [activeMenuId, setActiveMenuId] = useState<string | number | null>(
         null,
@@ -70,8 +76,8 @@ export function AdminDataTable<T extends { id: string | number }>({
     const processedData = useMemo(() => {
         let result = [...data]
 
-        if (searchQuery.trim() && getSearchableString) {
-            const query = searchQuery.toLowerCase()
+        if (search.trim() && getSearchableString) {
+            const query = search.toLowerCase()
             result = result.filter((item) =>
                 getSearchableString(item).toLowerCase().includes(query),
             )
@@ -88,30 +94,19 @@ export function AdminDataTable<T extends { id: string | number }>({
         }
 
         return result
-    }, [data, searchQuery, sortOrder, getSearchableString, getSortValue])
+    }, [data, search, sortOrder, getSearchableString, getSortValue])
 
     return (
         <div className="flex flex-col gap-6">
             <div className="flex items-center justify-between gap-4">
-                <div className="relative w-full max-w-xs">
-                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                    <Input
-                        placeholder={searchPlaceholder}
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-9 border-[#D1D1D1] dark:border-auth-card-border bg-[#ECECEC] dark:bg-[#454545] rounded-none focus-visible:ring-0"
-                    />
-                </div>
+                <SearchInput limit={limit} search={search} />
 
                 {createButtonLabel && onCreateClick && (
-                    <Button
-                        type="button"
-                        variant="primaryV2"
+                    <AddItemButton
+                        label={createButtonLabel}
                         onClick={onCreateClick}
-                    >
-                        <Plus className="mr-2 h-4 w-4" />
-                        {createButtonLabel}
-                    </Button>
+                        className={createButtonClassName}
+                    />
                 )}
             </div>
 
