@@ -1,3 +1,6 @@
+"use client"
+
+import { cn } from "cn"
 import {
     ChartLine,
     File,
@@ -5,49 +8,49 @@ import {
     type LucideIcon,
     Users,
 } from "lucide-react"
-import { getTranslations } from "next-intl/server"
+import { useTranslations } from "next-intl"
 
-import { SidebarNavItem } from "@/components/sidebar-nav-item"
 import {
     SidebarGroup,
     SidebarGroupContent,
     SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { Link, usePathname } from "@/i18n/navigation"
 
 type SidebarItem = {
-    label: string
+    label: "employees" | "skills" | "languages" | "cvs"
     icon: LucideIcon
     href: string
 }
 
-export const SidebarNav = async () => {
-    const tUsers = await getTranslations("Users")
-    const tSkills = await getTranslations("Skills")
-    const tLanguages = await getTranslations("Languages")
-    const tCvs = await getTranslations("Cvs")
+const sidebarItems: SidebarItem[] = [
+    {
+        label: "employees",
+        icon: Users,
+        href: "/users",
+    },
+    {
+        label: "skills",
+        icon: ChartLine,
+        href: "/skills",
+    },
+    {
+        label: "languages",
+        icon: Languages,
+        href: "/languages",
+    },
+    {
+        label: "cvs",
+        icon: File,
+        href: "/cv",
+    },
+]
 
-    const sidebarItems: SidebarItem[] = [
-        {
-            label: tUsers("title"),
-            icon: Users,
-            href: "/users",
-        },
-        {
-            label: tSkills("title"),
-            icon: ChartLine,
-            href: "/skills",
-        },
-        {
-            label: tLanguages("title"),
-            icon: Languages,
-            href: "/languages",
-        },
-        {
-            label: tCvs("title"),
-            icon: File,
-            href: "/cv",
-        },
-    ]
+export const SidebarNav = () => {
+    const pathname = usePathname()
+    const t = useTranslations("Navigation")
 
     return (
         <SidebarGroup className="px-3 py-1">
@@ -55,15 +58,36 @@ export const SidebarNav = async () => {
                 <SidebarMenu className="gap-1 group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:gap-3">
                     {sidebarItems.map((item) => {
                         const Icon = item.icon
+                        const isActive =
+                            pathname === item.href ||
+                            pathname.startsWith(`${item.href}/`)
 
                         return (
-                            <SidebarNavItem
-                                key={item.href}
-                                href={item.href}
-                                label={item.label}
+                            <SidebarMenuItem
+                                key={item.label}
+                                className="group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center"
                             >
-                                <Icon strokeWidth={1.75} />
-                            </SidebarNavItem>
+                                <SidebarMenuButton
+                                    render={<Link href={item.href} />}
+                                    isActive={isActive}
+                                    tooltip={t(item.label)}
+                                    aria-current={isActive ? "page" : undefined}
+                                    className={cn(
+                                        "h-10 rounded-full px-3 font-normal text-button-secondary-default no-underline",
+                                        "hover:bg-[#ececee] hover:text-button-secondary-default hover:no-underline dark:hover:bg-white/10 dark:hover:text-foreground",
+                                        "data-active:bg-[#e6e6e8] data-active:font-normal data-active:text-[#3a3a3a] dark:data-active:bg-white/15 dark:data-active:text-foreground",
+                                        "[&_svg]:size-4.5",
+                                        "group-data-[collapsible=icon]:text-[#3a3a3a] dark:group-data-[collapsible=icon]:text-foreground",
+                                        "group-data-[collapsible=icon]:data-active:bg-transparent",
+                                        "group-data-[collapsible=icon]:data-active:text-[#3a3a3a] dark:group-data-[collapsible=icon]:data-active:text-foreground",
+                                    )}
+                                >
+                                    <Icon strokeWidth={1.75} />
+                                    <span className="group-data-[collapsible=icon]:sr-only">
+                                        {t(item.label)}
+                                    </span>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
                         )
                     })}
                 </SidebarMenu>

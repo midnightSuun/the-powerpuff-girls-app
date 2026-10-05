@@ -4,10 +4,8 @@ type Props = {
     params: Promise<{ locale: string; userId: string }>
 }
 
-const UserPage = async ({ params }: Props) => {
+export default async function UserDetailRoute({ params }: Props) {
     const { locale, userId } = await params
 
     redirect({ href: `/users/${userId}/profile`, locale })
 }
-
-export default UserPage

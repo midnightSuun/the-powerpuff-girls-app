@@ -2,16 +2,19 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter, useSearchParams } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 
 import { resetPasswordAction } from "../api/reset-password"
 import {
+    createResetPasswordSchema,
     type ResetPasswordFormValues,
-    resetPasswordSchema,
 } from "../schemas/reset-password"
 
 export function useResetPassword() {
+    const validation = useTranslations("Auth.validation")
+    const t = useTranslations("Auth.messages")
     const router = useRouter()
     const [serverError, setServerError] = useState<string | undefined>(
         undefined,
@@ -25,7 +28,14 @@ export function useResetPassword() {
         handleSubmit,
         formState: { errors, isValid },
     } = useForm<ResetPasswordFormValues>({
-        resolver: zodResolver(resetPasswordSchema),
+        resolver: zodResolver(
+            createResetPasswordSchema({
+                passwordRequired: validation("passwordRequired"),
+                passwordMin: validation("passwordMin8"),
+                confirmPassword: validation("confirmPassword"),
+                passwordsDoNotMatch: validation("passwordsDoNotMatch"),
+            }),
+        ),
         mode: "onChange",
     })
 
@@ -33,9 +43,7 @@ export function useResetPassword() {
         setServerError(undefined)
 
         if (!token) {
-            setServerError(
-                "Reset token is missing or invalid. Open the link from your email again.",
-            )
+            setServerError(t("resetTokenInvalid"))
             return
         }
 

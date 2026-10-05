@@ -1,7 +1,8 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
-import { type FormEvent, useState } from "react"
+import { useState } from "react"
 
 import type { Mastery } from "@/gql/generated/graphql"
 import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock"
@@ -34,6 +35,7 @@ export function useAddSkillModal({
     availableSkills = [],
 }: UseAddSkillModalProps) {
     const t = useTranslations("Skills.add")
+    const router = useRouter()
     const [selectedSkillId, setSelectedSkillId] = useState("")
     const [mastery, setMastery] = useState<Mastery | "">("")
     const [error, setError] = useState<string | null>(null)
@@ -88,6 +90,7 @@ export function useAddSkillModal({
                 mastery: mastery as Mastery,
             })
 
+            router.refresh()
             handleClose()
         } catch (err: unknown) {
             const error = err as Error

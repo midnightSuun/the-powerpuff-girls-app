@@ -97,7 +97,7 @@ export function EmailVerification({
 
                     {statusMessage && (
                         <p
-                            className="text-xs text-green-600 text-center w-full"
+                            className="text-xs text-green-600 text-center w-full dark:text-green-400"
                             role="status"
                         >
                             {statusMessage}

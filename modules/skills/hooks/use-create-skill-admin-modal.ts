@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl"
 import { useState } from "react"
 
 interface UseCreateSkillAdminModalProps {
@@ -13,6 +14,7 @@ export function useCreateSkillAdminModal({
     existingSkillNames = [],
     onCreate,
 }: UseCreateSkillAdminModalProps) {
+    const t = useTranslations("Skills.admin")
     const [name, setName] = useState("")
     const [categoryId, setCategoryId] = useState("")
     const [error, setError] = useState<string | null>(null)
@@ -32,8 +34,7 @@ export function useCreateSkillAdminModal({
         (s) => s.toLowerCase() === name.trim().toLowerCase(),
     )
 
-    const inlineError =
-        isDuplicate && name.trim() ? "Skill already exists" : null
+    const inlineError = isDuplicate && name.trim() ? t("duplicate") : null
     const isValid = Boolean(name.trim() && categoryId && !isDuplicate)
 
     const handleSubmit = async (e: React.SyntheticEvent) => {
@@ -47,9 +48,8 @@ export function useCreateSkillAdminModal({
             await onCreate({ name: name.trim(), categoryId })
             onClose()
         } catch (err: unknown) {
-            setError(
-                err instanceof Error ? err.message : "Failed to create skill",
-            )
+            console.error("Failed to create skill:", err)
+            setError(t("createError"))
         } finally {
             setIsSubmitting(false)
         }

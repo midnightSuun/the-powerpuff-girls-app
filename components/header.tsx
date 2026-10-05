@@ -1,9 +1,8 @@
-import { headers } from "next/headers"
 import { ReactNode } from "react"
 
 import type { HeaderCopyKey, HeaderPage } from "@/components/header-view"
 import { HeaderView } from "@/components/header-view"
-import { routing } from "@/i18n/routing"
+import { getCvById } from "@/modules/cvs/api/get-cv"
 import { getUser } from "@/modules/users/api/get-user"
 
 type DefaultPage = {
@@ -16,6 +15,8 @@ type DefaultPage = {
 type PageWithTabs = {
     path: string
     firstBreadcrumb: HeaderCopyKey
+    breadcrumbParam: string
+    showBreadcrumbIcon: boolean
     getSecondBreadcrumb: (id: string) => Promise<ReactNode>
     tabs: {
         label: HeaderCopyKey
@@ -29,6 +30,10 @@ const PAGES: (DefaultPage | PageWithTabs)[] = [
         title: "users",
         showSearch: true,
         action: "addEmployee",
+    },
+    {
+        path: "/cv",
+        title: "cvs",
     },
     {
         path: "/skills",
@@ -45,11 +50,27 @@ const PAGES: (DefaultPage | PageWithTabs)[] = [
     {
         path: "/users/{userId}",
         firstBreadcrumb: "users",
+        breadcrumbParam: "userId",
+        showBreadcrumbIcon: true,
         getSecondBreadcrumb: async (id: string) => (await getUser(id)).email,
         tabs: [
             { label: "profile", path: "/profile" },
             { label: "skills", path: "/skills" },
             { label: "languages", path: "/languages" },
+        ],
+    },
+    {
+        path: "/cv/{id}",
+        firstBreadcrumb: "cvs",
+        breadcrumbParam: "id",
+        showBreadcrumbIcon: false,
+        getSecondBreadcrumb: async (id: string) =>
+            (await getCvById(id)).data?.name ?? null,
+        tabs: [
+            { label: "cvDetails", path: "" },
+            { label: "cvSkills", path: "/skills" },
+            { label: "cvProjects", path: "/projects" },
+            { label: "cvPreview", path: "/preview" },
         ],
     },
 ]
@@ -66,12 +87,14 @@ const toText = (value: ReactNode) => {
     return null
 }
 
-const loadSecondBreadcrumb = async (id: string) => {
+const loadSecondBreadcrumb = async (pagePath: string, id: string) => {
     "use server"
 
-    const page = PAGES.find(isPageWithTabs)
+    const page = PAGES.find(
+        (candidate) => isPageWithTabs(candidate) && candidate.path === pagePath,
+    )
 
-    if (!page) return null
+    if (!page || !isPageWithTabs(page)) return null
 
     try {
         return toText(await page.getSecondBreadcrumb(id))
@@ -80,23 +103,14 @@ const loadSecondBreadcrumb = async (id: string) => {
     }
 }
 
-const stripLocale = (pathname: string) => {
-    const segments = pathname.split("/")
-    const locale = segments[1]
-
-    if (routing.locales.includes(locale as (typeof routing.locales)[number])) {
-        segments.splice(1, 1)
-    }
-
-    return segments.join("/") || "/"
-}
-
 const clientPages: HeaderPage[] = PAGES.map((page) => {
     if (isPageWithTabs(page)) {
         return {
             type: "tabs",
             path: page.path,
             firstBreadcrumb: page.firstBreadcrumb,
+            breadcrumbParam: page.breadcrumbParam,
+            showBreadcrumbIcon: page.showBreadcrumbIcon,
             tabs: page.tabs,
         }
     }
@@ -110,32 +124,11 @@ const clientPages: HeaderPage[] = PAGES.map((page) => {
     }
 })
 
-export const Header = async () => {
-    const headerStore = await headers()
-    const pathname = stripLocale(headerStore.get("x-pathname") ?? "/")
-    const userId = pathname.split("/").filter(Boolean)[1]
-    const tabsPage = PAGES.find(isPageWithTabs)
-    const isUserPath = Boolean(
-        userId && pathname.startsWith("/users/") && tabsPage,
-    )
-    let initialBreadcrumb: { userId: string; value: string | null } | null =
-        null
-
-    if (isUserPath && userId && tabsPage) {
-        try {
-            initialBreadcrumb = {
-                userId,
-                value: toText(await tabsPage.getSecondBreadcrumb(userId)),
-            }
-        } catch {
-            initialBreadcrumb = { userId, value: null }
-        }
-    }
-
+export const Header = () => {
     return (
         <HeaderView
             pages={clientPages}
-            initialBreadcrumb={initialBreadcrumb}
+            initialBreadcrumb={null}
             loadSecondBreadcrumb={loadSecondBreadcrumb}
         />
     )

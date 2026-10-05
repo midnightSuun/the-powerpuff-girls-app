@@ -1,16 +1,19 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useTranslations } from "next-intl"
 import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 
 import { requestPasswordReset } from "../api/forgot-password"
 import {
+    createForgotPasswordSchema,
     type ForgotPasswordFormValues,
-    forgotPasswordSchema,
 } from "../schemas/forgot-password"
 
 export function useForgotPassword() {
+    const validation = useTranslations("Auth.validation")
+    const t = useTranslations("Auth.messages")
     const [serverError, setServerError] = useState<string | undefined>(
         undefined,
     )
@@ -22,7 +25,12 @@ export function useForgotPassword() {
         handleSubmit,
         formState: { errors, isValid },
     } = useForm<ForgotPasswordFormValues>({
-        resolver: zodResolver(forgotPasswordSchema),
+        resolver: zodResolver(
+            createForgotPasswordSchema({
+                emailRequired: validation("emailRequired"),
+                invalidEmail: validation("invalidEmail"),
+            }),
+        ),
         mode: "onChange",
     })
 
@@ -36,7 +44,7 @@ export function useForgotPassword() {
             if (result?.error) {
                 setServerError(result.error)
             } else {
-                setSuccessMessage("Instructions have been sent to your email.")
+                setSuccessMessage(t("forgotInstructionsSent"))
             }
         })
     }

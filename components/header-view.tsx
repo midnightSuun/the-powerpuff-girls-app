@@ -7,9 +7,20 @@ import { Suspense, useEffect, useState } from "react"
 import { SearchInput } from "@/components/search-input"
 import { Button } from "@/components/ui/button"
 import { Link, usePathname } from "@/i18n/navigation"
+import { routing } from "@/i18n/routing"
 
 export type HeaderCopyKey =
-    "users" | "skills" | "languages" | "settings" | "profile" | "addEmployee"
+    | "users"
+    | "skills"
+    | "languages"
+    | "settings"
+    | "profile"
+    | "addEmployee"
+    | "cvs"
+    | "cvDetails"
+    | "cvSkills"
+    | "cvProjects"
+    | "cvPreview"
 
 type HeaderCopy = Record<HeaderCopyKey, string>
 
@@ -30,6 +41,8 @@ type HeaderTabsPage = {
     type: "tabs"
     path: string
     firstBreadcrumb: HeaderCopyKey
+    breadcrumbParam: string
+    showBreadcrumbIcon: boolean
     tabs: HeaderTab[]
 }
 
@@ -41,14 +54,18 @@ type PathMatch = {
 }
 
 type BreadcrumbResult = {
-    userId: string
+    pagePath: string
+    id: string
     value: string | null
 }
 
 type Props = {
     pages: HeaderPage[]
     initialBreadcrumb: BreadcrumbResult | null
-    loadSecondBreadcrumb: (id: string) => Promise<string | null>
+    loadSecondBreadcrumb: (
+        pagePath: string,
+        id: string,
+    ) => Promise<string | null>
 }
 
 const crumbClassName =
@@ -110,6 +127,20 @@ const joinPaths = (base: string, tabPath: string) => {
     return `${normalizedBase}${normalizedTab}`
 }
 
+const normalizePathname = (pathname: string) => {
+    const segments = pathname.split(/[?#]/, 1)[0].split("/").filter(Boolean)
+
+    if (
+        routing.locales.includes(
+            segments[0] as (typeof routing.locales)[number],
+        )
+    ) {
+        segments.shift()
+    }
+
+    return `/${segments.join("/")}`
+}
+
 const resolvePage = (pages: HeaderPage[], pathname: string) => {
     const matches = pages.flatMap((page) => {
         const match = matchTemplate(page.path, pathname)
@@ -145,6 +176,8 @@ const useHeaderCopy = (): HeaderCopy => {
     const tLanguages = useTranslations("Languages")
     const tSettings = useTranslations("Settings")
     const tNav = useTranslations("User.nav")
+    const tCvs = useTranslations("Cvs")
+    const tCv = useTranslations("CV")
 
     return {
         users: tUsers("title"),
@@ -153,6 +186,11 @@ const useHeaderCopy = (): HeaderCopy => {
         settings: tSettings("title"),
         profile: tNav("profile"),
         addEmployee: tUsers("addEmployee"),
+        cvs: tCvs("title"),
+        cvDetails: tCv("tabs.details").toLowerCase(),
+        cvSkills: tCv("tabs.skills").toLowerCase(),
+        cvProjects: tCv("tabs.projects").toLowerCase(),
+        cvPreview: tCv("tabs.preview").toLowerCase(),
     }
 }
 
@@ -270,9 +308,12 @@ const PageWithTabsHeader = ({
                     <li className="flex min-w-0 items-center">
                         <Link
                             href={basePath}
-                            className="inline-flex min-w-0 items-center gap-2 text-base leading-6 font-normal tracking-[0.15px] text-[#c63031] capitalize"
+                            className={cn(
+                                "inline-flex min-w-0 items-center text-base leading-6 font-normal tracking-[0.15px] text-[#c63031] capitalize",
+                                page.showBreadcrumbIcon && "gap-2",
+                            )}
                         >
-                            <UserIcon />
+                            {page.showBreadcrumbIcon ? <UserIcon /> : null}
                             <span className="truncate">{secondBreadcrumb}</span>
                         </Link>
                     </li>
@@ -293,7 +334,7 @@ const PageWithTabsHeader = ({
                     ) : null}
                 </ol>
             </nav>
-            <div className="flex h-14 items-end">
+            <div className="flex h-14 items-end overflow-x-auto">
                 {page.tabs.map((tab) => {
                     const isActive = tab.path === activeTab?.path
 
@@ -303,7 +344,7 @@ const PageWithTabsHeader = ({
                             href={joinPaths(basePath, tab.path)}
                             aria-current={isActive ? "page" : undefined}
                             className={cn(
-                                "flex h-[50px] w-[150px] flex-col text-sm leading-[17.5px] tracking-[0.4px] uppercase",
+                                "flex h-[50px] w-[150px] shrink-0 flex-col text-sm leading-[17.5px] tracking-[0.4px] uppercase",
                                 isActive
                                     ? "font-semibold text-[#c63031]"
                                     : "font-medium text-[#2e2e2e] dark:text-[#f5f5f7]",
@@ -334,44 +375,61 @@ export const HeaderView = ({
     loadSecondBreadcrumb,
 }: Props) => {
     const copy = useHeaderCopy()
-    const pathname = usePathname()
+    const pathname = normalizePathname(usePathname())
     const resolved = resolvePage(pages, pathname)
-    const userId =
+    const breadcrumbId =
         resolved?.page.type === "tabs"
-            ? (resolved.match.params.userId ??
-              Object.values(resolved.match.params)[0] ??
-              "")
+            ? (resolved.match.params[resolved.page.breadcrumbParam] ?? "")
             : ""
+    const pagePath = resolved?.page.type === "tabs" ? resolved.page.path : ""
     const [loadedBreadcrumb, setLoadedBreadcrumb] =
         useState<BreadcrumbResult | null>(initialBreadcrumb)
     const secondBreadcrumb =
-        loadedBreadcrumb?.userId === userId
+        loadedBreadcrumb?.pagePath === pagePath &&
+        loadedBreadcrumb.id === breadcrumbId
             ? loadedBreadcrumb.value
-            : initialBreadcrumb?.userId === userId
+            : initialBreadcrumb?.pagePath === pagePath &&
+                initialBreadcrumb.id === breadcrumbId
               ? initialBreadcrumb.value
               : null
 
     useEffect(() => {
-        if (!userId || loadedBreadcrumb?.userId === userId) return
+        if (
+            !breadcrumbId ||
+            (loadedBreadcrumb?.pagePath === pagePath &&
+                loadedBreadcrumb.id === breadcrumbId)
+        ) {
+            return
+        }
 
         let isCurrent = true
 
-        loadSecondBreadcrumb(userId)
+        loadSecondBreadcrumb(pagePath, breadcrumbId)
             .then((value) => {
                 if (!isCurrent) return
 
-                setLoadedBreadcrumb({ userId, value })
+                setLoadedBreadcrumb({ pagePath, id: breadcrumbId, value })
             })
             .catch(() => {
                 if (!isCurrent) return
 
-                setLoadedBreadcrumb({ userId, value: null })
+                setLoadedBreadcrumb({
+                    pagePath,
+                    id: breadcrumbId,
+                    value: null,
+                })
             })
 
         return () => {
             isCurrent = false
         }
-    }, [loadSecondBreadcrumb, loadedBreadcrumb?.userId, userId])
+    }, [
+        breadcrumbId,
+        loadSecondBreadcrumb,
+        loadedBreadcrumb?.id,
+        loadedBreadcrumb?.pagePath,
+        pagePath,
+    ])
 
     if (!resolved) return null
 

@@ -1,0 +1,32 @@
+query GetCv($cvId: ID!) {
+    cv(cvId: $cvId) {
+        id
+        name
+        education
+        description
+        projects {
+            id
+            project {
+                id
+            }
+            name
+            internal_name
+            description
+            domain
+            start_date
+            end_date
+            environment
+            roles
+            responsibilities
+        }
+        skills {
+            name
+            mastery
+            categoryId
+        }
+        languages {
+            name
+            proficiency
+        }
+    }
+}

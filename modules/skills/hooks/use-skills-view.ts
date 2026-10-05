@@ -1,5 +1,6 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 import type { Mastery } from "@/gql/generated/graphql"
@@ -12,6 +13,7 @@ interface UseSkillsViewProps {
 }
 
 export function useSkillsView({ cvId }: UseSkillsViewProps) {
+    const router = useRouter()
     const [isSelectionMode, setIsSelectionMode] = useState(false)
     const [selectedSkills, setSelectedSkills] = useState<string[]>([])
     const [editingSkill, setEditingSkill] = useState<Skill | null>(null)
@@ -33,6 +35,7 @@ export function useSkillsView({ cvId }: UseSkillsViewProps) {
             mastery: newMastery,
         })
 
+        router.refresh()
         setEditingSkill(null)
     }
 

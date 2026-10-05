@@ -1,6 +1,7 @@
 "use server"
 
 import { ClientError } from "graphql-request"
+import { getTranslations } from "next-intl/server"
 
 import { getGql } from "@/gql"
 
@@ -33,8 +34,9 @@ const graphqlErrorMessage = (error: unknown) => {
 export async function sendVerificationAction(
     email: string,
 ): Promise<VerificationActionState> {
+    const t = await getTranslations("Auth.messages")
     if (!email.trim()) {
-        return { error: "Email address is unavailable. Please sign in again." }
+        return { error: t("verificationEmailUnavailable") }
     }
 
     try {
@@ -45,7 +47,7 @@ export async function sendVerificationAction(
         )
     } catch {
         return {
-            error: "Failed to send the verification email. Please try again.",
+            error: t("verificationSendFailed"),
         }
     }
 
@@ -56,11 +58,12 @@ export async function verifyMailAction(
     otp: string,
     accessToken?: string,
 ): Promise<VerificationActionState> {
+    const t = await getTranslations("Auth.messages")
     const normalizedOtp = otp.replace(/\D/g, "")
 
     if (normalizedOtp.length !== 6) {
         return {
-            error: "The verification code is invalid or has expired. Please try again.",
+            error: t("verificationInvalid"),
         }
     }
 
@@ -75,12 +78,12 @@ export async function verifyMailAction(
 
         if (/unauthor/i.test(message)) {
             return {
-                error: "Your session expired. Please sign in and try again.",
+                error: t("sessionExpired"),
             }
         }
 
         return {
-            error: "The verification code is invalid or has expired. Please try again.",
+            error: t("verificationInvalid"),
         }
     }
 
