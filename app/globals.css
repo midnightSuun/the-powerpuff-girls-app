@@ -22,7 +22,9 @@
     --color-button-secondary-hover: #f5f5f7;
     --color-button-secondary-disabled: #aeaeae;
 
-    --font-sans: var(--font-roboto), sans-serif;
+    --font-sans:
+        var(--font-roboto), var(--font-roboto-cyrillic),
+        var(--font-roboto-cyrillic-ext), sans-serif;
     --font-mono: var(--font-geist-mono);
     --font-heading: var(--font-sans);
     --color-sidebar-ring: var(--sidebar-ring);
