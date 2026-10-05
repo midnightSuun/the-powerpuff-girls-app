@@ -1,5 +1,8 @@
 "use client"
 
+import { cn } from "cn"
+import type { ReactNode } from "react"
+
 import { BaseModal } from "./base-modal"
 
 interface DeleteModalProps {
@@ -7,12 +10,20 @@ interface DeleteModalProps {
     onClose: () => void
     onConfirm: () => Promise<void> | void
     title: string
-    description: string
+    description: ReactNode
     cancelText: string
     confirmText: string
     deletingText: string
     isDeleting: boolean
     error?: string | null
+    dialogClassName?: string
+    formClassName?: string
+    overlayClassName?: string
+    titleClassName?: string
+    footerClassName?: string
+    cancelButtonClassName?: string
+    confirmButtonClassName?: string
+    descriptionClassName?: string
 }
 
 export function DeleteModal({
@@ -26,6 +37,14 @@ export function DeleteModal({
     deletingText,
     isDeleting,
     error,
+    dialogClassName,
+    formClassName,
+    overlayClassName,
+    titleClassName,
+    footerClassName,
+    cancelButtonClassName,
+    confirmButtonClassName,
+    descriptionClassName,
 }: DeleteModalProps) {
     return (
         <BaseModal
@@ -38,9 +57,23 @@ export function DeleteModal({
             confirmText={confirmText}
             pendingText={deletingText}
             confirmButtonVariant="destructive"
+            dialogClassName={dialogClassName}
+            formClassName={formClassName}
+            overlayClassName={overlayClassName}
+            titleClassName={titleClassName}
+            footerClassName={footerClassName}
+            cancelButtonClassName={cancelButtonClassName}
+            confirmButtonClassName={confirmButtonClassName}
             onConfirm={onConfirm}
         >
-            <p className="mb-2 text-sm text-muted-foreground">{description}</p>
+            <p
+                className={cn(
+                    "mb-2 text-sm text-foreground",
+                    descriptionClassName,
+                )}
+            >
+                {description}
+            </p>
         </BaseModal>
     )
 }

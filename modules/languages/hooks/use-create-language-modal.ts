@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl"
 import { useState } from "react"
 
 interface UseCreateLanguageModalProps {
@@ -13,6 +14,7 @@ export function useCreateLanguageModal({
     existingLanguageNames = [],
     onCreate,
 }: UseCreateLanguageModalProps) {
+    const t = useTranslations("Languages.admin")
     const [name, setName] = useState("")
     const [iso2, setIso2] = useState("")
     const [error, setError] = useState<string | null>(null)
@@ -33,7 +35,7 @@ export function useCreateLanguageModal({
     )
 
     const inlineError =
-        isDuplicate && name.trim() ? "Language already exists" : null
+        isDuplicate && name.trim() ? t("errors.duplicate") : null
     const isValid = Boolean(name.trim() && iso2.trim() && !isDuplicate)
 
     const handleSubmit = async (e: React.SyntheticEvent) => {
@@ -48,9 +50,7 @@ export function useCreateLanguageModal({
             onClose()
         } catch (err: unknown) {
             setError(
-                err instanceof Error
-                    ? err.message
-                    : "Failed to create language",
+                err instanceof Error ? err.message : t("errors.createFailed"),
             )
         } finally {
             setIsSubmitting(false)

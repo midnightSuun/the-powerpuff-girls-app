@@ -1,6 +1,7 @@
 "use server"
 
 import { ClientError } from "graphql-request"
+import { getTranslations } from "next-intl/server"
 
 import { getGql, LoginDocument, SignupDocument } from "@/gql"
 
@@ -11,16 +12,17 @@ export async function signup(
     _previousState: AuthActionState,
     formData: FormData,
 ): Promise<AuthActionState & { redirectTo?: string }> {
+    const t = await getTranslations("Auth.messages")
     const email = String(formData.get("email") ?? "").trim()
     const password = String(formData.get("password") ?? "")
     const confirmPassword = String(formData.get("confirmPassword") ?? "")
 
     if (!email || !password || !confirmPassword) {
-        return { error: "Please fill in all fields." }
+        return { error: t("signupRequired") }
     }
 
     if (password !== confirmPassword) {
-        return { error: "Passwords do not match." }
+        return { error: t("passwordsDoNotMatch") }
     }
 
     let tokens: { accessToken: string; refreshToken: string }
@@ -55,7 +57,7 @@ export async function signup(
 
         if (isUserExists) {
             return {
-                error: "This email is already taken. Please use a different one or log in.",
+                error: t("emailAlreadyTaken"),
             }
         }
 
@@ -72,12 +74,14 @@ export async function signup(
             } catch (loginError) {
                 console.error("🔴 LOGIN FALLBACK ERROR:", loginError)
                 return {
-                    error: "Failed to sign up due to mail server error. Please try again later.",
+                    error: t("signupEmailFailed"),
                 }
             }
         } else {
             return {
-                error: `Server Error: ${errorMessage || "Unknown error"}`,
+                error: t("serverError", {
+                    message: errorMessage || t("unknownError"),
+                }),
             }
         }
     }

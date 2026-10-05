@@ -66,19 +66,20 @@ export async function PaginationComponent({
     const pageItems = getPageItems(totalPages, page)
 
     return (
-        <Pagination className="px-4 py-4">
+        <Pagination aria-label={t("label")} className="px-4 py-4">
             <PaginationContent>
                 <PaginationItem>
                     <PaginationPrevious
                         href={hrefForPage(previousPage)}
                         isDisabled={page <= 1}
                         text={t("previous")}
+                        aria-label={t("previousLabel")}
                     />
                 </PaginationItem>
                 {pageItems.map((item, index) =>
                     item === "ellipsis" ? (
                         <PaginationItem key={`ellipsis-${index}`}>
-                            <PaginationEllipsis />
+                            <PaginationEllipsis label={t("morePages")} />
                         </PaginationItem>
                     ) : (
                         <PaginationItem key={item}>
@@ -96,6 +97,7 @@ export async function PaginationComponent({
                         href={hrefForPage(nextPage)}
                         isDisabled={page >= totalPages}
                         text={t("next")}
+                        aria-label={t("nextLabel")}
                     />
                 </PaginationItem>
             </PaginationContent>

@@ -19,6 +19,7 @@ interface SkillsViewProps {
     typedSkills: Skill[]
     availableSkills: SkillOption[]
     canManageSkills: boolean
+    compact?: boolean
 }
 
 export function SkillsView({
@@ -27,6 +28,7 @@ export function SkillsView({
     typedSkills,
     availableSkills,
     canManageSkills,
+    compact = false,
 }: SkillsViewProps) {
     const {
         isSelectionMode,
@@ -40,8 +42,18 @@ export function SkillsView({
     } = useSkillsView({ cvId })
 
     return (
-        <div className="flex items-start gap-16">
-            <div className="flex-1 max-w-213 pl-50 pt-6">
+        <div
+            className={
+                compact
+                    ? "mx-auto w-full max-w-[1100px]"
+                    : "flex items-start gap-16"
+            }
+        >
+            <div
+                className={
+                    compact ? "w-full pt-6 pl-0" : "max-w-213 flex-1 pt-6 pl-50"
+                }
+            >
                 <div className="space-y-8">
                     {categories.map((category) => (
                         <SkillCategory
@@ -61,7 +73,13 @@ export function SkillsView({
                 </div>
 
                 {canManageSkills && (
-                    <div className="mt-8 flex flex-wrap items-center justify-end gap-6 text-xs font-medium tracking-wider text-muted-foreground">
+                    <div
+                        className={`mt-8 flex flex-wrap items-center gap-6 text-xs font-medium tracking-wider text-muted-foreground ${
+                            compact
+                                ? "justify-center gap-12 sm:translate-x-8"
+                                : "justify-end"
+                        }`}
+                    >
                         {!isSelectionMode && (
                             <AddSkillButton
                                 cvId={cvId}

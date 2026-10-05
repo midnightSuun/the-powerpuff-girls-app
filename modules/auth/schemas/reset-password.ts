@@ -1,18 +1,28 @@
 import * as z from "zod"
 
-export const resetPasswordSchema = z
-    .object({
-        newPassword: z
-            .string()
-            .min(1, { message: "Password is required" })
-            .min(8, { message: "Password must be at least 8 characters" }),
-        confirmPassword: z
-            .string()
-            .min(1, { message: "Please confirm your password" }),
-    })
-    .refine((data) => data.newPassword === data.confirmPassword, {
-        message: "Passwords do not match",
-        path: ["confirmPassword"],
-    })
+type Messages = {
+    passwordRequired: string
+    passwordMin: string
+    confirmPassword: string
+    passwordsDoNotMatch: string
+}
 
-export type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>
+export const createResetPasswordSchema = (messages: Messages) =>
+    z
+        .object({
+            newPassword: z
+                .string()
+                .min(1, { message: messages.passwordRequired })
+                .min(8, { message: messages.passwordMin }),
+            confirmPassword: z
+                .string()
+                .min(1, { message: messages.confirmPassword }),
+        })
+        .refine((data) => data.newPassword === data.confirmPassword, {
+            message: messages.passwordsDoNotMatch,
+            path: ["confirmPassword"],
+        })
+
+export type ResetPasswordFormValues = z.infer<
+    ReturnType<typeof createResetPasswordSchema>
+>

@@ -1,5 +1,6 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
 import { useState } from "react"
 
@@ -18,6 +19,7 @@ export function useDeleteSkillsButton({
     onToggleSelectionMode,
     onClearSelection,
 }: UseDeleteSkillsButtonProps) {
+    const router = useRouter()
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const t = useTranslations("Skills.actions")
@@ -25,18 +27,13 @@ export function useDeleteSkillsButton({
     const hasSelected = selectedSkills.length > 0
 
     const handleDeleteConfirm = async () => {
+        setIsSubmitting(true)
         try {
-            setIsSubmitting(true)
-            await deleteCvSkills({
-                cvId,
-                name: selectedSkills,
-            })
-
+            await deleteCvSkills({ cvId, name: selectedSkills })
+            router.refresh()
             onClearSelection()
             onToggleSelectionMode(false)
             setIsModalOpen(false)
-        } catch (error) {
-            console.error("Failed to delete skills:", error)
         } finally {
             setIsSubmitting(false)
         }

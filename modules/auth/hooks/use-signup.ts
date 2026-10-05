@@ -2,14 +2,16 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 
 import { type AuthActionState } from "../api/login"
 import { signup } from "../api/signup"
-import { type SignUpFormValues, signUpSchema } from "../schemas/signup"
+import { createSignUpSchema, type SignUpFormValues } from "../schemas/signup"
 
 export function useSignup() {
+    const validation = useTranslations("Auth.validation")
     const router = useRouter()
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -21,7 +23,16 @@ export function useSignup() {
         handleSubmit,
         formState: { errors, isValid },
     } = useForm<SignUpFormValues>({
-        resolver: zodResolver(signUpSchema),
+        resolver: zodResolver(
+            createSignUpSchema({
+                emailRequired: validation("emailRequired"),
+                invalidEmail: validation("invalidEmail"),
+                passwordRequired: validation("passwordRequired"),
+                passwordMin: validation("passwordMin"),
+                confirmPassword: validation("confirmPassword"),
+                passwordsDoNotMatch: validation("passwordsDoNotMatch"),
+            }),
+        ),
         mode: "onChange",
     })
 

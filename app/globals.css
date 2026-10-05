@@ -147,3 +147,44 @@
         @apply font-sans;
     }
 }
+
+@media print {
+    body:has(.cv-preview) {
+        min-height: 0 !important;
+        background: #fff !important;
+        color: #292929 !important;
+    }
+
+    body:has(.cv-preview) * {
+        visibility: hidden !important;
+    }
+
+    body:has(.cv-preview) .cv-preview,
+    body:has(.cv-preview) .cv-preview * {
+        visibility: visible !important;
+    }
+
+    body:has(.cv-preview) .cv-preview {
+        position: absolute;
+        inset: 0 auto auto 0;
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        padding: 0;
+        background: #fff;
+        color: #292929;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+
+    body:has(.cv-preview) .cv-preview section,
+    body:has(.cv-preview) .cv-preview article,
+    body:has(.cv-preview) .cv-preview tr {
+        break-inside: avoid;
+    }
+
+    @page {
+        size: A4;
+        margin: 14mm;
+    }
+}

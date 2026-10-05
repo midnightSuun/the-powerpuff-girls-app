@@ -1,12 +1,18 @@
 import { z } from "zod"
 
-export const verificationSchema = z.object({
-    code: z
-        .string()
-        .length(6, { message: "Verification code must be exactly 6 digits." })
-        .regex(/^\d+$/, {
-            message: "Verification code must contain only numbers.",
-        }),
-})
+type Messages = {
+    codeLength: string
+    codeDigits: string
+}
 
-export type VerificationFormValues = z.infer<typeof verificationSchema>
+export const createVerificationSchema = (messages: Messages) =>
+    z.object({
+        code: z
+            .string()
+            .length(6, { message: messages.codeLength })
+            .regex(/^\d+$/, { message: messages.codeDigits }),
+    })
+
+export type VerificationFormValues = z.infer<
+    ReturnType<typeof createVerificationSchema>
+>

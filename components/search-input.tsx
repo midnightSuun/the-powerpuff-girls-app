@@ -1,12 +1,16 @@
 "use client"
 
 import debounce from "debounce"
-import { useSearchParams } from "next/navigation"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useTranslations } from "next-intl"
 import { ChangeEvent, useEffect, useRef, useState } from "react"
 
 import { Input } from "@/components/ui/input"
-import { usePathname, useRouter } from "@/i18n/navigation"
+
+interface SearchInputProps {
+    limit?: number
+    search?: string
+}
 
 const SearchIcon = () => {
     return (
@@ -32,26 +36,31 @@ const SearchIcon = () => {
 const SEARCH_DEBOUNCE_MS = 500
 const DEFAULT_LIMIT = 10
 
-export function SearchInput() {
+export function SearchInput({
+    limit: propLimit,
+    search: propSearch,
+}: SearchInputProps) {
     const t = useTranslations("Common")
     const path = usePathname()
     const router = useRouter()
     const searchParams = useSearchParams()
-    const search = searchParams.get("search") ?? ""
+
+    const querySearch = searchParams.get("search") ?? propSearch ?? ""
     const limitParam = Number(searchParams.get("limit"))
     const limit =
         Number.isInteger(limitParam) && limitParam > 0
             ? limitParam
-            : DEFAULT_LIMIT
-    const [value, setValue] = useState(search)
-    const [prevSearch, setPrevSearch] = useState(search)
+            : (propLimit ?? DEFAULT_LIMIT)
+
+    const [value, setValue] = useState(querySearch)
+    const [prevSearch, setPrevSearch] = useState(querySearch)
     const latestRef = useRef({ limit, path, router })
     const updateSearchRef = useRef<(nextSearch: string) => void>(() => {})
 
-    if (search !== prevSearch) {
-        setPrevSearch(search)
+    if (querySearch !== prevSearch) {
+        setPrevSearch(querySearch)
 
-        if (value === prevSearch) setValue(search)
+        if (value === prevSearch) setValue(querySearch)
     }
 
     useEffect(() => {
@@ -94,7 +103,7 @@ export function SearchInput() {
                 value={value}
                 onChange={handleSearch}
                 placeholder={t("search")}
-                className="h-10 w-full rounded-full border border-[#aeaeae] bg-transparent pr-3 pl-[46px] text-base tracking-[0.15px] text-[#2e2e2e] shadow-none placeholder:text-[#c4c4c6] focus-visible:border-[#aeaeae] focus-visible:ring-0 md:text-base dark:bg-transparent dark:text-[#f5f5f7] dark:placeholder:text-[#626262]"
+                className="h-9 w-full rounded-full border border-input bg-background pr-4 pl-9 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
             />
         </label>
     )
