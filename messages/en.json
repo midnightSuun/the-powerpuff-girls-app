@@ -372,6 +372,14 @@
     "Users": {
         "title": "Employees",
         "createUser": "Create user",
+        "dialog": {
+            "description": "Create a new user",
+            "password": "Password",
+            "cancel": "Cancel",
+            "submit": "Create",
+            "close": "Close",
+            "employee": "Employee"
+        },
         "loading": "Loading users...",
         "columns": {
             "avatar": "Avatar",
