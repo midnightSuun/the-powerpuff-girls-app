@@ -1,0 +1,28 @@
+query GetPositions($params: SearchPaginationInput) {
+    positions(params: $params) {
+        items {
+            id
+            name
+        }
+    }
+}
+
+mutation CreatePosition($position: CreatePositionInput!) {
+    createPosition(position: $position) {
+        id
+        name
+    }
+}
+
+mutation UpdatePosition($position: UpdatePositionInput!) {
+    updatePosition(position: $position) {
+        id
+        name
+    }
+}
+
+mutation DeletePosition($position: DeletePositionInput!) {
+    deletePosition(position: $position) {
+        affected
+    }
+}
