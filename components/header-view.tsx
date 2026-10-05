@@ -15,7 +15,7 @@ export type HeaderCopyKey =
     | "languages"
     | "settings"
     | "profile"
-    | "addEmployee"
+    | "createUser"
     | "cvs"
     | "cvDetails"
     | "cvSkills"
@@ -34,7 +34,7 @@ type HeaderDefaultPage = {
     path: string
     title: HeaderCopyKey
     showSearch?: boolean
-    action?: "addEmployee"
+    action?: "createUser"
 }
 
 type HeaderTabsPage = {
@@ -185,7 +185,7 @@ const useHeaderCopy = (): HeaderCopy => {
         languages: tLanguages("title"),
         settings: tSettings("title"),
         profile: tNav("profile"),
-        addEmployee: tUsers("addEmployee"),
+        createUser: tUsers("createUser"),
         cvs: tCvs("title"),
         cvDetails: tCv("tabs.details").toLowerCase(),
         cvSkills: tCv("tabs.skills").toLowerCase(),
@@ -255,14 +255,14 @@ const DefaultPageHeader = ({
                             <SearchInput />
                         </Suspense>
                     ) : null}
-                    {page.action === "addEmployee" ? (
+                    {page.action === "createUser" ? (
                         <div className="ml-auto">
                             <Button
                                 variant="primaryV2"
                                 className="h-10 w-[220px] gap-2 rounded-[40px] p-0 text-sm leading-[24.5px] font-medium tracking-[0.4px] uppercase hover:border-transparent active:border-transparent active:bg-transparent"
                             >
                                 <PlusIcon />
-                                {copy.addEmployee}
+                                {copy.createUser}
                             </Button>
                         </div>
                     ) : null}

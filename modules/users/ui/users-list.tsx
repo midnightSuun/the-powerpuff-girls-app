@@ -1,9 +1,11 @@
+import { redirect } from "next/navigation"
 import { getLocale, getTranslations } from "next-intl/server"
 
 import { PaginationComponent } from "@/components/pagination"
 import { TableComponent } from "@/components/table"
 import { buildListSearchParams } from "@/lib/list-search-params"
 import { type PaginationSearchParams } from "@/lib/pagination-search-params"
+import { getCurrentSession } from "@/modules/auth/helpers/get-current-session"
 
 import { getUsers } from "../api/get-users"
 import { getUsersColumns } from "./users-columns"
@@ -17,6 +19,13 @@ export async function UsersList({
     sortBy,
     sortOrder,
 }: Props) {
+    const session = await getCurrentSession()
+
+    if (!session) {
+        redirect("/login")
+    }
+
+    const isAdmin = session.role === "Admin"
     const t = await getTranslations("Users.columns")
     const locale = await getLocale()
     const { users, totalPages } = await getUsers(
@@ -27,7 +36,7 @@ export async function UsersList({
         sortOrder,
         locale,
     )
-    const columns = getUsersColumns(t)
+    const columns = getUsersColumns(t, isAdmin)
     const getSortHref = (sortKey: string) => {
         const nextOrder =
             sortBy === sortKey && sortOrder === "asc" ? "desc" : "asc"

@@ -100,7 +100,10 @@
         "employees": "Сотрудники",
         "skills": "Навыки",
         "languages": "Языки",
-        "cvs": "Резюме"
+        "cvs": "Резюме",
+        "departments": "Отделы",
+        "positions": "Должности",
+        "projects": "Проекты"
     },
     "Errors": {
         "NoInternet": {
@@ -368,7 +371,7 @@
     },
     "Users": {
         "title": "Сотрудники",
-        "addEmployee": "Добавить сотрудника",
+        "createUser": "Добавить пользователя",
         "loading": "Загрузка пользователей...",
         "columns": {
             "avatar": "Аватар",
@@ -377,7 +380,8 @@
             "email": "Электронная почта",
             "department": "Отдел",
             "position": "Должность",
-            "sortBy": "Сортировать по полю «{column}»"
+            "sortBy": "Сортировать по полю «{column}»",
+            "openMenu": "Открыть меню"
         }
     },
     "Pagination": {

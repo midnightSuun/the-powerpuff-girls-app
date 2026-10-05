@@ -100,7 +100,10 @@
         "employees": "Employees",
         "skills": "Skills",
         "languages": "Languages",
-        "cvs": "CVs"
+        "cvs": "CVs",
+        "departments": "Departments",
+        "positions": "Positions",
+        "projects": "Projects"
     },
     "Errors": {
         "NoInternet": {
@@ -368,7 +371,7 @@
     },
     "Users": {
         "title": "Employees",
-        "addEmployee": "Add Employee",
+        "createUser": "Create user",
         "loading": "Loading users...",
         "columns": {
             "avatar": "Avatar",
@@ -377,7 +380,8 @@
             "email": "Email",
             "department": "Department",
             "position": "Position",
-            "sortBy": "Sort by {column}"
+            "sortBy": "Sort by {column}",
+            "openMenu": "Open menu"
         }
     },
     "Pagination": {
