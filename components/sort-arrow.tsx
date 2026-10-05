@@ -7,8 +7,8 @@ type Props = {
 export const SortArrow = ({ descending }: Props) => {
     return (
         <img
-            alt=""
-            src="/users/sort-arrow.svg"
+            alt="sort arrow"
+            src="/sort-arrow.svg"
             width={12}
             height={12}
             className={cn("shrink-0", descending && "rotate-180")}
