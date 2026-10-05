@@ -376,7 +376,8 @@
             "lastName": "Last Name",
             "email": "Email",
             "department": "Department",
-            "position": "Position"
+            "position": "Position",
+            "sortBy": "Sort by {column}"
         }
     },
     "Pagination": {

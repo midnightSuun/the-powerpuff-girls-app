@@ -2,17 +2,35 @@ import { ChevronRight } from "lucide-react"
 
 import { type TableColumn } from "@/components/table"
 import { type GetUsersQuery } from "@/gql"
+import { type UserSortField } from "@/lib/user-sort"
 
 import { UserAvatar } from "./user-avatar"
 
 type User = GetUsersQuery["users"]["items"][number]
 
-export function getUsersColumns(
-    t: (key: string) => string,
-): TableColumn<User>[] {
+type ColumnTranslator = (key: string, values?: Record<string, string>) => string
+
+const sortableColumn = (
+    id: string,
+    label: string,
+    sortKey: UserSortField,
+    sortLabel: string,
+    render: TableColumn<User>["render"],
+): TableColumn<User> => ({
+    id,
+    label,
+    sortKey,
+    sortLabel,
+    render,
+})
+
+export function getUsersColumns(t: ColumnTranslator): TableColumn<User>[] {
+    const sortLabel = (column: string) => t("sortBy", { column })
+
     return [
         {
-            label: t("avatar"),
+            id: "avatar",
+            label: "",
             render: (user) => (
                 <UserAvatar
                     src={user.profile.avatar}
@@ -22,27 +40,43 @@ export function getUsersColumns(
                 />
             ),
         },
+        sortableColumn(
+            "firstName",
+            t("firstName"),
+            "first_name",
+            sortLabel(t("firstName")),
+            (user) => user.profile.first_name,
+        ),
+        sortableColumn(
+            "lastName",
+            t("lastName"),
+            "last_name",
+            sortLabel(t("lastName")),
+            (user) => user.profile.last_name,
+        ),
+        sortableColumn(
+            "email",
+            t("email"),
+            "email",
+            sortLabel(t("email")),
+            (user) => user.email,
+        ),
+        sortableColumn(
+            "department",
+            t("department"),
+            "department",
+            sortLabel(t("department")),
+            (user) => user.department?.name,
+        ),
+        sortableColumn(
+            "position",
+            t("position"),
+            "position",
+            sortLabel(t("position")),
+            (user) => user.position?.name,
+        ),
         {
-            label: t("firstName"),
-            render: (user) => user.profile.first_name,
-        },
-        {
-            label: t("lastName"),
-            render: (user) => user.profile.last_name,
-        },
-        {
-            label: t("email"),
-            render: (user) => user.email,
-        },
-        {
-            label: t("department"),
-            render: (user) => user.department?.name,
-        },
-        {
-            label: t("position"),
-            render: (user) => user.position?.name,
-        },
-        {
+            id: "open",
             label: "",
             render: () => (
                 <ChevronRight className="size-4 text-muted-foreground" />

@@ -376,7 +376,8 @@
             "lastName": "Фамилия",
             "email": "Электронная почта",
             "department": "Отдел",
-            "position": "Должность"
+            "position": "Должность",
+            "sortBy": "Сортировать по полю «{column}»"
         }
     },
     "Pagination": {
