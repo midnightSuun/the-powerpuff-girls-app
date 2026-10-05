@@ -361,6 +361,38 @@
         "loading": "Loading...",
         "email": "Email",
         "role": "Role",
+        "memberSince": "A member since {date}",
+        "uploadAvatar": "Upload avatar image",
+        "avatarRequirements": "png, jpg or gif no more than 0.5MB",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "department": "Department",
+        "position": "Position",
+        "selectDepartment": "Select department",
+        "selectPosition": "Select position",
+        "verifyEmail": "VERIFY EMAIL",
+        "sendingVerification": "SENDING...",
+        "update": "UPDATE",
+        "updating": "UPDATING...",
+        "errors": {
+            "firstNameRequired": "First name is required",
+            "lastNameRequired": "Last name is required",
+            "departmentRequired": "Department is required",
+            "positionRequired": "Position is required",
+            "firstNameTooLong": "First name must be 100 characters or fewer",
+            "lastNameTooLong": "Last name must be 100 characters or fewer",
+            "unsupportedFileType": "Unsupported file type",
+            "fileTooLarge": "File size must not exceed 0.5 MB"
+        },
+        "messages": {
+            "profileUpdated": "Profile updated successfully",
+            "updateFailed": "Could not save your profile. Please try again.",
+            "updateForbidden": "You can only update your own profile.",
+            "avatarUploaded": "Avatar uploaded successfully",
+            "avatarUploadFailed": "Could not upload your profile photo. Please try again.",
+            "verificationSent": "Verification email has been sent",
+            "verificationFailed": "Failed to send verification email"
+        },
         "nav": {
             "viewProfile": "View profile",
             "profile": "Profile",
@@ -496,6 +528,11 @@
             "created": "Created successfully.",
             "updated": "Changes saved successfully.",
             "deleted": "Deleted successfully."
+        },
+        "messages": {
+            "verificationSent": "Verification email has been sent.",
+            "profileUpdated": "Profile updated successfully.",
+            "verificationFailed": "Failed to send verification email."
         }
     }
 }

@@ -259,7 +259,7 @@ const DefaultPageHeader = ({
                         <div className="ml-auto">
                             <Button
                                 variant="primaryV2"
-                                className="h-10 w-[220px] gap-2 rounded-[40px] p-0 text-sm leading-[24.5px] font-medium tracking-[0.4px] uppercase hover:border-transparent active:border-transparent active:bg-transparent"
+                                className="h-10 w-55 gap-2 rounded-[40px] p-0 text-sm leading-[24.5px] font-medium tracking-[0.4px] uppercase hover:border-transparent active:border-transparent active:bg-transparent"
                             >
                                 <PlusIcon />
                                 {copy.addEmployee}
@@ -309,7 +309,7 @@ const PageWithTabsHeader = ({
                         <Link
                             href={basePath}
                             className={cn(
-                                "inline-flex min-w-0 items-center text-base leading-6 font-normal tracking-[0.15px] text-[#c63031] capitalize",
+                                "inline-flex min-w-0 items-center text-base leading-6 font-normal tracking-[0.15px] text-button-primary-default capitalize",
                                 page.showBreadcrumbIcon && "gap-2",
                             )}
                         >
@@ -346,7 +346,7 @@ const PageWithTabsHeader = ({
                             className={cn(
                                 "flex h-[50px] w-[150px] shrink-0 flex-col text-sm leading-[17.5px] tracking-[0.4px] uppercase",
                                 isActive
-                                    ? "font-semibold text-[#c63031]"
+                                    ? "font-semibold text-button-primary-default"
                                     : "font-medium text-[#2e2e2e] dark:text-[#f5f5f7]",
                             )}
                         >
@@ -357,7 +357,7 @@ const PageWithTabsHeader = ({
                                 className={cn(
                                     "h-0.5 w-full",
                                     isActive
-                                        ? "bg-[#c63031]"
+                                        ? "bg-button-primary-default"
                                         : "bg-transparent",
                                 )}
                             />

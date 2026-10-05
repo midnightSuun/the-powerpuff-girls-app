@@ -19,8 +19,14 @@ export async function getCurrentSession(): Promise<UserSession | null> {
         const secret = new TextEncoder().encode(process.env.JWT_SECRET)
         const { payload } = await jwtVerify(token, secret)
 
-        const userId = (payload.userId || payload.sub || payload.id) as string
-        if (!userId) return null
+        const rawUserId = payload.userId ?? payload.sub ?? payload.id
+        if (
+            (typeof rawUserId !== "string" && typeof rawUserId !== "number") ||
+            String(rawUserId).length === 0
+        ) {
+            return null
+        }
+        const userId = String(rawUserId)
 
         const role = isUserRole(payload.role) ? payload.role : null
 
