@@ -1,3 +1,5 @@
+"use client"
+
 import { cn } from "cn"
 import {
     ChartLine,
@@ -6,9 +8,7 @@ import {
     type LucideIcon,
     Users,
 } from "lucide-react"
-import { headers } from "next/headers"
-import Link from "next/link"
-import { getTranslations } from "next-intl/server"
+import { useTranslations } from "next-intl"
 
 import {
     SidebarGroup,
@@ -17,6 +17,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { Link, usePathname } from "@/i18n/navigation"
 
 type SidebarItem = {
     label: "employees" | "skills" | "languages" | "cvs"
@@ -47,9 +48,9 @@ const sidebarItems: SidebarItem[] = [
     },
 ]
 
-export const SidebarNav = async () => {
-    const pathname = (await headers()).get("x-pathname") ?? ""
-    const t = await getTranslations("Navigation")
+export const SidebarNav = () => {
+    const pathname = usePathname()
+    const t = useTranslations("Navigation")
 
     return (
         <SidebarGroup className="px-3 py-1">

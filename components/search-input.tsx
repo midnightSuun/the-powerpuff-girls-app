@@ -1,66 +1,103 @@
 "use client"
 
 import debounce from "debounce"
-import { Search } from "lucide-react"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useTranslations } from "next-intl"
-import { ChangeEvent, useEffect, useMemo, useState } from "react"
+import { ChangeEvent, useEffect, useRef, useState } from "react"
 
 import { Input } from "@/components/ui/input"
 
-type Props = {
-    limit: number
-    search: string
+interface SearchInputProps {
+    limit?: number
+    search?: string
+}
+
+const SearchIcon = () => {
+    return (
+        <>
+            <img
+                alt=""
+                src="/header/search-light.svg"
+                width={24}
+                height={24}
+                className="dark:hidden"
+            />
+            <img
+                alt=""
+                src="/header/search-dark.svg"
+                width={24}
+                height={24}
+                className="hidden dark:block"
+            />
+        </>
+    )
 }
 
 const SEARCH_DEBOUNCE_MS = 500
+const DEFAULT_LIMIT = 10
 
-export function SearchInput({ limit, search }: Props) {
+export function SearchInput({
+    limit: propLimit,
+    search: propSearch,
+}: SearchInputProps) {
     const t = useTranslations("Common")
     const path = usePathname()
     const router = useRouter()
-    const [value, setValue] = useState(search)
-    const [prevSearch, setPrevSearch] = useState(search)
+    const searchParams = useSearchParams()
 
-    if (search !== prevSearch) {
-        setPrevSearch(search)
+    const querySearch = searchParams.get("search") ?? propSearch ?? ""
+    const limitParam = Number(searchParams.get("limit"))
+    const limit =
+        Number.isInteger(limitParam) && limitParam > 0
+            ? limitParam
+            : (propLimit ?? DEFAULT_LIMIT)
 
-        if (value === prevSearch) setValue(search)
+    const [value, setValue] = useState(querySearch)
+    const [prevSearch, setPrevSearch] = useState(querySearch)
+    const latestRef = useRef({ limit, path, router })
+    const updateSearchRef = useRef<(nextSearch: string) => void>(() => {})
+
+    if (querySearch !== prevSearch) {
+        setPrevSearch(querySearch)
+
+        if (value === prevSearch) setValue(querySearch)
     }
 
-    const updateSearch = useMemo(
-        () =>
-            debounce(
-                (nextPath: string, nextLimit: number, nextSearch: string) => {
-                    const params = new URLSearchParams({
-                        page: "1",
-                        limit: String(nextLimit),
-                        search: nextSearch,
-                    })
-
-                    router.replace(`${nextPath}?${params.toString()}`)
-                },
-                SEARCH_DEBOUNCE_MS,
-            ),
-        [router],
-    )
+    useEffect(() => {
+        latestRef.current = { limit, path, router }
+    }, [limit, path, router])
 
     useEffect(() => {
+        const updateSearch = debounce((nextSearch: string) => {
+            const current = latestRef.current
+            const params = new URLSearchParams({
+                page: "1",
+                limit: String(current.limit),
+                search: nextSearch,
+            })
+
+            current.router.replace(`${current.path}?${params.toString()}`)
+        }, SEARCH_DEBOUNCE_MS)
+
+        updateSearchRef.current = updateSearch
+
         return () => {
             updateSearch.clear()
         }
-    }, [updateSearch])
+    }, [])
 
     const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
         const nextValue = event.target.value
 
         setValue(nextValue)
-        updateSearch(path, limit, nextValue)
+        updateSearchRef.current(nextValue)
     }
 
     return (
-        <label className="relative block w-72">
-            <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+        <label className="relative block w-80 dark:drop-shadow-[0px_4px_2px_rgba(0,0,0,0.25)]">
+            <span className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2">
+                <SearchIcon />
+            </span>
             <Input
                 type="text"
                 value={value}

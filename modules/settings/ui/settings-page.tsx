@@ -5,7 +5,6 @@ import { useTranslations } from "next-intl"
 
 import { PasswordField } from "@/components/password-field"
 import { Button } from "@/components/ui/button"
-import { LogoutButton } from "@/modules/auth/ui/logout-button"
 
 import { useSettings } from "../hooks/use-settings"
 
@@ -29,14 +28,7 @@ export function SettingsPage() {
     const languageRegistration = register("language")
 
     return (
-        <main className="min-h-screen w-full bg-background text-foreground px-6 py-8 flex flex-col transition-colors duration-300">
-            <div className="w-full max-w-2xl mx-auto mb-8 flex items-center justify-between">
-                <h1 className="text-xl font-medium tracking-tight text-muted-foreground">
-                    {t("title")}
-                </h1>
-                <LogoutButton />
-            </div>
-
+        <main className="min-h-screen w-full bg-background text-foreground px-6 pt-4 pb-8 flex flex-col transition-colors duration-300">
             <div className="w-full max-w-2xl mx-auto space-y-6">
                 {serverError && (
                     <div

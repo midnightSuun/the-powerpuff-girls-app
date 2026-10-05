@@ -87,6 +87,7 @@
     },
     "Common": {
         "retry": "ПОВТОРИТЬ",
+        "breadcrumb": "Навигация",
         "search": "Поиск",
         "edit": "Изменить",
         "delete": "Удалить",
@@ -154,7 +155,11 @@
             "passwordUpdateFailed": "Не удалось обновить пароль. Проверьте текущий пароль."
         }
     },
+    "Cvs": {
+        "title": "Резюме"
+    },
     "Skills": {
+        "title": "Навыки",
         "loading": "Загрузка навыков профиля...",
         "masteryPlaceholder": "Уровень владения",
         "masteryLevels": {
@@ -247,6 +252,25 @@
             "preview": "ПРЕДПРОСМОТР"
         },
         "previewUnavailable": "Предпросмотр резюме пока недоступен.",
+        "preview": {
+            "exportPdf": "ЭКСПОРТ PDF",
+            "education": "Образование",
+            "languageProficiency": "Знание языков",
+            "domains": "Области",
+            "profile": "Профессиональный профиль",
+            "noDescription": "Описание профиля не указано.",
+            "projects": "Проекты",
+            "projectRoles": "Роли в проекте",
+            "period": "Период",
+            "responsibilities": "Обязанности",
+            "environment": "Окружение",
+            "tillNow": "По настоящее время",
+            "professionalSkills": "Профессиональные навыки",
+            "skills": "Группы навыков",
+            "skillName": "Навык",
+            "mastery": "Уровень владения",
+            "noSkills": "В это резюме пока не добавлены навыки."
+        },
         "list": {
             "create": "СОЗДАТЬ РЕЗЮМЕ",
             "name": "Название",
@@ -302,8 +326,8 @@
             "remove": "Удалить",
             "noSearchResults": "Проекты не найдены.",
             "empty": "К этому резюме ещё не добавлены проекты.",
-            "removeTitle": "Удалить проект",
-            "removeConfirmation": "Удалить проект «{name}» из этого резюме?",
+            "removeTitle": "Удалить проект из резюме",
+            "removeConfirmation": "Вы уверены, что хотите удалить проект <strong>{name}</strong>?",
             "cancel": "ОТМЕНА",
             "removing": "УДАЛЕНИЕ...",
             "removeError": "Не удалось удалить проект. Попробуйте ещё раз.",
@@ -318,21 +342,33 @@
                 "project": "Проект",
                 "selectProject": "Выберите проект",
                 "noAvailableProjects": "Нет доступных проектов для добавления.",
+                "duplicateProjectError": "Этот проект уже добавлен в резюме.",
+                "domain": "Область",
                 "startDate": "Дата начала",
                 "endDate": "Дата окончания",
-                "roles": "Роли (по одной на строку)",
-                "responsibilities": "Обязанности (по одной на строку)",
+                "description": "Описание",
+                "environment": "Окружение",
+                "roles": "Роли",
+                "responsibilities": "Обязанности",
                 "saveError": "Не удалось сохранить проект. Попробуйте ещё раз."
             }
         }
     },
     "User": {
         "title": "Профиль пользователя",
+        "loading": "Загрузка...",
         "email": "Электронная почта",
-        "role": "Роль"
+        "role": "Роль",
+        "nav": {
+            "viewProfile": "Смотреть профиль",
+            "profile": "Профиль",
+            "settings": "Настройки",
+            "logout": "Выйти"
+        }
     },
     "Users": {
         "title": "Сотрудники",
+        "addEmployee": "Добавить сотрудника",
         "loading": "Загрузка пользователей...",
         "columns": {
             "avatar": "Аватар",
@@ -352,6 +388,7 @@
         "morePages": "Другие страницы"
     },
     "Languages": {
+        "title": "Языки",
         "currentLanguages": "Текущие языки",
         "empty": "Языки ещё не добавлены.",
         "proficiencyPlaceholder": "Уровень владения",

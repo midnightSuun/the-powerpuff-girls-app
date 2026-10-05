@@ -87,6 +87,7 @@
     },
     "Common": {
         "retry": "Retry",
+        "breadcrumb": "Breadcrumb",
         "search": "Search",
         "edit": "Edit",
         "delete": "Delete",
@@ -154,7 +155,11 @@
             "passwordUpdateFailed": "Failed to update password. Please check your current password."
         }
     },
+    "Cvs": {
+        "title": "CVs"
+    },
     "Skills": {
+        "title": "Skills",
         "loading": "Loading profile skills...",
         "masteryPlaceholder": "Skill mastery",
         "masteryLevels": {
@@ -247,6 +252,25 @@
             "preview": "PREVIEW"
         },
         "previewUnavailable": "Resume preview is not available yet.",
+        "preview": {
+            "exportPdf": "EXPORT PDF",
+            "education": "Education",
+            "languageProficiency": "Language proficiency",
+            "domains": "Domains",
+            "profile": "Professional profile",
+            "noDescription": "No profile description provided.",
+            "projects": "Projects",
+            "projectRoles": "Project roles",
+            "period": "Period",
+            "responsibilities": "Responsibilities",
+            "environment": "Environment",
+            "tillNow": "Present",
+            "professionalSkills": "Professional skills",
+            "skills": "Skill groups",
+            "skillName": "Skill",
+            "mastery": "Proficiency",
+            "noSkills": "No skills have been added to this CV yet."
+        },
         "list": {
             "create": "CREATE CV",
             "name": "Name",
@@ -302,8 +326,8 @@
             "remove": "Remove",
             "noSearchResults": "No projects match your search.",
             "empty": "No projects have been added to this CV yet.",
-            "removeTitle": "Remove project",
-            "removeConfirmation": "Remove \"{name}\" from this CV?",
+            "removeTitle": "Remove CV project",
+            "removeConfirmation": "Are you sure you want to remove project <strong>{name}</strong>?",
             "cancel": "CANCEL",
             "removing": "REMOVING...",
             "removeError": "Failed to remove project. Please try again.",
@@ -318,21 +342,33 @@
                 "project": "Project",
                 "selectProject": "Select a project",
                 "noAvailableProjects": "There are no projects available to add.",
+                "duplicateProjectError": "This project has already been added to this CV.",
+                "domain": "Domain",
                 "startDate": "Start date",
                 "endDate": "End date",
-                "roles": "Roles (one per line)",
-                "responsibilities": "Responsibilities (one per line)",
+                "description": "Description",
+                "environment": "Environment",
+                "roles": "Roles",
+                "responsibilities": "Responsibilities",
                 "saveError": "Failed to save project. Please try again."
             }
         }
     },
     "User": {
         "title": "User Profile",
+        "loading": "Loading...",
         "email": "Email",
-        "role": "Role"
+        "role": "Role",
+        "nav": {
+            "viewProfile": "View profile",
+            "profile": "Profile",
+            "settings": "Settings",
+            "logout": "Log out"
+        }
     },
     "Users": {
         "title": "Employees",
+        "addEmployee": "Add Employee",
         "loading": "Loading users...",
         "columns": {
             "avatar": "Avatar",
@@ -352,6 +388,7 @@
         "morePages": "More pages"
     },
     "Languages": {
+        "title": "Languages",
         "currentLanguages": "Current languages",
         "empty": "No languages added yet.",
         "proficiencyPlaceholder": "Proficiency level",

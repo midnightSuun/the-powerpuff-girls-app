@@ -24,5 +24,9 @@ query GetCv($cvId: ID!) {
             mastery
             categoryId
         }
+        languages {
+            name
+            proficiency
+        }
     }
 }

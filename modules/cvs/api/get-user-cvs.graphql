@@ -2,26 +2,11 @@ query GetUserCvs($userId: ID!, $params: SearchPaginationInput) {
     cvsByUserId(userId: $userId, params: $params) {
         items {
             id
-            created_at
             name
             education
             description
             user {
-                id
                 email
-                role
-            }
-            projects {
-                id
-                name
-            }
-            skills {
-                name
-                mastery
-            }
-            languages {
-                name
-                proficiency
             }
         }
         total

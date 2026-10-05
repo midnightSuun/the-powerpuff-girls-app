@@ -29,11 +29,13 @@ query GetSkills {
         }
     }
 }
+
 mutation DeleteCvSkill($skill: DeleteCvSkillInput!) {
     deleteCvSkill(skill: $skill) {
         id
     }
 }
+
 mutation UpdateSkill($skill: UpdateCvSkillInput!) {
     updateCvSkill(skill: $skill) {
         id

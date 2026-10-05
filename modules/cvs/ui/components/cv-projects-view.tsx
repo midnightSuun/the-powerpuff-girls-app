@@ -5,7 +5,6 @@ import {
     ArrowUp,
     MoreVertical,
     Pencil,
-    Plus,
     Search,
     Trash2,
 } from "lucide-react"
@@ -15,6 +14,7 @@ import { Fragment, useMemo, useState } from "react"
 
 import { DeleteModal } from "@/components/ui/delete-item-modal"
 import { Input } from "@/components/ui/input"
+import { AddItemButton } from "@/components/ui/list-management-buttons"
 import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock"
 import { removeCvProject } from "@/modules/cvs/api/projects"
 import type { CvProjectItem, ProjectOption } from "@/modules/cvs/types"
@@ -153,25 +153,17 @@ export function CvProjectsView({
                 </label>
 
                 {canManageProjects && (
-                    <button
-                        type="button"
+                    <AddItemButton
+                        label={t("addProject")}
                         onClick={() => setIsAddOpen(true)}
                         disabled={!availableToAdd}
-                        title={
-                            availableToAdd
-                                ? undefined
-                                : t("noAvailableProjects")
-                        }
-                        className="inline-flex h-8 items-center justify-end gap-2 self-end text-[10px] font-medium text-[#d7352c] disabled:cursor-not-allowed disabled:opacity-50 sm:self-auto"
-                    >
-                        <Plus aria-hidden="true" className="size-4" />
-                        {t("addProject")}
-                    </button>
+                        className="self-end text-xs font-medium text-[#d7352c] hover:text-[#b5332b] dark:text-[#f06b65] dark:hover:text-[#ff8a84] sm:self-auto"
+                    />
                 )}
             </div>
 
             <div className="overflow-x-auto">
-                <table className="w-full min-w-[680px] border-collapse text-left text-[11px]">
+                <table className="w-full min-w-[680px] border-collapse text-left text-sm">
                     <thead>
                         <tr className="h-10 border-b border-border text-foreground">
                             <th className="w-[31%] px-2 font-medium">
@@ -322,22 +314,20 @@ export function CvProjectsView({
                                 </tr>
                                 <tr className="border-b border-border">
                                     <td colSpan={5} className="px-2 pb-4 pt-1">
-                                        <p className="mb-2 text-[11px] leading-5 text-muted-foreground">
+                                        <p className="mb-2 text-xs leading-5 text-muted-foreground">
                                             {project.description}
                                         </p>
                                         <div className="flex flex-wrap gap-1.5">
-                                            {[
-                                                ...project.environment,
-                                                ...project.roles,
-                                                ...project.responsibilities,
-                                            ].map((tag, index) => (
-                                                <span
-                                                    key={`${tag}-${index}`}
-                                                    className="rounded-full bg-muted px-2 py-0.5 text-[10px] text-muted-foreground"
-                                                >
-                                                    {tag}
-                                                </span>
-                                            ))}
+                                            {[...project.responsibilities].map(
+                                                (tag, index) => (
+                                                    <span
+                                                        key={`${tag}-${index}`}
+                                                        className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground"
+                                                    >
+                                                        {tag}
+                                                    </span>
+                                                ),
+                                            )}
                                         </div>
                                     </td>
                                 </tr>
@@ -377,14 +367,22 @@ export function CvProjectsView({
                         }}
                         onConfirm={handleRemove}
                         title={t("removeTitle")}
-                        description={t("removeConfirmation", {
+                        description={t.rich("removeConfirmation", {
                             name: projectToRemove?.name ?? "",
+                            strong: (chunks) => <strong>{chunks}</strong>,
                         })}
                         cancelText={t("cancel")}
                         confirmText={t("remove")}
                         deletingText={t("removing")}
                         isDeleting={isRemoving}
                         error={removeError}
+                        formClassName="max-w-[450px]"
+                        dialogClassName="max-w-[450px] rounded-none p-5 md:rounded-none md:p-5"
+                        titleClassName="text-base font-medium md:text-base md:font-medium"
+                        footerClassName="mt-4 gap-4"
+                        cancelButtonClassName="h-9 w-[116px] px-0 py-0 text-[10px]"
+                        confirmButtonClassName="h-9 w-[116px] px-0 py-0 text-[10px]"
+                        descriptionClassName="text-xs"
                     />
                 </>
             )}

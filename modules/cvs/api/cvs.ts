@@ -9,6 +9,13 @@ import {
 } from "@/gql"
 import { ACCESS_TOKEN_COOKIE } from "@/modules/auth/consts"
 
+const getGraphQLErrorMessage = (error: ClientError) =>
+    error.response.errors
+        ?.flatMap((entry) =>
+            typeof entry?.message === "string" ? [entry.message] : [],
+        )
+        .join(" ") ?? ""
+
 export async function getAdminCvs(params?: SearchPaginationInput) {
     try {
         const cookieStore = await cookies()
@@ -21,11 +28,7 @@ export async function getAdminCvs(params?: SearchPaginationInput) {
         return data.cvs
     } catch (error) {
         const message =
-            error instanceof ClientError
-                ? (error.response.errors
-                      ?.map(({ message }) => message)
-                      .join(" ") ?? "")
-                : ""
+            error instanceof ClientError ? getGraphQLErrorMessage(error) : ""
 
         if (/expired|unauthor/i.test(message)) {
             throw new Error("Your session has expired. Please log in again.")
@@ -50,11 +53,7 @@ export async function getUserCvs(
         return data.cvsByUserId
     } catch (error) {
         const message =
-            error instanceof ClientError
-                ? (error.response.errors
-                      ?.map(({ message }) => message)
-                      .join(" ") ?? "")
-                : ""
+            error instanceof ClientError ? getGraphQLErrorMessage(error) : ""
 
         if (/expired|unauthor/i.test(message)) {
             throw new Error("Your session has expired. Please log in again.")

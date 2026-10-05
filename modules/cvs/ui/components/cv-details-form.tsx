@@ -40,7 +40,10 @@ export function CvDetailsForm({ cv, onUpdate }: CvDetailsFormProps) {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+        <form
+            onSubmit={handleSubmit}
+            className="mx-auto flex w-full max-w-[852px] flex-col gap-5"
+        >
             {error && (
                 <div className="rounded bg-destructive/10 p-3 text-sm text-destructive">
                     {error}
@@ -50,7 +53,7 @@ export function CvDetailsForm({ cv, onUpdate }: CvDetailsFormProps) {
             <div className="flex flex-col gap-1">
                 <label
                     htmlFor="cv-name"
-                    className="pl-2 text-[10px] text-muted-foreground"
+                    className="pl-2 text-xs text-muted-foreground"
                 >
                     {t("name")}
                 </label>
@@ -66,7 +69,7 @@ export function CvDetailsForm({ cv, onUpdate }: CvDetailsFormProps) {
             <div className="flex flex-col gap-1">
                 <label
                     htmlFor="cv-education"
-                    className="pl-2 text-[10px] text-muted-foreground"
+                    className="pl-2 text-xs text-muted-foreground"
                 >
                     {t("education")}
                 </label>
@@ -82,7 +85,7 @@ export function CvDetailsForm({ cv, onUpdate }: CvDetailsFormProps) {
             <div className="flex flex-col gap-1">
                 <label
                     htmlFor="cv-description"
-                    className="pl-2 text-[10px] text-muted-foreground"
+                    className="pl-2 text-xs text-muted-foreground"
                 >
                     {t("description")}
                 </label>
@@ -98,7 +101,7 @@ export function CvDetailsForm({ cv, onUpdate }: CvDetailsFormProps) {
                 <Button
                     type="submit"
                     disabled={!isDirty || isSubmitting}
-                    className="h-8! w-26.5! min-w-26.5! px-0! py-0! rounded-full bg-[#d7352c] text-[10px] font-normal tracking-normal text-white shadow-none hover:bg-[#c52e26] disabled:bg-[#b8b8b8] disabled:text-white"
+                    className="h-8! w-26.5! min-w-26.5! px-0! py-0! rounded-full bg-[#d7352c] text-[10px] font-normal tracking-normal text-white shadow-none hover:bg-[#c52e26] disabled:bg-[#b8b8b8] disabled:text-white dark:disabled:bg-[#626262]"
                 >
                     {isSubmitting ? t("updating") : t("update")}
                 </Button>
