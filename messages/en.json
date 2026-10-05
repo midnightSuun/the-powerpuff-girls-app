@@ -82,7 +82,9 @@
             "verificationSendFailed": "We couldn't send the verification email. Please try again.",
             "verificationInvalid": "The verification code is invalid or has expired. Please try again.",
             "verificationSent": "A new verification email has been sent.",
-            "sessionExpired": "Your session expired. Please sign in and try again."
+            "sessionExpired": "Your session expired. Please sign in and try again.",
+            "loginSuccess": "You have successfully logged in to your account",
+            "signupVerificationSent": "A confirmation email has been sent to your email address."
         }
     },
     "Common": {
@@ -145,7 +147,7 @@
         },
         "validation": {
             "passwordRequired": "Password is required",
-            "newPasswordRequired": "Password must meet application security requirements",
+            "newPasswordRequired": "New password must be at least 6 characters long",
             "confirmPasswordRequired": "Confirm Password is required",
             "passwordsDoNotMatch": "Passwords do not match"
         },
@@ -482,6 +484,18 @@
                 "updateFailed": "Failed to update language",
                 "invalidData": "Invalid language data or ISO2 code"
             }
+        }
+    },
+    "Notifications": {
+        "success": "Success",
+        "error": "Error",
+        "warning": "Warning",
+        "info": "Info",
+        "logoutSuccess": "You have successfully logged out.",
+        "actions": {
+            "created": "Created successfully.",
+            "updated": "Changes saved successfully.",
+            "deleted": "Deleted successfully."
         }
     }
 }

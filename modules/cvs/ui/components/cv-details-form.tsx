@@ -1,12 +1,12 @@
 "use client"
 
 import { useTranslations } from "next-intl"
-import React, { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 
+import { useCvDetailsForm } from "../../hooks/use-cv-details-form"
 import type { CvItem, UpdateCvDto } from "../../types"
 
 interface CvDetailsFormProps {
@@ -16,33 +16,28 @@ interface CvDetailsFormProps {
 
 export function CvDetailsForm({ cv, onUpdate }: CvDetailsFormProps) {
     const t = useTranslations("CV.form")
-    const [name, setName] = useState(cv.name)
-    const [education, setEducation] = useState(cv.education)
-    const [description, setDescription] = useState(cv.description)
-    const [isSubmitting, setIsSubmitting] = useState(false)
-    const [error, setError] = useState<string | null>(null)
-    const isDirty =
-        name !== cv.name ||
-        education !== cv.education ||
-        description !== cv.description
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        try {
-            setIsSubmitting(true)
-            setError(null)
-            await onUpdate({ name, education, description })
-        } catch {
-            setError(t("updateError"))
-        } finally {
-            setIsSubmitting(false)
-        }
-    }
+    const {
+        name,
+        setName,
+        education,
+        setEducation,
+        description,
+        setDescription,
+        isSubmitting,
+        error,
+        isDirty,
+        handleSubmit,
+    } = useCvDetailsForm({
+        cv,
+        onUpdate,
+        updateErrorText: t("updateError"),
+    })
 
     return (
         <form
             onSubmit={handleSubmit}
-            className="mx-auto flex w-full max-w-[852px] flex-col gap-5"
+            className="mx-auto flex w-full max-w-213 flex-col gap-5"
         >
             {error && (
                 <div className="rounded bg-destructive/10 p-3 text-sm text-destructive">
@@ -101,7 +96,7 @@ export function CvDetailsForm({ cv, onUpdate }: CvDetailsFormProps) {
                 <Button
                     type="submit"
                     disabled={!isDirty || isSubmitting}
-                    className="h-8! w-26.5! min-w-26.5! px-0! py-0! rounded-full bg-[#d7352c] text-[10px] font-normal tracking-normal text-white shadow-none hover:bg-[#c52e26] disabled:bg-[#b8b8b8] disabled:text-white dark:disabled:bg-[#626262]"
+                    className="h-8! w-26.5! min-w-26.5! px-0! py-0! rounded-full bg-[#d7352c] text-[10px] font-normal tracking-normal text-white shadow-none hover:bg-[#c52e26] disabled:bg-[#b8b8b8] disabled:text-white dark:disabled:bg-button-secondary-default"
                 >
                     {isSubmitting ? t("updating") : t("update")}
                 </Button>

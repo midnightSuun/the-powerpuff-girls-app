@@ -1,5 +1,6 @@
 import { useState } from "react"
 
+import { useActionNotifications } from "@/hooks/use-action-notifications"
 import {
     createAdminSkill,
     deleteAdminSkill,
@@ -12,6 +13,7 @@ interface UseAdminSkillsViewProps {
 }
 
 export function useAdminSkillsView({ initialSkills }: UseAdminSkillsViewProps) {
+    const notifications = useActionNotifications()
     const [skills, setSkills] = useState<AdminSkillItem[]>(initialSkills)
     const [isCreateOpen, setIsCreateOpen] = useState(false)
     const [editingSkill, setEditingSkill] = useState<AdminSkillItem | null>(
@@ -27,6 +29,7 @@ export function useAdminSkillsView({ initialSkills }: UseAdminSkillsViewProps) {
             categoryId: data.categoryId,
         })
 
+        notifications.success("created")
         if (created) {
             setSkills((prev) => [
                 ...prev,
@@ -50,6 +53,7 @@ export function useAdminSkillsView({ initialSkills }: UseAdminSkillsViewProps) {
             categoryId: data.categoryId,
         } as unknown as Parameters<typeof updateAdminSkill>[0])
 
+        notifications.success("updated")
         if (updated) {
             setSkills((prev) =>
                 prev.map((s) =>
@@ -71,6 +75,7 @@ export function useAdminSkillsView({ initialSkills }: UseAdminSkillsViewProps) {
         await deleteAdminSkill({
             skillId: deletingSkill.id,
         } as unknown as Parameters<typeof deleteAdminSkill>[0])
+        notifications.success("deleted")
         setSkills((prev) => prev.filter((s) => s.id !== deletingSkill.id))
     }
 

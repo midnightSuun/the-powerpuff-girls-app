@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/sidebar"
 import { Link } from "@/i18n/navigation"
 import { logout } from "@/modules/auth/api/logout"
+import { AUTH_NOTIFICATION_STORAGE_KEY } from "@/modules/auth/consts"
 
 import { UserAvatar } from "./user-avatar"
 
@@ -48,6 +49,7 @@ export const NavUserMenu = ({ user }: Props) => {
 
     const handleLogout = () => {
         handleCloseMobileSidebar()
+        sessionStorage.setItem(AUTH_NOTIFICATION_STORAGE_KEY, "logout")
         void logout()
     }
 

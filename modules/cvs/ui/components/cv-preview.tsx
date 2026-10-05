@@ -1,63 +1,31 @@
 "use client"
 
 import { Download } from "lucide-react"
-import { useLocale, useTranslations } from "next-intl"
 
 import { Button } from "@/components/ui/button"
-import type { Proficiency } from "@/gql/generated/graphql"
-import type { CvDetailsItem, CvProjectItem } from "@/modules/cvs/types"
+import type { CvDetailsItem } from "@/modules/cvs/types"
+
+import { useCvPreview } from "../../hooks/use-cv-preview"
 
 interface CvPreviewProps {
     cv: CvDetailsItem
 }
 
-const masteryKey = {
-    Novice: "novice",
-    Advanced: "advanced",
-    Competent: "competent",
-    Proficient: "proficient",
-    Expert: "expert",
-} as const
-
-function formatPeriod(project: CvProjectItem, locale: string, tillNow: string) {
-    const dateFormatter = new Intl.DateTimeFormat(locale, {
-        month: "2-digit",
-        year: "numeric",
-        timeZone: "UTC",
-    })
-    const formatDate = (value: string | null) => {
-        if (!value) return tillNow
-        const date = new Date(value)
-        return Number.isNaN(date.getTime()) ? value : dateFormatter.format(date)
-    }
-
-    return `${formatDate(project.start_date)} – ${formatDate(project.end_date)}`
-}
-
 export function CvPreview({ cv }: CvPreviewProps) {
-    const locale = useLocale()
-    const t = useTranslations("CV.preview")
-    const tSkills = useTranslations("Skills")
-    const tLanguages = useTranslations("Languages")
-    const projects = cv.projects ?? []
-    const skills = cv.skills ?? []
-    const languages = cv.languages ?? []
-    const domains = [...new Set(projects.map((project) => project.domain))]
-    const categories = new Map<string, typeof skills>()
-
-    for (const skill of skills) {
-        const categoryId = skill.categoryId ?? "other"
-        const translationKey = `categories.${categoryId}` as const
-        const title = tSkills.has(translationKey)
-            ? tSkills(translationKey)
-            : tSkills("categories.other")
-        const categorySkills = categories.get(title) ?? []
-        categorySkills.push(skill)
-        categories.set(title, categorySkills)
-    }
+    const {
+        t,
+        projects,
+        skills,
+        languages,
+        domains,
+        categories,
+        getFormattedPeriod,
+        getMasteryLabel,
+        getLanguageProficiencyLabel,
+    } = useCvPreview(cv)
 
     return (
-        <article className="cv-preview mx-auto w-full max-w-[1100px] px-5 pb-12 pt-6 text-[#292929] dark:text-foreground sm:px-10 print:max-w-none print:px-0 print:pt-0">
+        <article className="cv-preview mx-auto w-full max-w-275 px-5 pb-12 pt-6 text-[#292929] dark:text-foreground sm:px-10 print:max-w-none print:px-0 print:pt-0">
             <div className="mb-8 flex justify-end print:hidden">
                 <Button
                     type="button"
@@ -102,8 +70,8 @@ export function CvPreview({ cv }: CvPreviewProps) {
                                 {languages.map((language) => (
                                     <li key={language.name}>
                                         {language.name} —{" "}
-                                        {tLanguages(
-                                            `proficiencyLevels.${language.proficiency as Proficiency}`,
+                                        {getLanguageProficiencyLabel(
+                                            language.proficiency,
                                         )}
                                     </li>
                                 ))}
@@ -151,7 +119,7 @@ export function CvPreview({ cv }: CvPreviewProps) {
                                         </p>
                                     ) : null}
                                     {project.description ? (
-                                        <p className="mt-2 leading-[1.5] text-muted-foreground">
+                                        <p className="mt-2 leading-normal text-muted-foreground">
                                             {project.description}
                                         </p>
                                     ) : null}
@@ -172,11 +140,7 @@ export function CvPreview({ cv }: CvPreviewProps) {
                                             {t("period")}
                                         </h3>
                                         <p className="text-muted-foreground">
-                                            {formatPeriod(
-                                                project,
-                                                locale,
-                                                t("tillNow"),
-                                            )}
+                                            {getFormattedPeriod(project)}
                                         </p>
                                     </div>
                                     {project.responsibilities.length > 0 ? (
@@ -248,9 +212,7 @@ export function CvPreview({ cv }: CvPreviewProps) {
                                                 {skill.name}
                                             </td>
                                             <td className="px-2 py-2 text-center text-muted-foreground">
-                                                {tSkills(
-                                                    `masteryLevels.${masteryKey[skill.mastery]}`,
-                                                )}
+                                                {getMasteryLabel(skill.mastery)}
                                             </td>
                                         </tr>
                                     )),

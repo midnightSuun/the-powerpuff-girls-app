@@ -1,11 +1,12 @@
 "use client"
 
 import { useTranslations } from "next-intl"
-import { useState } from "react"
 
 import { BaseModal } from "@/components/ui/base-modal"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+
+import { useUpdateCvModal } from "../../hooks/use-update-cv-modal"
 
 interface CvItem {
     id: string
@@ -36,20 +37,18 @@ export function UpdateCvModal({
     isSubmitting,
 }: UpdateCvModalProps) {
     const t = useTranslations("CV.form")
-    const [name, setName] = useState(cv?.name ?? "")
-    const [education, setEducation] = useState(cv?.education ?? "")
-    const [description, setDescription] = useState(cv?.description ?? "")
 
-    const isValid =
-        name.trim().length > 0 &&
-        education.trim().length > 0 &&
-        description.trim().length > 0
-
-    const handleSubmit = async (e: React.SyntheticEvent) => {
-        e.preventDefault()
-        if (!isValid) return
-        await onUpdate({ name, education, description })
-    }
+    const {
+        name,
+        setName,
+        education,
+        setEducation,
+        description,
+        setDescription,
+        hasSubmitted,
+        isValid,
+        handleSubmit,
+    } = useUpdateCvModal({ cv, onUpdate })
 
     return (
         <BaseModal
@@ -76,7 +75,7 @@ export function UpdateCvModal({
                         onChange={(e) => setName(e.target.value)}
                         className="rounded-none"
                     />
-                    {!name.trim() && (
+                    {hasSubmitted && !name.trim() && (
                         <span className="text-xs text-red-500">
                             {t("nameRequired")}
                         </span>
@@ -94,7 +93,7 @@ export function UpdateCvModal({
                         onChange={(e) => setEducation(e.target.value)}
                         className="rounded-none"
                     />
-                    {!education.trim() && (
+                    {hasSubmitted && !education.trim() && (
                         <span className="text-xs text-red-500">
                             {t("educationRequired")}
                         </span>
@@ -110,7 +109,7 @@ export function UpdateCvModal({
                         onChange={(e) => setDescription(e.target.value)}
                         className="rounded-none min-h-20"
                     />
-                    {!description.trim() && (
+                    {hasSubmitted && !description.trim() && (
                         <span className="text-xs text-red-500">
                             {t("descriptionRequired")}
                         </span>

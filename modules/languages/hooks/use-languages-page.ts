@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 import type { Proficiency } from "@/gql/generated/graphql"
+import { useActionNotifications } from "@/hooks/use-action-notifications"
 
 import {
     addProfileLanguage,
@@ -21,6 +22,7 @@ export function useLanguagesPage({
     initialUserLanguages,
 }: UseLanguagesPageProps) {
     const router = useRouter()
+    const notifications = useActionNotifications()
 
     const [isRemovalMode, setIsRemovalMode] = useState(false)
     const [selectedLanguages, setSelectedLanguages] = useState<string[]>([])
@@ -52,6 +54,7 @@ export function useLanguagesPage({
             name,
             proficiency,
         })
+        notifications.success("created")
         router.refresh()
     }
 
@@ -62,6 +65,7 @@ export function useLanguagesPage({
             name: editingLang.name,
             proficiency,
         })
+        notifications.success("updated")
         router.refresh()
     }
 
@@ -70,6 +74,7 @@ export function useLanguagesPage({
             userId,
             name: selectedLanguages,
         })
+        notifications.success("deleted")
         setSelectedLanguages([])
         setIsRemovalMode(false)
         router.refresh()
