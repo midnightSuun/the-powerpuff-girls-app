@@ -1,4 +1,96 @@
 {
+    "Admin": {
+        "departments": {
+            "title": "Отделы",
+            "createButton": "СОЗДАТЬ ОТДЕЛ",
+            "empty": "Отделы не найдены",
+            "columns": {
+                "name": "Название"
+            },
+            "create": {
+                "title": "Создать отдел",
+                "departmentName": "Отдел",
+                "departmentPlaceholder": "Название отдела",
+                "alreadyExists": "Отдел с таким названием уже существует",
+                "required": "Укажите название отдела"
+            },
+            "edit": {
+                "title": "Редактировать отдел",
+                "departmentName": "Отдел",
+                "departmentPlaceholder": "Название отдела"
+            },
+            "delete": {
+                "title": "Удалить отдел",
+                "confirmation": "Вы уверены, что хотите удалить отдел «{name}»?",
+                "inUseError": "Невозможно удалить отдел, так как он используется в системе"
+            }
+        },
+        "common": {
+            "search": "Поиск",
+            "edit": "Редактировать",
+            "delete": "Удалить",
+            "cancel": "ОТМЕНА",
+            "confirm": "ПОДТВЕРДИТЬ",
+            "save": "СОХРАНИТЬ",
+            "saving": "СОХРАНЕНИЕ...",
+            "create": "СОЗДАТЬ",
+            "creating": "СОЗДАНИЕ...",
+            "deleting": "УДАЛЕНИЕ..."
+        },
+        "skills": {
+            "title": "Навыки",
+            "createButton": "СОЗДАТЬ НАВЫК",
+            "empty": "Навыки не найдены",
+            "columns": {
+                "name": "Название",
+                "category": "Категория"
+            },
+            "create": {
+                "title": "Создать навык",
+                "skillName": "Навык",
+                "skillPlaceholder": "Навык",
+                "category": "Категория",
+                "categoryPlaceholder": "Категория",
+                "alreadyExists": "Навык уже существует"
+            },
+            "edit": {
+                "title": "Изменить навык",
+                "skillName": "Название навыка",
+                "category": "Категория"
+            },
+            "delete": {
+                "title": "Удалить навык",
+                "confirmation": "Вы уверены, что хотите удалить навык «{name}»?"
+            }
+        },
+        "languages": {
+            "title": "Языки",
+            "createButton": "СОЗДАТЬ ЯЗЫК",
+            "empty": "Языки не найдены",
+            "columns": {
+                "name": "Название",
+                "iso2": "Код ISO"
+            },
+            "create": {
+                "title": "Создать язык",
+                "languageName": "Название языка",
+                "languagePlaceholder": "например: Русский",
+                "iso2": "Код ISO",
+                "iso2Placeholder": "например: ru",
+                "alreadyExists": "Язык уже существует",
+                "invalidIso2": "Код ISO2 должен состоять ровно из 2 символов"
+            },
+            "edit": {
+                "title": "Изменить язык",
+                "languageName": "Название языка",
+                "iso2": "Код ISO"
+            },
+            "delete": {
+                "title": "Удалить язык",
+                "confirmation": "Вы уверены, что хотите удалить язык «{name}»?"
+            }
+        }
+    },
     "Auth": {
         "EmailVerification": {
             "title": "Подтверждение email",
@@ -214,7 +306,7 @@
         "delete": {
             "titleSingular": "Удалить навык",
             "titlePlural": "Удалить навыки",
-            "confirmation": "Вы уверены, что хотите удалить {count, plural, one {# навык?} few {# навыка?} many {# навыков?} other {# навыка?}}",
+            "confirmation": "Вы уверены, что хотите удалить {count, plural, one {# навык?} few {# языка?} many {# навыков?} other {# навыка?}}",
             "cancel": "ОТМЕНА",
             "confirm": "ПОДТВЕРДИТЬ",
             "removing": "УДАЛЕНИЕ...",

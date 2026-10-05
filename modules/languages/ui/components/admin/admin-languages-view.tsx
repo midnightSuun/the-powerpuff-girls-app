@@ -18,6 +18,7 @@ export function AdminLanguagesView({
     initialLanguages,
 }: AdminLanguagesViewProps) {
     const t = useTranslations("Languages.admin")
+
     const {
         languages,
         isCreateOpen,

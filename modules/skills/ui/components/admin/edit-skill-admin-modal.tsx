@@ -36,6 +36,7 @@ interface EditSkillModalProps {
 export function EditSkillModal(props: EditSkillModalProps) {
     const { isOpen, onClose, categories } = props
     const t = useTranslations("Skills.admin")
+
     const {
         name,
         setName,

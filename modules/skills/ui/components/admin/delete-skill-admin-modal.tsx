@@ -15,6 +15,7 @@ interface DeleteSkillModalProps {
 export function DeleteSkillModal(props: DeleteSkillModalProps) {
     const { isOpen, onClose, skillName } = props
     const t = useTranslations("Skills.admin")
+
     const { isDeleting, error, handleConfirm } = useDeleteSkillsModal(props)
 
     return (

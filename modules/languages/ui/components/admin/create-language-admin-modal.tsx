@@ -14,8 +14,9 @@ interface CreateLanguageModalProps {
 }
 
 export function CreateLanguageModal(props: CreateLanguageModalProps) {
-    const t = useTranslations("Languages.admin.create")
     const { isOpen, onClose } = props
+    const t = useTranslations("Languages.admin.create")
+
     const {
         name,
         setName,
@@ -56,7 +57,7 @@ export function CreateLanguageModal(props: CreateLanguageModalProps) {
                     />
                     {inlineError && (
                         <span className="mt-1 text-xs text-red-500">
-                            {inlineError}
+                            {t("alreadyExists")}
                         </span>
                     )}
                 </div>

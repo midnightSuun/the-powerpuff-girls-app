@@ -19,10 +19,6 @@ export function AdminSkillsView({
     categories,
 }: AdminSkillsViewProps) {
     const t = useTranslations("Skills.admin")
-    const skillColumns: Column<AdminSkillItem>[] = [
-        { key: "name", label: t("name"), sortable: true },
-        { key: "category", label: t("category") },
-    ]
 
     const {
         skills,
@@ -37,11 +33,16 @@ export function AdminSkillsView({
         handleDeleteConfirm,
     } = useAdminSkillsView({ initialSkills })
 
+    const columns: Column<AdminSkillItem>[] = [
+        { key: "name", label: t("name"), sortable: true },
+        { key: "category", label: t("category") },
+    ]
+
     return (
         <div className="w-full">
             <AdminDataTable
                 data={skills}
-                columns={skillColumns}
+                columns={columns}
                 searchPlaceholder={t("search")}
                 createButtonLabel={t("create")}
                 onCreateClick={() => setIsCreateOpen(true)}

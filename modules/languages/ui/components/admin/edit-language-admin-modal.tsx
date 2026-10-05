@@ -22,8 +22,9 @@ interface EditLanguageModalProps {
 }
 
 export function EditLanguageModal(props: EditLanguageModalProps) {
-    const t = useTranslations("Languages.admin.edit")
     const { isOpen, onClose } = props
+    const t = useTranslations("Languages.admin.edit")
+
     const {
         name,
         setName,
