@@ -16,7 +16,7 @@ export async function UserPage({ userId }: Props) {
     const fullName = [firstName, lastName].filter(Boolean).join(" ")
 
     return (
-        <main className="min-h-screen w-full bg-background text-foreground px-6 py-8 flex flex-col transition-colors duration-300">
+        <main className="min-h-screen w-full bg-background text-foreground px-6 pt-4 pb-8 flex flex-col transition-colors duration-300">
             <div className="w-full max-w-2xl mx-auto space-y-6">
                 <div className="flex items-center gap-4 border-b border-border pb-6">
                     <UserAvatar

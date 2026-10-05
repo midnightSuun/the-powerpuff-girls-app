@@ -1,0 +1,17 @@
+query GetUserCvs($userId: ID!, $params: SearchPaginationInput) {
+    cvsByUserId(userId: $userId, params: $params) {
+        items {
+            id
+            name
+            education
+            description
+            user {
+                email
+            }
+        }
+        total
+        page
+        limit
+        total_pages
+    }
+}

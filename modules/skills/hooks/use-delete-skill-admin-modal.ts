@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl"
 import { useState } from "react"
 
 interface UseDeleteSkillAdminModalProps {
@@ -9,6 +10,7 @@ export function useDeleteSkillAdminModal({
     onClose,
     onConfirm,
 }: UseDeleteSkillAdminModalProps) {
+    const t = useTranslations("Skills.admin")
     const [isDeleting, setIsDeleting] = useState(false)
     const [error, setError] = useState<string | null>(null)
 
@@ -20,9 +22,8 @@ export function useDeleteSkillAdminModal({
             await onConfirm()
             onClose()
         } catch (err: unknown) {
-            const message =
-                err instanceof Error ? err.message : "Failed to delete skill"
-            setError(message)
+            console.error("Failed to delete skill:", err)
+            setError(t("deleteError"))
         } finally {
             setIsDeleting(false)
         }

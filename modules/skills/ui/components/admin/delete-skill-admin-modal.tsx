@@ -14,8 +14,7 @@ interface DeleteSkillModalProps {
 
 export function DeleteSkillModal(props: DeleteSkillModalProps) {
     const { isOpen, onClose, skillName } = props
-    const t = useTranslations("Admin.skills.delete")
-    const tCommon = useTranslations("Admin.common")
+    const t = useTranslations("Skills.admin")
 
     const { isDeleting, error, handleConfirm } = useDeleteSkillsModal(props)
 
@@ -24,11 +23,11 @@ export function DeleteSkillModal(props: DeleteSkillModalProps) {
             isOpen={isOpen}
             onClose={onClose}
             onConfirm={handleConfirm}
-            title={t("title")}
-            description={t("confirmation", { name: skillName })}
-            cancelText={tCommon("cancel")}
-            confirmText={tCommon("confirm")}
-            deletingText={tCommon("deleting")}
+            title={t("deleteTitle")}
+            description={t("deleteConfirmation", { name: skillName })}
+            cancelText={t("cancel")}
+            confirmText={t("confirm")}
+            deletingText={t("deleting")}
             isDeleting={isDeleting}
             error={error}
         />

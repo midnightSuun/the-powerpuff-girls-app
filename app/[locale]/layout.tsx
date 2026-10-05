@@ -2,34 +2,21 @@ import { notFound } from "next/navigation"
 import { hasLocale, NextIntlClientProvider } from "next-intl"
 import { setRequestLocale } from "next-intl/server"
 import { Suspense } from "react"
+import { Toaster } from "sonner"
 
 import { routing } from "@/i18n/routing"
+import { AuthNotificationListener } from "@/modules/auth/ui/auth-notification-listener"
 
 export function generateStaticParams() {
     return routing.locales.map((locale) => ({ locale }))
 }
 
-export default function LocaleLayout({
-    children,
-    params,
-}: {
+type Props = {
     children: React.ReactNode
     params: Promise<{ locale: string }>
-}) {
-    return (
-        <Suspense fallback={null}>
-            <LocalizedLayout params={params}>{children}</LocalizedLayout>
-        </Suspense>
-    )
 }
 
-async function LocalizedLayout({
-    children,
-    params,
-}: {
-    children: React.ReactNode
-    params: Promise<{ locale: string }>
-}) {
+const LocaleContent = async ({ children, params }: Props) => {
     const { locale } = await params
 
     if (!hasLocale(routing.locales, locale)) {
@@ -43,6 +30,16 @@ async function LocalizedLayout({
     return (
         <NextIntlClientProvider messages={messages} locale={locale}>
             {children}
+            <AuthNotificationListener />
         </NextIntlClientProvider>
+    )
+}
+
+export default function LocaleLayout({ children, params }: Props) {
+    return (
+        <Suspense fallback={null}>
+            <LocaleContent params={params}>{children}</LocaleContent>
+            <Toaster position="top-right" closeButton={true} />
+        </Suspense>
     )
 }

@@ -23,8 +23,7 @@ interface EditLanguageModalProps {
 
 export function EditLanguageModal(props: EditLanguageModalProps) {
     const { isOpen, onClose } = props
-    const t = useTranslations("Admin.languages.edit")
-    const tCommon = useTranslations("Admin.common")
+    const t = useTranslations("Languages.admin.edit")
 
     const {
         name,
@@ -45,9 +44,9 @@ export function EditLanguageModal(props: EditLanguageModalProps) {
             error={error}
             isPending={isSubmitting}
             isValid={isValid}
-            cancelText={tCommon("cancel")}
-            confirmText={tCommon("save")}
-            pendingText={tCommon("saving")}
+            cancelText={t("cancel")}
+            confirmText={t("save")}
+            pendingText={t("saving")}
             confirmButtonVariant="destructive"
             onSubmit={handleSubmit}
         >
@@ -57,7 +56,7 @@ export function EditLanguageModal(props: EditLanguageModalProps) {
                         {t("languageName")}
                     </span>
                     <Input
-                        placeholder={t("languageName")}
+                        placeholder={t("languagePlaceholder")}
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         disabled={isSubmitting}
@@ -67,10 +66,10 @@ export function EditLanguageModal(props: EditLanguageModalProps) {
 
                 <div className="flex flex-col gap-1">
                     <span className="text-xs text-muted-foreground">
-                        {t("iso2")}
+                        {t("isoCode")}
                     </span>
                     <Input
-                        placeholder={t("iso2")}
+                        placeholder={t("isoCodePlaceholder")}
                         value={iso2}
                         onChange={(e) => setIso2(e.target.value)}
                         disabled={isSubmitting}

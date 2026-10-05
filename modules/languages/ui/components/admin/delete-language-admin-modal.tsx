@@ -14,8 +14,7 @@ interface DeleteLanguageModalProps {
 
 export function DeleteLanguageModal(props: DeleteLanguageModalProps) {
     const { isOpen, onClose, languageName } = props
-    const t = useTranslations("Admin.languages.delete")
-    const tCommon = useTranslations("Admin.common")
+    const t = useTranslations("Languages.admin.delete")
 
     const { isDeleting, error, handleConfirm } = useDeleteLanguageModal(props)
 
@@ -26,9 +25,9 @@ export function DeleteLanguageModal(props: DeleteLanguageModalProps) {
             onConfirm={handleConfirm}
             title={t("title")}
             description={t("confirmation", { name: languageName })}
-            cancelText={tCommon("cancel")}
-            confirmText={tCommon("confirm")}
-            deletingText={tCommon("deleting")}
+            cancelText={t("cancel")}
+            confirmText={t("confirm")}
+            deletingText={t("deleting")}
             isDeleting={isDeleting}
             error={error}
         />

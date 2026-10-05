@@ -15,8 +15,7 @@ interface CreateLanguageModalProps {
 
 export function CreateLanguageModal(props: CreateLanguageModalProps) {
     const { isOpen, onClose } = props
-    const t = useTranslations("Admin.languages.create")
-    const tCommon = useTranslations("Admin.common")
+    const t = useTranslations("Languages.admin.create")
 
     const {
         name,
@@ -38,9 +37,9 @@ export function CreateLanguageModal(props: CreateLanguageModalProps) {
             error={error}
             isPending={isSubmitting}
             isValid={isValid}
-            cancelText={tCommon("cancel")}
-            confirmText={tCommon("create")}
-            pendingText={tCommon("creating")}
+            cancelText={t("cancel")}
+            confirmText={t("create")}
+            pendingText={t("creating")}
             confirmButtonVariant="destructive"
             onSubmit={handleSubmit}
         >
@@ -65,10 +64,10 @@ export function CreateLanguageModal(props: CreateLanguageModalProps) {
 
                 <div className="flex flex-col gap-1">
                     <span className="text-xs text-muted-foreground">
-                        {t("iso2")}
+                        {t("isoCode")}
                     </span>
                     <Input
-                        placeholder={t("iso2Placeholder")}
+                        placeholder={t("isoCodePlaceholder")}
                         value={iso2}
                         onChange={(e) => setIso2(e.target.value)}
                         disabled={isSubmitting}

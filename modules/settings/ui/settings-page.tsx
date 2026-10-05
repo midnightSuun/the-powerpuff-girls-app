@@ -5,7 +5,6 @@ import { useTranslations } from "next-intl"
 
 import { PasswordField } from "@/components/password-field"
 import { Button } from "@/components/ui/button"
-import { LogoutButton } from "@/modules/auth/ui/logout-button"
 
 import { useSettings } from "../hooks/use-settings"
 
@@ -13,8 +12,6 @@ export function SettingsPage() {
     const t = useTranslations("Settings")
     const {
         locale,
-        serverError,
-        successMessage,
         isPending,
         register,
         handleSubmit,
@@ -29,32 +26,8 @@ export function SettingsPage() {
     const languageRegistration = register("language")
 
     return (
-        <main className="min-h-screen w-full bg-background text-foreground px-6 py-8 flex flex-col transition-colors duration-300">
-            <div className="w-full max-w-2xl mx-auto mb-8 flex items-center justify-between">
-                <h1 className="text-xl font-medium tracking-tight text-muted-foreground">
-                    {t("title")}
-                </h1>
-                <LogoutButton />
-            </div>
-
+        <main className="min-h-screen w-full bg-background text-foreground px-6 pt-4 pb-8 flex flex-col transition-colors duration-300">
             <div className="w-full max-w-2xl mx-auto space-y-6">
-                {serverError && (
-                    <div
-                        className="p-3 text-xs text-destructive bg-destructive/10 rounded-md"
-                        role="alert"
-                    >
-                        {serverError}
-                    </div>
-                )}
-                {successMessage && (
-                    <div
-                        className="p-3 text-xs text-green-600 bg-green-500/10 rounded-md"
-                        role="status"
-                    >
-                        {successMessage}
-                    </div>
-                )}
-
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     className="space-y-6"
@@ -146,14 +119,6 @@ export function SettingsPage() {
                                 error={errors.password?.message}
                                 {...register("password")}
                             />
-                            {errors.password && (
-                                <span
-                                    className="text-xs text-destructive"
-                                    role="alert"
-                                >
-                                    {errors.password.message}
-                                </span>
-                            )}
                         </div>
 
                         <div className="space-y-1">
@@ -164,14 +129,6 @@ export function SettingsPage() {
                                 error={errors.newPassword?.message}
                                 {...register("newPassword")}
                             />
-                            {errors.newPassword && (
-                                <span
-                                    className="text-xs text-destructive"
-                                    role="alert"
-                                >
-                                    {errors.newPassword.message}
-                                </span>
-                            )}
                         </div>
 
                         <div className="space-y-1">
@@ -182,14 +139,6 @@ export function SettingsPage() {
                                 error={errors.confirmPassword?.message}
                                 {...register("confirmPassword")}
                             />
-                            {errors.confirmPassword && (
-                                <span
-                                    className="text-xs text-destructive"
-                                    role="alert"
-                                >
-                                    {errors.confirmPassword.message}
-                                </span>
-                            )}
                         </div>
                     </div>
 

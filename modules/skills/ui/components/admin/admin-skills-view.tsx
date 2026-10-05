@@ -18,8 +18,7 @@ export function AdminSkillsView({
     initialSkills,
     categories,
 }: AdminSkillsViewProps) {
-    const t = useTranslations("Admin.skills")
-    const tCommon = useTranslations("Admin.common")
+    const t = useTranslations("Skills.admin")
 
     const {
         skills,
@@ -35,8 +34,8 @@ export function AdminSkillsView({
     } = useAdminSkillsView({ initialSkills })
 
     const columns: Column<AdminSkillItem>[] = [
-        { key: "name", label: t("columns.name"), sortable: true },
-        { key: "category", label: t("columns.category") },
+        { key: "name", label: t("name"), sortable: true },
+        { key: "category", label: t("category") },
     ]
 
     return (
@@ -44,9 +43,10 @@ export function AdminSkillsView({
             <AdminDataTable
                 data={skills}
                 columns={columns}
-                searchPlaceholder={tCommon("search")}
-                createButtonLabel={t("createButton")}
+                searchPlaceholder={t("search")}
+                createButtonLabel={t("create")}
                 onCreateClick={() => setIsCreateOpen(true)}
+                createButtonClassName="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30"
                 onEditClick={(skill) => setEditingSkill(skill)}
                 onDeleteClick={(skill) => setDeletingSkill(skill)}
                 getSearchableString={(skill) => skill.name}

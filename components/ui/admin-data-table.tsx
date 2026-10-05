@@ -1,11 +1,13 @@
 "use client"
 
-import { ArrowUpDown, MoreVertical, Plus, Search } from "lucide-react"
+import { ArrowUpDown, MoreVertical } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useEffect, useMemo, useRef, useState } from "react"
 
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+
+import { SearchInput } from "../search-input"
+import { AddItemButton } from "./list-management-buttons"
 
 export interface Column<T> {
     key: string
@@ -25,12 +27,14 @@ interface AdminDataTableProps<T> {
     getSearchableString?: (item: T) => string
     getSortValue?: (item: T) => string
     emptyMessage?: string
+    limit?: number
+    search?: string
+    createButtonClassName?: string
 }
 
 export function AdminDataTable<T extends { id: string | number }>({
     data,
     columns,
-    searchPlaceholder,
     createButtonLabel,
     onCreateClick,
     onEditClick,
@@ -38,18 +42,18 @@ export function AdminDataTable<T extends { id: string | number }>({
     getSearchableString,
     getSortValue,
     emptyMessage = "No items found",
+    limit = 10,
+    search = "",
+    createButtonClassName,
 }: AdminDataTableProps<T>) {
     const tCommon = useTranslations("Admin.common")
 
-    const [searchQuery, setSearchQuery] = useState("")
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
     const [activeMenuId, setActiveMenuId] = useState<string | number | null>(
         null,
     )
 
     const menuRef = useRef<HTMLDivElement | null>(null)
-
-    const effectiveSearchPlaceholder = searchPlaceholder ?? tCommon("search")
 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
@@ -75,8 +79,8 @@ export function AdminDataTable<T extends { id: string | number }>({
     const processedData = useMemo(() => {
         let result = [...data]
 
-        if (searchQuery.trim() && getSearchableString) {
-            const query = searchQuery.toLowerCase()
+        if (search.trim() && getSearchableString) {
+            const query = search.toLowerCase()
             result = result.filter((item) =>
                 getSearchableString(item).toLowerCase().includes(query),
             )
@@ -93,30 +97,19 @@ export function AdminDataTable<T extends { id: string | number }>({
         }
 
         return result
-    }, [data, searchQuery, sortOrder, getSearchableString, getSortValue])
+    }, [data, search, sortOrder, getSearchableString, getSortValue])
 
     return (
         <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between gap-4">
-                <div className="relative w-full max-w-xs">
-                    <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
-                    <Input
-                        placeholder={effectiveSearchPlaceholder}
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="h-9 w-full rounded-full border border-[#B8B8B8] dark:border-auth-card-border bg-transparent dark:bg-[#333333] pl-10 pr-4 text-sm text-foreground placeholder:text-gray-400 focus-visible:ring-1 focus-visible:ring-primary/40 focus-visible:border-primary transition-all outline-none"
-                    />
-                </div>
+                <SearchInput limit={limit} search={search} />
 
                 {createButtonLabel && onCreateClick && (
-                    <Button
-                        type="button"
-                        variant="primaryV2"
+                    <AddItemButton
+                        label={createButtonLabel}
                         onClick={onCreateClick}
-                    >
-                        <Plus className="mr-2 h-4 w-4" />
-                        {createButtonLabel}
-                    </Button>
+                        className={createButtonClassName}
+                    />
                 )}
             </div>
 

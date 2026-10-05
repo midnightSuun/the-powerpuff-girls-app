@@ -28,8 +28,7 @@ interface CreateSkillModalProps {
 
 export function CreateSkillModal(props: CreateSkillModalProps) {
     const { isOpen, onClose, categories } = props
-    const t = useTranslations("Admin.skills.create")
-    const tCommon = useTranslations("Admin.common")
+    const t = useTranslations("Skills.admin")
 
     const {
         name,
@@ -47,23 +46,23 @@ export function CreateSkillModal(props: CreateSkillModalProps) {
         <BaseModal
             isOpen={isOpen}
             onClose={onClose}
-            title={t("title")}
+            title={t("createTitle")}
             error={error}
             isPending={isSubmitting}
             isValid={isValid}
-            cancelText={tCommon("cancel")}
-            confirmText={tCommon("create")}
-            pendingText={tCommon("creating")}
+            cancelText={t("cancel")}
+            confirmText={t("create")}
+            pendingText={t("creating")}
             confirmButtonVariant="destructive"
             onSubmit={handleSubmit}
         >
             <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1">
                     <span className="text-xs text-muted-foreground">
-                        {t("skillName")}
+                        {t("skill")}
                     </span>
                     <Input
-                        placeholder={t("skillPlaceholder")}
+                        placeholder={t("skill")}
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         disabled={isSubmitting}
@@ -86,9 +85,7 @@ export function CreateSkillModal(props: CreateSkillModalProps) {
                         disabled={isSubmitting}
                     >
                         <SelectTrigger className="w-full border border-[#D1D1D1] dark:border-auth-card-border bg-[#ECECEC] dark:bg-[#454545] px-4 py-6 text-sm text-gray-800 dark:text-foreground shadow-none focus:ring-0 rounded-none">
-                            <SelectValue
-                                placeholder={t("categoryPlaceholder")}
-                            />
+                            <SelectValue placeholder={t("category")} />
                         </SelectTrigger>
                         <SelectContent
                             side="bottom"

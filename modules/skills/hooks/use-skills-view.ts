@@ -1,8 +1,10 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 import type { Mastery } from "@/gql/generated/graphql"
+import { useActionNotifications } from "@/hooks/use-action-notifications"
 import { updateCvSkill } from "@/modules/skills/api/skills"
 
 import { Skill } from "../ui/components/user/skill-category"
@@ -12,6 +14,8 @@ interface UseSkillsViewProps {
 }
 
 export function useSkillsView({ cvId }: UseSkillsViewProps) {
+    const router = useRouter()
+    const notifications = useActionNotifications()
     const [isSelectionMode, setIsSelectionMode] = useState(false)
     const [selectedSkills, setSelectedSkills] = useState<string[]>([])
     const [editingSkill, setEditingSkill] = useState<Skill | null>(null)
@@ -33,6 +37,8 @@ export function useSkillsView({ cvId }: UseSkillsViewProps) {
             mastery: newMastery,
         })
 
+        notifications.success("updated")
+        router.refresh()
         setEditingSkill(null)
     }
 

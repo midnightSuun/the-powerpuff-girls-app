@@ -29,8 +29,8 @@ export function useDeleteSkillsModal({
             await onConfirm()
             onClose()
         } catch (err: unknown) {
-            const errorObj = err as Error
-            setError(errorObj.message || t("errors.failed"))
+            console.error("Failed to delete skills:", err)
+            setError(t("errors.failed"))
         } finally {
             setIsDeleting(false)
         }

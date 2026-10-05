@@ -17,8 +17,7 @@ interface AdminLanguagesViewProps {
 export function AdminLanguagesView({
     initialLanguages,
 }: AdminLanguagesViewProps) {
-    const t = useTranslations("Admin.languages")
-    const tCommon = useTranslations("Admin.common")
+    const t = useTranslations("Languages.admin")
 
     const {
         languages,
@@ -35,7 +34,7 @@ export function AdminLanguagesView({
 
     const columns: Column<AdminLanguageItem>[] = [
         { key: "name", label: t("columns.name"), sortable: true },
-        { key: "iso2", label: t("columns.iso2") },
+        { key: "iso2", label: t("columns.isoCode") },
     ]
 
     return (
@@ -43,7 +42,7 @@ export function AdminLanguagesView({
             <AdminDataTable
                 data={languages}
                 columns={columns}
-                searchPlaceholder={tCommon("search")}
+                searchPlaceholder={t("search")}
                 createButtonLabel={t("createButton")}
                 onCreateClick={() => setIsCreateOpen(true)}
                 onEditClick={(lang) => setEditingLanguage(lang)}

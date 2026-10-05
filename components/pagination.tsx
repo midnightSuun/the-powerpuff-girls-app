@@ -9,6 +9,8 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination"
+import { buildListSearchParams } from "@/lib/list-search-params"
+import { type SortOrder } from "@/lib/user-sort"
 
 type PaginationComponentProps = {
     totalPages: number
@@ -16,6 +18,8 @@ type PaginationComponentProps = {
     limit: number
     search: string
     path: string
+    sortBy?: string
+    sortOrder?: SortOrder
 }
 
 type PageItem = number | "ellipsis"
@@ -51,6 +55,8 @@ export async function PaginationComponent({
     limit,
     search,
     path,
+    sortBy,
+    sortOrder,
 }: PaginationComponentProps) {
     if (totalPages <= 1) {
         return null
@@ -59,26 +65,33 @@ export async function PaginationComponent({
     const t = await getTranslations("Pagination")
 
     const hrefForPage = (pageNumber: number) =>
-        `/${path}?page=${pageNumber}&limit=${limit}&search=${encodeURIComponent(search)}`
+        `/${path}?${buildListSearchParams({
+            page: pageNumber,
+            limit,
+            search,
+            sortBy,
+            sortOrder,
+        })}`
 
     const previousPage = Math.max(1, page - 1)
     const nextPage = Math.min(totalPages, page + 1)
     const pageItems = getPageItems(totalPages, page)
 
     return (
-        <Pagination className="px-4 py-4">
+        <Pagination aria-label={t("label")} className="px-4 py-4">
             <PaginationContent>
                 <PaginationItem>
                     <PaginationPrevious
                         href={hrefForPage(previousPage)}
                         isDisabled={page <= 1}
                         text={t("previous")}
+                        aria-label={t("previousLabel")}
                     />
                 </PaginationItem>
                 {pageItems.map((item, index) =>
                     item === "ellipsis" ? (
                         <PaginationItem key={`ellipsis-${index}`}>
-                            <PaginationEllipsis />
+                            <PaginationEllipsis label={t("morePages")} />
                         </PaginationItem>
                     ) : (
                         <PaginationItem key={item}>
@@ -96,6 +109,7 @@ export async function PaginationComponent({
                         href={hrefForPage(nextPage)}
                         isDisabled={page >= totalPages}
                         text={t("next")}
+                        aria-label={t("nextLabel")}
                     />
                 </PaginationItem>
             </PaginationContent>

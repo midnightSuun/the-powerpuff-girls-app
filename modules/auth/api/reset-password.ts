@@ -2,6 +2,7 @@
 
 import { ClientError } from "graphql-request"
 import { cookies } from "next/headers"
+import { getTranslations } from "next-intl/server"
 
 import { getGql, ResetPasswordDocument } from "@/gql"
 
@@ -12,8 +13,9 @@ export async function resetPasswordAction(
     data: ResetPasswordFormValues,
     token: string,
 ): Promise<{ error?: string }> {
+    const t = await getTranslations("Auth.messages")
     if (!token) {
-        return { error: "Reset token is missing or invalid." }
+        return { error: t("resetTokenInvalid") }
     }
 
     try {
@@ -34,12 +36,12 @@ export async function resetPasswordAction(
 
         if (/expired|unauthor/i.test(message)) {
             return {
-                error: "This reset link has expired. Please request a new one.",
+                error: t("resetExpired"),
             }
         }
 
         return {
-            error: message || "Failed to reset password. Please try again.",
+            error: message || t("resetFailed"),
         }
     }
 

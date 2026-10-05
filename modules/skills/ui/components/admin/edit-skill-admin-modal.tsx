@@ -35,8 +35,7 @@ interface EditSkillModalProps {
 
 export function EditSkillModal(props: EditSkillModalProps) {
     const { isOpen, onClose, categories } = props
-    const t = useTranslations("Admin.skills.edit")
-    const tCommon = useTranslations("Admin.common")
+    const t = useTranslations("Skills.admin")
 
     const {
         name,
@@ -53,23 +52,23 @@ export function EditSkillModal(props: EditSkillModalProps) {
         <BaseModal
             isOpen={isOpen}
             onClose={onClose}
-            title={t("title")}
+            title={t("editTitle")}
             error={error}
             isPending={isSubmitting}
             isValid={isValid}
-            cancelText={tCommon("cancel")}
-            confirmText={tCommon("save")}
-            pendingText={tCommon("saving")}
+            cancelText={t("cancel")}
+            confirmText={t("save")}
+            pendingText={t("saving")}
             confirmButtonVariant="destructive"
             onSubmit={handleSubmit}
         >
             <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1">
                     <span className="text-xs text-muted-foreground">
-                        {t("skillName")}
+                        {t("skill")}
                     </span>
                     <Input
-                        placeholder={t("skillName")}
+                        placeholder={t("skill")}
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         disabled={isSubmitting}

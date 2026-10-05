@@ -1,6 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
+import { getTranslations } from "next-intl/server"
 
 import { getGql } from "@/gql"
 import {
@@ -35,7 +36,8 @@ export async function createAdminLanguage(language: CreateLanguageInput) {
         return data.createLanguage
     } catch (err: unknown) {
         console.error("Failed to create language:", err)
-        throw new Error("Invalid language data or ISO2 code")
+        const t = await getTranslations("Languages.admin.errors")
+        throw new Error(t("invalidData"))
     }
 }
 
