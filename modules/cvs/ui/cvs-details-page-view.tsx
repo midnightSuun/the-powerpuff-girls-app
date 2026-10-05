@@ -1,12 +1,14 @@
 "use client"
 
-import { useRouter } from "next/navigation"
-import React, { type ReactNode } from "react"
+import { type ReactNode } from "react"
 
+import { useCvDetails } from "../hooks/use-cv-details"
 import type { CvDetailsItem, ProjectOption, UpdateCvDto } from "../types"
 import { CvDetailsForm } from "./components/cv-details-form"
 import { CvPreview } from "./components/cv-preview"
 import { CvProjectsView } from "./components/cv-projects-view"
+
+export type CvDetailsTab = "details" | "skills" | "projects" | "preview"
 
 interface CvsDetailsPageViewProps {
     cv: CvDetailsItem
@@ -17,8 +19,6 @@ interface CvsDetailsPageViewProps {
     canManageProjects: boolean
 }
 
-export type CvDetailsTab = "details" | "skills" | "projects" | "preview"
-
 export function CvsDetailsPageView({
     cv,
     activeTab,
@@ -27,12 +27,7 @@ export function CvsDetailsPageView({
     availableProjects,
     canManageProjects,
 }: CvsDetailsPageViewProps) {
-    const router = useRouter()
-
-    const handleUpdateAndRefresh = async (data: UpdateCvDto) => {
-        await onUpdate(data)
-        router.refresh()
-    }
+    const { handleUpdateAndRefresh } = useCvDetails({ onUpdate })
 
     return (
         <main className="w-full min-w-0 px-4 pb-8 sm:px-6">

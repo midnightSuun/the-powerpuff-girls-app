@@ -1,5 +1,6 @@
 import { useState } from "react"
 
+import { useActionNotifications } from "@/hooks/use-action-notifications"
 import {
     createAdminLanguage,
     deleteAdminLanguage,
@@ -14,6 +15,7 @@ interface UseAdminLanguagesViewProps {
 export function useAdminLanguagesView({
     initialLanguages,
 }: UseAdminLanguagesViewProps) {
+    const notifications = useActionNotifications()
     const [languages, setLanguages] =
         useState<AdminLanguageItem[]>(initialLanguages)
     const [isCreateOpen, setIsCreateOpen] = useState(false)
@@ -28,6 +30,7 @@ export function useAdminLanguagesView({
             iso2: data.iso2,
         })
 
+        notifications.success("created")
         if (created) {
             setLanguages((prev) => [
                 ...prev,
@@ -50,6 +53,7 @@ export function useAdminLanguagesView({
             iso2: data.iso2,
         } as unknown as Parameters<typeof updateAdminLanguage>[0])
 
+        notifications.success("updated")
         if (updated) {
             setLanguages((prev) =>
                 prev.map((l) =>
@@ -70,6 +74,7 @@ export function useAdminLanguagesView({
         await deleteAdminLanguage({
             languageId: deletingLanguage.id,
         } as unknown as Parameters<typeof deleteAdminLanguage>[0])
+        notifications.success("deleted")
         setLanguages((prev) => prev.filter((l) => l.id !== deletingLanguage.id))
     }
 

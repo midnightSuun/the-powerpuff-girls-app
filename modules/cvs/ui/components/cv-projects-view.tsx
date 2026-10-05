@@ -8,20 +8,16 @@ import {
     Search,
     Trash2,
 } from "lucide-react"
-import { useRouter } from "next/navigation"
 import { useLocale, useTranslations } from "next-intl"
-import { Fragment, useMemo, useState } from "react"
+import { Fragment } from "react"
 
 import { DeleteModal } from "@/components/ui/delete-item-modal"
 import { Input } from "@/components/ui/input"
 import { AddItemButton } from "@/components/ui/list-management-buttons"
-import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock"
-import { removeCvProject } from "@/modules/cvs/api/projects"
 import type { CvProjectItem, ProjectOption } from "@/modules/cvs/types"
 
+import { type SortField, useCvProjects } from "../../hooks/use-cv-projects"
 import { CvProjectFormModal } from "./cv-project-form-modal"
-
-type SortField = "name" | "start_date" | "end_date"
 
 interface CvProjectsViewProps {
     cvId: string
@@ -50,58 +46,32 @@ export function CvProjectsView({
     availableProjects,
     canManageProjects,
 }: CvProjectsViewProps) {
-    const router = useRouter()
     const locale = useLocale()
     const t = useTranslations("CV.projects")
-    const [search, setSearch] = useState("")
-    const [sortField, setSortField] = useState<SortField>("name")
-    const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc")
-    const [activeMenuId, setActiveMenuId] = useState<string | null>(null)
-    const [isAddOpen, setIsAddOpen] = useState(false)
-    const [editingProject, setEditingProject] = useState<CvProjectItem | null>(
-        null,
-    )
-    const [projectToRemove, setProjectToRemove] =
-        useState<CvProjectItem | null>(null)
-    const [isRemoving, setIsRemoving] = useState(false)
-    const [removeError, setRemoveError] = useState<string | null>(null)
 
-    useBodyScrollLock(Boolean(projectToRemove))
-
-    const existingProjectIds = projects.map((project) => project.project.id)
-    const visibleProjects = useMemo(() => {
-        const normalizedSearch = search.trim().toLocaleLowerCase()
-
-        return projects
-            .filter((project) =>
-                [
-                    project.name,
-                    project.domain,
-                    project.description,
-                    ...project.environment,
-                ]
-                    .join(" ")
-                    .toLocaleLowerCase()
-                    .includes(normalizedSearch),
-            )
-            .sort((left, right) => {
-                const comparison = (left[sortField] ?? "").localeCompare(
-                    right[sortField] ?? "",
-                )
-                return sortDirection === "asc" ? comparison : -comparison
-            })
-    }, [projects, search, sortDirection, sortField])
-
-    const toggleSort = (field: SortField) => {
-        if (sortField === field) {
-            setSortDirection((direction) =>
-                direction === "asc" ? "desc" : "asc",
-            )
-        } else {
-            setSortField(field)
-            setSortDirection("desc")
-        }
-    }
+    const {
+        search,
+        setSearch,
+        sortField,
+        sortDirection,
+        activeMenuId,
+        setActiveMenuId,
+        isAddOpen,
+        setIsAddOpen,
+        editingProject,
+        setEditingProject,
+        projectToRemove,
+        setProjectToRemove,
+        isRemoving,
+        removeError,
+        setRemoveError,
+        visibleProjects,
+        existingProjectIds,
+        availableToAdd,
+        toggleSort,
+        handleRemove,
+        refresh,
+    } = useCvProjects({ cvId, projects, availableProjects })
 
     const renderSortIcon = (field: SortField) => {
         const SortIcon =
@@ -109,35 +79,10 @@ export function CvProjectsView({
         return <SortIcon aria-hidden="true" className="size-3" />
     }
 
-    const handleRemove = async () => {
-        if (!projectToRemove) return
-
-        setIsRemoving(true)
-        setRemoveError(null)
-
-        try {
-            await removeCvProject({
-                cvId,
-                projectId: projectToRemove.project.id,
-            })
-            setProjectToRemove(null)
-            router.refresh()
-        } catch (error) {
-            console.error("Failed to remove project from CV:", error)
-            setRemoveError(t("removeError"))
-        } finally {
-            setIsRemoving(false)
-        }
-    }
-
-    const availableToAdd = availableProjects.some(
-        (project) => !existingProjectIds.includes(project.id),
-    )
-
     return (
         <div className="space-y-3">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <label className="relative block w-full sm:max-w-[310px]">
+                <label className="relative block w-full sm:max-w-77.5">
                     <Search
                         aria-hidden="true"
                         className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
@@ -148,7 +93,7 @@ export function CvProjectsView({
                         onChange={(event) => setSearch(event.target.value)}
                         placeholder={t("search")}
                         aria-label={t("searchLabel")}
-                        className="h-[30px] rounded-full border-[#cccccc] pl-8 text-xs dark:border-border"
+                        className="h-7.5 rounded-full border-[#cccccc] pl-8 text-xs dark:border-border"
                     />
                 </label>
 
@@ -163,7 +108,7 @@ export function CvProjectsView({
             </div>
 
             <div className="overflow-x-auto">
-                <table className="w-full min-w-[680px] border-collapse text-left text-sm">
+                <table className="w-full min-w-170 border-collapse text-left text-sm">
                     <thead>
                         <tr className="h-10 border-b border-border text-foreground">
                             <th className="w-[31%] px-2 font-medium">
@@ -352,7 +297,7 @@ export function CvProjectsView({
                                 setIsAddOpen(false)
                                 setEditingProject(null)
                             }}
-                            onSaved={() => router.refresh()}
+                            onSaved={refresh}
                             cvId={cvId}
                             project={editingProject}
                             projects={availableProjects}

@@ -190,3 +190,86 @@
         margin: 14mm;
     }
 }
+[data-sonner-toaster] {
+    --success-bg: #66bb6a;
+    --error-bg: #c63031;
+    --warning-bg: #ffb800;
+    --info-bg: #29b6f6;
+}
+
+[data-sonner-toast] {
+    border-radius: 16px !important;
+    padding: 16px !important;
+    box-shadow: none !important;
+}
+
+[data-sonner-toast] [data-close-button] {
+    position: absolute !important;
+    top: 16px !important;
+    right: 16px !important;
+    left: auto !important;
+    background: transparent !important;
+    border: none !important;
+    width: 20px !important;
+    height: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+}
+
+[data-sonner-toast] [data-icon] {
+    display: none !important;
+}
+
+[data-sonner-toast][data-type="success"] {
+    background-color: #66bb6a !important;
+    color: #335d35 !important;
+    border: none !important;
+}
+[data-sonner-toast][data-type="success"] [data-title] {
+    font-size: 18px !important;
+    font-weight: 600 !important;
+}
+[data-sonner-toast][data-type="success"] [data-close-button] {
+    color: #335d35 !important;
+}
+
+[data-sonner-toast][data-type="error"] {
+    background-color: #c63031 !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+[data-sonner-toast][data-type="error"] [data-title] {
+    font-size: 18px !important;
+    font-weight: 600 !important;
+}
+[data-sonner-toast][data-type="error"] [data-close-button] {
+    color: #ffffff !important;
+}
+
+[data-sonner-toast][data-type="warning"] {
+    background-color: #ffb800 !important;
+    color: #7f5c00 !important;
+    border: none !important;
+}
+[data-sonner-toast][data-type="warning"] [data-title] {
+    font-size: 18px !important;
+    font-weight: 600 !important;
+}
+[data-sonner-toast][data-type="warning"] [data-close-button] {
+    color: #7f5c00 !important;
+}
+
+[data-sonner-toast][data-type="info"] {
+    background-color: #29b6f6 !important;
+    color: #145b7b !important;
+    border: none !important;
+}
+[data-sonner-toast][data-type="info"] [data-title] {
+    font-size: 18px !important;
+    font-weight: 600 !important;
+}
+[data-sonner-toast][data-type="info"] [data-close-button] {
+    color: #145b7b !important;
+}

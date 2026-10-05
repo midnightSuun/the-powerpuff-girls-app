@@ -2,8 +2,10 @@ import { notFound } from "next/navigation"
 import { hasLocale, NextIntlClientProvider } from "next-intl"
 import { setRequestLocale } from "next-intl/server"
 import { Suspense } from "react"
+import { Toaster } from "sonner"
 
 import { routing } from "@/i18n/routing"
+import { AuthNotificationListener } from "@/modules/auth/ui/auth-notification-listener"
 
 export function generateStaticParams() {
     return routing.locales.map((locale) => ({ locale }))
@@ -28,6 +30,7 @@ const LocaleContent = async ({ children, params }: Props) => {
     return (
         <NextIntlClientProvider messages={messages} locale={locale}>
             {children}
+            <AuthNotificationListener />
         </NextIntlClientProvider>
     )
 }
@@ -36,6 +39,7 @@ export default function LocaleLayout({ children, params }: Props) {
     return (
         <Suspense fallback={null}>
             <LocaleContent params={params}>{children}</LocaleContent>
+            <Toaster position="top-right" closeButton={true} />
         </Suspense>
     )
 }
