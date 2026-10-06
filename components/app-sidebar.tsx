@@ -8,7 +8,6 @@ import {
     SidebarContent,
     SidebarFooter,
     SidebarHeader,
-    SidebarSeparator,
 } from "@/components/ui/sidebar"
 import { Skeleton } from "@/components/ui/skeleton"
 import { NavUser } from "@/modules/users"
@@ -38,7 +37,7 @@ const SidebarUserFallback = () => {
 
 export function AppSidebar() {
     return (
-        <Sidebar variant="inset" collapsible="icon">
+        <Sidebar className="border-r-0" variant="sidebar" collapsible="icon">
             <SidebarHeader className="gap-2 group-data-[collapsible=icon]:items-center">
                 <div className="flex min-w-0 items-center gap-2 px-1 group-data-[collapsible=icon]:flex-col group-data-[collapsible=icon]:gap-2 group-data-[collapsible=icon]:px-0">
                     <CvBuilderLogo className="size-6 shrink-0" />
@@ -53,11 +52,10 @@ export function AppSidebar() {
                     <SidebarNav />
                 </Suspense>
             </SidebarContent>
-            <SidebarFooter>
+            <SidebarFooter className="pb-8">
                 <Suspense fallback={<SidebarUserFallback />}>
                     <NavUser />
                 </Suspense>
-                <SidebarSeparator className="group-data-[collapsible=icon]:hidden" />
             </SidebarFooter>
         </Sidebar>
     )
