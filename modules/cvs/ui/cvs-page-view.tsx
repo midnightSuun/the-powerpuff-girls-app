@@ -19,6 +19,7 @@ interface CvsPageViewProps {
     isAdmin: boolean
     search: string
     limit: number
+    targetUserId?: string
 }
 
 export function CvsPageView({
@@ -26,6 +27,7 @@ export function CvsPageView({
     isAdmin,
     search,
     limit,
+    targetUserId,
 }: CvsPageViewProps) {
     const router = useRouter()
     const t = useTranslations("CV.list")
@@ -46,7 +48,7 @@ export function CvsPageView({
         handleCreate,
         handleUpdate,
         handleDelete,
-    } = useCvsPage({ initialCvs })
+    } = useCvsPage({ initialCvs, targetUserId })
 
     return (
         <div className="p-6 space-y-6 max-w-7xl mx-auto">

@@ -11,10 +11,23 @@ export async function createCvAction(data: {
     name: string
     education?: string
     description: string
+    userId?: string
 }): Promise<{ error?: string }> {
     const session = await getCurrentSession()
     if (!session) {
         return { error: "Your session has expired. Please log in again." }
+    }
+
+    if (
+        data.userId !== undefined &&
+        (typeof data.userId !== "string" || !data.userId.trim())
+    ) {
+        return { error: "User id is required." }
+    }
+
+    const userId = data.userId?.trim() ?? session.userId
+    if (userId !== session.userId && session.role !== "Admin") {
+        return { error: "You can only create CVs for yourself." }
     }
 
     if (
@@ -39,7 +52,7 @@ export async function createCvAction(data: {
                 name: data.name.trim(),
                 education: data.education.trim(),
                 description: data.description.trim(),
-                userId: session.userId,
+                userId,
             },
         })
     } catch (error) {

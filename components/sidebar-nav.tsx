@@ -78,16 +78,23 @@ const adminSidebarItems: SidebarItem[] = [
 
 type SidebarNavProps = {
     isAdmin: boolean
+    viewerId: string | null
 }
 
-export const SidebarNav = ({ isAdmin }: SidebarNavProps) => {
+export const SidebarNav = ({ isAdmin, viewerId }: SidebarNavProps) => {
     const pathname = usePathname()
     const t = useTranslations("Navigation")
+    
+    const userProfileMatch = pathname.match(/^\/users\/([^/]+)(?:\/|$)/)
+    const isOtherUserProfile =
+        userProfileMatch !== null && userProfileMatch[1] !== viewerId
 
     const renderItem = (item: SidebarItem) => {
         const Icon = item.icon
         const isActive =
-            pathname === item.href || pathname.startsWith(`${item.href}/`)
+            item.href === "/users"
+                ? pathname === item.href || isOtherUserProfile
+                : pathname === item.href || pathname.startsWith(`${item.href}/`)
 
         return (
             <SidebarMenuItem

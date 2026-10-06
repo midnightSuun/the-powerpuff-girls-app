@@ -22,6 +22,7 @@ type PageWithTabs = {
     tabs: {
         label: HeaderCopyKey
         path: string
+        requiresUserAdminOrOwner?: boolean
     }[]
 }
 
@@ -58,6 +59,11 @@ const PAGES: (DefaultPage | PageWithTabs)[] = [
             { label: "profile", path: "/profile" },
             { label: "skills", path: "/skills" },
             { label: "languages", path: "/languages" },
+            {
+                label: "cvs",
+                path: "/cv",
+                requiresUserAdminOrOwner: true,
+            },
         ],
     },
     {
@@ -134,6 +140,8 @@ export const Header = async () => {
         <HeaderView
             pages={toClientPages(isAdmin)}
             initialBreadcrumb={null}
+            viewerId={session?.userId ?? null}
+            isAdmin={isAdmin}
             loadSecondBreadcrumb={loadSecondBreadcrumb}
         />
     )
