@@ -48,9 +48,12 @@ const sidebarItems: SidebarItem[] = [
     },
 ]
 
-export const SidebarNav = () => {
+export const SidebarNav = ({ viewerId }: { viewerId: string | null }) => {
     const pathname = usePathname()
     const t = useTranslations("Navigation")
+    const userProfileMatch = pathname.match(/^\/users\/([^/]+)(?:\/|$)/)
+    const isOtherUserProfile =
+        userProfileMatch !== null && userProfileMatch[1] !== viewerId
 
     return (
         <SidebarGroup className="px-3 py-1">
@@ -59,8 +62,10 @@ export const SidebarNav = () => {
                     {sidebarItems.map((item) => {
                         const Icon = item.icon
                         const isActive =
-                            pathname === item.href ||
-                            pathname.startsWith(`${item.href}/`)
+                            item.href === "/users"
+                                ? pathname === item.href || isOtherUserProfile
+                                : pathname === item.href ||
+                                  pathname.startsWith(`${item.href}/`)
 
                         return (
                             <SidebarMenuItem

@@ -11,6 +11,7 @@ import {
     SidebarSeparator,
 } from "@/components/ui/sidebar"
 import { Skeleton } from "@/components/ui/skeleton"
+import { getCurrentSession } from "@/modules/auth/helpers/get-current-session"
 import { NavUser } from "@/modules/users"
 
 const SidebarNavFallback = () => {
@@ -36,7 +37,9 @@ const SidebarUserFallback = () => {
     )
 }
 
-export function AppSidebar() {
+export async function AppSidebar() {
+    const session = await getCurrentSession()
+
     return (
         <Sidebar variant="inset" collapsible="icon">
             <SidebarHeader className="gap-2 group-data-[collapsible=icon]:items-center">
@@ -50,7 +53,7 @@ export function AppSidebar() {
             </SidebarHeader>
             <SidebarContent>
                 <Suspense fallback={<SidebarNavFallback />}>
-                    <SidebarNav />
+                    <SidebarNav viewerId={session?.userId ?? null} />
                 </Suspense>
             </SidebarContent>
             <SidebarFooter>

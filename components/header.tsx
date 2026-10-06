@@ -2,6 +2,7 @@ import { ReactNode } from "react"
 
 import type { HeaderCopyKey, HeaderPage } from "@/components/header-view"
 import { HeaderView } from "@/components/header-view"
+import { getCurrentSession } from "@/modules/auth/helpers/get-current-session"
 import { getCvById } from "@/modules/cvs/api/get-cv"
 import { getUser } from "@/modules/users/api/get-user"
 
@@ -21,6 +22,7 @@ type PageWithTabs = {
     tabs: {
         label: HeaderCopyKey
         path: string
+        requiresUserAdminOrOwner?: boolean
     }[]
 }
 
@@ -57,6 +59,11 @@ const PAGES: (DefaultPage | PageWithTabs)[] = [
             { label: "profile", path: "/profile" },
             { label: "skills", path: "/skills" },
             { label: "languages", path: "/languages" },
+            {
+                label: "cvs",
+                path: "/cv",
+                requiresUserAdminOrOwner: true,
+            },
         ],
     },
     {
@@ -124,11 +131,15 @@ const clientPages: HeaderPage[] = PAGES.map((page) => {
     }
 })
 
-export const Header = () => {
+export const Header = async () => {
+    const session = await getCurrentSession()
+
     return (
         <HeaderView
             pages={clientPages}
             initialBreadcrumb={null}
+            viewerId={session?.userId ?? null}
+            isAdmin={session?.role === "Admin"}
             loadSecondBreadcrumb={loadSecondBreadcrumb}
         />
     )
