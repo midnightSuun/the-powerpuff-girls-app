@@ -1,0 +1,700 @@
+{
+    "Admin": {
+        "departments": {
+            "title": "Відділи",
+            "createButton": "СТВОРИТИ ВІДДІЛ",
+            "empty": "Відділів не знайдено",
+            "columns": {
+                "name": "Назва"
+            },
+            "create": {
+                "title": "Створити відділ",
+                "departmentName": "Відділ",
+                "departmentPlaceholder": "Назва відділу",
+                "alreadyExists": "Відділ вже існує",
+                "required": "Назва відділу обов'язкова"
+            },
+            "edit": {
+                "title": "Редагувати відділ",
+                "departmentName": "Відділ",
+                "departmentPlaceholder": "Назва відділу"
+            },
+            "delete": {
+                "title": "Видалити відділ",
+                "confirmation": "Ви впевнені, що хочете видалити відділ «{name}»?",
+                "inUseError": "Відділ неможливо видалити, оскільки він зараз використовується"
+            }
+        },
+        "positions": {
+            "title": "Посади",
+            "createButton": "СТВОРИТИ ПОСАДУ",
+            "empty": "Посад не знайдено",
+            "columns": {
+                "name": "Назва"
+            },
+            "create": {
+                "title": "Створити посаду",
+                "positionName": "Посада",
+                "positionPlaceholder": "Назва посади",
+                "alreadyExists": "Посада вже існує",
+                "required": "Назва посади обов'язкова"
+            },
+            "edit": {
+                "title": "Редагувати посаду",
+                "positionName": "Посада",
+                "positionPlaceholder": "Назва посади"
+            },
+            "delete": {
+                "title": "Видалити посаду",
+                "confirmation": "Ви впевнені, що хочете видалити посаду «{name}»?",
+                "inUseError": "Посаду неможливо видалити, оскільки вона зараз використовується"
+            }
+        },
+        "projects": {
+            "title": "Проєкти",
+            "empty": "Проєктів не знайдено",
+            "search": "Шукати проєкти",
+            "searchLabel": "Шукати проєкти",
+            "createProject": "СТВОРИТИ ПРОЄКТ",
+            "edit": "Редагувати",
+            "remove": "Видалити",
+            "removeTitle": "Видалити проєкт",
+            "removeConfirmation": "Ви впевнені, що хочете видалити проєкт «{name}»?",
+            "cancel": "СКАСУВАТИ",
+            "removing": "ВИДАЛЕННЯ...",
+            "removeError": "Не вдалося видалити проєкт. Спробуйте ще раз.",
+            "form": {
+                "createTitle": "Створити проєкт",
+                "updateTitle": "Оновити проєкт",
+                "name": "Назва",
+                "domain": "Домен",
+                "startDate": "Дата початку",
+                "endDate": "Дата закінчення",
+                "description": "Опис",
+                "environment": "Середовище",
+                "addEnvironment": "Додати значення середовища",
+                "removeEnvironment": "Видалити {value}",
+                "create": "СТВОРИТИ",
+                "creating": "СТВОРЕННЯ...",
+                "update": "ОНОВИТИ",
+                "saving": "ОНОВЛЕННЯ...",
+                "cancel": "СКАСУВАТИ",
+                "saveError": "Не вдалося зберегти проєкт. Спробуйте ще раз."
+            }
+        },
+        "common": {
+            "search": "Пошук",
+            "edit": "Редагувати",
+            "delete": "Видалити",
+            "cancel": "СКАСУВАТИ",
+            "confirm": "ПІДТВЕРДИТИ",
+            "save": "ЗБЕРЕГТИ",
+            "saving": "ЗБЕРЕЖЕННЯ...",
+            "create": "СТВОРИТИ",
+            "creating": "СТВОРЕННЯ...",
+            "deleting": "ВИДАЛЕННЯ..."
+        },
+        "skills": {
+            "title": "Навички",
+            "createButton": "СТВОРИТИ НАВИЧКУ",
+            "empty": "Навичок не знайдено",
+            "columns": {
+                "name": "Назва",
+                "category": "Категорія"
+            },
+            "create": {
+                "title": "Створити навичку",
+                "skillName": "Навичка",
+                "skillPlaceholder": "Навичка",
+                "category": "Категорія",
+                "categoryPlaceholder": "Категорія",
+                "alreadyExists": "Навичка вже існує"
+            },
+            "edit": {
+                "title": "Редагувати навичку",
+                "skillName": "Назва навички",
+                "category": "Категорія"
+            },
+            "delete": {
+                "title": "Видалити навичку",
+                "confirmation": "Ви впевнені, що хочете видалити навичку «{name}»?"
+            }
+        },
+        "languages": {
+            "title": "Мови",
+            "createButton": "СТВОРИТИ МОВУ",
+            "empty": "Мов не знайдено",
+            "columns": {
+                "name": "Назва",
+                "iso2": "ISO-код"
+            },
+            "create": {
+                "title": "Створити мову",
+                "languageName": "Назва мови",
+                "languagePlaceholder": "напр. Українська",
+                "iso2": "ISO-код",
+                "iso2Placeholder": "напр. uk",
+                "alreadyExists": "Мова вже існує",
+                "invalidIso2": "ISO2-код має містити рівно 2 символи"
+            },
+            "edit": {
+                "title": "Редагувати мову",
+                "languageName": "Назва мови",
+                "iso2": "ISO-код"
+            },
+            "delete": {
+                "title": "Видалити мову",
+                "confirmation": "Ви впевнені, що хочете видалити мову «{name}»?"
+            }
+        }
+    },
+    "Auth": {
+        "EmailVerification": {
+            "title": "Підтвердження електронної пошти",
+            "subtitle": "Введіть код підтвердження, який ми надіслали на",
+            "fallbackEmail": "вашу електронну пошту",
+            "submitButton": "ПІДТВЕРДИТИ",
+            "submittingButton": "ПЕРЕВІРКА...",
+            "resendButton": "НАДІСЛАТИ ПОВТОРНО",
+            "resendingButton": "ВІДПРАВКА...",
+            "laterButton": "ПІЗНІШЕ"
+        },
+        "ForgotPassword": {
+            "title": "Забули пароль",
+            "subtitle": "Ми надішлемо вам електронного листа з подальшими інструкціями",
+            "emailLabel": "Електронна пошта",
+            "emailPlaceholder": "example@email.com",
+            "submitButton": "СКИНУТИ ПАРОЛЬ",
+            "submittingButton": "ВІДПРАВКА...",
+            "cancelButton": "Скасувати"
+        },
+        "Login": {
+            "title": "З поверненням",
+            "subtitle": "Вітаємо знову! Увійдіть, щоб продовжити",
+            "emailPlaceholder": "Електронна пошта",
+            "passwordPlaceholder": "Пароль",
+            "submitButton": "УВІЙТИ",
+            "submittingButton": "ВХІД...",
+            "forgotPassword": "ЗАБУЛИ ПАРОЛЬ",
+            "hidePassword": "Сховати пароль",
+            "showPassword": "Показати пароль"
+        },
+        "ResetPassword": {
+            "title": "Скидання пароля",
+            "subtitle": "Тут ви можете ввести новий пароль та підтвердити його",
+            "newPasswordPlaceholder": "Новий пароль",
+            "confirmPasswordPlaceholder": "Підтвердіть пароль",
+            "submitButton": "НАДІСЛАТИ",
+            "submittingButton": "ВІДПРАВКА...",
+            "goToSignIn": "ПЕРЕЙТИ ДО ВХОДУ"
+        },
+        "Signup": {
+            "title": "Зареєструйтеся зараз",
+            "subtitle": "Ласкаво просимо! Зареєструйтеся, щоб продовжити",
+            "emailPlaceholder": "Електронна пошта",
+            "passwordPlaceholder": "Пароль",
+            "confirmPasswordPlaceholder": "Підтвердіть пароль",
+            "submitButton": "СТВОРИТИ ОБЛІКОВИЙ ЗАПИС",
+            "submittingButton": "СТВОРЕННЯ...",
+            "haveAccount": "У МЕНЕ ВЖЕ Є ОБЛІКОВИЙ ЗАПИС"
+        },
+        "Tabs": {
+            "signIn": "УВІЙТИ",
+            "signup": "ЗАРЕЄСТРУВАТИСЯ"
+        },
+        "validation": {
+            "emailRequired": "Електронна пошта обов'язкова",
+            "invalidEmail": "Будь ласка, введіть дійсну адресу електронної пошти",
+            "passwordRequired": "Пароль обов'язковий",
+            "passwordMin": "Пароль повинен містити щонайменше 6 символів",
+            "passwordMin8": "Пароль повинен містити щонайменше 8 символів",
+            "confirmPassword": "Будь ласка, підтвердіть свій пароль",
+            "passwordsDoNotMatch": "Паролі не збігаються",
+            "codeLength": "Код підтвердження має складатися рівно з 6 цифр.",
+            "codeDigits": "Код підтвердження повинен містити лише цифри."
+        },
+        "messages": {
+            "loginRequired": "Електронна пошта та пароль обов'язкові.",
+            "loginFailed": "Не вдалося увійти. Будь ласка, перевірте свою електронну пошту та пароль.",
+            "signupRequired": "Будь ласка, заповніть усі поля.",
+            "passwordsDoNotMatch": "Паролі не збігаються.",
+            "emailAlreadyTaken": "Ця електронна пошта вже зайнята. Будь ласка, використайте іншу або увійдіть.",
+            "serverError": "Помилка сервера: {message}",
+            "unknownError": "Невідома помилка",
+            "signupEmailFailed": "Не вдалося зареєструватися через помилку поштового сервера. Спробуйте пізніше.",
+            "forgotFailed": "Не вдалося надіслати інструкції зі скидання. Спробуйте ще раз.",
+            "forgotInstructionsSent": "Інструкції надіслано на вашу електронну пошту.",
+            "resetTokenInvalid": "Токен скидання відсутній або недійсний. Відкрийте посилання з електронного листа знову.",
+            "resetExpired": "Термін дії цього посилання для скидання минув. Запросіть нове.",
+            "resetFailed": "Не вдалося скинути пароль. Спробуйте ще раз.",
+            "verificationEmailUnavailable": "Адреса електронної пошти недоступна. Будь ласка, увійдіть знову.",
+            "verificationSendFailed": "Не вдалося надіслати електронного листа для підтвердження. Спробуйте ще раз.",
+            "verificationInvalid": "Код підтвердження недійсний або його термін дії минув. Спробуйте ще раз.",
+            "verificationSent": "Надіслано новий електронний лист для підтвердження.",
+            "sessionExpired": "Ваша сесія закінчилася. Будь ласка, увійдіть і спробуйте знову.",
+            "loginSuccess": "Ви успішно увійшли до свого облікового запису",
+            "signupVerificationSent": "На вашу адресу електронної пошти надіслано лист із підтвердженням."
+        }
+    },
+    "Common": {
+        "retry": "Повторити",
+        "breadcrumb": "Хлібні крихти",
+        "search": "Пошук",
+        "edit": "Редагувати",
+        "delete": "Видалити",
+        "loading": "Завантаження...",
+        "toggleSidebar": "Перемкнути бічну панель",
+        "sidebarTitle": "Бічна панель",
+        "sidebarDescription": "Бічна панель навігації"
+    },
+    "Navigation": {
+        "employees": "Працівники",
+        "skills": "Навички",
+        "languages": "Мови",
+        "cvs": "Резюме",
+        "departments": "Відділи",
+        "positions": "Посади",
+        "projects": "Проєкти"
+    },
+    "Errors": {
+        "NoInternet": {
+            "title": "Упс",
+            "description": "Щось пішло не так. Ми вже працюємо над усуненням.\nБудь ласка, спробуйте ще раз або поверніться назад.",
+            "actionText": "Повторити"
+        },
+        "NotFound": {
+            "title": "Сторінку не знайдено",
+            "description": "Сторінку, яку ви шукаєте, можливо, було видалено,\nзмінено її назву або вона тимчасово недоступна.",
+            "actionText": "На головну"
+        }
+    },
+    "Settings": {
+        "title": "Налаштування",
+        "logout": "Вийти",
+        "theme": {
+            "label": "Тема",
+            "light": "Світла",
+            "dark": "Темна",
+            "deviceSettings": "Налаштування пристрою"
+        },
+        "language": {
+            "label": "Мова",
+            "english": "Англійська",
+            "french": "Французька",
+            "german": "Німецька",
+            "italian": "Італійська",
+            "polish": "Польська",
+            "portuguese": "Португальська",
+            "russian": "Російська",
+            "spanish": "Іспанська",
+            "ukrainian": "Українська"
+        },
+        "passwordSection": {
+            "title": "Змінити пароль",
+            "currentPlaceholder": "Поточний пароль",
+            "newPlaceholder": "Новий пароль",
+            "confirmPlaceholder": "Підтвердіть пароль",
+            "submitButton": "ЗМІНИТИ",
+            "submittingButton": "ЗМІНА..."
+        },
+        "validation": {
+            "passwordRequired": "Пароль обов'язковий",
+            "newPasswordRequired": "Новий пароль повинен містити щонайменше 6 символів",
+            "confirmPasswordRequired": "Підтвердження пароля обов'язкове",
+            "passwordsDoNotMatch": "Паролі не збігаються"
+        },
+        "messages": {
+            "updated": "Налаштування та пароль успішно оновлено.",
+            "sessionExpired": "Термін дії вашої сесії закінчився. Будь ласка, увійдіть знову.",
+            "passwordUpdateFailed": "Не вдалося оновити пароль. Будь ласка, перевірте свій поточний пароль."
+        }
+    },
+    "Cvs": {
+        "title": "Резюме"
+    },
+    "Skills": {
+        "title": "Навички",
+        "loading": "Завантаження навичок профілю...",
+        "masteryPlaceholder": "Рівень володіння",
+        "masteryLevels": {
+            "novice": "Початківець",
+            "advanced": "Просунутий",
+            "competent": "Компетентний",
+            "proficient": "Впевнений користувач",
+            "expert": "Експерт"
+        },
+        "categories": {
+            "1": "Мови програмування",
+            "2": "Frontend",
+            "3": "Backend",
+            "4": "Системи контролю версій",
+            "other": "Загальні навички"
+        },
+        "actions": {
+            "add": "ДОДАТИ НАВИЧКУ",
+            "remove": "ВИДАЛИТИ НАВИЧКИ",
+            "cancel": "СКАСУВАТИ",
+            "deleteSelected": "ВИДАЛИТИ ({count})"
+        },
+        "add": {
+            "title": "Додати навичку",
+            "skillPlaceholder": "Навичка",
+            "allLanguagesAdded": "Додано всі доступні мови",
+            "allSkillsAdded": "Додано всі доступні навички",
+            "cancel": "СКАСУВАТИ",
+            "submit": "ДОДАТИ",
+            "adding": "ДОДАВАННЯ...",
+            "errors": {
+                "selectSkill": "Будь ласка, виберіть навичку",
+                "selectMastery": "Будь ласка, виберіть рівень володіння навичкою",
+                "notFound": "Вибрану навичку не знайдено",
+                "alreadyAdded": "Цю навичку вже додано до вашого резюме.",
+                "failed": "Не вдалося додати навичку. Спробуйте ще раз."
+            }
+        },
+        "edit": {
+            "title": "Оновити навичку",
+            "skill": "Навичка",
+            "mastery": "Рівень володіння",
+            "cancel": "СКАСУВАТИ",
+            "submit": "ОНОВИТИ",
+            "updating": "ОНОВЛЕННЯ...",
+            "errors": {
+                "masteryRequired": "Рівень володіння навичкою обов'язковий",
+                "failed": "Не вдалося оновити навичку. Спробуйте ще раз."
+            }
+        },
+        "delete": {
+            "titleSingular": "Видалити навичку",
+            "titlePlural": "Видалити навички",
+            "confirmation": "Ви впевнені, що хочете видалити {count, plural, one {# навичку?} few {# навички?} many {# навичок?} other {# навички?}}",
+            "cancel": "СКАСУВАТИ",
+            "confirm": "ПІДТВЕРДИТИ",
+            "removing": "ВИДАЛЕННЯ...",
+            "errors": {
+                "failed": "Не вдалося видалити навички. Спробуйте ще раз."
+            }
+        },
+        "admin": {
+            "name": "Назва",
+            "category": "Категорія",
+            "search": "Пошук",
+            "create": "СТВОРИТИ НАВИЧКУ",
+            "empty": "Навичок не знайдено",
+            "createTitle": "Створити навичку",
+            "editTitle": "Редагувати навичку",
+            "deleteTitle": "Видалити навичку",
+            "skill": "Навичка",
+            "duplicate": "Навичка вже існує",
+            "cancel": "СКАСУВАТИ",
+            "save": "ЗБЕРЕГТИ",
+            "saving": "ЗБЕРЕЖЕННЯ...",
+            "creating": "СТВОРЕННЯ...",
+            "confirm": "ПІДТВЕРДИТИ",
+            "deleting": "ВИДАЛЕННЯ...",
+            "deleteConfirmation": "Ви впевнені, що хочете видалити навичку «{name}»?",
+            "createError": "Не вдалося створити навичку. Спробуйте ще раз.",
+            "updateError": "Не вдалося оновити навичку. Спробуйте ще раз.",
+            "deleteError": "Не вдалося видалити навичку. Спробуйте ще раз."
+        }
+    },
+    "CV": {
+        "tabListLabel": "Розділи резюме",
+        "tabs": {
+            "details": "ДЕТАЛІ",
+            "skills": "НАВИЧКИ",
+            "projects": "ПРОЄКТИ",
+            "preview": "ПОПЕРЕДНІЙ ПЕРЕГЛЯД"
+        },
+        "previewUnavailable": "Попередній перегляд резюме ще недоступний.",
+        "preview": {
+            "exportPdf": "ЕКСПОРТУВАТИ У PDF",
+            "education": "Освіта",
+            "languageProficiency": "Володіння мовами",
+            "domains": "Домени",
+            "profile": "Професійний профіль",
+            "noDescription": "Опис профілю не надано.",
+            "projects": "Проєкти",
+            "projectRoles": "Ролі у проєкті",
+            "period": "Період",
+            "responsibilities": "Обов'язки",
+            "environment": "Середовище",
+            "tillNow": "Дотепер",
+            "professionalSkills": "Професійні навички",
+            "skills": "Групи навичок",
+            "skillName": "Навичка",
+            "mastery": "Рівень володіння",
+            "noSkills": "До цього резюме ще не додано жодних навичок."
+        },
+        "list": {
+            "create": "СТВОРИТИ РЕЗЮМЕ",
+            "name": "Назва",
+            "education": "Освіта",
+            "employee": "Працівник",
+            "view": "Переглянути",
+            "edit": "Редагувати",
+            "delete": "Видалити",
+            "noResults": "Резюме не знайдено",
+            "empty": "У вас ще немає резюме",
+            "createError": "Не вдалося створити резюме. Спробуйте ще раз.",
+            "updateError": "Не вдалося оновити резюме. Спробуйте ще раз.",
+            "deleteError": "Не вдалося видалити резюме. Спробуйте ще раз."
+        },
+        "form": {
+            "name": "Назва",
+            "education": "Освіта",
+            "description": "Опис",
+            "update": "ОНОВИТИ",
+            "updating": "ОНОВЛЕННЯ...",
+            "updateError": "Не вдалося оновити резюме. Спробуйте ще раз.",
+            "createTitle": "Створити резюме",
+            "create": "СТВОРИТИ",
+            "creating": "СТВОРЕННЯ...",
+            "updateTitle": "Оновити резюме",
+            "save": "ЗБЕРЕГТИ",
+            "saving": "ЗБЕРЕЖЕННЯ...",
+            "nameRequired": "Назва обов'язкова",
+            "educationRequired": "Освіта обов'язкова",
+            "descriptionRequired": "Опис обов'язковий",
+            "cancel": "СКАСУВАТИ",
+            "deleteTitle": "Видалити резюме",
+            "deleteConfirmation": "Ви впевнені, що хочете видалити резюме «{name}»?",
+            "confirm": "ПІДТВЕРДИТИ",
+            "deleting": "ВИДАЛЕННЯ..."
+        },
+        "projects": {
+            "search": "Пошук",
+            "searchLabel": "Шукати проєкти",
+            "noAvailableProjects": "Немає доступних проєктів для додавання.",
+            "addProject": "ДОДАТИ ПРОЄКТ",
+            "sortByName": "Сортувати проєкти за назвою ({direction})",
+            "ascending": "за зростанням",
+            "descending": "за спаданням",
+            "name": "Назва",
+            "domain": "Домен",
+            "startDate": "Дата початку",
+            "endDate": "Дата закінчення",
+            "actions": "Дії",
+            "actionsFor": "Дії для {name}",
+            "tillNow": "Дотепер",
+            "edit": "Редагувати",
+            "remove": "Видалити",
+            "noSearchResults": "Жоден проєкт не відповідає вашому пошуку.",
+            "empty": "До цього резюме ще не додано жодних проєктів.",
+            "removeTitle": "Видалити проєкт з резюме",
+            "removeConfirmation": "Ви впевнені, що хочете видалити проєкт <strong>{name}</strong>?",
+            "cancel": "СКАСУВАТИ",
+            "removing": "ВИДАЛЕННЯ...",
+            "removeError": "Не вдалося видалити проєкт. Спробуйте ще раз.",
+            "form": {
+                "editTitle": "Редагувати проєкт",
+                "addTitle": "Додати проєкт",
+                "cancel": "СКАСУВАТИ",
+                "update": "ОНОВИТИ",
+                "add": "ДОДАТИ",
+                "updating": "ОНОВЛЕННЯ...",
+                "adding": "ДОДАВАННЯ...",
+                "project": "Проєкт",
+                "selectProject": "Виберіть проєкт",
+                "noAvailableProjects": "Немає доступних проєктів для додавання.",
+                "duplicateProjectError": "Цей проєкт уже додано до цього резюме.",
+                "domain": "Домен",
+                "startDate": "Дата початку",
+                "endDate": "Дата закінчення",
+                "description": "Опис",
+                "environment": "Середовище",
+                "roles": "Ролі",
+                "responsibilities": "Обов'язки",
+                "saveError": "Не вдалося зберегти проєкт. Спробуйте ще раз."
+            }
+        }
+    },
+    "User": {
+        "title": "Профіль користувача",
+        "loading": "Завантаження...",
+        "email": "Електронна пошта",
+        "role": "Роль",
+        "memberSince": "Учасник з {date}",
+        "uploadAvatar": "Завантажити зображення аватарки",
+        "avatarRequirements": "png, jpg або gif об'ємом не більше 0,5 МБ",
+        "firstName": "Ім'я",
+        "lastName": "Прізвище",
+        "department": "Відділ",
+        "position": "Посада",
+        "selectDepartment": "Вибрати відділ",
+        "selectPosition": "Вибрати посаду",
+        "verifyEmail": "ПІДТВЕРДИТИ ПОШТУ",
+        "sendingVerification": "ВІДПРАВКА...",
+        "update": "ОНОВИТИ",
+        "updating": "ОНОВЛЕННЯ...",
+        "errors": {
+            "firstNameRequired": "Ім'я обов'язкове",
+            "lastNameRequired": "Прізвище обов'язкове",
+            "departmentRequired": "Відділ обов'язковий",
+            "positionRequired": "Посада обов'язкова",
+            "firstNameTooLong": "Ім'я повинно містити не більше 100 символів",
+            "lastNameTooLong": "Прізвище повинно містити не більше 100 символів",
+            "unsupportedFileType": "Непідтримуваний тип файлу",
+            "fileTooLarge": "Розмір файлу не повинен перевищувати 0,5 МБ"
+        },
+        "messages": {
+            "profileUpdated": "Профіль успішно оновлено",
+            "updateFailed": "Не вдалося зберегти ваш профіль. Спробуйте ще раз.",
+            "updateForbidden": "Ви можете оновлювати лише власний профіль.",
+            "avatarUploaded": "Аватар успішно завантажено",
+            "avatarUploadFailed": "Не вдалося завантажити ваше фото профілю. Спробуйте ще раз.",
+            "verificationSent": "Електронний лист для підтвердження надіслано",
+            "verificationFailed": "Не вдалося надіслати електронний лист для підтвердження"
+        },
+        "nav": {
+            "viewProfile": "Переглянути профіль",
+            "profile": "Профіль",
+            "settings": "Налаштування",
+            "logout": "Вийти"
+        }
+    },
+    "Users": {
+        "title": "Працівники",
+        "createUser": "Створити користувача",
+        "dialog": {
+            "description": "Створити нового користувача",
+            "password": "Пароль",
+            "cancel": "Скасувати",
+            "submit": "Створити",
+            "close": "Закрити",
+            "employee": "Працівник"
+        },
+        "loading": "Завантаження користувачів...",
+        "columns": {
+            "avatar": "Аватар",
+            "firstName": "Ім'я",
+            "lastName": "Прізвище",
+            "email": "Електронна пошта",
+            "department": "Відділ",
+            "position": "Посада",
+            "sortBy": "Сортувати за {column}",
+            "openMenu": "Відкрити меню"
+        }
+    },
+    "Pagination": {
+        "previous": "Попередня",
+        "next": "Наступна",
+        "label": "Пагінація",
+        "previousLabel": "Перейти на попередню сторінку",
+        "nextLabel": "Перейти на наступну сторінку",
+        "morePages": "Більше сторінок"
+    },
+    "Languages": {
+        "title": "Мови",
+        "currentLanguages": "Поточні мови",
+        "empty": "Мови ще не додано.",
+        "proficiencyPlaceholder": "Рівень володіння",
+        "proficiencyLevels": {
+            "A1": "A1 - Початковий",
+            "A2": "A2 - Елементарний",
+            "B1": "B1 - Середній",
+            "B2": "B2 - Вище середнього",
+            "C1": "C1 - Просунутий",
+            "C2": "C2 - Досконалий",
+            "Native": "Рідна мова"
+        },
+        "actions": {
+            "add": "ДОДАТИ МОВУ",
+            "remove": "ВИДАЛИТИ МОВИ",
+            "cancel": "СКАСУВАТИ",
+            "deleteSelected": "ВИДАЛИТИ ({count})"
+        },
+        "add": {
+            "title": "Додати мову",
+            "languagePlaceholder": "Мова",
+            "allLanguagesAdded": "Додано всі доступні мови",
+            "cancel": "СКАСУВАТИ",
+            "submit": "ДОДАТИ",
+            "adding": "ДОДАВАННЯ...",
+            "errors": {
+                "failed": "Не вдалося додати мову. Спробуйте ще раз."
+            }
+        },
+        "edit": {
+            "title": "Оновити мову",
+            "language": "Мова",
+            "proficiency": "Рівень володіння",
+            "cancel": "СКАСУВАТИ",
+            "submit": "ОНОВИТИ",
+            "updating": "ОНОВЛЕННЯ...",
+            "errors": {
+                "failed": "Не вдалося оновити мову. Спробуйте ще раз."
+            }
+        },
+        "delete": {
+            "titleSingular": "Видалити мову",
+            "titlePlural": "Видалити мови",
+            "confirmation": "Ви впевнені, що хочете видалити {count, plural, one {# мову?} few {# мови?} many {# мов?} other {# мови?}}",
+            "cancel": "СКАСУВАТИ",
+            "confirm": "ПІДТВЕРДИТИ",
+            "removing": "ВИДАЛЕННЯ...",
+            "errors": {
+                "failed": "Не вдалося видалити мови. Спробуйте ще раз."
+            }
+        },
+        "admin": {
+            "columns": {
+                "name": "Назва",
+                "isoCode": "ISO-код"
+            },
+            "search": "Пошук",
+            "createButton": "СТВОРИТИ МОВУ",
+            "empty": "Мов не знайдено",
+            "create": {
+                "title": "Створити мову",
+                "languageName": "Назва мови",
+                "languagePlaceholder": "напр. Українська",
+                "isoCode": "ISO-код",
+                "isoCodePlaceholder": "напр. uk",
+                "cancel": "СКАСУВАТИ",
+                "create": "СТВОРИТИ",
+                "creating": "СТВОРЕННЯ..."
+            },
+            "edit": {
+                "title": "Редагувати мову",
+                "languageName": "Назва мови",
+                "languagePlaceholder": "Мова",
+                "isoCode": "ISO-код",
+                "isoCodePlaceholder": "ISO2",
+                "cancel": "СКАСУВАТИ",
+                "save": "ЗБЕРЕГТИ",
+                "saving": "ЗБЕРЕЖЕННЯ..."
+            },
+            "delete": {
+                "title": "Видалити мову",
+                "confirmation": "Ви впевнені, що хочете видалити мову «{name}»?",
+                "cancel": "СКАСУВАТИ",
+                "confirm": "ПІДТВЕРДИТИ",
+                "deleting": "ВИДАЛЕННЯ..."
+            },
+            "errors": {
+                "duplicate": "Мова вже існує",
+                "createFailed": "Не вдалося створити мову",
+                "updateFailed": "Не вдалося оновити мову",
+                "invalidData": "Невірні дані мови або ISO2-код"
+            }
+        }
+    },
+    "Notifications": {
+        "success": "Успішно",
+        "error": "Помилка",
+        "warning": "Попередження",
+        "info": "Інформація",
+        "logoutSuccess": "Ви успішно вийшли з системи.",
+        "actions": {
+            "created": "Успішно створено.",
+            "updated": "Зміни успішно збережено.",
+            "deleted": "Успішно видалено."
+        },
+        "messages": {
+            "verificationSent": "Електронний лист для підтвердження надіслано.",
+            "profileUpdated": "Профіль успішно оновлено.",
+            "verificationFailed": "Не вдалося надіслати електронний лист для підтвердження."
+        }
+    }
+}
