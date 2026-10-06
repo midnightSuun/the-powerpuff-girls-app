@@ -1,5 +1,3 @@
-"use client"
-
 import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
 
@@ -22,7 +20,7 @@ interface UserData {
     email: string
     is_verified?: boolean
     isVerified?: boolean
-    role: string
+    role?: string | null
     profile?: {
         first_name?: string | null
         firstName?: string | null
@@ -62,7 +60,11 @@ function readFileAsBase64(file: File, errorMessage: string): Promise<string> {
     })
 }
 
-export function useUserProfile(user: UserData, currentUserId: string | number) {
+export function useUserProfile(
+    user: UserData,
+    currentUserId: string | number,
+    currentUserRole?: string | null,
+) {
     const notifications = useActionNotifications()
     const router = useRouter()
     const errors = useTranslations("User.errors")
@@ -94,7 +96,8 @@ export function useUserProfile(user: UserData, currentUserId: string | number) {
     )
 
     const canEdit =
-        String(currentUserId) === String(user.id) || user.role === "Admin"
+        String(currentUserId) === String(user.id) || currentUserRole === "Admin"
+
     const isVerified = user.is_verified ?? user.isVerified ?? false
     const canVerifyEmail =
         String(currentUserId) === String(user.id) && !isVerified
