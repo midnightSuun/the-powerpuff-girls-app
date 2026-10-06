@@ -5,9 +5,29 @@ query GetProjects {
             name
             internal_name
             domain
+            start_date
+            end_date
             description
             environment
         }
+    }
+}
+
+mutation CreateProject($project: CreateProjectInput!) {
+    createProject(project: $project) {
+        id
+    }
+}
+
+mutation UpdateProject($project: UpdateProjectInput!) {
+    updateProject(project: $project) {
+        id
+    }
+}
+
+mutation DeleteProject($project: DeleteProjectInput!) {
+    deleteProject(project: $project) {
+        affected
     }
 }
 

@@ -6,60 +6,50 @@ import { getTranslations } from "next-intl/server"
 import { getGql, UploadAvatarDocument } from "@/gql"
 import { getCurrentSession } from "@/modules/auth/helpers/get-current-session"
 
-const MAX_AVATAR_SIZE = 0.5 * 1024 * 1024
+const MAX_AVATAR_SIZE = 500_000
 const ALLOWED_AVATAR_TYPES = new Set(["image/png", "image/jpeg", "image/gif"])
-const BASE64_PATTERN =
-    /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/
 
-export type UploadProfileAvatarInput = {
-    userId: string
-    base64: string
-    size: number
-    type: string
-}
-
-export async function uploadProfileAvatar(input: UploadProfileAvatarInput) {
+export async function uploadProfileAvatar(formData: FormData) {
     const session = await getCurrentSession()
     if (!session) {
         const t = await getTranslations("Auth.messages")
         return { success: false, error: t("sessionExpired") }
     }
 
-    if (session.userId !== String(input.userId)) {
-        const t = await getTranslations("User.messages")
-        return { success: false, error: t("updateForbidden") }
-    }
+    const userId = formData.get("userId") as string
+    const file = formData.get("file") as File
 
-    if (!ALLOWED_AVATAR_TYPES.has(input.type)) {
-        const t = await getTranslations("User.errors")
-        return { success: false, error: t("unsupportedFileType") }
-    }
-
-    if (
-        !Number.isInteger(input.size) ||
-        input.size <= 0 ||
-        input.size > MAX_AVATAR_SIZE
-    ) {
-        const t = await getTranslations("User.errors")
-        return { success: false, error: t("fileTooLarge") }
-    }
-
-    if (
-        !BASE64_PATTERN.test(input.base64) ||
-        Buffer.byteLength(input.base64, "base64") !== input.size
-    ) {
+    if (!userId || !file) {
         const t = await getTranslations("User.messages")
         return { success: false, error: t("avatarUploadFailed") }
     }
 
+    if (session.userId !== userId && session.role !== "Admin") {
+        const t = await getTranslations("User.messages")
+        return { success: false, error: t("updateForbidden") }
+    }
+
+    if (!ALLOWED_AVATAR_TYPES.has(file.type)) {
+        const t = await getTranslations("User.errors")
+        return { success: false, error: t("unsupportedFileType") }
+    }
+
+    if (file.size > MAX_AVATAR_SIZE) {
+        const t = await getTranslations("User.errors")
+        return { success: false, error: t("fileTooLarge") }
+    }
+
     try {
+        const arrayBuffer = await file.arrayBuffer()
+        const base64 = Buffer.from(arrayBuffer).toString("base64")
+
         const gql = await getGql()
         const data = await gql.request(UploadAvatarDocument, {
             avatar: {
-                userId: input.userId,
-                base64: input.base64,
-                size: input.size,
-                type: input.type,
+                userId,
+                base64: `data:${file.type};base64,${base64}`,
+                size: file.size,
+                type: file.type,
             },
         })
 
@@ -67,7 +57,11 @@ export async function uploadProfileAvatar(input: UploadProfileAvatarInput) {
 
         return { success: true, data: data.uploadAvatar }
     } catch (error) {
-        console.error("Failed to upload user profile avatar:", error)
+        const message = error instanceof Error ? error.message : "Unknown error"
+        console.error(
+            "Failed to upload user profile avatar:",
+            message.split("\n")[0]?.slice(0, 300),
+        )
         const t = await getTranslations("User.messages")
         return {
             success: false,

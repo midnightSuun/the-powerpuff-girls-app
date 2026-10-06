@@ -17,7 +17,11 @@ export async function UserPage({ userId }: Props) {
     }
 
     const user = await getUser(userId)
-    const canEdit = session.userId === String(user.id)
+
+    const isOwner = session.userId === String(user.id)
+    const isAdmin = session.role === "Admin"
+    const canEdit = isOwner || isAdmin
+
     const profileOptions = canEdit
         ? await getProfileOptions()
         : { departments: [], positions: [] }
@@ -28,6 +32,7 @@ export async function UserPage({ userId }: Props) {
                 user={user}
                 key={String(user.id)}
                 currentUserId={session.userId}
+                currentUserRole={session.role}
                 departments={profileOptions.departments}
                 positions={profileOptions.positions}
             />

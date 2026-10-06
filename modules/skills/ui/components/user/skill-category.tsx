@@ -28,7 +28,7 @@ export function SkillCategory({
 
     return (
         <div className="mb-6">
-            <p className="mb-3 text-sm font-normal text-muted-foreground">
+            <p className="font-roboto text-[16px] font-normal leading-6 tracking-[0.15px] text-foreground mb-4">
                 {title}
             </p>
             <div className="grid grid-cols-1 gap-y-2 sm:grid-cols-2 md:grid-cols-3">

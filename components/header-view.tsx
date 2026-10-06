@@ -5,9 +5,9 @@ import { useTranslations } from "next-intl"
 import { Suspense, useEffect, useState } from "react"
 
 import { SearchInput } from "@/components/search-input"
-import { Button } from "@/components/ui/button"
 import { Link, usePathname } from "@/i18n/navigation"
 import { routing } from "@/i18n/routing"
+import { CreateUserDialog } from "@/modules/users/ui/create-user-dialog"
 
 export type HeaderCopyKey =
     | "users"
@@ -15,7 +15,7 @@ export type HeaderCopyKey =
     | "languages"
     | "settings"
     | "profile"
-    | "addEmployee"
+    | "createUser"
     | "cvs"
     | "cvDetails"
     | "cvSkills"
@@ -27,6 +27,7 @@ type HeaderCopy = Record<HeaderCopyKey, string>
 type HeaderTab = {
     label: HeaderCopyKey
     path: string
+    requiresUserAdminOrOwner?: boolean
 }
 
 type HeaderDefaultPage = {
@@ -34,7 +35,7 @@ type HeaderDefaultPage = {
     path: string
     title: HeaderCopyKey
     showSearch?: boolean
-    action?: "addEmployee"
+    action?: "createUser"
 }
 
 type HeaderTabsPage = {
@@ -62,6 +63,8 @@ type BreadcrumbResult = {
 type Props = {
     pages: HeaderPage[]
     initialBreadcrumb: BreadcrumbResult | null
+    viewerId: string | null
+    isAdmin: boolean
     loadSecondBreadcrumb: (
         pagePath: string,
         id: string,
@@ -141,16 +144,35 @@ const normalizePathname = (pathname: string) => {
     return `/${segments.join("/")}`
 }
 
-const resolvePage = (pages: HeaderPage[], pathname: string) => {
+const getVisibleTabs = (
+    page: HeaderTabsPage,
+    match: PathMatch,
+    viewerId: string | null,
+    isAdmin: boolean,
+) =>
+    page.tabs.filter(
+        (tab) =>
+            !tab.requiresUserAdminOrOwner ||
+            isAdmin ||
+            viewerId === match.params.userId,
+    )
+
+const resolvePage = (
+    pages: HeaderPage[],
+    pathname: string,
+    viewerId: string | null,
+    isAdmin: boolean,
+) => {
     const matches = pages.flatMap((page) => {
         const match = matchTemplate(page.path, pathname)
 
         if (!match) return []
 
         if (page.type === "tabs") {
+            const visibleTabs = getVisibleTabs(page, match, viewerId, isAdmin)
             const hasMatchingTab =
                 match.remainder === "" ||
-                page.tabs.some((tab) => tab.path === match.remainder)
+                visibleTabs.some((tab) => tab.path === match.remainder)
 
             if (!hasMatchingTab) return []
         } else if (match.remainder !== "") {
@@ -185,7 +207,7 @@ const useHeaderCopy = (): HeaderCopy => {
         languages: tLanguages("title"),
         settings: tSettings("title"),
         profile: tNav("profile"),
-        addEmployee: tUsers("addEmployee"),
+        createUser: tUsers("createUser"),
         cvs: tCvs("title"),
         cvDetails: tCv("tabs.details").toLowerCase(),
         cvSkills: tCv("tabs.skills").toLowerCase(),
@@ -218,22 +240,6 @@ const UserIcon = () => {
     )
 }
 
-const PlusIcon = () => {
-    return (
-        <svg
-            aria-hidden
-            width={24}
-            height={24}
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="size-6 shrink-0"
-        >
-            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="#C63031" />
-        </svg>
-    )
-}
-
 const DefaultPageHeader = ({
     page,
     copy,
@@ -255,15 +261,9 @@ const DefaultPageHeader = ({
                             <SearchInput />
                         </Suspense>
                     ) : null}
-                    {page.action === "addEmployee" ? (
+                    {page.action === "createUser" ? (
                         <div className="ml-auto">
-                            <Button
-                                variant="primaryV2"
-                                className="h-10 w-55 gap-2 rounded-[40px] p-0 text-sm leading-[24.5px] font-medium tracking-[0.4px] uppercase hover:border-transparent active:border-transparent active:bg-transparent"
-                            >
-                                <PlusIcon />
-                                {copy.addEmployee}
-                            </Button>
+                            <CreateUserDialog label={copy.createUser} />
                         </div>
                     ) : null}
                 </div>
@@ -275,17 +275,19 @@ const DefaultPageHeader = ({
 const PageWithTabsHeader = ({
     page,
     match,
+    visibleTabs,
     secondBreadcrumb,
     copy,
 }: {
     page: HeaderTabsPage
     match: PathMatch
+    visibleTabs: HeaderTab[]
     secondBreadcrumb: string | null
     copy: HeaderCopy
 }) => {
     const t = useTranslations("Common")
     const basePath = fillPath(page.path, match.params)
-    const activeTab = page.tabs.find((tab) => tab.path === match.remainder)
+    const activeTab = visibleTabs.find((tab) => tab.path === match.remainder)
 
     return (
         <header className="w-full shrink-0 bg-[#f5f5f7] dark:bg-[#2e2e2e]">
@@ -335,7 +337,7 @@ const PageWithTabsHeader = ({
                 </ol>
             </nav>
             <div className="flex h-14 items-end overflow-x-auto">
-                {page.tabs.map((tab) => {
+                {visibleTabs.map((tab) => {
                     const isActive = tab.path === activeTab?.path
 
                     return (
@@ -344,7 +346,7 @@ const PageWithTabsHeader = ({
                             href={joinPaths(basePath, tab.path)}
                             aria-current={isActive ? "page" : undefined}
                             className={cn(
-                                "flex h-[50px] w-[150px] shrink-0 flex-col text-sm leading-[17.5px] tracking-[0.4px] uppercase",
+                                "flex h-12.5 w-37.5 shrink-0 flex-col text-sm leading-[17.5px] tracking-[0.4px] uppercase",
                                 isActive
                                     ? "font-semibold text-button-primary-default"
                                     : "font-medium text-[#2e2e2e] dark:text-[#f5f5f7]",
@@ -372,11 +374,13 @@ const PageWithTabsHeader = ({
 export const HeaderView = ({
     pages,
     initialBreadcrumb,
+    viewerId,
+    isAdmin,
     loadSecondBreadcrumb,
 }: Props) => {
     const copy = useHeaderCopy()
     const pathname = normalizePathname(usePathname())
-    const resolved = resolvePage(pages, pathname)
+    const resolved = resolvePage(pages, pathname, viewerId, isAdmin)
     const breadcrumbId =
         resolved?.page.type === "tabs"
             ? (resolved.match.params[resolved.page.breadcrumbParam] ?? "")
@@ -434,10 +438,18 @@ export const HeaderView = ({
     if (!resolved) return null
 
     if (resolved.page.type === "tabs") {
+        const visibleTabs = getVisibleTabs(
+            resolved.page,
+            resolved.match,
+            viewerId,
+            isAdmin,
+        )
+
         return (
             <PageWithTabsHeader
                 page={resolved.page}
                 match={resolved.match}
+                visibleTabs={visibleTabs}
                 secondBreadcrumb={secondBreadcrumb}
                 copy={copy}
             />

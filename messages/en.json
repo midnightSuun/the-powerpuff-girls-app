@@ -50,6 +50,38 @@
                 "inUseError": "Position cannot be deleted because it is currently in use"
             }
         },
+        "projects": {
+            "title": "Projects",
+            "empty": "No projects found",
+            "search": "Search projects",
+            "searchLabel": "Search projects",
+            "createProject": "CREATE PROJECT",
+            "edit": "Edit",
+            "remove": "Delete",
+            "removeTitle": "Delete project",
+            "removeConfirmation": "Are you sure you want to delete project \"{name}\"?",
+            "cancel": "CANCEL",
+            "removing": "DELETING...",
+            "removeError": "Failed to delete project. Please try again.",
+            "form": {
+                "createTitle": "Create project",
+                "updateTitle": "Update project",
+                "name": "Name",
+                "domain": "Domain",
+                "startDate": "Start date",
+                "endDate": "End Date",
+                "description": "Description",
+                "environment": "Environment",
+                "addEnvironment": "Add environment value",
+                "removeEnvironment": "Remove {value}",
+                "create": "CREATE",
+                "creating": "CREATING...",
+                "update": "UPDATE",
+                "saving": "UPDATING...",
+                "cancel": "CANCEL",
+                "saveError": "Failed to save project. Please try again."
+            }
+        },
         "common": {
             "search": "Search",
             "edit": "Edit",
@@ -220,7 +252,9 @@
         "skills": "Skills",
         "languages": "Languages",
         "cvs": "CVs",
-        "positions": "Positions"
+        "departments": "Departments",
+        "positions": "Positions",
+        "projects": "Projects"
     },
     "Errors": {
         "NoInternet": {
@@ -536,7 +570,15 @@
     },
     "Users": {
         "title": "Employees",
-        "addEmployee": "Add Employee",
+        "createUser": "Create user",
+        "dialog": {
+            "description": "Create a new user",
+            "password": "Password",
+            "cancel": "Cancel",
+            "submit": "Create",
+            "close": "Close",
+            "employee": "Employee"
+        },
         "loading": "Loading users...",
         "columns": {
             "avatar": "Avatar",
@@ -545,7 +587,8 @@
             "email": "Email",
             "department": "Department",
             "position": "Position",
-            "sortBy": "Sort by {column}"
+            "sortBy": "Sort by {column}",
+            "openMenu": "Open menu"
         }
     },
     "Pagination": {

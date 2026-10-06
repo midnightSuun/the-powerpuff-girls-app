@@ -5,6 +5,7 @@ import { type GetUsersQuery } from "@/gql"
 import { type UserSortField } from "@/lib/user-sort"
 
 import { UserAvatar } from "./user-avatar"
+import { UserRowMenu } from "./user-row-menu"
 
 type User = GetUsersQuery["users"]["items"][number]
 
@@ -24,7 +25,10 @@ const sortableColumn = (
     render,
 })
 
-export function getUsersColumns(t: ColumnTranslator): TableColumn<User>[] {
+export function getUsersColumns(
+    t: ColumnTranslator,
+    isAdmin: boolean,
+): TableColumn<User>[] {
     const sortLabel = (column: string) => t("sortBy", { column })
 
     return [
@@ -78,9 +82,12 @@ export function getUsersColumns(t: ColumnTranslator): TableColumn<User>[] {
         {
             id: "open",
             label: "",
-            render: () => (
-                <ChevronRight className="size-4 text-muted-foreground" />
-            ),
+            render: () =>
+                isAdmin ? (
+                    <UserRowMenu label={t("openMenu")} />
+                ) : (
+                    <ChevronRight className="size-4 text-muted-foreground" />
+                ),
         },
     ]
 }

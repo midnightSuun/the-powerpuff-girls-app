@@ -47,9 +47,7 @@ export function SkillsView({
     return (
         <div
             className={
-                compact
-                    ? "mx-auto w-full max-w-[1100px]"
-                    : "flex items-start gap-16"
+                compact ? "mx-auto w-full max-w-275" : "flex items-start gap-16"
             }
         >
             <div
