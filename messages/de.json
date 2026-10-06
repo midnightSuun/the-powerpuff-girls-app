@@ -323,11 +323,27 @@
             "proficient": "Erfahren",
             "expert": "Experte"
         },
+        "empty": "Hier gibt es noch keine Fähigkeiten",
         "categories": {
             "1": "Programmiersprachen",
             "2": "Frontend",
-            "3": "Backend",
-            "4": "Versionskontrollsysteme",
+            "3": "Frontend",
+            "4": "Frontend",
+            "5": "Frontend",
+            "6": "Frontend",
+            "7": "Frontend",
+            "8": "Frontend",
+            "9": "Backend",
+            "10": "Backend",
+            "11": "Backend",
+            "12": "Backend",
+            "13": "Test-Frameworks",
+            "14": "DevOps",
+            "15": "DevOps",
+            "16": "DevOps",
+            "17": "Versionskontrollsysteme",
+            "18": "Dokumentation",
+            "19": "Grafikeditoren",
             "other": "Allgemeine Fähigkeiten"
         },
         "actions": {
@@ -339,7 +355,6 @@
         "add": {
             "title": "Fähigkeit hinzufügen",
             "skillPlaceholder": "Fähigkeit",
-            "allLanguagesAdded": "Alle verfügbaren Sprachen hinzugefügt",
             "allSkillsAdded": "Alle verfügbaren Fähigkeiten hinzugefügt",
             "cancel": "ABBRECHEN",
             "submit": "HINZUFÜGEN",

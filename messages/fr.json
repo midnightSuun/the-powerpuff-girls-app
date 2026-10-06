@@ -323,11 +323,27 @@
             "proficient": "Maîtrisé",
             "expert": "Expert"
         },
+        "empty": "Aucune compétence ici",
         "categories": {
             "1": "Langages de programmation",
             "2": "Frontend",
-            "3": "Backend",
-            "4": "Systèmes de contrôle de version",
+            "3": "Frontend",
+            "4": "Frontend",
+            "5": "Frontend",
+            "6": "Frontend",
+            "7": "Frontend",
+            "8": "Frontend",
+            "9": "Backend",
+            "10": "Backend",
+            "11": "Backend",
+            "12": "Backend",
+            "13": "Frameworks de test",
+            "14": "DevOps",
+            "15": "DevOps",
+            "16": "DevOps",
+            "17": "Systèmes de contrôle de version",
+            "18": "Documentation",
+            "19": "Éditeurs graphiques",
             "other": "Compétences générales"
         },
         "actions": {
@@ -339,7 +355,6 @@
         "add": {
             "title": "Ajouter une compétence",
             "skillPlaceholder": "Compétence",
-            "allLanguagesAdded": "Toutes les compétences disponibles ont été ajoutées",
             "allSkillsAdded": "Toutes les compétences disponibles ont été ajoutées",
             "cancel": "ANNULER",
             "submit": "AJOUTER",

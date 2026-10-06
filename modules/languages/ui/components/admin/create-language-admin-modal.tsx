@@ -57,7 +57,7 @@ export function CreateLanguageModal(props: CreateLanguageModalProps) {
                     />
                     {inlineError && (
                         <span className="mt-1 text-xs text-red-500">
-                            {t("alreadyExists")}
+                            {inlineError}
                         </span>
                     )}
                 </div>
