@@ -15,12 +15,15 @@ import {
     type SettingsFormValues,
 } from "../schemas/settings"
 
+export type SupportedLocale =
+    "en" | "fr" | "de" | "it" | "pl" | "pt" | "ru" | "es" | "uk"
+
 export function useSettings() {
     const validation = useTranslations("Settings.validation")
     const t = useTranslations("Settings.messages")
     const notifications = useTranslations("Notifications")
     const { theme, setTheme } = useTheme()
-    const locale = useLocale()
+    const locale = useLocale() as SupportedLocale
     const router = useRouter()
     const pathname = usePathname()
 
@@ -56,7 +59,7 @@ export function useSettings() {
         },
     })
 
-    const handleLanguageChange = (newLocale: "en" | "ru") => {
+    const handleLanguageChange = (newLocale: SupportedLocale) => {
         router.replace(pathname, { locale: newLocale })
     }
 

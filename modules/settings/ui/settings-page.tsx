@@ -84,7 +84,16 @@ export function SettingsPage() {
                                 onChange={(e) => {
                                     languageRegistration.onChange(e)
                                     handleLanguageChange(
-                                        e.target.value as "en" | "ru",
+                                        e.target.value as
+                                            | "en"
+                                            | "fr"
+                                            | "de"
+                                            | "it"
+                                            | "pl"
+                                            | "pt"
+                                            | "ru"
+                                            | "es"
+                                            | "uk",
                                     )
                                 }}
                                 className="w-full h-11 px-4 pr-10 text-sm bg-transparent border border-border rounded-lg appearance-none focus:outline-none focus:ring-1 focus:ring-ring cursor-pointer text-foreground"
@@ -96,10 +105,52 @@ export function SettingsPage() {
                                     {t("language.english")}
                                 </option>
                                 <option
+                                    value="fr"
+                                    className="bg-background text-foreground"
+                                >
+                                    {t("language.french")}
+                                </option>
+                                <option
+                                    value="de"
+                                    className="bg-background text-foreground"
+                                >
+                                    {t("language.german")}
+                                </option>
+                                <option
+                                    value="it"
+                                    className="bg-background text-foreground"
+                                >
+                                    {t("language.italian")}
+                                </option>
+                                <option
+                                    value="pl"
+                                    className="bg-background text-foreground"
+                                >
+                                    {t("language.polish")}
+                                </option>
+                                <option
+                                    value="pt"
+                                    className="bg-background text-foreground"
+                                >
+                                    {t("language.portuguese")}
+                                </option>
+                                <option
                                     value="ru"
                                     className="bg-background text-foreground"
                                 >
                                     {t("language.russian")}
+                                </option>
+                                <option
+                                    value="es"
+                                    className="bg-background text-foreground"
+                                >
+                                    {t("language.spanish")}
+                                </option>
+                                <option
+                                    value="uk"
+                                    className="bg-background text-foreground"
+                                >
+                                    {t("language.ukrainian")}
                                 </option>
                             </select>
                             <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
