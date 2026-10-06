@@ -220,7 +220,9 @@
         "skills": "Skills",
         "languages": "Languages",
         "cvs": "CVs",
-        "positions": "Positions"
+        "departments": "Departments",
+        "positions": "Positions",
+        "projects": "Projects"
     },
     "Errors": {
         "NoInternet": {
@@ -520,7 +522,15 @@
     },
     "Users": {
         "title": "Employees",
-        "addEmployee": "Add Employee",
+        "createUser": "Create user",
+        "dialog": {
+            "description": "Create a new user",
+            "password": "Password",
+            "cancel": "Cancel",
+            "submit": "Create",
+            "close": "Close",
+            "employee": "Employee"
+        },
         "loading": "Loading users...",
         "columns": {
             "avatar": "Avatar",
@@ -529,7 +539,8 @@
             "email": "Email",
             "department": "Department",
             "position": "Position",
-            "sortBy": "Sort by {column}"
+            "sortBy": "Sort by {column}",
+            "openMenu": "Open menu"
         }
     },
     "Pagination": {

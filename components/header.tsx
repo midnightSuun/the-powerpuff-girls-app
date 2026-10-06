@@ -10,7 +10,7 @@ type DefaultPage = {
     path: string
     title: HeaderCopyKey
     showSearch?: boolean
-    action?: "addEmployee"
+    action?: "createUser"
 }
 
 type PageWithTabs = {
@@ -31,7 +31,7 @@ const PAGES: (DefaultPage | PageWithTabs)[] = [
         path: "/users",
         title: "users",
         showSearch: true,
-        action: "addEmployee",
+        action: "createUser",
     },
     {
         path: "/cv",
@@ -110,36 +110,38 @@ const loadSecondBreadcrumb = async (pagePath: string, id: string) => {
     }
 }
 
-const clientPages: HeaderPage[] = PAGES.map((page) => {
-    if (isPageWithTabs(page)) {
-        return {
-            type: "tabs",
-            path: page.path,
-            firstBreadcrumb: page.firstBreadcrumb,
-            breadcrumbParam: page.breadcrumbParam,
-            showBreadcrumbIcon: page.showBreadcrumbIcon,
-            tabs: page.tabs,
+const toClientPages = (isAdmin: boolean): HeaderPage[] =>
+    PAGES.map((page) => {
+        if (isPageWithTabs(page)) {
+            return {
+                type: "tabs",
+                path: page.path,
+                firstBreadcrumb: page.firstBreadcrumb,
+                breadcrumbParam: page.breadcrumbParam,
+                showBreadcrumbIcon: page.showBreadcrumbIcon,
+                tabs: page.tabs,
+            }
         }
-    }
 
-    return {
-        type: "default",
-        path: page.path,
-        title: page.title,
-        showSearch: page.showSearch,
-        action: page.action,
-    }
-})
+        return {
+            type: "default",
+            path: page.path,
+            title: page.title,
+            showSearch: page.showSearch,
+            action: isAdmin ? page.action : undefined,
+        }
+    })
 
 export const Header = async () => {
     const session = await getCurrentSession()
+    const isAdmin = session?.role === "Admin"
 
     return (
         <HeaderView
-            pages={clientPages}
+            pages={toClientPages(isAdmin)}
             initialBreadcrumb={null}
             viewerId={session?.userId ?? null}
-            isAdmin={session?.role === "Admin"}
+            isAdmin={isAdmin}
             loadSecondBreadcrumb={loadSecondBreadcrumb}
         />
     )

@@ -32,33 +32,8 @@ interface UserData {
     position?: ProfileOption | null
 }
 
-const MAX_AVATAR_SIZE = 5 * 1024 * 1024
+const MAX_AVATAR_SIZE = 500_000
 const ALLOWED_AVATAR_TYPES = new Set(["image/png", "image/jpeg", "image/gif"])
-
-function readFileAsBase64(file: File, errorMessage: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader()
-
-        reader.onload = () => {
-            if (typeof reader.result !== "string") {
-                reject(new Error(errorMessage))
-                return
-            }
-
-            const separator = reader.result.indexOf(",")
-            if (separator < 0) {
-                reject(new Error(errorMessage))
-                return
-            }
-
-            resolve(reader.result.slice(separator + 1))
-        }
-        reader.onerror = () => {
-            reject(reader.error ?? new Error(errorMessage))
-        }
-        reader.readAsDataURL(file)
-    })
-}
 
 export function useUserProfile(
     user: UserData,

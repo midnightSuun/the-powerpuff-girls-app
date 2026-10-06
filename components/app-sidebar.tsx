@@ -37,13 +37,22 @@ const SidebarUserFallback = () => {
     )
 }
 
-export async function AppSidebar() {
+const SidebarNavSection = async () => {
     const session = await getCurrentSession()
 
     return (
+        <SidebarNav
+            isAdmin={session?.role === "Admin"}
+            viewerId={session?.userId ?? null}
+        />
+    )
+}
+
+export function AppSidebar() {
+    return (
         <Sidebar variant="inset" collapsible="icon">
             <SidebarHeader className="gap-2 group-data-[collapsible=icon]:items-center">
-                <div className="flex min-w-0 items-center gap-2 px-1 group-data-[collapsible=icon]:flex-col group-data-[collapsible=icon]:gap-2 group-data-[collapsible=icon]:px-0">
+                <div className="flex min-w-0 items-center gap-1 px-1 group-data-[collapsible=icon]:flex-col group-data-[collapsible=icon]:gap-2 group-data-[collapsible=icon]:px-0">
                     <CvBuilderLogo className="size-6 shrink-0" />
                     <p className="min-w-0 flex-1 truncate text-sm font-medium group-data-[collapsible=icon]:hidden">
                         CV Builder
@@ -53,7 +62,7 @@ export async function AppSidebar() {
             </SidebarHeader>
             <SidebarContent>
                 <Suspense fallback={<SidebarNavFallback />}>
-                    <SidebarNav viewerId={session?.userId ?? null} />
+                    <SidebarNavSection />
                 </Suspense>
             </SidebarContent>
             <SidebarFooter>
