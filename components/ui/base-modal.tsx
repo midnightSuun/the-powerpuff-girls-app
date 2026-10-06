@@ -59,7 +59,7 @@ export function BaseModal({
     const content = (
         <div
             className={cn(
-                "relative w-full max-w-155 rounded-none border border-border bg-background p-6 text-foreground shadow-2xl dark:border-auth-card-border dark:bg-auth-bg md:rounded-xl md:p-8",
+                "relative w-full max-w-155 rounded-none border border-border bg-background p-6 text-foreground shadow-2xl dark:border-auth-card-border dark:bg-auth-bg md:p-8",
                 dialogClassName,
             )}
         >
