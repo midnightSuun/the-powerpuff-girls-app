@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from "next-intl"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import type { GetProfileOptionsQuery, GetUserQuery } from "@/gql"
+import type { GetProfileOptionsQuery, GetUserQuery, UserRole } from "@/gql"
 
 import { useUserProfile } from "../hooks/use-user-profile"
 import { UserAvatar } from "./user-avatar"
@@ -12,6 +12,7 @@ import { UserAvatar } from "./user-avatar"
 interface UserProfileFormProps {
     user: GetUserQuery["user"]
     currentUserId: string | number
+    currentUserRole?: UserRole | string | null
     departments: GetProfileOptionsQuery["departments"]["items"]
     positions: GetProfileOptionsQuery["positions"]["items"]
 }
@@ -19,6 +20,7 @@ interface UserProfileFormProps {
 export function UserProfileForm({
     user,
     currentUserId,
+    currentUserRole,
     departments,
     positions,
 }: UserProfileFormProps) {
@@ -56,16 +58,13 @@ export function UserProfileForm({
         handleUpdate,
         handleAvatarChange,
         handleVerifyEmail,
-    } = useUserProfile(user, currentUserId)
+    } = useUserProfile(user, currentUserId, currentUserRole)
 
-    // Безопасное парсить created_at (поддерживает числа, строки-таймстемпы и стандартные ISO-строки)
     const parseCreatedAt = (rawDate: unknown) => {
         if (!rawDate) return null
 
-        // Если это строка, состоящая только из цифр (таймстемп)
         if (typeof rawDate === "string" && /^\d+$/.test(rawDate)) {
             const num = Number(rawDate)
-            // Если таймстемп в секундах (10 символов), переводим в миллисекунды
             return new Date(rawDate.length === 10 ? num * 1000 : num)
         }
 
@@ -275,7 +274,7 @@ export function UserProfileForm({
                             variant="secondary"
                             onClick={handleVerifyEmail}
                             disabled={isVerifyingEmail}
-                            className="h-9 w-full px-4 py-0 text-[10px] font-normal sm:w-[120px]"
+                            className="h-9 w-full px-4 py-0 text-[10px] font-normal sm:w-30"
                         >
                             {isVerifyingEmail
                                 ? t("sendingVerification")
@@ -285,7 +284,7 @@ export function UserProfileForm({
                     <Button
                         type="submit"
                         disabled={(!isChanged && isValid) || isSubmitting}
-                        className="h-9 w-full px-4 py-0 text-[10px] font-normal sm:w-[120px]"
+                        className="h-9 w-full px-4 py-0 text-[10px] font-normal sm:w-30"
                     >
                         {isSubmitting ? t("updating") : t("update")}
                     </Button>
