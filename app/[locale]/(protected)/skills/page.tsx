@@ -11,6 +11,7 @@ import { getUserSkills } from "@/modules/skills/api/skills"
 import { getAuthUserId } from "@/modules/skills/helpers/get-auth-user-id"
 import { AdminSkillsView } from "@/modules/skills/ui/components/admin/admin-skills-view"
 import { Skills } from "@/modules/skills/ui/skills"
+export const instant = false
 
 async function SkillsContent() {
     const userId = await getAuthUserId()

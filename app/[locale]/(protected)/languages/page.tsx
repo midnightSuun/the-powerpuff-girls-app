@@ -13,6 +13,7 @@ import {
 } from "@/modules/languages/api/languages"
 import { AdminLanguagesView } from "@/modules/languages/ui/components/admin/admin-languages-view"
 import { LanguagesPage } from "@/modules/languages/ui/languages-page"
+export const instant = false
 
 async function LanguagesContent() {
     const session = await getCurrentSession()
