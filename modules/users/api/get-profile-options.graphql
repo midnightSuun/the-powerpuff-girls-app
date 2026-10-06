@@ -1,0 +1,14 @@
+query GetProfileOptions($params: SearchPaginationInput) {
+    departments(params: $params) {
+        items {
+            id
+            name
+        }
+    }
+    positions(params: $params) {
+        items {
+            id
+            name
+        }
+    }
+}
