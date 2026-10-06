@@ -655,7 +655,8 @@
         "admin": {
             "columns": {
                 "name": "Назва",
-                "isoCode": "ISO-код"
+                "isoCode": "ISO",
+                "nativeName": "Нативна назва"
             },
             "search": "Пошук",
             "createButton": "СТВОРИТИ МОВУ",
@@ -664,7 +665,7 @@
                 "title": "Створити мову",
                 "languageName": "Назва мови",
                 "languagePlaceholder": "напр. Українська",
-                "isoCode": "ISO-код",
+                "isoCode": "ISO",
                 "isoCodePlaceholder": "напр. uk",
                 "cancel": "СКАСУВАТИ",
                 "create": "СТВОРИТИ",

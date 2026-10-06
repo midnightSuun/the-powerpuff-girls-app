@@ -40,7 +40,6 @@ export function CreateLanguageModal(props: CreateLanguageModalProps) {
             cancelText={t("cancel")}
             confirmText={t("create")}
             pendingText={t("creating")}
-            confirmButtonVariant="destructive"
             onSubmit={handleSubmit}
         >
             <div className="flex flex-col gap-4">

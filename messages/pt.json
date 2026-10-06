@@ -655,7 +655,8 @@
         "admin": {
             "columns": {
                 "name": "Nome",
-                "isoCode": "Código ISO"
+                "isoCode": "ISO",
+                "nativeName": "Nome nativo"
             },
             "search": "Pesquisar",
             "createButton": "CRIAR IDIOMA",
