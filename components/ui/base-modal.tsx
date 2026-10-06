@@ -128,7 +128,7 @@ export function BaseModal({
     return (
         <div
             className={cn(
-                "fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs",
+                "fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4",
                 overlayClassName,
             )}
         >
