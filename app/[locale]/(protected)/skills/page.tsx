@@ -38,7 +38,7 @@ async function SkillsContent() {
 
     const userSkills = await getUserSkills(userId)
 
-    return <Skills userSkills={userSkills} role={userRole} />
+    return <Skills userSkills={userSkills} role={userRole} canManageSkills />
 }
 
 export default async function SkillsPage() {

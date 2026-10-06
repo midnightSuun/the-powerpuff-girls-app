@@ -42,6 +42,7 @@ async function LanguagesContent() {
             initialUserLanguages={userLanguages}
             allSystemLanguages={allSystemLanguages}
             userId={userId}
+            canManageLanguages
         />
     )
 }
