@@ -32,7 +32,7 @@ interface UserData {
     position?: ProfileOption | null
 }
 
-const MAX_AVATAR_SIZE = 0.5 * 1024 * 1024
+const MAX_AVATAR_SIZE = 5 * 1024 * 1024
 const ALLOWED_AVATAR_TYPES = new Set(["image/png", "image/jpeg", "image/gif"])
 
 function readFileAsBase64(file: File, errorMessage: string): Promise<string> {
@@ -80,7 +80,9 @@ export function useUserProfile(
     const [departmentId, setDepartmentId] = useState(user.department?.id ?? "")
     const [positionId, setPositionId] = useState(user.position?.id ?? "")
     const [avatarFile, setAvatarFile] = useState<File | null>(null)
-    const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
+    const [avatarPreview, setAvatarPreview] = useState<string | null>(
+        user.profile?.avatar ?? null,
+    )
     const [hasSubmitted, setHasSubmitted] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [isVerifyingEmail, setIsVerifyingEmail] = useState(false)
@@ -88,7 +90,7 @@ export function useUserProfile(
 
     useEffect(
         () => () => {
-            if (avatarPreview) {
+            if (avatarPreview && avatarPreview.startsWith("blob:")) {
                 URL.revokeObjectURL(avatarPreview)
             }
         },
@@ -109,37 +111,64 @@ export function useUserProfile(
     const isChanged =
         firstName !== initialFirstName ||
         lastName !== initialLastName ||
-        isAssignmentChanged ||
-        avatarFile !== null
+        isAssignmentChanged
 
     const isValid =
         firstName.trim() !== "" &&
         lastName.trim() !== "" &&
         Boolean(departmentId && positionId)
 
-    const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.currentTarget.files?.[0]
+    const handleAvatarChange = async (
+        event: React.ChangeEvent<HTMLInputElement>,
+    ) => {
+        const inputElement = event.currentTarget
+        const file = inputElement.files?.[0]
         if (!file) return
 
         if (!ALLOWED_AVATAR_TYPES.has(file.type)) {
-            setAvatarFile(null)
-            setAvatarPreview(null)
             setAvatarError(errors("unsupportedFileType"))
-            event.currentTarget.value = ""
+            notifications.error(errors("unsupportedFileType"))
+            inputElement.value = ""
             return
         }
 
         if (file.size > MAX_AVATAR_SIZE) {
-            setAvatarFile(null)
-            setAvatarPreview(null)
             setAvatarError(errors("fileTooLarge"))
-            event.currentTarget.value = ""
+            notifications.error(errors("fileTooLarge"))
+            inputElement.value = ""
             return
         }
 
-        setAvatarFile(file)
-        setAvatarPreview(URL.createObjectURL(file))
         setAvatarError(null)
+        setAvatarFile(file)
+
+        const tempPreview = URL.createObjectURL(file)
+        setAvatarPreview(tempPreview)
+
+        try {
+            const formData = new FormData()
+            formData.append("userId", String(user.id))
+            formData.append("file", file)
+
+            const result = await uploadProfileAvatar(formData)
+
+            if (!result.success) {
+                setAvatarPreview(user.profile?.avatar ?? null)
+                notifications.error(
+                    result.error || messages("avatarUploadFailed"),
+                )
+                return
+            }
+
+            notifications.success("update")
+            router.refresh()
+        } catch (error) {
+            console.error("Failed to upload avatar:", error)
+            setAvatarPreview(user.profile?.avatar ?? null)
+            notifications.error(messages("avatarUploadFailed"))
+        } finally {
+            inputElement.value = ""
+        }
     }
 
     const handleUpdate = async (e: React.FormEvent) => {
@@ -182,28 +211,7 @@ export function useUserProfile(
                 }
             }
 
-            if (avatarFile) {
-                const base64 = await readFileAsBase64(
-                    avatarFile,
-                    messages("avatarUploadFailed"),
-                )
-                const result = await uploadProfileAvatar({
-                    userId: String(user.id),
-                    base64,
-                    size: avatarFile.size,
-                    type: avatarFile.type,
-                })
-                if (!result.success) {
-                    notifications.error(
-                        result.error || messages("avatarUploadFailed"),
-                    )
-                    return
-                }
-            }
-
             notifications.success("update")
-            setAvatarFile(null)
-            setAvatarPreview(null)
             router.refresh()
         } catch (error) {
             console.error("Failed to save profile changes:", error)
