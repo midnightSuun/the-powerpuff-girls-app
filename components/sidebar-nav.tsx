@@ -84,7 +84,7 @@ type SidebarNavProps = {
 export const SidebarNav = ({ isAdmin, viewerId }: SidebarNavProps) => {
     const pathname = usePathname()
     const t = useTranslations("Navigation")
-    
+
     const userProfileMatch = pathname.match(/^\/users\/([^/]+)(?:\/|$)/)
     const isOtherUserProfile =
         userProfileMatch !== null && userProfileMatch[1] !== viewerId
