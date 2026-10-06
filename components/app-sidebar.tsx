@@ -11,6 +11,7 @@ import {
     SidebarSeparator,
 } from "@/components/ui/sidebar"
 import { Skeleton } from "@/components/ui/skeleton"
+import { getCurrentSession } from "@/modules/auth/helpers/get-current-session"
 import { NavUser } from "@/modules/users"
 
 const SidebarNavFallback = () => {
@@ -36,6 +37,12 @@ const SidebarUserFallback = () => {
     )
 }
 
+const SidebarNavSection = async () => {
+    const session = await getCurrentSession()
+
+    return <SidebarNav isAdmin={session?.role === "Admin"} />
+}
+
 export function AppSidebar() {
     return (
         <Sidebar variant="inset" collapsible="icon">
@@ -50,7 +57,7 @@ export function AppSidebar() {
             </SidebarHeader>
             <SidebarContent>
                 <Suspense fallback={<SidebarNavFallback />}>
-                    <SidebarNav />
+                    <SidebarNavSection />
                 </Suspense>
             </SidebarContent>
             <SidebarFooter>
