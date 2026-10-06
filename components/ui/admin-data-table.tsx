@@ -1,13 +1,13 @@
 "use client"
 
-import { ArrowUpDown, MoreVertical } from "lucide-react"
+import { MoreVertical, Plus } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useEffect, useMemo, useRef, useState } from "react"
 
 import { Button } from "@/components/ui/button"
 
 import { SearchInput } from "../search-input"
-import { AddItemButton } from "./list-management-buttons"
+import { SortArrow } from "../sort-arrow"
 
 export interface Column<T> {
     key: string
@@ -25,11 +25,12 @@ interface AdminDataTableProps<T> {
     onEditClick?: (item: T) => void
     onDeleteClick?: (item: T) => void
     getSearchableString?: (item: T) => string
-    getSortValue?: (item: T) => string
+    getSortValue?: (item: T, key?: string) => string
     emptyMessage?: string
     limit?: number
     search?: string
     createButtonClassName?: string
+    defaultSortKey?: string
 }
 
 export function AdminDataTable<T extends { id: string | number }>({
@@ -44,10 +45,11 @@ export function AdminDataTable<T extends { id: string | number }>({
     emptyMessage = "No items found",
     limit = 10,
     search = "",
-    createButtonClassName,
+    defaultSortKey = "type",
 }: AdminDataTableProps<T>) {
     const tCommon = useTranslations("Admin.common")
 
+    const [sortColumnKey, setSortColumnKey] = useState<string>(defaultSortKey)
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
     const [activeMenuId, setActiveMenuId] = useState<string | number | null>(
         null,
@@ -76,6 +78,15 @@ export function AdminDataTable<T extends { id: string | number }>({
         }
     }, [])
 
+    const handleSort = (key: string) => {
+        if (sortColumnKey === key) {
+            setSortOrder(sortOrder === "asc" ? "desc" : "asc")
+        } else {
+            setSortColumnKey(key)
+            setSortOrder("asc")
+        }
+    }
+
     const processedData = useMemo(() => {
         let result = [...data]
 
@@ -88,8 +99,8 @@ export function AdminDataTable<T extends { id: string | number }>({
 
         if (getSortValue) {
             result.sort((a, b) => {
-                const valA = getSortValue(a)
-                const valB = getSortValue(b)
+                const valA = getSortValue(a, sortColumnKey)
+                const valB = getSortValue(b, sortColumnKey)
                 return sortOrder === "asc"
                     ? valA.localeCompare(valB)
                     : valB.localeCompare(valA)
@@ -97,53 +108,66 @@ export function AdminDataTable<T extends { id: string | number }>({
         }
 
         return result
-    }, [data, search, sortOrder, getSearchableString, getSortValue])
+    }, [
+        data,
+        search,
+        sortColumnKey,
+        sortOrder,
+        getSearchableString,
+        getSortValue,
+    ])
 
     return (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between gap-4">
                 <SearchInput limit={limit} search={search} />
 
                 {createButtonLabel && onCreateClick && (
-                    <AddItemButton
-                        label={createButtonLabel}
+                    <Button
+                        type="button"
+                        variant="primaryV2"
                         onClick={onCreateClick}
-                        className={createButtonClassName}
-                    />
+                        className="flex items-center gap-1.5 cursor-pointer"
+                    >
+                        <Plus className="h-4 w-4" />
+                        {createButtonLabel}
+                    </Button>
                 )}
             </div>
 
             <div className="w-full overflow-x-auto">
                 <table className="w-full text-left text-sm">
                     <thead>
-                        <tr className="h-[73px] border-b border-[#AEAEAE] dark:border-gray-700">
-                            {columns.map((col) => (
-                                <th
-                                    key={col.key}
-                                    className={`px-4 font-medium text-foreground align-middle ${
-                                        col.sortable
-                                            ? "cursor-pointer select-none"
-                                            : ""
-                                    }`}
-                                    onClick={
-                                        col.sortable
-                                            ? () =>
-                                                  setSortOrder(
-                                                      sortOrder === "asc"
-                                                          ? "desc"
-                                                          : "asc",
-                                                  )
-                                            : undefined
-                                    }
-                                >
-                                    <div className="flex items-center gap-1">
-                                        {col.label}
-                                        {col.sortable && (
-                                            <ArrowUpDown className="h-3 w-3" />
-                                        )}
-                                    </div>
-                                </th>
-                            ))}
+                        <tr className="h-12 border-b border-[#383838]">
+                            {columns.map((col) => {
+                                const isSorted = sortColumnKey === col.key
+                                return (
+                                    <th
+                                        key={col.key}
+                                        className={`px-4 font-semibold text-foreground align-middle ${
+                                            col.sortable
+                                                ? "cursor-pointer select-none"
+                                                : ""
+                                        }`}
+                                        onClick={
+                                            col.sortable
+                                                ? () => handleSort(col.key)
+                                                : undefined
+                                        }
+                                    >
+                                        <div className="flex items-center gap-1.5">
+                                            {col.label}
+                                            {col.sortable && isSorted && (
+                                                <SortArrow
+                                                    descending={
+                                                        sortOrder === "desc"
+                                                    }
+                                                />
+                                            )}
+                                        </div>
+                                    </th>
+                                )
+                            })}
                             {(onEditClick || onDeleteClick) && (
                                 <th className="px-4 w-10 align-middle"></th>
                             )}
@@ -154,12 +178,12 @@ export function AdminDataTable<T extends { id: string | number }>({
                             processedData.map((item) => (
                                 <tr
                                     key={item.id}
-                                    className="h-[73px] border-b border-[#AEAEAE] dark:border-gray-700 hover:bg-muted/30 transition-colors"
+                                    className="h-14 border-b border-[#383838] hover:bg-muted/10 transition-colors"
                                 >
                                     {columns.map((col) => (
                                         <td
                                             key={col.key}
-                                            className="px-4 align-middle"
+                                            className="px-4 align-middle text-muted-foreground"
                                         >
                                             {col.render
                                                 ? col.render(item)
@@ -178,7 +202,7 @@ export function AdminDataTable<T extends { id: string | number }>({
                                             <Button
                                                 type="button"
                                                 variant="ghost"
-                                                className="h-8 w-8 p-0"
+                                                className="h-8 min-w-8 p-0 text-muted-foreground hover:text-foreground"
                                                 onClick={() =>
                                                     setActiveMenuId(
                                                         activeMenuId === item.id
@@ -234,7 +258,7 @@ export function AdminDataTable<T extends { id: string | number }>({
                                 </tr>
                             ))
                         ) : (
-                            <tr className="h-[73px] border-b border-[#AEAEAE] dark:border-gray-700">
+                            <tr className="h-14 border-b border-[#383838]">
                                 <td
                                     colSpan={
                                         columns.length +

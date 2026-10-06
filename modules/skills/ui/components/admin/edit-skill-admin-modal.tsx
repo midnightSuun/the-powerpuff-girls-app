@@ -11,16 +11,14 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { useEditSkillAdminModal } from "@/modules/skills/hooks/use-edit-skill-admin-modal"
+import {
+    type AdminSkillItem,
+    useEditSkillAdminModal,
+} from "@/modules/skills/hooks/use-edit-skill-admin-modal"
 
 import type { CategoryOption } from "./create-skill-modal"
 
-export interface AdminSkillItem {
-    id: string
-    name: string
-    category: string
-    categoryId: string
-}
+export type { AdminSkillItem }
 
 interface EditSkillModalProps {
     isOpen: boolean
@@ -72,7 +70,6 @@ export function EditSkillModal(props: EditSkillModalProps) {
             cancelText={tAdmin("cancel")}
             confirmText={tAdmin("save")}
             pendingText={tAdmin("saving")}
-            confirmButtonVariant="destructive"
             onSubmit={handleSubmit}
         >
             <div className="flex flex-col gap-4">

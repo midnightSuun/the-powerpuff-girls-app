@@ -66,7 +66,6 @@ export function CreateSkillModal(props: CreateSkillModalProps) {
             cancelText={tAdmin("cancel")}
             confirmText={tAdmin("create")}
             pendingText={tAdmin("creating")}
-            confirmButtonVariant="destructive"
             onSubmit={handleSubmit}
         >
             <div className="flex flex-col gap-4">
