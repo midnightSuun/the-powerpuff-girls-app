@@ -529,7 +529,17 @@
             "cancel": "Cancel",
             "submit": "Create",
             "close": "Close",
-            "employee": "Employee"
+            "employee": "Employee",
+            "admin": "Admin",
+            "updateTitle": "Update user",
+            "updateDescription": "Update an existing user",
+            "update": "Update"
+        },
+        "messages": {
+            "createForbidden": "Only an administrator can create users.",
+            "createFailed": "Could not create the user. Please try again.",
+            "updateForbidden": "Only an administrator can update users.",
+            "updateFailed": "Could not update the user. Please try again."
         },
         "loading": "Loading users...",
         "columns": {
