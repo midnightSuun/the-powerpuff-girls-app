@@ -6,7 +6,7 @@ import { getTranslations } from "next-intl/server"
 import { getGql, UploadAvatarDocument } from "@/gql"
 import { getCurrentSession } from "@/modules/auth/helpers/get-current-session"
 
-const MAX_AVATAR_SIZE = 0.5 * 1024 * 1024
+const MAX_AVATAR_SIZE = 500_000
 const ALLOWED_AVATAR_TYPES = new Set(["image/png", "image/jpeg", "image/gif"])
 const BASE64_PATTERN =
     /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/
@@ -57,7 +57,7 @@ export async function uploadProfileAvatar(input: UploadProfileAvatarInput) {
         const data = await gql.request(UploadAvatarDocument, {
             avatar: {
                 userId: input.userId,
-                base64: input.base64,
+                base64: `data:${input.type};base64,${input.base64}`,
                 size: input.size,
                 type: input.type,
             },
@@ -67,7 +67,11 @@ export async function uploadProfileAvatar(input: UploadProfileAvatarInput) {
 
         return { success: true, data: data.uploadAvatar }
     } catch (error) {
-        console.error("Failed to upload user profile avatar:", error)
+        const message = error instanceof Error ? error.message : "Unknown error"
+        console.error(
+            "Failed to upload user profile avatar:",
+            message.split("\n")[0]?.slice(0, 300),
+        )
         const t = await getTranslations("User.messages")
         return {
             success: false,

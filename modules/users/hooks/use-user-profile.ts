@@ -34,7 +34,7 @@ interface UserData {
     position?: ProfileOption | null
 }
 
-const MAX_AVATAR_SIZE = 0.5 * 1024 * 1024
+const MAX_AVATAR_SIZE = 500_000
 const ALLOWED_AVATAR_TYPES = new Set(["image/png", "image/jpeg", "image/gif"])
 
 function readFileAsBase64(file: File, errorMessage: string): Promise<string> {
