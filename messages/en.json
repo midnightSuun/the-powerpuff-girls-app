@@ -50,6 +50,38 @@
                 "inUseError": "Position cannot be deleted because it is currently in use"
             }
         },
+        "projects": {
+            "title": "Projects",
+            "empty": "No projects found",
+            "search": "Search projects",
+            "searchLabel": "Search projects",
+            "createProject": "CREATE PROJECT",
+            "edit": "Edit",
+            "remove": "Delete",
+            "removeTitle": "Delete project",
+            "removeConfirmation": "Are you sure you want to delete project \"{name}\"?",
+            "cancel": "CANCEL",
+            "removing": "DELETING...",
+            "removeError": "Failed to delete project. Please try again.",
+            "form": {
+                "createTitle": "Create project",
+                "updateTitle": "Update project",
+                "name": "Name",
+                "domain": "Domain",
+                "startDate": "Start date",
+                "endDate": "End Date",
+                "description": "Description",
+                "environment": "Environment",
+                "addEnvironment": "Add environment value",
+                "removeEnvironment": "Remove {value}",
+                "create": "CREATE",
+                "creating": "CREATING...",
+                "update": "UPDATE",
+                "saving": "UPDATING...",
+                "cancel": "CANCEL",
+                "saveError": "Failed to save project. Please try again."
+            }
+        },
         "common": {
             "search": "Search",
             "edit": "Edit",
