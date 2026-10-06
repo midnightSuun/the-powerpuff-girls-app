@@ -4,6 +4,8 @@ import { ClientError } from "graphql-request"
 import { getTranslations } from "next-intl/server"
 
 import { getGql } from "@/gql"
+import { getCurrentSession } from "@/modules/auth/helpers/get-current-session"
+import { getUser } from "@/modules/users/api/get-user"
 
 export type VerificationActionState = {
     error?: string
@@ -31,7 +33,7 @@ const graphqlErrorMessage = (error: unknown) => {
     return error instanceof Error ? error.message : ""
 }
 
-export async function sendVerificationAction(
+async function sendVerification(
     email: string,
 ): Promise<VerificationActionState> {
     const t = await getTranslations("Auth.messages")
@@ -52,6 +54,32 @@ export async function sendVerificationAction(
     }
 
     return {}
+}
+
+export async function sendVerificationAction(
+    email: string,
+): Promise<VerificationActionState> {
+    return sendVerification(email)
+}
+
+export async function sendProfileVerificationAction(): Promise<VerificationActionState> {
+    const t = await getTranslations("Auth.messages")
+    const session = await getCurrentSession()
+
+    if (!session) {
+        return { error: t("sessionExpired") }
+    }
+
+    try {
+        const user = await getUser(session.userId)
+        return await sendVerification(user.email)
+    } catch (error) {
+        console.error(
+            "Failed to load current user for email verification:",
+            error,
+        )
+        return { error: t("verificationSendFailed") }
+    }
 }
 
 export async function verifyMailAction(

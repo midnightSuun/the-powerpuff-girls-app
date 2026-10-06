@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl"
 import { useState } from "react"
 
 import type { Mastery } from "@/gql/generated/graphql"
+import { useActionNotifications } from "@/hooks/use-action-notifications"
 import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock"
 
 import { addCvSkills } from "../api/skills"
@@ -35,6 +36,7 @@ export function useAddSkillModal({
     availableSkills = [],
 }: UseAddSkillModalProps) {
     const t = useTranslations("Skills.add")
+    const notifications = useActionNotifications()
     const router = useRouter()
     const [selectedSkillId, setSelectedSkillId] = useState("")
     const [mastery, setMastery] = useState<Mastery | "">("")
@@ -90,6 +92,7 @@ export function useAddSkillModal({
                 mastery: mastery as Mastery,
             })
 
+            notifications.success("created")
             router.refresh()
             handleClose()
         } catch (err: unknown) {

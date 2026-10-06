@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
 import { useState } from "react"
 
+import { useActionNotifications } from "@/hooks/use-action-notifications"
 import { deleteCvSkills } from "@/modules/skills/api/skills"
 
 interface UseDeleteSkillsButtonProps {
@@ -23,6 +24,7 @@ export function useDeleteSkillsButton({
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const t = useTranslations("Skills.actions")
+    const notifications = useActionNotifications()
 
     const hasSelected = selectedSkills.length > 0
 
@@ -30,6 +32,7 @@ export function useDeleteSkillsButton({
         setIsSubmitting(true)
         try {
             await deleteCvSkills({ cvId, name: selectedSkills })
+            notifications.success("deleted")
             router.refresh()
             onClearSelection()
             onToggleSelectionMode(false)

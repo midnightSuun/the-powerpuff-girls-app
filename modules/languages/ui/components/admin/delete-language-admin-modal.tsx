@@ -13,8 +13,9 @@ interface DeleteLanguageModalProps {
 }
 
 export function DeleteLanguageModal(props: DeleteLanguageModalProps) {
-    const t = useTranslations("Languages.admin.delete")
     const { isOpen, onClose, languageName } = props
+    const t = useTranslations("Languages.admin.delete")
+
     const { isDeleting, error, handleConfirm } = useDeleteLanguageModal(props)
 
     return (

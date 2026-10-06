@@ -29,6 +29,7 @@ interface CreateSkillModalProps {
 export function CreateSkillModal(props: CreateSkillModalProps) {
     const { isOpen, onClose, categories } = props
     const t = useTranslations("Skills.admin")
+
     const {
         name,
         setName,
@@ -69,7 +70,7 @@ export function CreateSkillModal(props: CreateSkillModalProps) {
                     />
                     {inlineError && (
                         <span className="mt-1 text-xs text-red-500">
-                            {inlineError}
+                            {t("alreadyExists")}
                         </span>
                     )}
                 </div>

@@ -3,14 +3,11 @@
 import { ArrowUpDown, MoreVertical } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
-import React, { useState } from "react"
 
 import { SearchInput } from "@/components/search-input"
 import { Button } from "@/components/ui/button"
 
-import { createCvAction } from "../api/create-cv"
-import { deleteCvAction } from "../api/delete-cv"
-import { updateCvAction } from "../api/update-cv"
+import { useCvsPage } from "../hooks/use-cvs-page"
 import { CvItem } from "../types"
 import { CreateCvTriggerButton } from "./components/add-cv-button"
 import { CreateCvModal } from "./components/create-cv-modal"
@@ -32,114 +29,24 @@ export function CvsPageView({
 }: CvsPageViewProps) {
     const router = useRouter()
     const t = useTranslations("CV.list")
-    const [cvs, setCvs] = useState<CvItem[]>(initialCvs)
-    const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
 
-    const [isCreateOpen, setIsCreateOpen] = useState(false)
-    const [editingCv, setEditingCv] = useState<CvItem | null>(null)
-    const [deletingCv, setDeletingCv] = useState<CvItem | null>(null)
-    const [activeMenuId, setActiveMenuId] = useState<string | null>(null)
-
-    const [isSubmitting, setIsSubmitting] = useState(false)
-    const [error, setError] = useState<string | null>(null)
-
-    const sortedCvs = [...cvs].sort((a, b) => {
-        if (sortOrder === "asc") {
-            return a.name.localeCompare(b.name)
-        }
-        return b.name.localeCompare(a.name)
-    })
-
-    const toggleSort = () => {
-        setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"))
-    }
-
-    const handleCreate = async (data: {
-        name: string
-        education: string
-        description: string
-    }) => {
-        try {
-            setIsSubmitting(true)
-            setError(null)
-
-            const result = await createCvAction({
-                name: data.name,
-                education: data.education,
-                description: data.description,
-            })
-
-            if (result?.error) {
-                console.error("Failed to create CV:", result.error)
-                setError(t("createError"))
-                return
-            }
-
-            setIsCreateOpen(false)
-            router.refresh()
-        } catch {
-            setError(t("createError"))
-        } finally {
-            setIsSubmitting(false)
-        }
-    }
-
-    const handleUpdate = async (data: {
-        name: string
-        education: string
-        description: string
-    }) => {
-        if (!editingCv) return
-        try {
-            setIsSubmitting(true)
-            setError(null)
-            const result = await updateCvAction({
-                cvId: editingCv.id,
-                ...data,
-            })
-
-            if (result.error) {
-                console.error("Failed to update CV:", result.error)
-                setError(t("updateError"))
-                return
-            }
-
-            setCvs(
-                cvs.map((cv) =>
-                    cv.id === editingCv.id ? { ...cv, ...data } : cv,
-                ),
-            )
-            setEditingCv(null)
-            router.refresh()
-        } catch {
-            setError(t("updateError"))
-        } finally {
-            setIsSubmitting(false)
-        }
-    }
-
-    const handleDelete = async () => {
-        if (!deletingCv) return
-        try {
-            setIsSubmitting(true)
-            setError(null)
-            const result = await deleteCvAction(deletingCv.id)
-
-            if (result.error) {
-                console.error("Failed to delete CV:", result.error)
-                setError(t("deleteError"))
-                return
-            }
-
-            setCvs(cvs.filter((cv) => cv.id !== deletingCv.id))
-            setDeletingCv(null)
-            router.refresh()
-        } catch {
-            setError(t("deleteError"))
-        } finally {
-            setIsSubmitting(false)
-        }
-    }
+    const {
+        sortedCvs,
+        toggleSort,
+        isCreateOpen,
+        setIsCreateOpen,
+        editingCv,
+        setEditingCv,
+        deletingCv,
+        setDeletingCv,
+        activeMenuId,
+        setActiveMenuId,
+        isSubmitting,
+        error,
+        handleCreate,
+        handleUpdate,
+        handleDelete,
+    } = useCvsPage({ initialCvs })
 
     return (
         <div className="p-6 space-y-6 max-w-7xl mx-auto">

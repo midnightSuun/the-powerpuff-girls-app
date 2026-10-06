@@ -8,6 +8,7 @@ type Props = {
     lastName: string | null
     email: string
     fallbackClassName?: string
+    avatarClassName?: string
 }
 
 const getInitial = (value: string | null | undefined) =>
@@ -19,13 +20,14 @@ export function UserAvatar({
     lastName,
     email,
     fallbackClassName,
+    avatarClassName,
 }: Props) {
     const name = [firstName, lastName].filter(Boolean).join(" ")
     const initial =
         getInitial(firstName) || getInitial(lastName) || getInitial(email)
 
     return (
-        <Avatar>
+        <Avatar className={avatarClassName}>
             {src ? <AvatarImage src={src} alt={name || email} /> : null}
             <AvatarFallback className={cn("rounded-full", fallbackClassName)}>
                 {initial}

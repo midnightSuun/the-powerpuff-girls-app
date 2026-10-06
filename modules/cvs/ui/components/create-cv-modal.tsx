@@ -1,11 +1,12 @@
 "use client"
 
 import { useTranslations } from "next-intl"
-import { useState } from "react"
 
 import { BaseModal } from "@/components/ui/base-modal"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+
+import { useCreateCv } from "../../hooks/use-сreate-сv"
 
 interface CreateCvModalProps {
     isOpen: boolean
@@ -27,20 +28,17 @@ export function CreateCvModal({
     isSubmitting,
 }: CreateCvModalProps) {
     const t = useTranslations("CV.form")
-    const [name, setName] = useState("")
-    const [education, setEducation] = useState("")
-    const [description, setDescription] = useState("")
 
-    const isValid =
-        name.trim().length > 0 &&
-        education.trim().length > 0 &&
-        description.trim().length > 0
-
-    const handleSubmit = async (e: React.SyntheticEvent) => {
-        e.preventDefault()
-        if (!isValid) return
-        await onCreate({ name, education, description })
-    }
+    const {
+        name,
+        setName,
+        education,
+        setEducation,
+        description,
+        setDescription,
+        isValid,
+        handleSubmit,
+    } = useCreateCv({ onCreate })
 
     return (
         <BaseModal

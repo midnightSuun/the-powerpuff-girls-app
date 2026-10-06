@@ -11,7 +11,12 @@ import type { AuthActionState } from "./login"
 export async function signup(
     _previousState: AuthActionState,
     formData: FormData,
-): Promise<AuthActionState & { redirectTo?: string }> {
+): Promise<
+    AuthActionState & {
+        redirectTo?: string
+        confirmationEmailSent?: boolean
+    }
+> {
     const t = await getTranslations("Auth.messages")
     const email = String(formData.get("email") ?? "").trim()
     const password = String(formData.get("password") ?? "")
@@ -26,6 +31,7 @@ export async function signup(
     }
 
     let tokens: { accessToken: string; refreshToken: string }
+    let confirmationEmailSent = true
     const gql = await getGql()
 
     try {
@@ -62,6 +68,7 @@ export async function signup(
         }
 
         if (errorMessage.includes("failedToSendEmail")) {
+            confirmationEmailSent = false
             try {
                 const loginData = await gql.request(LoginDocument, {
                     auth: { email, password },
@@ -90,5 +97,6 @@ export async function signup(
 
     return {
         redirectTo: `/verify-email?email=${encodeURIComponent(email)}`,
+        confirmationEmailSent,
     }
 }

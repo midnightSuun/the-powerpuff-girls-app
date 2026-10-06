@@ -46,7 +46,8 @@ export function AdminDataTable<T extends { id: string | number }>({
     search = "",
     createButtonClassName,
 }: AdminDataTableProps<T>) {
-    const t = useTranslations("Common")
+    const tCommon = useTranslations("Admin.common")
+
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
     const [activeMenuId, setActiveMenuId] = useState<string | number | null>(
         null,
@@ -99,7 +100,7 @@ export function AdminDataTable<T extends { id: string | number }>({
     }, [data, search, sortOrder, getSearchableString, getSortValue])
 
     return (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between gap-4">
                 <SearchInput limit={limit} search={search} />
 
@@ -112,14 +113,14 @@ export function AdminDataTable<T extends { id: string | number }>({
                 )}
             </div>
 
-            <div className="border border-border bg-background">
+            <div className="w-full overflow-x-auto">
                 <table className="w-full text-left text-sm">
-                    <thead className="border-b bg-muted/50 text-muted-foreground">
-                        <tr>
+                    <thead>
+                        <tr className="h-[73px] border-b border-[#AEAEAE] dark:border-gray-700">
                             {columns.map((col) => (
                                 <th
                                     key={col.key}
-                                    className={`p-4 font-medium ${
+                                    className={`px-4 font-medium text-foreground align-middle ${
                                         col.sortable
                                             ? "cursor-pointer select-none"
                                             : ""
@@ -144,7 +145,7 @@ export function AdminDataTable<T extends { id: string | number }>({
                                 </th>
                             ))}
                             {(onEditClick || onDeleteClick) && (
-                                <th className="p-4 w-10"></th>
+                                <th className="px-4 w-10 align-middle"></th>
                             )}
                         </tr>
                     </thead>
@@ -153,10 +154,13 @@ export function AdminDataTable<T extends { id: string | number }>({
                             processedData.map((item) => (
                                 <tr
                                     key={item.id}
-                                    className="border-b last:border-0 hover:bg-muted/30"
+                                    className="h-[73px] border-b border-[#AEAEAE] dark:border-gray-700 hover:bg-muted/30 transition-colors"
                                 >
                                     {columns.map((col) => (
-                                        <td key={col.key} className="p-4">
+                                        <td
+                                            key={col.key}
+                                            className="px-4 align-middle"
+                                        >
                                             {col.render
                                                 ? col.render(item)
                                                 : String(
@@ -170,7 +174,7 @@ export function AdminDataTable<T extends { id: string | number }>({
                                         </td>
                                     ))}
                                     {(onEditClick || onDeleteClick) && (
-                                        <td className="p-4 text-right relative">
+                                        <td className="px-4 text-right relative align-middle">
                                             <Button
                                                 type="button"
                                                 variant="ghost"
@@ -204,7 +208,7 @@ export function AdminDataTable<T extends { id: string | number }>({
                                                                 )
                                                             }}
                                                         >
-                                                            {t("edit")}
+                                                            {tCommon("edit")}
                                                         </button>
                                                     )}
                                                     {onDeleteClick && (
@@ -220,7 +224,7 @@ export function AdminDataTable<T extends { id: string | number }>({
                                                                 )
                                                             }}
                                                         >
-                                                            {t("delete")}
+                                                            {tCommon("delete")}
                                                         </button>
                                                     )}
                                                 </div>
@@ -230,13 +234,13 @@ export function AdminDataTable<T extends { id: string | number }>({
                                 </tr>
                             ))
                         ) : (
-                            <tr>
+                            <tr className="h-[73px] border-b border-[#AEAEAE] dark:border-gray-700">
                                 <td
                                     colSpan={
                                         columns.length +
                                         (onEditClick || onDeleteClick ? 1 : 0)
                                     }
-                                    className="p-8 text-center text-muted-foreground"
+                                    className="px-4 text-center text-muted-foreground align-middle"
                                 >
                                     {emptyMessage}
                                 </td>

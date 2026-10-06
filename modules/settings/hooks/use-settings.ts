@@ -3,8 +3,9 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useLocale, useTranslations } from "next-intl"
 import { useTheme } from "next-themes"
-import { useState, useTransition } from "react"
+import { useTransition } from "react"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
 import { usePathname, useRouter } from "@/i18n/navigation"
 
@@ -17,15 +18,12 @@ import {
 export function useSettings() {
     const validation = useTranslations("Settings.validation")
     const t = useTranslations("Settings.messages")
+    const notifications = useTranslations("Notifications")
     const { theme, setTheme } = useTheme()
     const locale = useLocale()
     const router = useRouter()
     const pathname = usePathname()
 
-    const [serverError, setServerError] = useState<string | undefined>(
-        undefined,
-    )
-    const [successMessage, setSuccessMessage] = useState<string | null>(null)
     const [isPending, startTransition] = useTransition()
 
     const getInitialTheme = () => {
@@ -38,6 +36,7 @@ export function useSettings() {
         register,
         handleSubmit,
         formState: { errors, isValid },
+        reset,
     } = useForm<SettingsFormValues>({
         resolver: zodResolver(
             createSettingsSchema({
@@ -62,9 +61,6 @@ export function useSettings() {
     }
 
     const onSubmit = (data: SettingsFormValues) => {
-        setServerError(undefined)
-        setSuccessMessage(null)
-
         startTransition(async () => {
             const result = await updateSettingsPasswordAction({
                 password: data.password,
@@ -73,18 +69,23 @@ export function useSettings() {
             })
 
             if (result?.error) {
-                setServerError(result.error)
+                toast.error(notifications("error"), {
+                    description: result.error,
+                })
                 return
             }
 
-            setSuccessMessage(t("updated"))
+            toast.success(notifications("success"), {
+                description: t("updated"),
+                closeButton: true,
+            })
+
+            reset()
         })
     }
 
     return {
         locale,
-        serverError,
-        successMessage,
         isPending,
         register,
         handleSubmit,

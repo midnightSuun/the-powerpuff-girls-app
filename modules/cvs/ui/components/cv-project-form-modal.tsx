@@ -1,8 +1,5 @@
 "use client"
 
-import { useTranslations } from "next-intl"
-import { type SyntheticEvent, useState } from "react"
-
 import { BaseModal } from "@/components/ui/base-modal"
 import { Input } from "@/components/ui/input"
 import {
@@ -13,10 +10,9 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock"
 import type { CvProjectItem, ProjectOption } from "@/modules/cvs/types"
 
-import { addCvProject, updateCvProject } from "../../api/projects"
+import { useCvProjectForm } from "../../hooks/use-cv-project-form"
 
 interface CvProjectFormModalProps {
     isOpen: boolean
@@ -28,94 +24,33 @@ interface CvProjectFormModalProps {
     existingProjectIds: string[]
 }
 
-function toDateInputValue(value?: string | null) {
-    if (!value) return ""
-    if (/^\d{4}-\d{2}-\d{2}/.test(value)) return value.slice(0, 10)
+const fieldClassName =
+    "h-9 rounded-none border-[#cccccc] bg-background px-2.5 text-xs text-foreground shadow-none dark:border-border"
+const disabledFieldClassName =
+    "disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100"
 
-    const date = new Date(value)
-    return Number.isNaN(date.getTime()) ? "" : date.toISOString().slice(0, 10)
-}
+export function CvProjectFormModal(props: CvProjectFormModalProps) {
+    const { isOpen, onClose, project } = props
 
-function linesToList(value: string) {
-    return value
-        .split(/[,\r\n]/)
-        .map((line) => line.trim())
-        .filter(Boolean)
-}
-
-export function CvProjectFormModal({
-    isOpen,
-    onClose,
-    onSaved,
-    cvId,
-    project,
-    projects,
-    existingProjectIds,
-}: CvProjectFormModalProps) {
-    const t = useTranslations("CV.projects.form")
-    const [projectId, setProjectId] = useState(project?.project.id ?? "")
-    const [startDate, setStartDate] = useState(
-        toDateInputValue(project?.start_date),
-    )
-    const [endDate, setEndDate] = useState(toDateInputValue(project?.end_date))
-    const [roles, setRoles] = useState(project?.roles.join(", ") ?? "")
-    const [responsibilities, setResponsibilities] = useState(
-        project?.responsibilities.join(", ") ?? "",
-    )
-    const [error, setError] = useState<string | null>(null)
-    const [isSubmitting, setIsSubmitting] = useState(false)
-
-    useBodyScrollLock(isOpen)
-
-    const availableProjects = projects.filter(
-        (item) =>
-            item.id === project?.project.id ||
-            !existingProjectIds.includes(item.id),
-    )
-    const selectedProject =
-        projects.find((item) => item.id === projectId) ?? project
-    const isDuplicate = !project && existingProjectIds.includes(projectId)
-    const isValid = Boolean(projectId && startDate && !isDuplicate)
-
-    const handleSubmit = async (event: SyntheticEvent) => {
-        event.preventDefault()
-        if (!isValid) {
-            if (isDuplicate) setError(t("duplicateProjectError"))
-            return
-        }
-
-        setIsSubmitting(true)
-        setError(null)
-
-        const projectInput = {
-            cvId,
-            projectId,
-            start_date: startDate,
-            end_date: endDate || null,
-            roles: linesToList(roles),
-            responsibilities: linesToList(responsibilities),
-        }
-
-        try {
-            if (project) {
-                await updateCvProject(projectInput)
-            } else {
-                await addCvProject(projectInput)
-            }
-            onSaved()
-            onClose()
-        } catch (caughtError) {
-            console.error("Failed to save project on CV:", caughtError)
-            setError(t("saveError"))
-        } finally {
-            setIsSubmitting(false)
-        }
-    }
-
-    const fieldClassName =
-        "h-9 rounded-none border-[#cccccc] bg-background px-2.5 text-xs text-foreground shadow-none dark:border-border"
-    const disabledFieldClassName =
-        "disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100"
+    const {
+        t,
+        projectId,
+        setProjectId,
+        startDate,
+        setStartDate,
+        endDate,
+        setEndDate,
+        roles,
+        setRoles,
+        responsibilities,
+        setResponsibilities,
+        error,
+        isSubmitting,
+        availableProjects,
+        selectedProject,
+        isValid,
+        handleSubmit,
+    } = useCvProjectForm(props)
 
     return (
         <BaseModal
