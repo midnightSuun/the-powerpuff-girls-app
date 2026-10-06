@@ -25,6 +25,31 @@
                 "inUseError": "Department cannot be deleted because it is currently in use"
             }
         },
+        "positions": {
+            "title": "Positions",
+            "createButton": "CREATE POSITION",
+            "empty": "No positions found",
+            "columns": {
+                "name": "Name"
+            },
+            "create": {
+                "title": "Create position",
+                "positionName": "Position",
+                "positionPlaceholder": "Position name",
+                "alreadyExists": "Position already exists",
+                "required": "Position name is required"
+            },
+            "edit": {
+                "title": "Edit position",
+                "positionName": "Position",
+                "positionPlaceholder": "Position name"
+            },
+            "delete": {
+                "title": "Delete position",
+                "confirmation": "Are you sure you want to delete position \"{name}\"?",
+                "inUseError": "Position cannot be deleted because it is currently in use"
+            }
+        },
         "common": {
             "search": "Search",
             "edit": "Edit",
@@ -194,7 +219,8 @@
         "employees": "Employees",
         "skills": "Skills",
         "languages": "Languages",
-        "cvs": "CVs"
+        "cvs": "CVs",
+        "positions": "Positions"
     },
     "Errors": {
         "NoInternet": {
