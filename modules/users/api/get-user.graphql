@@ -1,12 +1,22 @@
 query GetUser($id: ID!) {
     user(userId: $id) {
         id
+        created_at
         email
+        is_verified
         role
         profile {
             first_name
             last_name
             avatar
+        }
+        department {
+            id
+            name
+        }
+        position {
+            id
+            name
         }
     }
 }
