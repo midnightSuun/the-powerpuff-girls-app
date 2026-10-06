@@ -136,6 +136,9 @@
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.556 0 0);
+    --button-secondary-default: 240 5% 89%;
+    --button-secondary-default: 240 5% 89%;
+    --text-primary-default: 240 5% 89%;
 }
 
 @layer base {
