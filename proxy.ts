@@ -64,18 +64,39 @@ const refreshSession = async (request: NextRequest) => {
 }
 
 const guestOnlyRoutes = ["/login", "/register", "/forgot-password"]
-const publicRoutes = [
-    ...guestOnlyRoutes,
-    "/logout",
-    "/reset-password",
-    "/verify-email",
-]
 
 const employeeRoutes = ["/languages", "/skills", "/profile", "/settings"]
 const adminRoutes = ["/departments", "/positions", "/projects"]
+const protectedRoutes = [
+    "/",
+    "/cv",
+    "/departments",
+    "/languages",
+    "/positions",
+    "/projects",
+    "/settings",
+    "/skills",
+    "/users",
+]
 
-function isPublic(route: string) {
-    return publicRoutes.includes(route)
+function isProtectedRoute(route: string) {
+    if (protectedRoutes.includes(route)) {
+        return true
+    }
+
+    const segments = route.split("/").filter(Boolean)
+
+    if (segments[0] === "users" && segments.length >= 2) {
+        return (
+            segments.length === 2 ||
+            (segments.length === 3 &&
+                ["cv", "languages", "profile", "skills"].includes(segments[2]))
+        )
+    }
+
+    return (
+        segments[0] === "cv" && (segments.length === 2 || segments.length === 3)
+    )
 }
 
 function isGuestOnly(route: string) {
@@ -83,11 +104,11 @@ function isGuestOnly(route: string) {
 }
 
 function isAdminRoute(route: string) {
-    return adminRoutes.some((r) => route.startsWith(r))
+    return adminRoutes.some((r) => route === r || route.startsWith(`${r}/`))
 }
 
 function isEmployeeRoute(route: string) {
-    return employeeRoutes.some((r) => route.startsWith(r))
+    return employeeRoutes.some((r) => route === r || route.startsWith(`${r}/`))
 }
 
 function getCleanPathname(pathname: string) {
@@ -128,16 +149,9 @@ function localizedPath(locale: string, pathname: string) {
 function pathnameHeaders(request: NextRequest) {
     const requestHeaders = new Headers(request.headers)
     requestHeaders.set("x-pathname", getCleanPathname(request.nextUrl.pathname))
+    requestHeaders.set("x-locale", getLocale(request.nextUrl.pathname))
 
     return requestHeaders
-}
-
-function nextWithPathname(request: NextRequest) {
-    return NextResponse.next({
-        request: {
-            headers: pathnameHeaders(request),
-        },
-    })
 }
 
 export async function proxy(request: NextRequest) {
@@ -147,19 +161,17 @@ export async function proxy(request: NextRequest) {
 
     const session = await refreshSession(request)
 
-    if (session === "failed") {
-        const response = isPublic(targetPage)
-            ? nextWithPathname(request)
-            : NextResponse.redirect(
-                  new URL(localizedPath(currentLocale, "/login"), request.url),
-              )
-
-        return clearTokens(response)
+    if (session === "failed" && isProtectedRoute(targetPage)) {
+        return clearTokens(
+            NextResponse.redirect(
+                new URL(localizedPath(currentLocale, "/login"), request.url),
+            ),
+        )
     }
 
-    const tokens = session.tokens
+    const tokens = session === "failed" ? null : session.tokens
     const authorized = isAuthorized(request.cookies)
-    const userRole = session.payload?.role
+    const userRole = session === "failed" ? undefined : session.payload?.role
     const sessionIsValid = isUserRole(userRole)
     let customResponse: NextResponse | null = null
 
@@ -167,7 +179,7 @@ export async function proxy(request: NextRequest) {
         customResponse = NextResponse.redirect(
             new URL(localizedPath(currentLocale, "/"), request.url),
         )
-    } else if (!sessionIsValid && !isPublic(targetPage)) {
+    } else if (!sessionIsValid && isProtectedRoute(targetPage)) {
         return clearTokens(
             NextResponse.redirect(
                 new URL(localizedPath(currentLocale, "/login"), request.url),

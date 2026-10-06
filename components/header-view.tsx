@@ -346,7 +346,7 @@ const PageWithTabsHeader = ({
                             href={joinPaths(basePath, tab.path)}
                             aria-current={isActive ? "page" : undefined}
                             className={cn(
-                                "flex h-[50px] w-[150px] shrink-0 flex-col text-sm leading-[17.5px] tracking-[0.4px] uppercase",
+                                "flex h-12.5 w-37.5 shrink-0 flex-col text-sm leading-[17.5px] tracking-[0.4px] uppercase",
                                 isActive
                                     ? "font-semibold text-button-primary-default"
                                     : "font-medium text-[#2e2e2e] dark:text-[#f5f5f7]",
