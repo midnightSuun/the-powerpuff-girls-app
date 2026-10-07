@@ -7,7 +7,7 @@ import { ChangeEvent, useEffect, useRef, useState } from "react"
 
 import { Input } from "@/components/ui/input"
 import { buildListSearchParams } from "@/lib/list-search-params"
-import { type SortOrder } from "@/lib/user-sort"
+import { type SortOrder } from "@/lib/sort"
 
 interface SearchInputProps {
     limit?: number

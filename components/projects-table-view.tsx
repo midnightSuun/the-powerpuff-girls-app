@@ -108,7 +108,7 @@ export function ProjectsTableView<T extends ProjectTableItem>({
         setItemToRemove,
         visibleItems,
         toggleSort,
-    } = useProjectsTable({ items: projects })
+    } = useProjectsTable({ items: projects, locale })
     useBodyScrollLock(Boolean(itemToRemove))
 
     const actionCopy = manageCopy ?? {

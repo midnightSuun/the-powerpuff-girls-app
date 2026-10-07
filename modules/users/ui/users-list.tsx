@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation"
-import { getLocale, getTranslations } from "next-intl/server"
+import { getTranslations } from "next-intl/server"
 
 import { PaginationComponent } from "@/components/pagination"
 import { TableComponent } from "@/components/table"
@@ -28,14 +28,12 @@ export async function UsersList({
     const isAdmin = session.role === "Admin"
     const t = await getTranslations("Users.columns")
     const tUsers = await getTranslations("Users")
-    const locale = await getLocale()
     const { users, totalPages } = await getUsers(
         limit,
         page,
         search,
         sortBy,
         sortOrder,
-        locale,
     )
     const columns = getUsersColumns(t, isAdmin)
     const getSortHref = (sortKey: string) => {

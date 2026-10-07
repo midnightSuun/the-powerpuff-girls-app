@@ -1,10 +1,11 @@
 "use client"
 
 import { MoreVertical, Plus } from "lucide-react"
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 import { useEffect, useMemo, useRef, useState } from "react"
 
 import { Button } from "@/components/ui/button"
+import { sortByLocale, type SortOrder } from "@/lib/sort"
 
 import { SearchInput } from "../search-input"
 import { SortArrow } from "../sort-arrow"
@@ -47,10 +48,11 @@ export function AdminDataTable<T extends { id: string | number }>({
     search = "",
     defaultSortKey = "type",
 }: AdminDataTableProps<T>) {
+    const locale = useLocale()
     const tCommon = useTranslations("Admin.common")
 
     const [sortColumnKey, setSortColumnKey] = useState<string>(defaultSortKey)
-    const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
+    const [sortOrder, setSortOrder] = useState<SortOrder>("asc")
     const [activeMenuId, setActiveMenuId] = useState<string | number | null>(
         null,
     )
@@ -98,18 +100,18 @@ export function AdminDataTable<T extends { id: string | number }>({
         }
 
         if (getSortValue) {
-            result.sort((a, b) => {
-                const valA = getSortValue(a, sortColumnKey)
-                const valB = getSortValue(b, sortColumnKey)
-                return sortOrder === "asc"
-                    ? valA.localeCompare(valB)
-                    : valB.localeCompare(valA)
-            })
+            result = sortByLocale(
+                result,
+                (item) => getSortValue(item, sortColumnKey),
+                sortOrder,
+                locale,
+            )
         }
 
         return result
     }, [
         data,
+        locale,
         search,
         sortColumnKey,
         sortOrder,

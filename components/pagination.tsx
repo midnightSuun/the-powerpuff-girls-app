@@ -10,7 +10,7 @@ import {
     PaginationPrevious,
 } from "@/components/ui/pagination"
 import { buildListSearchParams } from "@/lib/list-search-params"
-import { type SortOrder } from "@/lib/user-sort"
+import { type SortOrder } from "@/lib/sort"
 
 type PaginationComponentProps = {
     totalPages: number

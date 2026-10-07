@@ -10,7 +10,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { Link } from "@/i18n/navigation"
-import { type SortOrder } from "@/lib/user-sort"
+import { type SortOrder } from "@/lib/sort"
 
 export type TableColumn<T> = {
     id: string

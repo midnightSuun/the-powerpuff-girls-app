@@ -1,4 +1,4 @@
-import { type SortOrder } from "@/lib/user-sort"
+import { type SortOrder } from "@/lib/sort"
 
 type ListQuery = {
     page: number
