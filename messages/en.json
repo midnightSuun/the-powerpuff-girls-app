@@ -323,11 +323,27 @@
             "proficient": "Proficient",
             "expert": "Expert"
         },
+        "empty": "No skills here",
         "categories": {
             "1": "Programming languages",
             "2": "Frontend",
-            "3": "Backend",
-            "4": "Source control systems",
+            "3": "Frontend",
+            "4": "Frontend",
+            "5": "Frontend",
+            "6": "Frontend",
+            "7": "Frontend",
+            "8": "Frontend",
+            "9": "Backend",
+            "10": "Backend",
+            "11": "Backend",
+            "12": "Backend",
+            "13": "Testing frameworks",
+            "14": "DevOps",
+            "15": "DevOps",
+            "16": "DevOps",
+            "17": "Source control systems",
+            "18": "Documentation",
+            "19": "Graphic editors",
             "other": "General Skills"
         },
         "actions": {
@@ -639,7 +655,8 @@
         "admin": {
             "columns": {
                 "name": "Name",
-                "isoCode": "ISO Code"
+                "isoCode": "ISO",
+                "nativeName": "Native name"
             },
             "search": "Search",
             "createButton": "CREATE LANGUAGE",
@@ -648,7 +665,7 @@
                 "title": "Create language",
                 "languageName": "Language Name",
                 "languagePlaceholder": "e.g. English",
-                "isoCode": "ISO Code",
+                "isoCode": "ISO",
                 "isoCodePlaceholder": "e.g. en",
                 "cancel": "CANCEL",
                 "create": "CREATE",

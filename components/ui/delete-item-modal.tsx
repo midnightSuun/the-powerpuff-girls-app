@@ -56,7 +56,6 @@ export function DeleteModal({
             cancelText={cancelText}
             confirmText={confirmText}
             pendingText={deletingText}
-            confirmButtonVariant="destructive"
             dialogClassName={dialogClassName}
             formClassName={formClassName}
             overlayClassName={overlayClassName}

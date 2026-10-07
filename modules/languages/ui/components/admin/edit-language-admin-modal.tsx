@@ -47,7 +47,6 @@ export function EditLanguageModal(props: EditLanguageModalProps) {
             cancelText={t("cancel")}
             confirmText={t("save")}
             pendingText={t("saving")}
-            confirmButtonVariant="destructive"
             onSubmit={handleSubmit}
         >
             <div className="flex flex-col gap-4">

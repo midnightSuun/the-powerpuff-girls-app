@@ -4,6 +4,7 @@ import { useState } from "react"
 export interface AdminSkillItem {
     id: string
     name: string
+    type?: string // 🟢 Добавлено опциональное поле type
     category: string
     categoryId: string
 }

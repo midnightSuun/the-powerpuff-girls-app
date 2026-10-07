@@ -323,11 +323,27 @@
             "proficient": "Proficient",
             "expert": "Esperto"
         },
+        "empty": "Nessuna competenza qui",
         "categories": {
             "1": "Linguaggi di programmazione",
             "2": "Frontend",
-            "3": "Backend",
-            "4": "Sistemi di controllo di versione",
+            "3": "Frontend",
+            "4": "Frontend",
+            "5": "Frontend",
+            "6": "Frontend",
+            "7": "Frontend",
+            "8": "Frontend",
+            "9": "Backend",
+            "10": "Backend",
+            "11": "Backend",
+            "12": "Backend",
+            "13": "Framework di test",
+            "14": "DevOps",
+            "15": "DevOps",
+            "16": "DevOps",
+            "17": "Sistemi di controllo di versione",
+            "18": "Documentazione",
+            "19": "Editor grafici",
             "other": "Competenze generali"
         },
         "actions": {
@@ -339,7 +355,6 @@
         "add": {
             "title": "Aggiungi competenza",
             "skillPlaceholder": "Competenza",
-            "allLanguagesAdded": "Tutte le lingue disponibili sono state aggiunte",
             "allSkillsAdded": "Tutte le competenze disponibili sono state aggiunte",
             "cancel": "ANNULLA",
             "submit": "AGGIUNGI",
@@ -640,7 +655,8 @@
         "admin": {
             "columns": {
                 "name": "Nome",
-                "isoCode": "Codice ISO"
+                "isoCode": "ISO",
+                "nativeName": "Nome nativo"
             },
             "search": "Cerca",
             "createButton": "CREA LINGUA",

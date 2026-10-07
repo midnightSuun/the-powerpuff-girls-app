@@ -5,6 +5,7 @@ export interface AdminLanguageItem {
     id: string
     name: string
     iso2: string
+    nativeName?: string
 }
 
 interface UseEditLanguageAdminModalProps {

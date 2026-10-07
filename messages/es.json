@@ -323,11 +323,27 @@
             "proficient": "Proficiente",
             "expert": "Experto"
         },
+        "empty": "No hay habilidades aquí",
         "categories": {
             "1": "Lenguajes de programación",
             "2": "Frontend",
-            "3": "Backend",
-            "4": "Sistemas de control de versiones",
+            "3": "Frontend",
+            "4": "Frontend",
+            "5": "Frontend",
+            "6": "Frontend",
+            "7": "Frontend",
+            "8": "Frontend",
+            "9": "Backend",
+            "10": "Backend",
+            "11": "Backend",
+            "12": "Backend",
+            "13": "Frameworks de pruebas",
+            "14": "DevOps",
+            "15": "DevOps",
+            "16": "DevOps",
+            "17": "Sistemas de control de versiones",
+            "18": "Documentación",
+            "19": "Editores gráficos",
             "other": "Habilidades generales"
         },
         "actions": {
@@ -339,7 +355,6 @@
         "add": {
             "title": "Añadir habilidad",
             "skillPlaceholder": "Habilidad",
-            "allLanguagesAdded": "Se han añadido todos los idiomas disponibles",
             "allSkillsAdded": "Se han añadido todas las habilidades disponibles",
             "cancel": "CANCELAR",
             "submit": "AÑADIR",
@@ -640,7 +655,8 @@
         "admin": {
             "columns": {
                 "name": "Nombre",
-                "isoCode": "Código ISO"
+                "isoCode": "ISO",
+                "nativeName": "Nombre nativo"
             },
             "search": "Buscar",
             "createButton": "CREAR IDIOMA",
