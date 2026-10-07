@@ -112,7 +112,6 @@ export const SidebarNav = ({ isAdmin, viewerId }: SidebarNavProps) => {
                         "data-active:bg-[#e6e6e8] data-active:font-normal data-active:text-[#3a3a3a] dark:data-active:bg-white/15 dark:data-active:text-foreground",
                         "[&_svg]:size-4.5",
                         "group-data-[collapsible=icon]:text-[#3a3a3a] dark:group-data-[collapsible=icon]:text-foreground",
-                        "group-data-[collapsible=icon]:data-active:bg-transparent",
                         "group-data-[collapsible=icon]:data-active:text-[#3a3a3a] dark:group-data-[collapsible=icon]:data-active:text-foreground",
                     )}
                 >

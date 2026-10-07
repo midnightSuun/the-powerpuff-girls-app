@@ -2,27 +2,11 @@
 
 import { useTranslations } from "next-intl"
 
-import { Button } from "@/components/ui/button"
 import { DialogTrigger } from "@/components/ui/dialog"
+import { AddItemButton } from "@/components/ui/list-management-buttons"
 
 import { useCreateUserDialog } from "../hooks/use-create-user-dialog"
 import { UserFormDialog } from "./user-form-dialog"
-
-const PlusIcon = () => {
-    return (
-        <svg
-            aria-hidden
-            width={24}
-            height={24}
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="size-6 shrink-0"
-        >
-            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="#C63031" />
-        </svg>
-    )
-}
 
 type Props = {
     label: string
@@ -66,16 +50,13 @@ export const CreateUserDialog = ({ label }: Props) => {
             trigger={
                 <DialogTrigger
                     render={
-                        <Button
-                            type="button"
+                        <AddItemButton
+                            label={label}
                             variant="primaryV2"
-                            className="h-10 w-[220px] gap-2 rounded-[40px] p-0 text-sm leading-[24.5px] font-medium tracking-[0.4px] uppercase hover:border-transparent active:border-transparent active:bg-transparent"
+                            className="h-10 rounded-[40px] p-0 text-sm leading-[24.5px] font-medium tracking-[0.4px] text-[#C63031] uppercase hover:border-transparent active:border-transparent active:bg-transparent lg:!h-10 lg:!w-[220px] lg:!min-w-0 lg:!px-0 lg:!py-0"
                         />
                     }
-                >
-                    <PlusIcon />
-                    {label}
-                </DialogTrigger>
+                />
             }
         />
     )

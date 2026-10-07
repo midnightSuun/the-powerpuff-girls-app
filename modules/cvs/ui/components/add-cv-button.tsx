@@ -20,6 +20,7 @@ export function CreateCvTriggerButton({
             label={t("create")}
             onClick={onClick}
             disabled={disabled}
+            iconOnlyBelowLg
             className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30 font-semibold"
         />
     )
