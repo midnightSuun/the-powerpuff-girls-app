@@ -266,6 +266,10 @@
             "title": "Page Not Found",
             "description": "The page you are looking for might have been removed,\nhad its name changed, or is temporarily unavailable.",
             "actionText": "Go Home"
+        },
+        "MobileNotSupported": {
+            "title": "Oops",
+            "description": "This app isn't supported on mobile devices.\nPlease open it on a desktop or tablet to continue."
         }
     },
     "Settings": {
