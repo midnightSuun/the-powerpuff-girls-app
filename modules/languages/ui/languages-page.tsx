@@ -51,13 +51,12 @@ export function LanguagesPage({
     })
 
     return (
-        <div className="flex items-start gap-16">
-            <div className="flex-1 max-w-213 pl-50 pt-6">
+        <div className="w-full max-w-6xl px-6 py-6 lg:pl-50">
+            <div className="w-full">
                 <p className="font-roboto text-[16px] font-normal leading-6 tracking-[0.15px] text-foreground mb-4">
                     {t("currentLanguages")}
                 </p>
-
-                <div className="grid grid-cols-1 gap-y-2 sm:grid-cols-2 md:grid-cols-3">
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-12 lg:gap-x-16 gap-y-3.5">
                     {initialUserLanguages.map((language) => (
                         <ProgressListItem
                             key={language.name}

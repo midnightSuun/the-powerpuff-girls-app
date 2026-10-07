@@ -67,7 +67,7 @@ export function DeleteModal({
         >
             <p
                 className={cn(
-                    "mb-2 text-sm text-foreground",
+                    "mb-2 text-sm font-normal text-foreground",
                     descriptionClassName,
                 )}
             >

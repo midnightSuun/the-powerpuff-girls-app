@@ -101,10 +101,7 @@ export function BaseModal({
                     variant="secondary"
                     onClick={onClose}
                     disabled={isPending}
-                    className={cn(
-                        "border border-border text-border dark:border-auth-card-border dark:text-auth-card-border",
-                        cancelButtonClassName,
-                    )}
+                    className={cn(cancelButtonClassName)}
                 >
                     {cancelText}
                 </Button>
