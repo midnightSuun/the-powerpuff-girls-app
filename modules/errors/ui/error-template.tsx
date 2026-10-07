@@ -21,7 +21,8 @@ export function ErrorTemplate({
     onAction,
 }: ErrorTemplateProps) {
     const t = useTranslations("Common")
-    const resolvedActionText = actionText ?? t("retry")
+    const resolvedActionText =
+        actionText !== undefined ? actionText : t("retry")
 
     const handleAction = () => {
         if (onAction) {
@@ -46,19 +47,21 @@ export function ErrorTemplate({
                     {title}
                 </h1>
 
-                <p className="text-xs text-muted-foreground leading-relaxed">
+                <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-line">
                     {description}
                 </p>
 
-                <div className="pt-2">
-                    <Button
-                        type="button"
-                        onClick={handleAction}
-                        className="w-36 bg-button-primary-default hover:bg-button-primary-default/90 text-white font-medium text-xs tracking-wider uppercase transition-colors cursor-pointer"
-                    >
-                        {resolvedActionText}
-                    </Button>
-                </div>
+                {resolvedActionText && (
+                    <div className="pt-2">
+                        <Button
+                            type="button"
+                            onClick={handleAction}
+                            className="w-36 bg-button-primary-default hover:bg-button-primary-default/90 text-white font-medium text-xs tracking-wider uppercase transition-colors cursor-pointer"
+                        >
+                            {resolvedActionText}
+                        </Button>
+                    </div>
+                )}
             </div>
         </main>
     )
