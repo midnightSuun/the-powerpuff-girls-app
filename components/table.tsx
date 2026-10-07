@@ -15,6 +15,7 @@ import { type SortOrder } from "@/lib/user-sort"
 export type TableColumn<T> = {
     id: string
     label: string
+    className?: string
     sortKey?: string
     sortLabel?: string
     render: (data: T) => ReactNode
@@ -52,7 +53,11 @@ export const TableComponent = <T,>(props: Props<T>) => {
                               : "none"
 
                         return (
-                            <TableHead key={column.id} aria-sort={ariaSort}>
+                            <TableHead
+                                key={column.id}
+                                aria-sort={ariaSort}
+                                className={column.className}
+                            >
                                 {href ? (
                                     <Link
                                         href={href}
@@ -92,7 +97,10 @@ export const TableComponent = <T,>(props: Props<T>) => {
                             }
                         >
                             {props.columns.map((column, columnIndex) => (
-                                <TableCell key={column.id}>
+                                <TableCell
+                                    key={column.id}
+                                    className={column.className}
+                                >
                                     {href && columnIndex === 0 ? (
                                         <Link
                                             href={href}

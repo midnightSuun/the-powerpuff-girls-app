@@ -266,6 +266,10 @@
             "title": "Page Not Found",
             "description": "The page you are looking for might have been removed,\nhad its name changed, or is temporarily unavailable.",
             "actionText": "Go Home"
+        },
+        "MobileNotSupported": {
+            "title": "Oops",
+            "description": "This app isn't supported on mobile devices.\nPlease open it on a desktop or tablet to continue."
         }
     },
     "Settings": {
@@ -577,7 +581,26 @@
             "cancel": "Cancel",
             "submit": "Create",
             "close": "Close",
-            "employee": "Employee"
+            "employee": "Employee",
+            "admin": "Admin",
+            "updateTitle": "Update user",
+            "updateDescription": "Update an existing user",
+            "update": "Update",
+            "view": "View",
+            "delete": "Delete",
+            "deleteTitle": "Delete user",
+            "deleteDescription": "Are you sure you want to delete user <strong>{name}</strong>?",
+            "confirm": "Confirm",
+            "deleting": "Deleting..."
+        },
+        "messages": {
+            "createForbidden": "Only an administrator can create users.",
+            "createFailed": "Could not create the user. Please try again.",
+            "updateForbidden": "Only an administrator can update users.",
+            "updateFailed": "Could not update the user. Please try again.",
+            "deleteForbidden": "Only an administrator can delete users.",
+            "deleteSelfForbidden": "You cannot delete your own account.",
+            "deleteFailed": "Could not delete the user. Please try again."
         },
         "loading": "Loading users...",
         "columns": {

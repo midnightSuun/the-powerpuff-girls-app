@@ -58,16 +58,16 @@ export function CvsPageView({
             </div>
 
             <div className="w-full overflow-visible">
-                <div className="grid grid-cols-[35%_35%_25%_5%] items-center px-2 py-4 border-b border-border text-xs font-semibold text-muted-foreground">
+                <div className="grid grid-cols-[1fr_1fr_auto] lg:grid-cols-[35%_35%_25%_auto] items-center px-2 py-4 border-b border-border text-sm font-semibold text-muted-foreground">
                     <div
-                        className="flex items-center gap-1.5 cursor-pointer hover:text-foreground select-none"
+                        className="flex items-center gap-1.5 cursor-pointer hover:text-foreground select-none pr-2"
                         onClick={toggleSort}
                     >
                         {t("name")}
-                        <ArrowUpDown className="size-3" />
+                        <ArrowUpDown className="size-3 shrink-0" />
                     </div>
-                    <div>{t("education")}</div>
-                    <div>{t("employee")}</div>
+                    <div className="pr-2">{t("education")}</div>
+                    <div className="hidden lg:block pr-2">{t("employee")}</div>
                     <div></div>
                 </div>
 
@@ -78,21 +78,22 @@ export function CvsPageView({
                                 key={cv.id}
                                 className="group hover:bg-muted/30 transition-colors px-2 py-4 space-y-2"
                             >
-                                <div className="grid grid-cols-[35%_35%_25%_5%] items-center">
-                                    <div className="text-sm font-medium text-foreground truncate pr-2">
+                                <div className="grid grid-cols-[1fr_1fr_auto] lg:grid-cols-[35%_35%_25%_auto] items-start">
+                                    <div className="text-sm font-medium text-foreground wrap-break-word pr-4">
                                         {cv.name}
                                     </div>
-                                    <div className="text-sm text-muted-foreground truncate pr-2">
+                                    <div className="text-sm text-muted-foreground wrap-break-word pr-4">
                                         {cv.education}
                                     </div>
-                                    <div className="text-sm text-muted-foreground truncate pr-2">
+                                    <div className="hidden lg:block text-sm text-muted-foreground wrap-break-word pr-4">
                                         {cv.user?.email || "—"}
                                     </div>
-                                    <div className="text-right relative">
+
+                                    <div className="relative flex justify-end lg:justify-center items-start">
                                         <Button
                                             variant="ghost"
                                             size="icon"
-                                            className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                                            className="min-w-0! p-0! rounded-md! border-transparent! hover:border-transparent! text-muted-foreground hover:text-foreground shrink-0"
                                             onClick={() =>
                                                 setActiveMenuId(
                                                     activeMenuId === cv.id
@@ -105,7 +106,7 @@ export function CvsPageView({
                                         </Button>
 
                                         {activeMenuId === cv.id && (
-                                            <div className="absolute right-0 mt-2 w-36 bg-popover border border-border shadow-md rounded-none z-50 py-1 text-sm">
+                                            <div className="absolute right-0 top-full mt-1 w-36 bg-popover border border-border shadow-md rounded-none z-50 py-1 text-sm">
                                                 <button
                                                     className="w-full text-left px-4 py-2 hover:bg-accent hover:text-accent-foreground"
                                                     onClick={() => {
@@ -141,7 +142,7 @@ export function CvsPageView({
                                 </div>
 
                                 {cv.description && (
-                                    <div className="text-sm text-muted-foreground leading-relaxed pt-1">
+                                    <div className="text-sm text-muted-foreground leading-relaxed pt-1 wrap-break-word">
                                         {cv.description}
                                     </div>
                                 )}

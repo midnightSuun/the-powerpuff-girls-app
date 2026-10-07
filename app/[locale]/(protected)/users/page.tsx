@@ -3,6 +3,7 @@ import { Suspense } from "react"
 import { LoadingText } from "@/components/loading-text"
 import { parsePaginationSearchParams } from "@/lib/pagination-search-params"
 import { UsersPage } from "@/modules/users"
+import { UsersTableSkeleton } from "@/modules/users/ui/users-table-skeleton"
 
 type Props = {
     searchParams: Promise<Record<string, string | string[] | undefined>>
@@ -32,9 +33,7 @@ export default function UsersRoute({ searchParams }: Props) {
     return (
         <Suspense
             fallback={
-                <p className="p-4 text-muted-foreground">
-                    <LoadingText namespace="Users" />
-                </p>
+                <UsersTableSkeleton label={<LoadingText namespace="Users" />} />
             }
         >
             <UsersContent searchParams={searchParams} />

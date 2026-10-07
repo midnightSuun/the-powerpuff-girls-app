@@ -6,6 +6,7 @@ import { Toaster } from "sonner"
 
 import { routing } from "@/i18n/routing"
 import { AuthNotificationListener } from "@/modules/auth/ui/auth-notification-listener"
+import { MobileScreenBlocker } from "@/modules/errors/ui/mobile-screen-blocker"
 
 export function generateStaticParams() {
     return routing.locales.map((locale) => ({ locale }))
@@ -29,8 +30,10 @@ const LocaleContent = async ({ children, params }: Props) => {
 
     return (
         <NextIntlClientProvider messages={messages} locale={locale}>
-            {children}
-            <AuthNotificationListener />
+            <MobileScreenBlocker>
+                {children}
+                <AuthNotificationListener />
+            </MobileScreenBlocker>
         </NextIntlClientProvider>
     )
 }
