@@ -27,6 +27,7 @@ export async function UsersList({
 
     const isAdmin = session.role === "Admin"
     const t = await getTranslations("Users.columns")
+    const tUsers = await getTranslations("Users")
     const locale = await getLocale()
     const { users, totalPages } = await getUsers(
         limit,
@@ -59,6 +60,7 @@ export async function UsersList({
                 sortOrder={sortOrder}
                 getSortHref={getSortHref}
                 getRowHref={(user) => `/users/${user.id}`}
+                emptyMessage={tUsers("noResults")}
             />
             <PaginationComponent
                 totalPages={totalPages}

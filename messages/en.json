@@ -603,6 +603,7 @@
             "deleteFailed": "Could not delete the user. Please try again."
         },
         "loading": "Loading users...",
+        "noResults": "No results",
         "columns": {
             "avatar": "Avatar",
             "firstName": "First Name",

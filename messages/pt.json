@@ -580,6 +580,7 @@
             "employee": "Colaborador"
         },
         "loading": "A carregar utilizadores...",
+        "noResults": "Sem resultados",
         "columns": {
             "avatar": "Avatar",
             "firstName": "Nome",

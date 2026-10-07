@@ -50,6 +50,18 @@ const PAGES: (DefaultPage | PageWithTabs)[] = [
         title: "settings",
     },
     {
+        path: "/departments",
+        title: "departments",
+    },
+    {
+        path: "/positions",
+        title: "positions",
+    },
+    {
+        path: "/projects",
+        title: "projects",
+    },
+    {
         path: "/users/{userId}",
         firstBreadcrumb: "users",
         breadcrumbParam: "userId",

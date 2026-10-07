@@ -14,6 +14,9 @@ export type HeaderCopyKey =
     | "skills"
     | "languages"
     | "settings"
+    | "departments"
+    | "positions"
+    | "projects"
     | "profile"
     | "createUser"
     | "cvs"
@@ -197,6 +200,9 @@ const useHeaderCopy = (): HeaderCopy => {
     const tSkills = useTranslations("Skills")
     const tLanguages = useTranslations("Languages")
     const tSettings = useTranslations("Settings")
+    const tDepartments = useTranslations("Admin.departments")
+    const tPositions = useTranslations("Admin.positions")
+    const tProjects = useTranslations("Admin.projects")
     const tNav = useTranslations("User.nav")
     const tCvs = useTranslations("Cvs")
     const tCv = useTranslations("CV")
@@ -206,6 +212,9 @@ const useHeaderCopy = (): HeaderCopy => {
         skills: tSkills("title"),
         languages: tLanguages("title"),
         settings: tSettings("title"),
+        departments: tDepartments("title"),
+        positions: tPositions("title"),
+        projects: tProjects("title"),
         profile: tNav("profile"),
         createUser: tUsers("createUser"),
         cvs: tCvs("title"),
