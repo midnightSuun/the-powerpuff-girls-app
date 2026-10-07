@@ -85,6 +85,7 @@ export function AdminLanguagesView({
             key: "nativeName",
             label: t("columns.nativeName", { defaultValue: "Native name" }),
             sortable: true,
+            className: "hidden lg:table-cell",
         },
     ]
 

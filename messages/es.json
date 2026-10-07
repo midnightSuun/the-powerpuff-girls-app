@@ -266,6 +266,10 @@
             "title": "Página no encontrada",
             "description": "Es posible que la página que buscas haya sido eliminada,\nhaya cambiado de nombre o no esté disponible temporalmente.",
             "actionText": "Ir al inicio"
+        },
+        "MobileNotSupported": {
+            "title": "Vaya",
+            "description": "Esta aplicación no es compatible con dispositivos móviles.\nÁbrela en un ordenador o una tablet para continuar."
         }
     },
     "Settings": {
