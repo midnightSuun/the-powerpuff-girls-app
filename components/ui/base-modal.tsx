@@ -5,6 +5,7 @@ import { X } from "lucide-react"
 import type { ComponentProps } from "react"
 
 import { Button } from "@/components/ui/button"
+import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock"
 
 interface BaseModalProps {
     isOpen: boolean
@@ -54,6 +55,8 @@ export function BaseModal({
     onSubmit,
     onConfirm,
 }: BaseModalProps) {
+    useBodyScrollLock(isOpen)
+
     if (!isOpen) return null
 
     const content = (
