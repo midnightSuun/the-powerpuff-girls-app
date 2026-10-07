@@ -47,7 +47,6 @@ export function DeleteSkillsButton({
                         variant="ghost"
                         onClick={handleCancel}
                         disabled={isSubmitting}
-                        className="rounded-none"
                     >
                         {t("cancel")}
                     </Button>

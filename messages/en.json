@@ -50,6 +50,38 @@
                 "inUseError": "Position cannot be deleted because it is currently in use"
             }
         },
+        "projects": {
+            "title": "Projects",
+            "empty": "No projects found",
+            "search": "Search projects",
+            "searchLabel": "Search projects",
+            "createProject": "CREATE PROJECT",
+            "edit": "Edit",
+            "remove": "Delete",
+            "removeTitle": "Delete project",
+            "removeConfirmation": "Are you sure you want to delete project \"{name}\"?",
+            "cancel": "CANCEL",
+            "removing": "DELETING...",
+            "removeError": "Failed to delete project. Please try again.",
+            "form": {
+                "createTitle": "Create project",
+                "updateTitle": "Update project",
+                "name": "Name",
+                "domain": "Domain",
+                "startDate": "Start date",
+                "endDate": "End Date",
+                "description": "Description",
+                "environment": "Environment",
+                "addEnvironment": "Add environment value",
+                "removeEnvironment": "Remove {value}",
+                "create": "CREATE",
+                "creating": "CREATING...",
+                "update": "UPDATE",
+                "saving": "UPDATING...",
+                "cancel": "CANCEL",
+                "saveError": "Failed to save project. Please try again."
+            }
+        },
         "common": {
             "search": "Search",
             "edit": "Edit",
@@ -291,11 +323,27 @@
             "proficient": "Proficient",
             "expert": "Expert"
         },
+        "empty": "No skills here",
         "categories": {
             "1": "Programming languages",
             "2": "Frontend",
-            "3": "Backend",
-            "4": "Source control systems",
+            "3": "Frontend",
+            "4": "Frontend",
+            "5": "Frontend",
+            "6": "Frontend",
+            "7": "Frontend",
+            "8": "Frontend",
+            "9": "Backend",
+            "10": "Backend",
+            "11": "Backend",
+            "12": "Backend",
+            "13": "Testing frameworks",
+            "14": "DevOps",
+            "15": "DevOps",
+            "16": "DevOps",
+            "17": "Source control systems",
+            "18": "Documentation",
+            "19": "Graphic editors",
             "other": "General Skills"
         },
         "actions": {
@@ -483,7 +531,7 @@
         "role": "Role",
         "memberSince": "A member since {date}",
         "uploadAvatar": "Upload avatar image",
-        "avatarRequirements": "png, jpg or gif no more than 0.5MB",
+        "avatarRequirements": "png, jpg or gif no more than 5MB",
         "firstName": "First Name",
         "lastName": "Last Name",
         "department": "Department",
@@ -502,7 +550,7 @@
             "firstNameTooLong": "First name must be 100 characters or fewer",
             "lastNameTooLong": "Last name must be 100 characters or fewer",
             "unsupportedFileType": "Unsupported file type",
-            "fileTooLarge": "File size must not exceed 0.5 MB"
+            "fileTooLarge": "File size must not exceed 5 MB"
         },
         "messages": {
             "profileUpdated": "Profile updated successfully",
@@ -626,7 +674,8 @@
         "admin": {
             "columns": {
                 "name": "Name",
-                "isoCode": "ISO Code"
+                "isoCode": "ISO",
+                "nativeName": "Native name"
             },
             "search": "Search",
             "createButton": "CREATE LANGUAGE",
@@ -635,7 +684,7 @@
                 "title": "Create language",
                 "languageName": "Language Name",
                 "languagePlaceholder": "e.g. English",
-                "isoCode": "ISO Code",
+                "isoCode": "ISO",
                 "isoCodePlaceholder": "e.g. en",
                 "cancel": "CANCEL",
                 "create": "CREATE",

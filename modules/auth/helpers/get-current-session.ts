@@ -1,5 +1,6 @@
 import { jwtVerify } from "jose"
 import { cookies } from "next/headers"
+import { connection } from "next/server"
 
 import type { UserRole } from "@/gql"
 import { ACCESS_TOKEN_COOKIE } from "@/modules/auth/consts"
@@ -16,6 +17,7 @@ export async function getCurrentSession(): Promise<UserSession | null> {
     if (!token) return null
 
     try {
+        await connection()
         const secret = new TextEncoder().encode(process.env.JWT_SECRET)
         const { payload } = await jwtVerify(token, secret)
 

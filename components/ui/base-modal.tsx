@@ -42,7 +42,7 @@ export function BaseModal({
     cancelText,
     confirmText,
     pendingText,
-    confirmButtonVariant = "default",
+    confirmButtonVariant = "primary",
     dialogClassName,
     formClassName,
     overlayClassName,
@@ -59,11 +59,11 @@ export function BaseModal({
     const content = (
         <div
             className={cn(
-                "relative w-full max-w-155 rounded-none border border-border bg-background p-6 text-foreground shadow-2xl dark:border-auth-card-border dark:bg-auth-bg md:rounded-xl md:p-8",
+                "relative w-full max-w-155 rounded-none border-none bg-background p-6 text-foreground shadow-2xl dark:bg-auth-bg md:p-8",
                 dialogClassName,
             )}
         >
-            <div className="mb-4 md:mb-6 flex items-center justify-between">
+            <div className="mb-4 flex items-center justify-between md:mb-6">
                 <p
                     className={cn(
                         "text-lg font-semibold text-foreground md:text-xl md:font-medium",
@@ -76,14 +76,14 @@ export function BaseModal({
                     type="button"
                     onClick={onClose}
                     disabled={isPending}
-                    className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                    className="cursor-pointer"
                 >
                     <X className="h-5 w-5" />
                 </button>
             </div>
 
             {error && (
-                <div className="mb-4 rounded-none bg-red-100 dark:bg-red-950/50 p-3 text-sm text-red-600 dark:text-red-400">
+                <div className="mb-4 rounded-none bg-red-100 p-3 text-sm text-red-600 dark:bg-red-950/50 dark:text-red-400">
                     {error}
                 </div>
             )}
@@ -102,7 +102,7 @@ export function BaseModal({
                     onClick={onClose}
                     disabled={isPending}
                     className={cn(
-                        "rounded-full border border-input bg-background px-8 py-2.5 text-sm font-normal shadow-none hover:bg-accent hover:text-accent-foreground",
+                        "border border-border text-border dark:border-auth-card-border dark:text-auth-card-border",
                         cancelButtonClassName,
                     )}
                 >
@@ -111,16 +111,13 @@ export function BaseModal({
                 <Button
                     type={onSubmit ? "submit" : "button"}
                     variant={
-                        confirmButtonVariant as ComponentProps<
+                        (confirmButtonVariant as ComponentProps<
                             typeof Button
-                        >["variant"]
+                        >["variant"]) ?? "primary"
                     }
                     onClick={onConfirm}
                     disabled={!isValid || isPending}
-                    className={cn(
-                        "rounded-full bg-[#C93B32] px-8 py-2.5 text-sm font-normal text-white shadow-none hover:bg-[#B5332B]",
-                        confirmButtonClassName,
-                    )}
+                    className={cn(confirmButtonClassName)}
                 >
                     {isPending ? pendingText : confirmText}
                 </Button>
@@ -131,7 +128,7 @@ export function BaseModal({
     return (
         <div
             className={cn(
-                "fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs",
+                "fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4",
                 overlayClassName,
             )}
         >

@@ -1,0 +1,716 @@
+{
+    "Admin": {
+        "departments": {
+            "title": "Abteilungen",
+            "createButton": "ABTEILUNG ERSTELLEN",
+            "empty": "Keine Abteilungen gefunden",
+            "columns": {
+                "name": "Name"
+            },
+            "create": {
+                "title": "Abteilung erstellen",
+                "departmentName": "Abteilung",
+                "departmentPlaceholder": "Abteilungsname",
+                "alreadyExists": "Abteilung existiert bereits",
+                "required": "Abteilungsname ist erforderlich"
+            },
+            "edit": {
+                "title": "Abteilung bearbeiten",
+                "departmentName": "Abteilung",
+                "departmentPlaceholder": "Abteilungsname"
+            },
+            "delete": {
+                "title": "Abteilung löschen",
+                "confirmation": "Möchten Sie die Abteilung „{name}“ wirklich löschen?",
+                "inUseError": "Abteilung kann nicht gelöscht werden, da sie derzeit in Verwendung ist"
+            }
+        },
+        "positions": {
+            "title": "Positionen",
+            "createButton": "POSITION ERSTELLEN",
+            "empty": "Keine Positionen gefunden",
+            "columns": {
+                "name": "Name"
+            },
+            "create": {
+                "title": "Position erstellen",
+                "positionName": "Position",
+                "positionPlaceholder": "Positionsname",
+                "alreadyExists": "Position existiert bereits",
+                "required": "Positionsname ist erforderlich"
+            },
+            "edit": {
+                "title": "Position bearbeiten",
+                "positionName": "Position",
+                "positionPlaceholder": "Positionsname"
+            },
+            "delete": {
+                "title": "Position löschen",
+                "confirmation": "Möchten Sie die Position „{name}“ wirklich löschen?",
+                "inUseError": "Position kann nicht gelöscht werden, da sie derzeit in Verwendung ist"
+            }
+        },
+        "projects": {
+            "title": "Projekte",
+            "empty": "Keine Projekte gefunden",
+            "search": "Projekte suchen",
+            "searchLabel": "Projekte suchen",
+            "createProject": "PROJEKT ERSTELLEN",
+            "edit": "Bearbeiten",
+            "remove": "Löschen",
+            "removeTitle": "Projekt löschen",
+            "removeConfirmation": "Möchten Sie das Projekt „{name}“ wirklich löschen?",
+            "cancel": "ABBRECHEN",
+            "removing": "WIRD GELÖSCHT...",
+            "removeError": "Fehler beim Löschen des Projekts. Bitte versuchen Sie es erneut.",
+            "form": {
+                "createTitle": "Projekt erstellen",
+                "updateTitle": "Projekt aktualisieren",
+                "name": "Name",
+                "domain": "Bereich",
+                "startDate": "Startdatum",
+                "endDate": "Enddatum",
+                "description": "Beschreibung",
+                "environment": "Umgebung",
+                "addEnvironment": "Umgebungswert hinzufügen",
+                "removeEnvironment": "{value} entfernen",
+                "create": "ERSTELLEN",
+                "creating": "WIRD ERSTELLT...",
+                "update": "AKTUALISIEREN",
+                "saving": "WIRD AKTUALISIERT...",
+                "cancel": "ABBRECHEN",
+                "saveError": "Fehler beim Speichern des Projekts. Bitte versuchen Sie es erneut."
+            }
+        },
+        "common": {
+            "search": "Suchen",
+            "edit": "Bearbeiten",
+            "delete": "Löschen",
+            "cancel": "ABBRECHEN",
+            "confirm": "BESTÄTIGEN",
+            "save": "SPEICHERN",
+            "saving": "WIRD GESPEICHERT...",
+            "create": "ERSTELLEN",
+            "creating": "WIRD ERSTELLT...",
+            "deleting": "WIRD GELÖSCHT..."
+        },
+        "skills": {
+            "title": "Fähigkeiten",
+            "createButton": "FÄHIGKEIT ERSTELLEN",
+            "empty": "Keine Fähigkeiten gefunden",
+            "columns": {
+                "name": "Name",
+                "category": "Kategorie"
+            },
+            "create": {
+                "title": "Fähigkeit erstellen",
+                "skillName": "Fähigkeit",
+                "skillPlaceholder": "Fähigkeit",
+                "category": "Kategorie",
+                "categoryPlaceholder": "Kategorie",
+                "alreadyExists": "Fähigkeit existiert bereits"
+            },
+            "edit": {
+                "title": "Fähigkeit bearbeiten",
+                "skillName": "Fähigkeitsname",
+                "category": "Kategorie"
+            },
+            "delete": {
+                "title": "Fähigkeit löschen",
+                "confirmation": "Möchten Sie die Fähigkeit „{name}“ wirklich löschen?"
+            }
+        },
+        "languages": {
+            "title": "Sprachen",
+            "createButton": "SPRACHE ERSTELLEN",
+            "empty": "Keine Sprachen gefunden",
+            "columns": {
+                "name": "Name",
+                "iso2": "ISO-Code"
+            },
+            "create": {
+                "title": "Sprache erstellen",
+                "languageName": "Sprachname",
+                "languagePlaceholder": "z. B. Deutsch",
+                "iso2": "ISO-Code",
+                "iso2Placeholder": "z. B. de",
+                "alreadyExists": "Sprache existiert bereits",
+                "invalidIso2": "Der ISO2-Code muss genau 2 Zeichen lang sein"
+            },
+            "edit": {
+                "title": "Sprache bearbeiten",
+                "languageName": "Sprachname",
+                "iso2": "ISO-Code"
+            },
+            "delete": {
+                "title": "Sprache löschen",
+                "confirmation": "Möchten Sie die Sprache „{name}“ wirklich löschen?"
+            }
+        }
+    },
+    "Auth": {
+        "EmailVerification": {
+            "title": "E-Mail-Bestätigung",
+            "subtitle": "Geben Sie den Bestätigungscode ein, den wir gesendet haben an",
+            "fallbackEmail": "Ihre E-Mail-Adresse",
+            "submitButton": "BESTÄTIGEN",
+            "submittingButton": "WIRD GEPRÜFT...",
+            "resendButton": "E-MAIL ERNEUT SENDEN",
+            "resendingButton": "WIRD GESENDET...",
+            "laterButton": "SPÄTER"
+        },
+        "ForgotPassword": {
+            "title": "Passwort vergessen",
+            "subtitle": "Wir senden Ihnen eine E-Mail mit weiteren Anweisungen",
+            "emailLabel": "E-Mail",
+            "emailPlaceholder": "beispiel@email.com",
+            "submitButton": "PASSWORT ZURÜCKSETZEN",
+            "submittingButton": "WIRD GESENDET...",
+            "cancelButton": "Abbrechen"
+        },
+        "Login": {
+            "title": "Willkommen zurück",
+            "subtitle": "Schön, Sie wiederzusehen! Melden Sie sich an, um fortzufahren",
+            "emailPlaceholder": "E-Mail",
+            "passwordPlaceholder": "Passwort",
+            "submitButton": "ANMELDEN",
+            "submittingButton": "ANMELDUNG LÄUFT...",
+            "forgotPassword": "PASSWORT VERGESSEN",
+            "hidePassword": "Passwort ausblenden",
+            "showPassword": "Passwort anzeigen"
+        },
+        "ResetPassword": {
+            "title": "Passwort zurücksetzen",
+            "subtitle": "Hier können Sie ein neues Passwort eingeben und bestätigen",
+            "newPasswordPlaceholder": "Neues Passwort",
+            "confirmPasswordPlaceholder": "Passwort bestätigen",
+            "submitButton": "ABSENDEN",
+            "submittingButton": "WIRD GESENDET...",
+            "goToSignIn": "ZUR ANMELDUNG"
+        },
+        "Signup": {
+            "title": "Jetzt registrieren",
+            "subtitle": "Willkommen! Registrieren Sie sich, um fortzufahren",
+            "emailPlaceholder": "E-Mail",
+            "passwordPlaceholder": "Passwort",
+            "confirmPasswordPlaceholder": "Passwort bestätigen",
+            "submitButton": "KONTO ERSTELLEN",
+            "submittingButton": "WIRD ERSTELLT...",
+            "haveAccount": "ICH HABE BEREITS EIN KONTO"
+        },
+        "Tabs": {
+            "signIn": "ANMELDEN",
+            "signup": "REGISTRIEREN"
+        },
+        "validation": {
+            "emailRequired": "E-Mail ist erforderlich",
+            "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+            "passwordRequired": "Passwort ist erforderlich",
+            "passwordMin": "Das Passwort muss mindestens 6 Zeichen lang sein",
+            "passwordMin8": "Das Passwort muss mindestens 8 Zeichen lang sein",
+            "confirmPassword": "Bitte bestätigen Sie Ihr Passwort",
+            "passwordsDoNotMatch": "Passwörter stimmen nicht überein",
+            "codeLength": "Der Bestätigungscode muss genau 6 Ziffern lang sein.",
+            "codeDigits": "Der Bestätigungscode darf nur Zahlen enthalten."
+        },
+        "messages": {
+            "loginRequired": "E-Mail und Passwort sind erforderlich.",
+            "loginFailed": "Anmeldung fehlgeschlagen. Bitte überprüfen Sie E-Mail und Passwort.",
+            "signupRequired": "Bitte füllen Sie alle Felder aus.",
+            "passwordsDoNotMatch": "Passwörter stimmen nicht überein.",
+            "emailAlreadyTaken": "Diese E-Mail ist bereits vergeben. Bitte verwenden Sie eine andere oder melden Sie sich an.",
+            "serverError": "Serverfehler: {message}",
+            "unknownError": "Unbekannter Fehler",
+            "signupEmailFailed": "Registrierung aufgrund eines E-Mail-Serverfehlers fehlgeschlagen. Bitte versuchen Sie es später erneut.",
+            "forgotFailed": "Fehler beim Senden der Anweisungen zum Zurücksetzen. Bitte versuchen Sie es erneut.",
+            "forgotInstructionsSent": "Anweisungen wurden an Ihre E-Mail-Adresse gesendet.",
+            "resetTokenInvalid": "Zurücksetzungs-Token fehlt oder ist ungültig. Öffnen Sie den Link aus Ihrer E-Mail erneut.",
+            "resetExpired": "Dieser Link zum Zurücksetzen ist abgelaufen. Bitte fordern Sie einen neuen an.",
+            "resetFailed": "Fehler beim Zurücksetzen des Passworts. Bitte versuchen Sie es erneut.",
+            "verificationEmailUnavailable": "E-Mail-Adresse ist nicht verfügbar. Bitte melden Sie sich erneut an.",
+            "verificationSendFailed": "Die Bestätigungs-E-Mail konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
+            "verificationInvalid": "Der Bestätigungscode ist ungültig oder abgelaufen. Bitte versuchen Sie es erneut.",
+            "verificationSent": "Eine neue Bestätigungs-E-Mail wurde gesendet.",
+            "sessionExpired": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich an und versuchen Sie es erneut.",
+            "loginSuccess": "Sie haben sich erfolgreich in Ihrem Konto angemeldet",
+            "signupVerificationSent": "Eine Bestätigungs-E-Mail wurde an Ihre E-Mail-Adresse gesendet."
+        }
+    },
+    "Common": {
+        "retry": "Wiederholen",
+        "breadcrumb": "Brotkrumen",
+        "search": "Suchen",
+        "edit": "Bearbeiten",
+        "delete": "Löschen",
+        "loading": "Wird geladen...",
+        "toggleSidebar": "Seitenleiste umschalten",
+        "sidebarTitle": "Seitenleiste",
+        "sidebarDescription": "Navigationsseitenleiste"
+    },
+    "Navigation": {
+        "employees": "Mitarbeiter",
+        "skills": "Fähigkeiten",
+        "languages": "Sprachen",
+        "cvs": "Lebensläufe",
+        "departments": "Abteilungen",
+        "positions": "Positionen",
+        "projects": "Projekte"
+    },
+    "Errors": {
+        "NoInternet": {
+            "title": "Hoppla",
+            "description": "Etwas ist schiefgelaufen. Wir arbeiten bereits daran.\nBitte versuchen Sie es erneut oder gehen Sie zurück.",
+            "actionText": "Wiederholen"
+        },
+        "NotFound": {
+            "title": "Seite nicht gefunden",
+            "description": "Die von Ihnen gesuchte Seite wurde möglicherweise entfernt,\numbenannt oder ist vorübergehend nicht verfügbar.",
+            "actionText": "Zur Startseite"
+        }
+    },
+    "Settings": {
+        "title": "Einstellungen",
+        "logout": "Abmelden",
+        "theme": {
+            "label": "Design",
+            "light": "Hell",
+            "dark": "Dunkel",
+            "deviceSettings": "Geräteeinstellungen"
+        },
+        "language": {
+            "label": "Sprache",
+            "english": "Englisch",
+            "french": "Französisch",
+            "german": "Deutsch",
+            "italian": "Italienisch",
+            "polish": "Polnisch",
+            "portuguese": "Portugiesisch",
+            "russian": "Russisch",
+            "spanish": "Spanisch",
+            "ukrainian": "Ukrainisch"
+        },
+        "passwordSection": {
+            "title": "Passwort ändern",
+            "currentPlaceholder": "Aktuelles Passwort",
+            "newPlaceholder": "Neues Passwort",
+            "confirmPlaceholder": "Passwort bestätigen",
+            "submitButton": "ÄNDERN",
+            "submittingButton": "WIRD GEÄNDERT..."
+        },
+        "validation": {
+            "passwordRequired": "Passwort ist erforderlich",
+            "newPasswordRequired": "Das neue Passwort muss mindestens 6 Zeichen lang sein",
+            "confirmPasswordRequired": "Passwortbestätigung ist erforderlich",
+            "passwordsDoNotMatch": "Passwörter stimmen nicht überein"
+        },
+        "messages": {
+            "updated": "Einstellungen und Passwort erfolgreich aktualisiert.",
+            "sessionExpired": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
+            "passwordUpdateFailed": "Fehler beim Aktualisieren des Passworts. Bitte überprüfen Sie Ihr aktuelles Passwort."
+        }
+    },
+    "Cvs": {
+        "title": "Lebensläufe"
+    },
+    "Skills": {
+        "title": "Fähigkeiten",
+        "loading": "Profilfähigkeiten werden geladen...",
+        "masteryPlaceholder": "Kompetenzstufe",
+        "masteryLevels": {
+            "novice": "Anfänger",
+            "advanced": "Fortgeschritten",
+            "competent": "Kompetent",
+            "proficient": "Erfahren",
+            "expert": "Experte"
+        },
+        "empty": "Hier gibt es noch keine Fähigkeiten",
+        "categories": {
+            "1": "Programmiersprachen",
+            "2": "Frontend",
+            "3": "Frontend",
+            "4": "Frontend",
+            "5": "Frontend",
+            "6": "Frontend",
+            "7": "Frontend",
+            "8": "Frontend",
+            "9": "Backend",
+            "10": "Backend",
+            "11": "Backend",
+            "12": "Backend",
+            "13": "Test-Frameworks",
+            "14": "DevOps",
+            "15": "DevOps",
+            "16": "DevOps",
+            "17": "Versionskontrollsysteme",
+            "18": "Dokumentation",
+            "19": "Grafikeditoren",
+            "other": "Allgemeine Fähigkeiten"
+        },
+        "actions": {
+            "add": "FÄHIGKEIT HINZUFÜGEN",
+            "remove": "FÄHIGKEITEN ENTFERNEN",
+            "cancel": "ABBRECHEN",
+            "deleteSelected": "LÖSCHEN ({count})"
+        },
+        "add": {
+            "title": "Fähigkeit hinzufügen",
+            "skillPlaceholder": "Fähigkeit",
+            "allSkillsAdded": "Alle verfügbaren Fähigkeiten hinzugefügt",
+            "cancel": "ABBRECHEN",
+            "submit": "HINZUFÜGEN",
+            "adding": "WIRD HINZUGEFÜGT...",
+            "errors": {
+                "selectSkill": "Bitte wählen Sie eine Fähigkeit aus",
+                "selectMastery": "Bitte wählen Sie eine Kompetenzstufe aus",
+                "notFound": "Ausgewählte Fähigkeit nicht gefunden",
+                "alreadyAdded": "Diese Fähigkeit wurde Ihrem Lebenslauf bereits hinzugefügt.",
+                "failed": "Fehler beim Hinzufügen der Fähigkeit. Bitte versuchen Sie es erneut."
+            }
+        },
+        "edit": {
+            "title": "Fähigkeit aktualisieren",
+            "skill": "Fähigkeit",
+            "mastery": "Kompetenzstufe",
+            "cancel": "ABBRECHEN",
+            "submit": "AKTUALISIEREN",
+            "updating": "WIRD AKTUALISIERT...",
+            "errors": {
+                "masteryRequired": "Kompetenzstufe ist erforderlich",
+                "failed": "Fehler beim Aktualisieren der Fähigkeit. Bitte versuchen Sie es erneut."
+            }
+        },
+        "delete": {
+            "titleSingular": "Fähigkeit entfernen",
+            "titlePlural": "Fähigkeiten entfernen",
+            "confirmation": "Möchten Sie {count, plural, one {# Fähigkeit?} other {# Fähigkeiten?}} wirklich entfernen?",
+            "cancel": "ABBRECHEN",
+            "confirm": "BESTÄTIGEN",
+            "removing": "WIRD ENTFERNT...",
+            "errors": {
+                "failed": "Fehler beim Entfernen der Fähigkeiten. Bitte versuchen Sie es erneut."
+            }
+        },
+        "admin": {
+            "name": "Name",
+            "category": "Kategorie",
+            "search": "Suchen",
+            "create": "FÄHIGKEIT ERSTELLEN",
+            "empty": "Keine Fähigkeiten gefunden",
+            "createTitle": "Fähigkeit erstellen",
+            "editTitle": "Fähigkeit bearbeiten",
+            "deleteTitle": "Fähigkeit löschen",
+            "skill": "Fähigkeit",
+            "duplicate": "Fähigkeit existiert bereits",
+            "cancel": "ABBRECHEN",
+            "save": "SPEICHERN",
+            "saving": "WIRD GESPEICHERT...",
+            "creating": "WIRD ERSTELLT...",
+            "confirm": "BESTÄTIGEN",
+            "deleting": "WIRD GELÖSCHT...",
+            "deleteConfirmation": "Möchten Sie die Fähigkeit „{name}“ wirklich löschen?",
+            "createError": "Fehler beim Erstellen der Fähigkeit. Bitte versuchen Sie es erneut.",
+            "updateError": "Fehler beim Aktualisieren der Fähigkeit. Bitte versuchen Sie es erneut.",
+            "deleteError": "Fehler beim Löschen der Fähigkeit. Bitte versuchen Sie es erneut."
+        }
+    },
+    "CV": {
+        "tabListLabel": "Lebenslauf-Abschnitte",
+        "tabs": {
+            "details": "DETAILS",
+            "skills": "FÄHIGKEITEN",
+            "projects": "PROJEKTE",
+            "preview": "VORSCHAU"
+        },
+        "previewUnavailable": "Lebenslauf-Vorschau ist noch nicht verfügbar.",
+        "preview": {
+            "exportPdf": "PDF EXPORTIEREN",
+            "education": "Ausbildung",
+            "languageProficiency": "Sprachkenntnisse",
+            "domains": "Bereiche",
+            "profile": "Berufliches Profil",
+            "noDescription": "Keine Profilbeschreibung angegeben.",
+            "projects": "Projekte",
+            "projectRoles": "Projektrollen",
+            "period": "Zeitraum",
+            "responsibilities": "Verantwortlichkeiten",
+            "environment": "Umgebung",
+            "tillNow": "Heute",
+            "professionalSkills": "Berufliche Fähigkeiten",
+            "skills": "Fähigkeitsgruppen",
+            "skillName": "Fähigkeit",
+            "mastery": "Kenntnisstand",
+            "noSkills": "Diesem Lebenslauf wurden noch keine Fähigkeiten hinzugefügt."
+        },
+        "list": {
+            "create": "LEBENSLAUF ERSTELLEN",
+            "name": "Name",
+            "education": "Ausbildung",
+            "employee": "Mitarbeiter",
+            "view": "Anzeigen",
+            "edit": "Bearbeiten",
+            "delete": "Löschen",
+            "noResults": "Keine Lebensläufe gefunden",
+            "empty": "Sie haben noch keine Lebensläufe",
+            "createError": "Fehler beim Erstellen des Lebenslaufs. Bitte versuchen Sie es erneut.",
+            "updateError": "Fehler beim Aktualisieren des Lebenslaufs. Bitte versuchen Sie es erneut.",
+            "deleteError": "Fehler beim Löschen des Lebenslaufs. Bitte versuchen Sie es erneut."
+        },
+        "form": {
+            "name": "Name",
+            "education": "Ausbildung",
+            "description": "Beschreibung",
+            "update": "AKTUALISIEREN",
+            "updating": "WIRD AKTUALISIERT...",
+            "updateError": "Fehler beim Aktualisieren des Lebenslaufs. Bitte versuchen Sie es erneut.",
+            "createTitle": "Lebenslauf erstellen",
+            "create": "ERSTELLEN",
+            "creating": "WIRD ERSTELLT...",
+            "updateTitle": "Lebenslauf aktualisieren",
+            "save": "SPEICHERN",
+            "saving": "WIRD GESPEICHERT...",
+            "nameRequired": "Name ist erforderlich",
+            "educationRequired": "Ausbildung ist erforderlich",
+            "descriptionRequired": "Beschreibung ist erforderlich",
+            "cancel": "ABBRECHEN",
+            "deleteTitle": "Lebenslauf löschen",
+            "deleteConfirmation": "Möchten Sie den Lebenslauf „{name}“ wirklich löschen?",
+            "confirm": "BESTÄTIGEN",
+            "deleting": "WIRD GELÖSCHT..."
+        },
+        "projects": {
+            "search": "Suchen",
+            "searchLabel": "Projekte suchen",
+            "noAvailableProjects": "Es sind keine verfügbaren Projekte zum Hinzufügen vorhanden.",
+            "addProject": "PROJEKT HINZUFÜGEN",
+            "sortByName": "Projekte nach Name sortieren ({direction})",
+            "ascending": "aufsteigend",
+            "descending": "absteigend",
+            "name": "Name",
+            "domain": "Bereich",
+            "startDate": "Startdatum",
+            "endDate": "Enddatum",
+            "actions": "Aktionen",
+            "actionsFor": "Aktionen für {name}",
+            "tillNow": "Bis heute",
+            "edit": "Bearbeiten",
+            "remove": "Entfernen",
+            "noSearchResults": "Keine Projekte entsprechen Ihrer Suche.",
+            "empty": "Diesem Lebenslauf wurden noch keine Projekte hinzugefügt.",
+            "removeTitle": "Lebenslauf-Projekt entfernen",
+            "removeConfirmation": "Möchten Sie das Projekt <strong>{name}</strong> wirklich entfernen?",
+            "cancel": "ABBRECHEN",
+            "removing": "WIRD ENTFERNT...",
+            "removeError": "Fehler beim Entfernen des Projekts. Bitte versuchen Sie es erneut.",
+            "form": {
+                "editTitle": "Projekt bearbeiten",
+                "addTitle": "Projekt hinzufügen",
+                "cancel": "ABBRECHEN",
+                "update": "AKTUALISIEREN",
+                "add": "HINZUFÜGEN",
+                "updating": "WIRD AKTUALISIERT...",
+                "adding": "WIRD HINZUGEFÜGT...",
+                "project": "Projekt",
+                "selectProject": "Projekt auswählen",
+                "noAvailableProjects": "Keine Projekte zum Hinzufügen verfügbar.",
+                "duplicateProjectError": "Dieses Projekt wurde diesem Lebenslauf bereits hinzugefügt.",
+                "domain": "Bereich",
+                "startDate": "Startdatum",
+                "endDate": "Enddatum",
+                "description": "Beschreibung",
+                "environment": "Umgebung",
+                "roles": "Rollen",
+                "responsibilities": "Verantwortlichkeiten",
+                "saveError": "Fehler beim Speichern des Projekts. Bitte versuchen Sie es erneut."
+            }
+        }
+    },
+    "User": {
+        "title": "Benutzerprofil",
+        "loading": "Wird geladen...",
+        "email": "E-Mail",
+        "role": "Rolle",
+        "memberSince": "Mitglied seit {date}",
+        "uploadAvatar": "Avatarbild hochladen",
+        "avatarRequirements": "png, jpg oder gif, max. 5 MB",
+        "firstName": "Vorname",
+        "lastName": "Nachname",
+        "department": "Abteilung",
+        "position": "Position",
+        "selectDepartment": "Abteilung auswählen",
+        "selectPosition": "Position auswählen",
+        "verifyEmail": "E-MAIL BESTÄTIGEN",
+        "sendingVerification": "WIRD GESENDET...",
+        "update": "AKTUALISIEREN",
+        "updating": "WIRD AKTUALISIERT...",
+        "errors": {
+            "firstNameRequired": "Vorname ist erforderlich",
+            "lastNameRequired": "Nachname ist erforderlich",
+            "departmentRequired": "Abteilung ist erforderlich",
+            "positionRequired": "Position ist erforderlich",
+            "firstNameTooLong": "Der Vorname darf höchstens 100 Zeichen lang sein",
+            "lastNameTooLong": "Der Nachname darf höchstens 100 Zeichen lang sein",
+            "unsupportedFileType": "Nicht unterstütztes Dateiformat",
+            "fileTooLarge": "Die Dateigröße darf 5 MB nicht überschreiten"
+        },
+        "messages": {
+            "profileUpdated": "Profil erfolgreich aktualisiert",
+            "updateFailed": "Ihr Profil konnte nicht gespeichert werden. Bitte versuchen Sie es erneut.",
+            "updateForbidden": "Sie können nur Ihr eigenes Profil aktualisieren.",
+            "avatarUploaded": "Avatar erfolgreich hochgeladen",
+            "avatarUploadFailed": "Ihr Profilbild konnte nicht hochgeladen werden. Bitte versuchen Sie es erneut.",
+            "verificationSent": "Bestätigungs-E-Mail wurde gesendet",
+            "verificationFailed": "Fehler beim Senden der Bestätigungs-E-Mail"
+        },
+        "nav": {
+            "viewProfile": "Profil anzeigen",
+            "profile": "Profil",
+            "settings": "Einstellungen",
+            "logout": "Abmelden"
+        }
+    },
+    "Users": {
+        "title": "Mitarbeiter",
+        "createUser": "Benutzer erstellen",
+        "dialog": {
+            "description": "Neuen Benutzer erstellen",
+            "password": "Passwort",
+            "cancel": "Abbrechen",
+            "submit": "Erstellen",
+            "close": "Schließen",
+            "employee": "Mitarbeiter"
+        },
+        "loading": "Benutzer werden geladen...",
+        "columns": {
+            "avatar": "Avatar",
+            "firstName": "Vorname",
+            "lastName": "Nachname",
+            "email": "E-Mail",
+            "department": "Abteilung",
+            "position": "Position",
+            "sortBy": "Sortieren nach {column}",
+            "openMenu": "Menü öffnen"
+        }
+    },
+    "Pagination": {
+        "previous": "Zurück",
+        "next": "Weiter",
+        "label": "Seitenangabe",
+        "previousLabel": "Zur vorherigen Seite gehen",
+        "nextLabel": "Zur nächsten Seite gehen",
+        "morePages": "Weitere Seiten"
+    },
+    "Languages": {
+        "title": "Sprachen",
+        "currentLanguages": "Aktuelle Sprachen",
+        "empty": "Noch keine Sprachen hinzugefügt.",
+        "proficiencyPlaceholder": "Kompetenzstufe",
+        "proficiencyLevels": {
+            "A1": "A1 - Anfänger",
+            "A2": "A2 - Grundkenntnisse",
+            "B1": "B1 - Fortgeschrittene Sprachverwendung",
+            "B2": "B2 - Selbstständige Sprachverwendung",
+            "C1": "C1 - Fachkundige Sprachkenntnisse",
+            "C2": "C2 - Annähernd muttersprachliche Kenntnisse",
+            "Native": "Muttersprachler"
+        },
+        "actions": {
+            "add": "SPRACHE HINZUFÜGEN",
+            "remove": "SPRACHEN ENTFERNEN",
+            "cancel": "ABBRECHEN",
+            "deleteSelected": "LÖSCHEN ({count})"
+        },
+        "add": {
+            "title": "Sprache hinzufügen",
+            "languagePlaceholder": "Sprache",
+            "allLanguagesAdded": "Alle verfügbaren Sprachen hinzugefügt",
+            "cancel": "ABBRECHEN",
+            "submit": "HINZUFÜGEN",
+            "adding": "WIRD HINZUGEFÜGT...",
+            "errors": {
+                "failed": "Fehler beim Hinzufügen der Sprache. Bitte versuchen Sie es erneut."
+            }
+        },
+        "edit": {
+            "title": "Sprache aktualisieren",
+            "language": "Sprache",
+            "proficiency": "Kompetenzstufe",
+            "cancel": "ABBRECHEN",
+            "submit": "AKTUALISIEREN",
+            "updating": "WIRD AKTUALISIERT...",
+            "errors": {
+                "failed": "Fehler beim Aktualisieren der Sprache. Bitte versuchen Sie es erneut."
+            }
+        },
+        "delete": {
+            "titleSingular": "Sprache entfernen",
+            "titlePlural": "Sprachen entfernen",
+            "confirmation": "Möchten Sie {count, plural, one {# Sprache?} other {# Sprachen?}} wirklich entfernen?",
+            "cancel": "ABBRECHEN",
+            "confirm": "BESTÄTIGEN",
+            "removing": "WIRD ENTFERNT...",
+            "errors": {
+                "failed": "Fehler beim Entfernen der Sprachen. Bitte versuchen Sie es erneut."
+            }
+        },
+        "admin": {
+            "columns": {
+                "name": "Name",
+                "isoCode": "ISO",
+                "nativeName": "Nativer Name"
+            },
+            "search": "Suchen",
+            "createButton": "SPRACHE ERSTELLEN",
+            "empty": "Keine Sprachen gefunden",
+            "create": {
+                "title": "Sprache erstellen",
+                "languageName": "Sprachname",
+                "languagePlaceholder": "z. B. Deutsch",
+                "isoCode": "ISO-Code",
+                "isoCodePlaceholder": "z. B. de",
+                "cancel": "ABBRECHEN",
+                "create": "ERSTELLEN",
+                "creating": "WIRD ERSTELLT..."
+            },
+            "edit": {
+                "title": "Sprache bearbeiten",
+                "languageName": "Sprachname",
+                "languagePlaceholder": "Sprache",
+                "isoCode": "ISO-Code",
+                "isoCodePlaceholder": "ISO2",
+                "cancel": "ABBRECHEN",
+                "save": "SPEICHERN",
+                "saving": "WIRD GESPEICHERT..."
+            },
+            "delete": {
+                "title": "Sprache löschen",
+                "confirmation": "Möchten Sie die Sprache „{name}“ wirklich löschen?",
+                "cancel": "ABBRECHEN",
+                "confirm": "BESTÄTIGEN",
+                "deleting": "WIRD GELÖSCHT..."
+            },
+            "errors": {
+                "duplicate": "Sprache existiert bereits",
+                "createFailed": "Fehler beim Erstellen der Sprache",
+                "updateFailed": "Fehler beim Aktualisieren der Sprache",
+                "invalidData": "Ungültige Sprachdaten oder ISO2-Code"
+            }
+        }
+    },
+    "Notifications": {
+        "success": "Erfolg",
+        "error": "Fehler",
+        "warning": "Warnung",
+        "info": "Info",
+        "logoutSuccess": "Sie haben sich erfolgreich abgemeldet.",
+        "actions": {
+            "created": "Erfolgreich erstellt.",
+            "updated": "Änderungen erfolgreich gespeichert.",
+            "deleted": "Erfolgreich gelöscht."
+        },
+        "messages": {
+            "verificationSent": "Bestätigungs-E-Mail wurde gesendet.",
+            "profileUpdated": "Profil erfolgreich aktualisiert.",
+            "verificationFailed": "Fehler beim Senden der Bestätigungs-E-Mail."
+        }
+    }
+}

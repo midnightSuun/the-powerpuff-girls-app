@@ -27,6 +27,7 @@ type HeaderCopy = Record<HeaderCopyKey, string>
 type HeaderTab = {
     label: HeaderCopyKey
     path: string
+    requiresUserAdminOrOwner?: boolean
 }
 
 type HeaderDefaultPage = {
@@ -62,6 +63,8 @@ type BreadcrumbResult = {
 type Props = {
     pages: HeaderPage[]
     initialBreadcrumb: BreadcrumbResult | null
+    viewerId: string | null
+    isAdmin: boolean
     loadSecondBreadcrumb: (
         pagePath: string,
         id: string,
@@ -141,16 +144,35 @@ const normalizePathname = (pathname: string) => {
     return `/${segments.join("/")}`
 }
 
-const resolvePage = (pages: HeaderPage[], pathname: string) => {
+const getVisibleTabs = (
+    page: HeaderTabsPage,
+    match: PathMatch,
+    viewerId: string | null,
+    isAdmin: boolean,
+) =>
+    page.tabs.filter(
+        (tab) =>
+            !tab.requiresUserAdminOrOwner ||
+            isAdmin ||
+            viewerId === match.params.userId,
+    )
+
+const resolvePage = (
+    pages: HeaderPage[],
+    pathname: string,
+    viewerId: string | null,
+    isAdmin: boolean,
+) => {
     const matches = pages.flatMap((page) => {
         const match = matchTemplate(page.path, pathname)
 
         if (!match) return []
 
         if (page.type === "tabs") {
+            const visibleTabs = getVisibleTabs(page, match, viewerId, isAdmin)
             const hasMatchingTab =
                 match.remainder === "" ||
-                page.tabs.some((tab) => tab.path === match.remainder)
+                visibleTabs.some((tab) => tab.path === match.remainder)
 
             if (!hasMatchingTab) return []
         } else if (match.remainder !== "") {
@@ -253,17 +275,19 @@ const DefaultPageHeader = ({
 const PageWithTabsHeader = ({
     page,
     match,
+    visibleTabs,
     secondBreadcrumb,
     copy,
 }: {
     page: HeaderTabsPage
     match: PathMatch
+    visibleTabs: HeaderTab[]
     secondBreadcrumb: string | null
     copy: HeaderCopy
 }) => {
     const t = useTranslations("Common")
     const basePath = fillPath(page.path, match.params)
-    const activeTab = page.tabs.find((tab) => tab.path === match.remainder)
+    const activeTab = visibleTabs.find((tab) => tab.path === match.remainder)
 
     return (
         <header className="w-full shrink-0 bg-[#f5f5f7] dark:bg-[#2e2e2e]">
@@ -313,7 +337,7 @@ const PageWithTabsHeader = ({
                 </ol>
             </nav>
             <div className="flex h-14 items-end overflow-x-auto">
-                {page.tabs.map((tab) => {
+                {visibleTabs.map((tab) => {
                     const isActive = tab.path === activeTab?.path
 
                     return (
@@ -322,7 +346,7 @@ const PageWithTabsHeader = ({
                             href={joinPaths(basePath, tab.path)}
                             aria-current={isActive ? "page" : undefined}
                             className={cn(
-                                "flex h-[50px] w-[150px] shrink-0 flex-col text-sm leading-[17.5px] tracking-[0.4px] uppercase",
+                                "flex h-12.5 w-37.5 shrink-0 flex-col text-sm leading-[17.5px] tracking-[0.4px] uppercase",
                                 isActive
                                     ? "font-semibold text-button-primary-default"
                                     : "font-medium text-[#2e2e2e] dark:text-[#f5f5f7]",
@@ -350,11 +374,13 @@ const PageWithTabsHeader = ({
 export const HeaderView = ({
     pages,
     initialBreadcrumb,
+    viewerId,
+    isAdmin,
     loadSecondBreadcrumb,
 }: Props) => {
     const copy = useHeaderCopy()
     const pathname = normalizePathname(usePathname())
-    const resolved = resolvePage(pages, pathname)
+    const resolved = resolvePage(pages, pathname, viewerId, isAdmin)
     const breadcrumbId =
         resolved?.page.type === "tabs"
             ? (resolved.match.params[resolved.page.breadcrumbParam] ?? "")
@@ -412,10 +438,18 @@ export const HeaderView = ({
     if (!resolved) return null
 
     if (resolved.page.type === "tabs") {
+        const visibleTabs = getVisibleTabs(
+            resolved.page,
+            resolved.match,
+            viewerId,
+            isAdmin,
+        )
+
         return (
             <PageWithTabsHeader
                 page={resolved.page}
                 match={resolved.match}
+                visibleTabs={visibleTabs}
                 secondBreadcrumb={secondBreadcrumb}
                 copy={copy}
             />

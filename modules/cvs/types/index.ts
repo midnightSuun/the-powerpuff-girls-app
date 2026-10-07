@@ -45,6 +45,8 @@ export interface ProjectOption {
     name: string
     internal_name: string
     domain: string
+    start_date?: string
+    end_date?: string | null
     description: string
     environment: string[]
 }

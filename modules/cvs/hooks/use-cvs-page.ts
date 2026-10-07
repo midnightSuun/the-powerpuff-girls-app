@@ -11,9 +11,10 @@ import { CvItem } from "../types"
 
 interface UseCvsPageProps {
     initialCvs: CvItem[]
+    targetUserId?: string
 }
 
-export function useCvsPage({ initialCvs }: UseCvsPageProps) {
+export function useCvsPage({ initialCvs, targetUserId }: UseCvsPageProps) {
     const router = useRouter()
     const t = useTranslations("CV.list")
     const notifications = useActionNotifications()
@@ -53,6 +54,7 @@ export function useCvsPage({ initialCvs }: UseCvsPageProps) {
                 name: data.name,
                 education: data.education,
                 description: data.description,
+                userId: targetUserId,
             })
 
             if (result?.error) {

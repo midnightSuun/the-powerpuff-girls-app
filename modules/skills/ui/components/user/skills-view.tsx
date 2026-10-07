@@ -1,5 +1,7 @@
 "use client"
 
+import { useTranslations } from "next-intl"
+
 import { SkillOption } from "../../../hooks/use-add-skill-modal"
 import { useSkillsView } from "../../../hooks/use-skills-view"
 import { AddSkillButton } from "./add-skill-button"
@@ -30,6 +32,7 @@ export function SkillsView({
     canManageSkills,
     compact = false,
 }: SkillsViewProps) {
+    const t = useTranslations("Skills")
     const {
         isSelectionMode,
         setIsSelectionMode,
@@ -52,23 +55,29 @@ export function SkillsView({
                     compact ? "w-full pt-6 pl-0" : "max-w-213 flex-1 pt-6 pl-50"
                 }
             >
-                <div className="space-y-8">
-                    {categories.map((category) => (
-                        <SkillCategory
-                            key={category.id}
-                            title={category.title}
-                            skills={category.skills}
-                            isSelectionMode={isSelectionMode}
-                            selectedSkills={selectedSkills}
-                            onSelectSkill={handleToggleSkill}
-                            onEditSkill={
-                                canManageSkills
-                                    ? (skill) => setEditingSkill(skill)
-                                    : undefined
-                            }
-                        />
-                    ))}
-                </div>
+                {categories.length === 0 ? (
+                    <div className="py-12 text-center text-sm font-normal text-muted-foreground">
+                        {t("empty")}
+                    </div>
+                ) : (
+                    <div className="space-y-8">
+                        {categories.map((category) => (
+                            <SkillCategory
+                                key={category.id}
+                                title={category.title}
+                                skills={category.skills}
+                                isSelectionMode={isSelectionMode}
+                                selectedSkills={selectedSkills}
+                                onSelectSkill={handleToggleSkill}
+                                onEditSkill={
+                                    canManageSkills
+                                        ? (skill) => setEditingSkill(skill)
+                                        : undefined
+                                }
+                            />
+                        ))}
+                    </div>
+                )}
 
                 {canManageSkills && (
                     <div

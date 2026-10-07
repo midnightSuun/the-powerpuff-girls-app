@@ -1,0 +1,716 @@
+{
+    "Admin": {
+        "departments": {
+            "title": "Departamentos",
+            "createButton": "CRIAR DEPARTAMENTO",
+            "empty": "Nenhum departamento encontrado",
+            "columns": {
+                "name": "Nome"
+            },
+            "create": {
+                "title": "Criar departamento",
+                "departmentName": "Departamento",
+                "departmentPlaceholder": "Nome do departamento",
+                "alreadyExists": "O departamento já existe",
+                "required": "O nome do departamento é obrigatório"
+            },
+            "edit": {
+                "title": "Editar departamento",
+                "departmentName": "Departamento",
+                "departmentPlaceholder": "Nome do departamento"
+            },
+            "delete": {
+                "title": "Eliminar departamento",
+                "confirmation": "Tem a certeza de que pretende eliminar o departamento \"{name}\"?",
+                "inUseError": "O departamento não pode ser eliminado porque está atualmente em uso"
+            }
+        },
+        "positions": {
+            "title": "Cargos",
+            "createButton": "CRIAR CARGO",
+            "empty": "Nenhum cargo encontrado",
+            "columns": {
+                "name": "Nome"
+            },
+            "create": {
+                "title": "Criar cargo",
+                "positionName": "Cargo",
+                "positionPlaceholder": "Nome do cargo",
+                "alreadyExists": "O cargo já existe",
+                "required": "O nome do cargo é obrigatório"
+            },
+            "edit": {
+                "title": "Editar cargo",
+                "positionName": "Cargo",
+                "positionPlaceholder": "Nome do cargo"
+            },
+            "delete": {
+                "title": "Eliminar cargo",
+                "confirmation": "Tem a certeza de que pretende eliminar o cargo \"{name}\"?",
+                "inUseError": "O cargo não pode ser eliminado porque está atualmente em uso"
+            }
+        },
+        "projects": {
+            "title": "Projetos",
+            "empty": "Nenhum projeto encontrado",
+            "search": "Pesquisar projetos",
+            "searchLabel": "Pesquisar projetos",
+            "createProject": "CRIAR PROJETO",
+            "edit": "Editar",
+            "remove": "Eliminar",
+            "removeTitle": "Eliminar projeto",
+            "removeConfirmation": "Tem a certeza de que pretende eliminar o projeto \"{name}\"?",
+            "cancel": "CANCELAR",
+            "removing": "A ELIMINAR...",
+            "removeError": "Falha ao eliminar o projeto. Tente novamente.",
+            "form": {
+                "createTitle": "Criar projeto",
+                "updateTitle": "Atualizar projeto",
+                "name": "Nome",
+                "domain": "Domínio",
+                "startDate": "Data de início",
+                "endDate": "Data de fim",
+                "description": "Descrição",
+                "environment": "Ambiente",
+                "addEnvironment": "Adicionar valor de ambiente",
+                "removeEnvironment": "Remover {value}",
+                "create": "CRIAR",
+                "creating": "A CRIAR...",
+                "update": "ATUALIZAR",
+                "saving": "A ATUALIZAR...",
+                "cancel": "CANCELAR",
+                "saveError": "Falha ao guardar o projeto. Tente novamente."
+            }
+        },
+        "common": {
+            "search": "Pesquisar",
+            "edit": "Editar",
+            "delete": "Eliminar",
+            "cancel": "CANCELAR",
+            "confirm": "CONFIRMAR",
+            "save": "GUARDAR",
+            "saving": "A GUARDAR...",
+            "create": "CRIAR",
+            "creating": "A CRIAR...",
+            "deleting": "A ELIMINAR..."
+        },
+        "skills": {
+            "title": "Competências",
+            "createButton": "CRIAR COMPETÊNCIA",
+            "empty": "Nenhuma competência encontrada",
+            "columns": {
+                "name": "Nome",
+                "category": "Categoria"
+            },
+            "create": {
+                "title": "Criar competência",
+                "skillName": "Competência",
+                "skillPlaceholder": "Competência",
+                "category": "Categoria",
+                "categoryPlaceholder": "Categoria",
+                "alreadyExists": "A competência já existe"
+            },
+            "edit": {
+                "title": "Editar competência",
+                "skillName": "Nome da competência",
+                "category": "Categoria"
+            },
+            "delete": {
+                "title": "Eliminar competência",
+                "confirmation": "Tem a certeza de que pretende eliminar a competência \"{name}\"?"
+            }
+        },
+        "languages": {
+            "title": "Idiomas",
+            "createButton": "CRIAR IDIOMA",
+            "empty": "Nenhum idioma encontrado",
+            "columns": {
+                "name": "Nome",
+                "iso2": "Código ISO"
+            },
+            "create": {
+                "title": "Criar idioma",
+                "languageName": "Nome do idioma",
+                "languagePlaceholder": "ex. Português",
+                "iso2": "Código ISO",
+                "iso2Placeholder": "ex. pt",
+                "alreadyExists": "O idioma já existe",
+                "invalidIso2": "O código ISO2 deve ter exatamente 2 caracteres"
+            },
+            "edit": {
+                "title": "Editar idioma",
+                "languageName": "Nome do idioma",
+                "iso2": "Código ISO"
+            },
+            "delete": {
+                "title": "Eliminar idioma",
+                "confirmation": "Tem a certeza de que pretende eliminar o idioma \"{name}\"?"
+            }
+        }
+    },
+    "Auth": {
+        "EmailVerification": {
+            "title": "Verificação de e-mail",
+            "subtitle": "Introduza o código de verificação que enviámos para",
+            "fallbackEmail": "o seu e-mail",
+            "submitButton": "CONFIRMAR",
+            "submittingButton": "A VERIFICAR...",
+            "resendButton": "REENVIAR E-MAIL",
+            "resendingButton": "A ENVIAR...",
+            "laterButton": "MAIS TARDE"
+        },
+        "ForgotPassword": {
+            "title": "Esqueceu-se da palavra-passe",
+            "subtitle": "Enviaremos um e-mail com mais instruções",
+            "emailLabel": "E-mail",
+            "emailPlaceholder": "exemplo@email.com",
+            "submitButton": "REDEFINIR PALAVRA-PASSE",
+            "submittingButton": "A ENVIAR...",
+            "cancelButton": "Cancelar"
+        },
+        "Login": {
+            "title": "Bem-vindo de volta",
+            "subtitle": "Olá novamente! Inicie sessão para continuar",
+            "emailPlaceholder": "E-mail",
+            "passwordPlaceholder": "Palavra-passe",
+            "submitButton": "INICIAR SESSÃO",
+            "submittingButton": "A INICIAR SESSÃO...",
+            "forgotPassword": "ESQUECEU-SE DA PALAVRA-PASSE",
+            "hidePassword": "Ocultar palavra-passe",
+            "showPassword": "Mostrar palavra-passe"
+        },
+        "ResetPassword": {
+            "title": "Redefinir palavra-passe",
+            "subtitle": "Aqui deve escrever uma nova palavra-passe e confirmá-la",
+            "newPasswordPlaceholder": "Nova palavra-passe",
+            "confirmPasswordPlaceholder": "Confirmar palavra-passe",
+            "submitButton": "SUBMETER",
+            "submittingButton": "A SUBMETER...",
+            "goToSignIn": "IR PARA INICIAR SESSÃO"
+        },
+        "Signup": {
+            "title": "Registe-se agora",
+            "subtitle": "Bem-vindo! Registe-se para continuar",
+            "emailPlaceholder": "E-mail",
+            "passwordPlaceholder": "Palavra-passe",
+            "confirmPasswordPlaceholder": "Confirmar palavra-passe",
+            "submitButton": "CRIAR CONTA",
+            "submittingButton": "A CRIAR...",
+            "haveAccount": "JÁ TENHO CONTA"
+        },
+        "Tabs": {
+            "signIn": "INICIAR SESSÃO",
+            "signup": "REGISTAR"
+        },
+        "validation": {
+            "emailRequired": "O e-mail é obrigatório",
+            "invalidEmail": "Introduza um endereço de e-mail válido",
+            "passwordRequired": "A palavra-passe é obrigatória",
+            "passwordMin": "A palavra-passe deve ter pelo menos 6 caracteres",
+            "passwordMin8": "A palavra-passe deve ter pelo menos 8 caracteres",
+            "confirmPassword": "Confirme a sua palavra-passe",
+            "passwordsDoNotMatch": "As palavras-passe não coincidem",
+            "codeLength": "O código de verificação deve ter exatamente 6 dígitos.",
+            "codeDigits": "O código de verificação deve conter apenas números."
+        },
+        "messages": {
+            "loginRequired": "O e-mail e a palavra-passe são obrigatórios.",
+            "loginFailed": "Falha ao iniciar sessão. Verifique o seu e-mail e palavra-passe.",
+            "signupRequired": "Preencha todos os campos.",
+            "passwordsDoNotMatch": "As palavras-passe não coincidem.",
+            "emailAlreadyTaken": "Este e-mail já está a ser utilizado. Utilize outro ou inicie sessão.",
+            "serverError": "Erro do servidor: {message}",
+            "unknownError": "Erro desconhecido",
+            "signupEmailFailed": "Falha ao registar devido a um erro no servidor de correio. Tente novamente mais tarde.",
+            "forgotFailed": "Falha ao enviar as instruções de redefinição. Tente novamente.",
+            "forgotInstructionsSent": "As instruções foram enviadas para o seu e-mail.",
+            "resetTokenInvalid": "O token de redefinição falta ou é inválido. Abra novamente a ligação do seu e-mail.",
+            "resetExpired": "Esta ligação de redefinição expirou. Solicite uma nova.",
+            "resetFailed": "Falha ao redefinir a palavra-passe. Tente novamente.",
+            "verificationEmailUnavailable": "O endereço de e-mail não está disponível. Inicie sessão novamente.",
+            "verificationSendFailed": "Não foi possível enviar o e-mail de verificação. Tente novamente.",
+            "verificationInvalid": "O código de verificação é inválido ou expirou. Tente novamente.",
+            "verificationSent": "Foi enviado um novo e-mail de verificação.",
+            "sessionExpired": "A sua sessão expirou. Inicie sessão e tente novamente.",
+            "loginSuccess": "Iniciou sessão com sucesso na sua conta",
+            "signupVerificationSent": "Foi enviado um e-mail de confirmação para o seu endereço de e-mail."
+        }
+    },
+    "Common": {
+        "retry": "Tentar novamente",
+        "breadcrumb": "Trilho de navegação",
+        "search": "Pesquisar",
+        "edit": "Editar",
+        "delete": "Eliminar",
+        "loading": "A carregar...",
+        "toggleSidebar": "Alternar barra lateral",
+        "sidebarTitle": "Barra lateral",
+        "sidebarDescription": "Barra lateral de navegação"
+    },
+    "Navigation": {
+        "employees": "Colaboradores",
+        "skills": "Competências",
+        "languages": "Idiomas",
+        "cvs": "CVs",
+        "departments": "Departamentos",
+        "positions": "Cargos",
+        "projects": "Projetos"
+    },
+    "Errors": {
+        "NoInternet": {
+            "title": "Ops",
+            "description": "Algo correu mal. Já estamos a trabalhar para o resolver.\nTente novamente ou volte atrás.",
+            "actionText": "Tentar novamente"
+        },
+        "NotFound": {
+            "title": "Página não encontrada",
+            "description": "A página que procura pode ter sido removida,\nter o nome alterado ou estar temporariamente indisponível.",
+            "actionText": "Ir para a Página Inicial"
+        }
+    },
+    "Settings": {
+        "title": "Definições",
+        "logout": "Terminar sessão",
+        "theme": {
+            "label": "Tema",
+            "light": "Claro",
+            "dark": "Escuro",
+            "deviceSettings": "Definições do dispositivo"
+        },
+        "language": {
+            "label": "Idioma",
+            "english": "Inglês",
+            "french": "Francês",
+            "german": "Alemão",
+            "italian": "Italiano",
+            "polish": "Polaco",
+            "portuguese": "Português",
+            "russian": "Russo",
+            "spanish": "Espanhol",
+            "ukrainian": "Ucraniano"
+        },
+        "passwordSection": {
+            "title": "Alterar palavra-passe",
+            "currentPlaceholder": "Palavra-passe atual",
+            "newPlaceholder": "Nova palavra-passe",
+            "confirmPlaceholder": "Confirmar palavra-passe",
+            "submitButton": "ALTERAR",
+            "submittingButton": "A ALTERAR..."
+        },
+        "validation": {
+            "passwordRequired": "A palavra-passe é obrigatória",
+            "newPasswordRequired": "A nova palavra-passe deve ter pelo menos 6 caracteres",
+            "confirmPasswordRequired": "A confirmação da palavra-passe é obrigatória",
+            "passwordsDoNotMatch": "As palavras-passe não coincidem"
+        },
+        "messages": {
+            "updated": "Definições e palavra-passe atualizadas com sucesso.",
+            "sessionExpired": "A sua sessão expirou. Inicie sessão novamente.",
+            "passwordUpdateFailed": "Falha ao atualizar a palavra-passe. Verifique a sua palavra-passe atual."
+        }
+    },
+    "Cvs": {
+        "title": "CVs"
+    },
+    "Skills": {
+        "title": "Competências",
+        "loading": "A carregar as competências do perfil...",
+        "masteryPlaceholder": "Nível de proficiência",
+        "masteryLevels": {
+            "novice": "Iniciado",
+            "advanced": "Avançado",
+            "competent": "Competente",
+            "proficient": "Proficiente",
+            "expert": "Especialista"
+        },
+        "empty": "Sem competências aqui",
+        "categories": {
+            "1": "Linguagens de programação",
+            "2": "Frontend",
+            "3": "Frontend",
+            "4": "Frontend",
+            "5": "Frontend",
+            "6": "Frontend",
+            "7": "Frontend",
+            "8": "Frontend",
+            "9": "Backend",
+            "10": "Backend",
+            "11": "Backend",
+            "12": "Backend",
+            "13": "Frameworks de testes",
+            "14": "DevOps",
+            "15": "DevOps",
+            "16": "DevOps",
+            "17": "Sistemas de controlo de versões",
+            "18": "Documentação",
+            "19": "Editores gráficos",
+            "other": "Competências gerais"
+        },
+        "actions": {
+            "add": "ADICIONAR COMPETÊNCIA",
+            "remove": "REMOVER COMPETÊNCIAS",
+            "cancel": "CANCELAR",
+            "deleteSelected": "ELIMINAR ({count})"
+        },
+        "add": {
+            "title": "Adicionar competência",
+            "skillPlaceholder": "Competência",
+            "allSkillsAdded": "Todas as competências disponíveis adicionadas",
+            "cancel": "CANCELAR",
+            "submit": "ADICIONAR",
+            "adding": "A ADICIONAR...",
+            "errors": {
+                "selectSkill": "Selecione uma competência",
+                "selectMastery": "Selecione o nível de proficiência",
+                "notFound": "Competência selecionada não encontrada",
+                "alreadyAdded": "Esta competência já foi adicionada ao seu CV.",
+                "failed": "Falha ao adicionar a competência. Tente novamente."
+            }
+        },
+        "edit": {
+            "title": "Atualizar competência",
+            "skill": "Competência",
+            "mastery": "Nível de proficiência",
+            "cancel": "CANCELAR",
+            "submit": "ATUALIZAR",
+            "updating": "A ATUALIZAR...",
+            "errors": {
+                "masteryRequired": "O nível de proficiência é obrigatório",
+                "failed": "Falha ao atualizar a competência. Tente novamente."
+            }
+        },
+        "delete": {
+            "titleSingular": "Remover competência",
+            "titlePlural": "Remover competências",
+            "confirmation": "Tem a certeza de que pretende remover {count, plural, one {# competência?} other {# competências?}}",
+            "cancel": "CANCELAR",
+            "confirm": "CONFIRMAR",
+            "removing": "A REMOVER...",
+            "errors": {
+                "failed": "Falha ao remover as competências. Tente novamente."
+            }
+        },
+        "admin": {
+            "name": "Nome",
+            "category": "Categoria",
+            "search": "Pesquisar",
+            "create": "CRIAR COMPETÊNCIA",
+            "empty": "Nenhuma competência encontrada",
+            "createTitle": "Criar competência",
+            "editTitle": "Editar competência",
+            "deleteTitle": "Eliminar competência",
+            "skill": "Competência",
+            "duplicate": "A competência já existe",
+            "cancel": "CANCELAR",
+            "save": "GUARDAR",
+            "saving": "A GUARDAR...",
+            "creating": "A CRIAR...",
+            "confirm": "CONFIRMAR",
+            "deleting": "A ELIMINAR...",
+            "deleteConfirmation": "Tem a certeza de que pretende eliminar a competência \"{name}\"?",
+            "createError": "Falha ao criar a competência. Tente novamente.",
+            "updateError": "Falha ao atualizar a competência. Tente novamente.",
+            "deleteError": "Falha ao eliminar a competência. Tente novamente."
+        }
+    },
+    "CV": {
+        "tabListLabel": "Secções do CV",
+        "tabs": {
+            "details": "DETALHES",
+            "skills": "COMPETÊNCIAS",
+            "projects": "PROJETOS",
+            "preview": "PRÉ-VISUALIZAÇÃO"
+        },
+        "previewUnavailable": "A pré-visualização do currículo ainda não está disponível.",
+        "preview": {
+            "exportPdf": "EXPORTAR PDF",
+            "education": "Educação",
+            "languageProficiency": "Proficiência linguística",
+            "domains": "Domínios",
+            "profile": "Perfil profissional",
+            "noDescription": "Nenhuma descrição de perfil fornecida.",
+            "projects": "Projetos",
+            "projectRoles": "Funções no projeto",
+            "period": "Período",
+            "responsibilities": "Responsabilidades",
+            "environment": "Ambiente",
+            "tillNow": "Presente",
+            "professionalSkills": "Competências profissionais",
+            "skills": "Grupos de competências",
+            "skillName": "Competência",
+            "mastery": "Proficiência",
+            "noSkills": "Ainda não foram adicionadas competências a este CV."
+        },
+        "list": {
+            "create": "CRIAR CV",
+            "name": "Nome",
+            "education": "Educação",
+            "employee": "Colaborador",
+            "view": "Ver",
+            "edit": "Editar",
+            "delete": "Eliminar",
+            "noResults": "Nenhum CV encontrado",
+            "empty": "Ainda não tem nenhum CV",
+            "createError": "Falha ao criar o CV. Tente novamente.",
+            "updateError": "Falha ao atualizar o CV. Tente novamente.",
+            "deleteError": "Falha ao eliminar o CV. Tente novamente."
+        },
+        "form": {
+            "name": "Nome",
+            "education": "Educação",
+            "description": "Descrição",
+            "update": "ATUALIZAR",
+            "updating": "A ATUALIZAR...",
+            "updateError": "Falha ao atualizar o CV. Tente novamente.",
+            "createTitle": "Criar CV",
+            "create": "CRIAR",
+            "creating": "A CRIAR...",
+            "updateTitle": "Atualizar CV",
+            "save": "GUARDAR",
+            "saving": "A GUARDAR...",
+            "nameRequired": "O nome é obrigatório",
+            "educationRequired": "A educação é obrigatória",
+            "descriptionRequired": "A descrição é obrigatória",
+            "cancel": "CANCELAR",
+            "deleteTitle": "Eliminar CV",
+            "deleteConfirmation": "Tem a certeza de que pretende eliminar o CV \"{name}\"?",
+            "confirm": "CONFIRMAR",
+            "deleting": "A ELIMINAR..."
+        },
+        "projects": {
+            "search": "Pesquisar",
+            "searchLabel": "Pesquisar projetos",
+            "noAvailableProjects": "Não existem projetos disponíveis para adicionar.",
+            "addProject": "ADICIONAR PROJETO",
+            "sortByName": "Ordenar projetos por nome ({direction})",
+            "ascending": "ascendente",
+            "descending": "descendente",
+            "name": "Nome",
+            "domain": "Domínio",
+            "startDate": "Data de início",
+            "endDate": "Data de fim",
+            "actions": "Ações",
+            "actionsFor": "Ações para {name}",
+            "tillNow": "Até agora",
+            "edit": "Editar",
+            "remove": "Remover",
+            "noSearchResults": "Nenhum projeto corresponde à sua pesquisa.",
+            "empty": "Ainda não foram adicionados projetos a este CV.",
+            "removeTitle": "Remover projeto do CV",
+            "removeConfirmation": "Tem a certeza de que pretende remover o projeto <strong>{name}</strong>?",
+            "cancel": "CANCELAR",
+            "removing": "A REMOVER...",
+            "removeError": "Falha ao remover o projeto. Tente novamente.",
+            "form": {
+                "editTitle": "Editar projeto",
+                "addTitle": "Adicionar projeto",
+                "cancel": "CANCELAR",
+                "update": "ATUALIZAR",
+                "add": "ADICIONAR",
+                "updating": "A ATUALIZAR...",
+                "adding": "A ADICIONAR...",
+                "project": "Projeto",
+                "selectProject": "Selecione um projeto",
+                "noAvailableProjects": "Não há projetos disponíveis para adicionar.",
+                "duplicateProjectError": "Este projeto já foi adicionado a este CV.",
+                "domain": "Domínio",
+                "startDate": "Data de início",
+                "endDate": "Data de fim",
+                "description": "Descrição",
+                "environment": "Ambiente",
+                "roles": "Funções",
+                "responsibilities": "Responsabilidades",
+                "saveError": "Falha ao guardar o projeto. Tente novamente."
+            }
+        }
+    },
+    "User": {
+        "title": "Perfil de utilizador",
+        "loading": "A carregar...",
+        "email": "E-mail",
+        "role": "Função",
+        "memberSince": "Membro desde {date}",
+        "uploadAvatar": "Carregar imagem de avatar",
+        "avatarRequirements": "png, jpg ou gif até 5 MB",
+        "firstName": "Nome",
+        "lastName": "Apelido",
+        "department": "Departamentos",
+        "position": "Cargo",
+        "selectDepartment": "Selecionar departamento",
+        "selectPosition": "Selecionar cargo",
+        "verifyEmail": "VERIFICAR E-MAIL",
+        "sendingVerification": "A ENVIAR...",
+        "update": "ATUALIZAR",
+        "updating": "A ATUALIZAR...",
+        "errors": {
+            "firstNameRequired": "O nome é obrigatório",
+            "lastNameRequired": "O apelido é obrigatório",
+            "departmentRequired": "O departamento é obrigatório",
+            "positionRequired": "O cargo é obrigatório",
+            "firstNameTooLong": "O nome deve ter 100 caracteres ou menos",
+            "lastNameTooLong": "O apelido deve ter 100 caracteres ou menos",
+            "unsupportedFileType": "Tipo de ficheiro não suportado",
+            "fileTooLarge": "O tamanho do ficheiro não deve exceder 5 MB"
+        },
+        "messages": {
+            "profileUpdated": "Perfil atualizado com sucesso",
+            "updateFailed": "Não foi possível guardar o seu perfil. Tente novamente.",
+            "updateForbidden": "Apenas pode atualizar o seu próprio perfil.",
+            "avatarUploaded": "Avatar carregado com sucesso",
+            "avatarUploadFailed": "Não foi possível carregar a sua foto de perfil. Tente novamente.",
+            "verificationSent": "O e-mail de verificação foi enviado",
+            "verificationFailed": "Falha ao enviar o e-mail de verificação"
+        },
+        "nav": {
+            "viewProfile": "Ver perfil",
+            "profile": "Perfil",
+            "settings": "Definições",
+            "logout": "Terminar sessão"
+        }
+    },
+    "Users": {
+        "title": "Colaboradores",
+        "createUser": "Criar utilizador",
+        "dialog": {
+            "description": "Criar um novo utilizador",
+            "password": "Palavra-passe",
+            "cancel": "Cancelar",
+            "submit": "Criar",
+            "close": "Fechar",
+            "employee": "Colaborador"
+        },
+        "loading": "A carregar utilizadores...",
+        "columns": {
+            "avatar": "Avatar",
+            "firstName": "Nome",
+            "lastName": "Apelido",
+            "email": "E-mail",
+            "department": "Departamento",
+            "position": "Cargo",
+            "sortBy": "Ordenar por {column}",
+            "openMenu": "Abrir menu"
+        }
+    },
+    "Pagination": {
+        "previous": "Anterior",
+        "next": "Seguinte",
+        "label": "Paginação",
+        "previousLabel": "Ir para a página anterior",
+        "nextLabel": "Ir para a página seguinte",
+        "morePages": "Mais páginas"
+    },
+    "Languages": {
+        "title": "Idiomas",
+        "currentLanguages": "Idiomas atuais",
+        "empty": "Ainda não foram adicionados idiomas.",
+        "proficiencyPlaceholder": "Nível de proficiência",
+        "proficiencyLevels": {
+            "A1": "A1 - Principiante",
+            "A2": "A2 - Elementar",
+            "B1": "B1 - Intermédio",
+            "B2": "B2 - Intermédio superior",
+            "C1": "C1 - Avançado",
+            "C2": "C2 - Proficiente",
+            "Native": "Nativo"
+        },
+        "actions": {
+            "add": "ADICIONAR IDIOMA",
+            "remove": "REMOVER IDIOMAS",
+            "cancel": "CANCELAR",
+            "deleteSelected": "ELIMINAR ({count})"
+        },
+        "add": {
+            "title": "Adicionar idioma",
+            "languagePlaceholder": "Idioma",
+            "allLanguagesAdded": "Todos os idiomas disponíveis adicionados",
+            "cancel": "CANCELAR",
+            "submit": "ADICIONAR",
+            "adding": "A ADICIONAR...",
+            "errors": {
+                "failed": "Falha ao adicionar o idioma. Tente novamente."
+            }
+        },
+        "edit": {
+            "title": "Atualizar idioma",
+            "language": "Idioma",
+            "proficiency": "Nível de proficiência",
+            "cancel": "CANCELAR",
+            "submit": "ATUALIZAR",
+            "updating": "A ATUALIZAR...",
+            "errors": {
+                "failed": "Falha ao atualizar o idioma. Tente novamente."
+            }
+        },
+        "delete": {
+            "titleSingular": "Remover idioma",
+            "titlePlural": "Remover idiomas",
+            "confirmation": "Tem a certeza de que pretende remover {count, plural, one {# idioma?} other {# idiomas?}}",
+            "cancel": "CANCELAR",
+            "confirm": "CONFIRMAR",
+            "removing": "A REMOVER...",
+            "errors": {
+                "failed": "Falha ao remover os idiomas. Tente novamente."
+            }
+        },
+        "admin": {
+            "columns": {
+                "name": "Nome",
+                "isoCode": "ISO",
+                "nativeName": "Nome nativo"
+            },
+            "search": "Pesquisar",
+            "createButton": "CRIAR IDIOMA",
+            "empty": "Nenhum idioma encontrado",
+            "create": {
+                "title": "Criar idioma",
+                "languageName": "Nome do idioma",
+                "languagePlaceholder": "ex. Português",
+                "isoCode": "Código ISO",
+                "isoCodePlaceholder": "ex. pt",
+                "cancel": "CANCELAR",
+                "create": "CRIAR",
+                "creating": "A CRIAR..."
+            },
+            "edit": {
+                "title": "Editar idioma",
+                "languageName": "Nome do idioma",
+                "languagePlaceholder": "Idioma",
+                "isoCode": "Código ISO",
+                "isoCodePlaceholder": "ISO2",
+                "cancel": "CANCELAR",
+                "save": "GUARDAR",
+                "saving": "A GUARDAR..."
+            },
+            "delete": {
+                "title": "Eliminar idioma",
+                "confirmation": "Tem a certeza de que pretende eliminar o idioma \"{name}\"?",
+                "cancel": "CANCELAR",
+                "confirm": "CONFIRMAR",
+                "deleting": "A ELIMINAR..."
+            },
+            "errors": {
+                "duplicate": "O idioma já existe",
+                "createFailed": "Falha ao criar o idioma",
+                "updateFailed": "Falha ao atualizar o idioma",
+                "invalidData": "Dados de idioma ou código ISO2 inválidos"
+            }
+        }
+    },
+    "Notifications": {
+        "success": "Sucesso",
+        "error": "Erro",
+        "warning": "Aviso",
+        "info": "Informação",
+        "logoutSuccess": "Terminou sessão com sucesso.",
+        "actions": {
+            "created": "Criado com sucesso.",
+            "updated": "Alterações guardadas com sucesso.",
+            "deleted": "Eliminado com sucesso."
+        },
+        "messages": {
+            "verificationSent": "O e-mail de verificação foi enviado.",
+            "profileUpdated": "Perfil atualizado com sucesso.",
+            "verificationFailed": "Falha ao enviar o e-mail de verificação."
+        }
+    }
+}

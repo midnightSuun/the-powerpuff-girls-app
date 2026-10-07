@@ -18,7 +18,8 @@ export function AdminSkillsView({
     initialSkills,
     categories,
 }: AdminSkillsViewProps) {
-    const t = useTranslations("Skills.admin")
+    const tAdmin = useTranslations("Skills.admin")
+    const tSkills = useTranslations("Skills")
 
     const {
         skills,
@@ -33,25 +34,47 @@ export function AdminSkillsView({
         handleDeleteConfirm,
     } = useAdminSkillsView({ initialSkills })
 
+    const formattedSkills = skills.map((skill) => {
+        const catId = skill.categoryId || skill.category
+        const translatedCat = tSkills(`categories.${catId}`, {
+            defaultValue: skill.category,
+        })
+
+        const skillType = skill.type || skill.category || "General"
+
+        return {
+            ...skill,
+            type: skillType,
+            category: translatedCat,
+        }
+    })
+
     const columns: Column<AdminSkillItem>[] = [
-        { key: "name", label: t("name"), sortable: true },
-        { key: "category", label: t("category") },
+        { key: "name", label: tAdmin("name"), sortable: true },
+        { key: "type", label: "Type", sortable: true },
+        { key: "category", label: tAdmin("category"), sortable: true },
     ]
 
     return (
         <div className="w-full">
             <AdminDataTable
-                data={skills}
+                data={formattedSkills}
                 columns={columns}
-                searchPlaceholder={t("search")}
-                createButtonLabel={t("create")}
+                defaultSortKey="type"
+                searchPlaceholder={tAdmin("search")}
+                createButtonLabel={tAdmin("create")}
                 onCreateClick={() => setIsCreateOpen(true)}
-                createButtonClassName="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30"
                 onEditClick={(skill) => setEditingSkill(skill)}
                 onDeleteClick={(skill) => setDeletingSkill(skill)}
-                getSearchableString={(skill) => skill.name}
-                getSortValue={(skill) => skill.name}
-                emptyMessage={t("empty")}
+                getSearchableString={(skill) =>
+                    `${skill.name} ${skill.type ?? ""} ${skill.category}`
+                }
+                getSortValue={(skill, key) => {
+                    if (key === "type") return skill.type ?? ""
+                    if (key === "category") return skill.category ?? ""
+                    return skill.name
+                }}
+                emptyMessage={tAdmin("empty")}
             />
 
             <CreateSkillModal
