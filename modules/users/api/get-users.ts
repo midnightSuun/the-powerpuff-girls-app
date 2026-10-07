@@ -1,4 +1,4 @@
-import { cacheLife } from "next/cache"
+import { cacheLife, cacheTag } from "next/cache"
 
 import { getGql, GetUsersDocument } from "@/gql"
 import {
@@ -29,6 +29,7 @@ export async function getUsers(
 ) {
     "use cache: private"
     cacheLife("hours")
+    cacheTag("users")
 
     const gql = await getGql()
 

@@ -82,9 +82,9 @@ export function getUsersColumns(
         {
             id: "open",
             label: "",
-            render: () =>
+            render: (user) =>
                 isAdmin ? (
-                    <UserRowMenu label={t("openMenu")} />
+                    <UserRowMenu label={t("openMenu")} user={user} />
                 ) : (
                     <ChevronRight className="size-4 text-muted-foreground" />
                 ),

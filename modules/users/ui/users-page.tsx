@@ -4,6 +4,7 @@ import { Suspense } from "react"
 import { type PaginationSearchParams } from "@/lib/pagination-search-params"
 
 import { UsersList } from "./users-list"
+import { UsersTableSkeleton } from "./users-table-skeleton"
 
 type Props = PaginationSearchParams
 
@@ -19,9 +20,7 @@ export async function UsersPage({
     return (
         <Suspense
             key={`${page}-${sortBy ?? ""}-${sortOrder}`}
-            fallback={
-                <p className="p-4 text-muted-foreground">{t("loading")}</p>
-            }
+            fallback={<UsersTableSkeleton label={t("loading")} rows={limit} />}
         >
             <UsersList
                 limit={limit}
