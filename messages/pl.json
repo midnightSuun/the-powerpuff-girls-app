@@ -531,7 +531,7 @@
         "role": "Rola",
         "memberSince": "Członek od {date}",
         "uploadAvatar": "Prześlij zdjęcie awatara",
-        "avatarRequirements": "png, jpg lub gif o rozmiarze do 0,5 MB",
+        "avatarRequirements": "png, jpg lub gif o rozmiarze do 5 MB",
         "firstName": "Imię",
         "lastName": "Nazwisko",
         "department": "Dział",
@@ -550,7 +550,7 @@
             "firstNameTooLong": "Imię może mieć maksymalnie 100 znaków",
             "lastNameTooLong": "Nazwisko może mieć maksymalnie 100 znaków",
             "unsupportedFileType": "Nieobsługiwany typ pliku",
-            "fileTooLarge": "Rozmiar pliku nie może przekraczać 0,5 MB"
+            "fileTooLarge": "Rozmiar pliku nie może przekraczać 5 MB"
         },
         "messages": {
             "profileUpdated": "Profil został pomyślnie zaktualizowany",

@@ -531,7 +531,7 @@
         "role": "Роль",
         "memberSince": "Участник с {date}",
         "uploadAvatar": "Загрузить изображение аватара",
-        "avatarRequirements": "png, jpg или gif размером не более 0.5 МБ",
+        "avatarRequirements": "png, jpg или gif размером не более 5 МБ",
         "firstName": "Имя",
         "lastName": "Фамилия",
         "department": "Отдел",
@@ -550,7 +550,7 @@
             "firstNameTooLong": "Имя не должно быть длиннее 100 символов",
             "lastNameTooLong": "Фамилия не должна быть длиннее 100 символов",
             "unsupportedFileType": "Неподдерживаемый тип файла",
-            "fileTooLarge": "Размер файла не должен превышать 0.5 МБ"
+            "fileTooLarge": "Размер файла не должен превышать 5 МБ"
         },
         "messages": {
             "profileUpdated": "Профиль успешно обновлен",
