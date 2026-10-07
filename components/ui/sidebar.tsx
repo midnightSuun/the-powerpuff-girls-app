@@ -24,7 +24,9 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { useIsMobile } from "@/hooks/use-mobile"
+import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock"
+import { useIsMobile, useIsTablet } from "@/hooks/use-mobile"
+import { usePathname } from "@/i18n/navigation"
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -40,6 +42,7 @@ type SidebarContextProps = {
     openMobile: boolean
     setOpenMobile: (open: boolean) => void
     isMobile: boolean
+    isTablet: boolean
     toggleSidebar: () => void
 }
 
@@ -68,7 +71,14 @@ function SidebarProvider({
     onOpenChange?: (open: boolean) => void
 }) {
     const isMobile = useIsMobile()
+    const isTablet = useIsTablet()
+    const pathname = usePathname()
     const [openMobile, setOpenMobile] = React.useState(false)
+    const [tabletOpenPath, setTabletOpenPath] = React.useState<string | null>(
+        null,
+    )
+    const openTablet = tabletOpenPath === pathname
+    useBodyScrollLock(isTablet && openTablet)
 
     const [_open, _setOpen] = React.useState(defaultOpen)
     const open = openProp ?? _open
@@ -89,8 +99,12 @@ function SidebarProvider({
     const toggleSidebar = React.useCallback(() => {
         return isMobile
             ? setOpenMobile((open) => !open)
-            : setOpen((open) => !open)
-    }, [isMobile, setOpen, setOpenMobile])
+            : isTablet
+              ? setTabletOpenPath((openPath) =>
+                    openPath === pathname ? null : pathname,
+                )
+              : setOpen((open) => !open)
+    }, [isMobile, isTablet, pathname, setOpen, setOpenMobile])
 
     React.useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
@@ -107,7 +121,7 @@ function SidebarProvider({
         return () => window.removeEventListener("keydown", handleKeyDown)
     }, [toggleSidebar])
 
-    const state = open ? "expanded" : "collapsed"
+    const state = (isTablet ? openTablet : open) ? "expanded" : "collapsed"
 
     const contextValue = React.useMemo<SidebarContextProps>(
         () => ({
@@ -118,6 +132,7 @@ function SidebarProvider({
             openMobile,
             setOpenMobile,
             toggleSidebar,
+            isTablet,
         }),
         [
             state,
@@ -127,6 +142,7 @@ function SidebarProvider({
             openMobile,
             setOpenMobile,
             toggleSidebar,
+            isTablet,
         ],
     )
 
@@ -138,6 +154,7 @@ function SidebarProvider({
                     {
                         "--sidebar-width": SIDEBAR_WIDTH,
                         "--sidebar-width-icon": SIDEBAR_WIDTH_ICON,
+                        "--sidebar-width-tablet": "10rem",
                         ...style,
                     } as React.CSSProperties
                 }
@@ -166,7 +183,14 @@ function Sidebar({
     variant?: "sidebar" | "floating" | "inset"
     collapsible?: "offcanvas" | "icon" | "none"
 }) {
-    const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
+    const {
+        isMobile,
+        isTablet,
+        state,
+        openMobile,
+        setOpenMobile,
+        toggleSidebar,
+    } = useSidebar()
     const t = useTranslations("Common")
 
     if (collapsible === "none") {
@@ -223,8 +247,17 @@ function Sidebar({
             data-side={side}
             data-slot="sidebar"
         >
+            {isTablet && state === "expanded" ? (
+                <button
+                    type="button"
+                    aria-label={t("toggleSidebar")}
+                    onClick={toggleSidebar}
+                    className="fixed inset-0 z-20 cursor-default bg-black/40"
+                />
+            ) : null}
             <div
                 data-slot="sidebar-gap"
+                data-tablet={isTablet ? "true" : undefined}
                 className={cn(
                     "relative w-(--sidebar-width) bg-transparent transition-[width] duration-200 ease-linear",
                     "group-data-[collapsible=offcanvas]:w-0",
@@ -232,13 +265,19 @@ function Sidebar({
                     variant === "floating" || variant === "inset"
                         ? "p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]"
                         : "group-data-[collapsible=icon]:w-(--sidebar-width-icon)",
+                    "data-[tablet=true]:w-(--sidebar-width-icon)",
                 )}
             />
             <div
                 data-slot="sidebar-container"
                 data-side={side}
+                data-state={state}
+                data-tablet={isTablet ? "true" : undefined}
                 className={cn(
                     "fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear data-[side=left]:left-0 data-[side=left]:group-data-[collapsible=offcanvas]:-left-(--sidebar-width) data-[side=right]:right-0 data-[side=right]:group-data-[collapsible=offcanvas]:-right-(--sidebar-width) md:flex",
+                    isTablet && "z-30",
+                    "data-[tablet=true]:w-(--sidebar-width-tablet)",
+                    "data-[tablet=true]:data-[state=collapsed]:w-(--sidebar-width-icon)",
                     variant === "floating" || variant === "inset"
                         ? "p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]"
                         : "group-data-[collapsible=icon]:w-(--sidebar-width-icon)",
