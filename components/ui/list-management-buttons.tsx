@@ -4,28 +4,43 @@ import { Button } from "@/components/ui/button"
 
 interface ListActionButtonProps {
     label: string
-    onClick: () => void
+    onClick?: () => void
     disabled?: boolean
     className?: string
+}
+
+interface AddItemButtonProps extends Omit<ListActionButtonProps, "onClick"> {
+    onClick?: () => void
+    iconOnlyBelowLg?: boolean
+    variant?: "ghost" | "primaryV2"
 }
 export function AddItemButton({
     label,
     onClick,
     disabled,
     className,
-}: ListActionButtonProps) {
+    iconOnlyBelowLg = true,
+    variant = "ghost",
+}: AddItemButtonProps) {
     return (
         <Button
             type="button"
-            variant="ghost"
+            variant={variant}
+            aria-label={iconOnlyBelowLg ? label : undefined}
             className={`inline-flex items-center justify-center gap-2 px-4 border-transparent text-muted-foreground hover:text-foreground whitespace-nowrap ${
-                className || ""
-            }`}
+                iconOnlyBelowLg
+                    ? "!h-8 !w-8 !min-w-0 !p-0 lg:!h-9 lg:!w-auto lg:!px-2 lg:!py-0"
+                    : ""
+            } ${className || ""}`}
             onClick={onClick}
             disabled={disabled}
         >
             <Plus className="h-5 w-5 shrink-0" />
-            <span className="whitespace-nowrap">{label}</span>
+            <span
+                className={`whitespace-nowrap ${iconOnlyBelowLg ? "hidden lg:inline" : ""}`}
+            >
+                {label}
+            </span>
         </Button>
     )
 }

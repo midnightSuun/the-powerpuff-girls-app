@@ -47,7 +47,7 @@ export const CreateUserPasswordInput = ({
                     createUserFieldClassName,
                     "pr-10",
                     disabled &&
-                        "disabled:bg-[#e6e6e6] disabled:text-[#626262] disabled:opacity-100 dark:disabled:bg-[#3a3a3a] dark:disabled:text-[#aeaeae]",
+                        "disabled:bg-[#e6e6e6] disabled:text-button-secondary-default disabled:opacity-100 dark:disabled:bg-[#3a3a3a] dark:disabled:text-[#aeaeae]",
                 )}
             />
             <button
@@ -55,7 +55,7 @@ export const CreateUserPasswordInput = ({
                 onClick={handleToggleVisibility}
                 aria-label={isVisible ? t("hidePassword") : t("showPassword")}
                 aria-pressed={isVisible}
-                className="absolute top-1/2 right-3 inline-flex -translate-y-1/2 text-[#626262] outline-none hover:text-[#2e2e2e] focus-visible:ring-3 focus-visible:ring-[#c63031]/30 dark:text-[#aeaeae] dark:hover:text-[#f5f5f7]"
+                className="absolute top-1/2 right-3 inline-flex -translate-y-1/2 text-button-secondary-default outline-none hover:text-[#2e2e2e] focus-visible:ring-3 focus-visible:ring-button-primary-default/30ry-default/30 dark:text-[#aeaeae] dark:hover:text-[#f5f5f7]"
             >
                 {isVisible ? (
                     <EyeOff aria-hidden className="size-5" />
@@ -94,7 +94,8 @@ export const CreateUserSelect = ({
                 className={cn(
                     createUserFieldClassName,
                     "appearance-none pr-10",
-                    isPlaceholder && "text-[#626262] dark:text-[#aeaeae]",
+                    isPlaceholder &&
+                        "text-button-secondary-default dark:text-[#aeaeae]",
                 )}
             >
                 {includeEmpty ? <option value="">{label}</option> : null}
@@ -106,7 +107,7 @@ export const CreateUserSelect = ({
             </select>
             <ChevronDown
                 aria-hidden
-                className="pointer-events-none absolute top-1/2 right-3 size-5 -translate-y-1/2 text-[#626262] dark:text-[#aeaeae]"
+                className="pointer-events-none absolute top-1/2 right-3 size-5 -translate-y-1/2 text-button-secondary-default dark:text-[#aeaeae]"
             />
         </div>
     )

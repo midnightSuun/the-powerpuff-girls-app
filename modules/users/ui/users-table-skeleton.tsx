@@ -12,17 +12,32 @@ import {
 
 const DEFAULT_ROW_COUNT = 10
 
-const textColumns = [
+const textColumns: {
+    id: string
+    headerClassName: string
+    cellClassName: string
+    className?: string
+}[] = [
     { id: "firstName", headerClassName: "h-4 w-20", cellClassName: "h-4 w-24" },
     { id: "lastName", headerClassName: "h-4 w-20", cellClassName: "h-4 w-28" },
-    { id: "email", headerClassName: "h-4 w-12", cellClassName: "h-4 w-40" },
+    {
+        id: "email",
+        headerClassName: "h-4 w-12",
+        cellClassName: "h-4 w-40",
+        className: "hidden lg:table-cell",
+    },
     {
         id: "department",
         headerClassName: "h-4 w-24",
         cellClassName: "h-4 w-28",
     },
-    { id: "position", headerClassName: "h-4 w-16", cellClassName: "h-4 w-24" },
-] as const
+    {
+        id: "position",
+        headerClassName: "h-4 w-16",
+        cellClassName: "h-4 w-24",
+        className: "hidden lg:table-cell",
+    },
+]
 
 type Props = {
     label?: ReactNode
@@ -55,7 +70,10 @@ export const UsersTableSkeleton = ({
                     <TableRow className="hover:bg-transparent">
                         <TableHead className="w-12" />
                         {textColumns.map((column) => (
-                            <TableHead key={column.id}>
+                            <TableHead
+                                key={column.id}
+                                className={column.className}
+                            >
                                 <Skeleton className={column.headerClassName} />
                             </TableHead>
                         ))}
@@ -72,7 +90,10 @@ export const UsersTableSkeleton = ({
                                 <Skeleton className="size-8 rounded-full" />
                             </TableCell>
                             {textColumns.map((column) => (
-                                <TableCell key={column.id}>
+                                <TableCell
+                                    key={column.id}
+                                    className={column.className}
+                                >
                                     <Skeleton
                                         className={column.cellClassName}
                                     />
