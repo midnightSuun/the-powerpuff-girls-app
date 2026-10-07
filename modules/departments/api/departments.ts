@@ -12,8 +12,10 @@ import {
     UpdateDepartmentDocument,
     UpdateDepartmentInput,
 } from "@/gql/generated/graphql"
+import { requireAdmin } from "@/modules/auth/helpers/require-admin"
 
 export async function getAdminDepartments() {
+    await requireAdmin()
     const gql = await getGql()
     const data = await gql.request(GetDepartmentsDocument, {
         params: { limit: 100 },
@@ -26,6 +28,7 @@ export async function getAdminDepartments() {
 }
 
 export async function createAdminDepartment(department: CreateDepartmentInput) {
+    await requireAdmin()
     try {
         const gql = await getGql()
         const data = await gql.request(CreateDepartmentDocument, { department })
@@ -39,6 +42,7 @@ export async function createAdminDepartment(department: CreateDepartmentInput) {
 }
 
 export async function updateAdminDepartment(department: UpdateDepartmentInput) {
+    await requireAdmin()
     try {
         const gql = await getGql()
         const data = await gql.request(UpdateDepartmentDocument, { department })
@@ -52,6 +56,7 @@ export async function updateAdminDepartment(department: UpdateDepartmentInput) {
 }
 
 export async function deleteAdminDepartment(department: DeleteDepartmentInput) {
+    await requireAdmin()
     try {
         const gql = await getGql()
         const data = await gql.request(DeleteDepartmentDocument, { department })

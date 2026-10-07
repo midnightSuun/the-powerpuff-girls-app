@@ -13,8 +13,10 @@ import {
     UpdateAdminSkillDocument,
     UpdateSkillInput,
 } from "@/gql/generated/graphql"
+import { requireAdmin } from "@/modules/auth/helpers/require-admin"
 
 export async function getAdminSkills() {
+    await requireAdmin()
     const gql = await getGql()
     const data = await gql.request(GetAdminSkillsDocument)
 
@@ -27,6 +29,7 @@ export async function getAdminSkills() {
 }
 
 export async function getSkillCategories() {
+    await requireAdmin()
     const gql = await getGql()
     const data = await gql.request(GetSkillCategoriesDocument)
 
@@ -37,6 +40,7 @@ export async function getSkillCategories() {
 }
 
 export async function createAdminSkill(skill: CreateSkillInput) {
+    await requireAdmin()
     const gql = await getGql()
     const data = await gql.request(CreateSkillDocument, { skill })
 
@@ -45,6 +49,7 @@ export async function createAdminSkill(skill: CreateSkillInput) {
 }
 
 export async function updateAdminSkill(skill: UpdateSkillInput) {
+    await requireAdmin()
     const gql = await getGql()
     const data = await gql.request(UpdateAdminSkillDocument, { skill })
 
@@ -53,6 +58,7 @@ export async function updateAdminSkill(skill: UpdateSkillInput) {
 }
 
 export async function deleteAdminSkill(skill: DeleteSkillInput) {
+    await requireAdmin()
     const gql = await getGql()
     const data = await gql.request(DeleteSkillDocument, { skill })
 

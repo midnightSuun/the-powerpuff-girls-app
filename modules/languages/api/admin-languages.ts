@@ -13,8 +13,10 @@ import {
     UpdateLanguageDocument,
     UpdateLanguageInput,
 } from "@/gql/generated/graphql"
+import { requireAdmin } from "@/modules/auth/helpers/require-admin"
 
 export async function getAdminLanguages() {
+    await requireAdmin()
     const gql = await getGql()
     const data = await gql.request(GetLanguagesDocument, {
         params: { limit: 100 },
@@ -28,6 +30,7 @@ export async function getAdminLanguages() {
 }
 
 export async function createAdminLanguage(language: CreateLanguageInput) {
+    await requireAdmin()
     try {
         const gql = await getGql()
         const data = await gql.request(CreateLanguageDocument, { language })
@@ -42,6 +45,7 @@ export async function createAdminLanguage(language: CreateLanguageInput) {
 }
 
 export async function updateAdminLanguage(language: UpdateLanguageInput) {
+    await requireAdmin()
     const gql = await getGql()
     const data = await gql.request(UpdateLanguageDocument, { language })
 
@@ -50,6 +54,7 @@ export async function updateAdminLanguage(language: UpdateLanguageInput) {
 }
 
 export async function deleteAdminLanguage(language: DeleteLanguageInput) {
+    await requireAdmin()
     const gql = await getGql()
     const data = await gql.request(DeleteLanguageDocument, { language })
 
