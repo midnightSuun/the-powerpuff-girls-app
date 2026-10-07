@@ -581,7 +581,26 @@
             "cancel": "Cancelar",
             "submit": "Crear",
             "close": "Cerrar",
-            "employee": "Empleado"
+            "employee": "Empleado",
+            "admin": "Administrador",
+            "updateTitle": "Actualizar usuario",
+            "updateDescription": "Actualizar un usuario existente",
+            "update": "Actualizar",
+            "view": "Ver",
+            "delete": "Eliminar",
+            "deleteTitle": "Eliminar usuario",
+            "deleteDescription": "¿Seguro que desea eliminar al usuario <strong>{name}</strong>?",
+            "confirm": "Confirmar",
+            "deleting": "Eliminando..."
+        },
+        "messages": {
+            "createForbidden": "Solo un administrador puede crear usuarios.",
+            "createFailed": "No se pudo crear el usuario. Inténtelo de nuevo.",
+            "updateForbidden": "Solo un administrador puede actualizar usuarios.",
+            "updateFailed": "No se pudo actualizar el usuario. Inténtelo de nuevo.",
+            "deleteForbidden": "Solo un administrador puede eliminar usuarios.",
+            "deleteSelfForbidden": "No puede eliminar su propia cuenta.",
+            "deleteFailed": "No se pudo eliminar el usuario. Inténtelo de nuevo."
         },
         "loading": "Cargando usuarios...",
         "noResults": "Sin resultados",

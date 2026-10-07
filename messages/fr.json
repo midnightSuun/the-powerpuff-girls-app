@@ -581,7 +581,26 @@
             "cancel": "Annuler",
             "submit": "Créer",
             "close": "Fermer",
-            "employee": "Employé"
+            "employee": "Employé",
+            "admin": "Administrateur",
+            "updateTitle": "Mettre à jour l'utilisateur",
+            "updateDescription": "Mettre à jour un utilisateur existant",
+            "update": "Mettre à jour",
+            "view": "Voir",
+            "delete": "Supprimer",
+            "deleteTitle": "Supprimer l'utilisateur",
+            "deleteDescription": "Voulez-vous vraiment supprimer l'utilisateur <strong>{name}</strong> ?",
+            "confirm": "Confirmer",
+            "deleting": "Suppression..."
+        },
+        "messages": {
+            "createForbidden": "Seul un administrateur peut créer des utilisateurs.",
+            "createFailed": "Impossible de créer l'utilisateur. Veuillez réessayer.",
+            "updateForbidden": "Seul un administrateur peut mettre à jour des utilisateurs.",
+            "updateFailed": "Impossible de mettre à jour l'utilisateur. Veuillez réessayer.",
+            "deleteForbidden": "Seul un administrateur peut supprimer des utilisateurs.",
+            "deleteSelfForbidden": "Vous ne pouvez pas supprimer votre propre compte.",
+            "deleteFailed": "Impossible de supprimer l'utilisateur. Veuillez réessayer."
         },
         "loading": "Chargement des utilisateurs...",
         "noResults": "Aucun résultat",
