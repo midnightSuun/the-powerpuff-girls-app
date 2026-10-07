@@ -49,7 +49,7 @@ export function SkillsView({
             className={
                 compact
                     ? "mx-auto w-full max-w-275"
-                    : "w-full max-w-4xl px-6 py-6 md:px-12 lg:px-16"
+                    : "w-full max-w-6xl px-6 py-6 lg:pl-50"
             }
         >
             <div className="w-full">

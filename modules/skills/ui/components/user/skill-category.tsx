@@ -28,7 +28,7 @@ export function SkillCategory({
 
     return (
         <div className="mb-8">
-            <p className="font-roboto text-sm font-semibold text-foreground/80 mb-4">
+            <p className=" text-base font-normal leading-6 tracking-[0.15px] text-foreground mb-4">
                 {title}
             </p>
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-12 lg:gap-x-16 gap-y-3.5">
