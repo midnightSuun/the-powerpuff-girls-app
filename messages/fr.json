@@ -266,6 +266,10 @@
             "title": "Page non trouvée",
             "description": "La page que vous recherchez a peut-être été supprimée,\na vu son nom modifié ou est temporairement indisponible.",
             "actionText": "Accueil"
+        },
+        "MobileNotSupported": {
+            "title": "Oups",
+            "description": "Cette application n'est pas prise en charge sur les appareils mobiles.\nVeuillez l'ouvrir sur un ordinateur ou une tablette pour continuer."
         }
     },
     "Settings": {
