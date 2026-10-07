@@ -88,7 +88,7 @@ const Field = ({
 
     return (
         <label className="flex flex-col gap-1">
-            <span className="text-xs leading-4 text-[#626262] dark:text-[#aeaeae]">
+            <span className="text-xs leading-4 text-button-secondary-default dark:text-[#aeaeae]">
                 {label}
             </span>
             {children}

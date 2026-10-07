@@ -266,6 +266,10 @@
             "title": "Página não encontrada",
             "description": "A página que procura pode ter sido removida,\nter o nome alterado ou estar temporariamente indisponível.",
             "actionText": "Ir para a Página Inicial"
+        },
+        "MobileNotSupported": {
+            "title": "Ops",
+            "description": "Este aplicativo não é compatível com dispositivos móveis.\nAbra-o em um computador ou tablet para continuar."
         }
     },
     "Settings": {

@@ -266,6 +266,10 @@
             "title": "Pagina non trovata",
             "description": "La pagina che stai cercando potrebbe essere stata rimossa,\naver cambiato nome o essere temporaneamente non disponibile.",
             "actionText": "Vai alla Home"
+        },
+        "MobileNotSupported": {
+            "title": "Ops",
+            "description": "Questa app non è supportata sui dispositivi mobili.\nApribile su un computer o un tablet per continuare."
         }
     },
     "Settings": {

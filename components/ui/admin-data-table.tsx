@@ -1,10 +1,11 @@
 "use client"
 
-import { MoreVertical, Plus } from "lucide-react"
+import { MoreVertical } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl"
 import { useEffect, useMemo, useRef, useState } from "react"
 
 import { Button } from "@/components/ui/button"
+import { AddItemButton } from "@/components/ui/list-management-buttons"
 import { sortByLocale, type SortOrder } from "@/lib/sort"
 
 import { SearchInput } from "../search-input"
@@ -125,15 +126,12 @@ export function AdminDataTable<T extends { id: string | number }>({
                 <SearchInput limit={limit} search={search} />
 
                 {createButtonLabel && onCreateClick && (
-                    <Button
-                        type="button"
-                        variant="primaryV2"
+                    <AddItemButton
+                        label={createButtonLabel}
                         onClick={onCreateClick}
-                        className="flex items-center gap-1.5 cursor-pointer"
-                    >
-                        <Plus className="h-4 w-4" />
-                        {createButtonLabel}
-                    </Button>
+                        variant="primaryV2"
+                        className="cursor-pointer text-[#d7352c] hover:text-[#b5332b] dark:text-[#f06b65] dark:hover:text-[#ff8a84] lg:!h-auto lg:!min-w-40 lg:!px-[30px] lg:!py-[16px]"
+                    />
                 )}
             </div>
 

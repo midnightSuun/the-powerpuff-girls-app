@@ -266,6 +266,10 @@
             "title": "Nie znaleziono strony",
             "description": "Strona, której szukasz, mogła zostać usunięta,\nmieć zmienioną nazwę lub być tymczasowo niedostępna.",
             "actionText": "Strona główna"
+        },
+        "MobileNotSupported": {
+            "title": "Ups",
+            "description": "Ta aplikacja nie jest obsługiwana na urządzeniach mobilnych.\nOtwórz ją na komputerze lub tablecie, aby kontynuować."
         }
     },
     "Settings": {

@@ -266,6 +266,10 @@
             "title": "Seite nicht gefunden",
             "description": "Die von Ihnen gesuchte Seite wurde möglicherweise entfernt,\numbenannt oder ist vorübergehend nicht verfügbar.",
             "actionText": "Zur Startseite"
+        },
+        "MobileNotSupported": {
+            "title": "Hoppla",
+            "description": "Diese App wird auf Mobilgeräten nicht unterstützt.\nBitte öffnen Sie sie auf einem Desktop- oder Tablet-Gerät, um fortzufahren."
         }
     },
     "Settings": {
