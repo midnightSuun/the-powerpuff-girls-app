@@ -531,7 +531,7 @@
         "role": "Ruolo",
         "memberSince": "Membro dal {date}",
         "uploadAvatar": "Carica immagine dell'avatar",
-        "avatarRequirements": "png, jpg o gif di massimo 0,5 MB",
+        "avatarRequirements": "png, jpg o gif di massimo 5 MB",
         "firstName": "Nome",
         "lastName": "Cognome",
         "department": "Dipartimento",
@@ -550,7 +550,7 @@
             "firstNameTooLong": "Il nome non deve superare i 100 caratteri",
             "lastNameTooLong": "Il cognome non deve superare i 100 caratteri",
             "unsupportedFileType": "Tipo di file non supportato",
-            "fileTooLarge": "La dimensione del file non deve superare 0,5 MB"
+            "fileTooLarge": "La dimensione del file non deve superare 5 MB"
         },
         "messages": {
             "profileUpdated": "Profilo aggiornato con successo",
