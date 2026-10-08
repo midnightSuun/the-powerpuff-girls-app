@@ -4,6 +4,7 @@ import { MoreVertical } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl"
 import { useEffect, useMemo, useRef, useState } from "react"
 
+import { useHeaderToolbarAction } from "@/components/header-toolbar-action"
 import { Button } from "@/components/ui/button"
 import { AddItemButton } from "@/components/ui/list-management-buttons"
 import { sortByLocale, type SortOrder } from "@/lib/sort"
@@ -62,6 +63,14 @@ export function AdminDataTable<T extends { id: string | number }>({
     )
 
     const menuRef = useRef<HTMLDivElement | null>(null)
+    const headerActionLabel =
+        !showSearchInput && createButtonLabel && onCreateClick
+            ? createButtonLabel
+            : null
+
+    useHeaderToolbarAction(headerActionLabel, () => {
+        onCreateClick?.()
+    })
 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
@@ -125,20 +134,19 @@ export function AdminDataTable<T extends { id: string | number }>({
 
     return (
         <div className="flex flex-col gap-4">
-            <div className="flex items-center justify-between gap-4">
-                {showSearchInput ? (
+            {showSearchInput ? (
+                <div className="flex items-center justify-between gap-4">
                     <SearchInput limit={limit} search={search} />
-                ) : null}
-
-                {createButtonLabel && onCreateClick && (
-                    <AddItemButton
-                        label={createButtonLabel}
-                        onClick={onCreateClick}
-                        variant="primaryV2"
-                        className={`${showSearchInput ? "" : "ml-auto "}cursor-pointer text-[#d7352c] hover:text-[#b5332b] dark:text-[#f06b65] dark:hover:text-[#ff8a84] lg:!h-auto lg:!min-w-40 lg:!px-[30px] lg:!py-[16px]`}
-                    />
-                )}
-            </div>
+                    {createButtonLabel && onCreateClick ? (
+                        <AddItemButton
+                            label={createButtonLabel}
+                            onClick={onCreateClick}
+                            variant="primaryV2"
+                            className="cursor-pointer text-[#d7352c] hover:text-[#b5332b] dark:text-[#f06b65] dark:hover:text-[#ff8a84] lg:!h-auto lg:!min-w-40 lg:!px-[30px] lg:!py-[16px]"
+                        />
+                    ) : null}
+                </div>
+            ) : null}
 
             <div className="w-full overflow-x-auto">
                 <table className="w-full text-left text-sm">
