@@ -37,7 +37,7 @@ export function useAdminSkillsView({ initialSkills }: UseAdminSkillsViewProps) {
             skillId: id,
             name: data.name,
             categoryId: data.categoryId,
-        } as unknown as Parameters<typeof updateAdminSkill>[0])
+        })
 
         notifications.success("updated")
         if (updated) {
@@ -53,7 +53,7 @@ export function useAdminSkillsView({ initialSkills }: UseAdminSkillsViewProps) {
         if (!crud.deletingItem) return
         await deleteAdminSkill({
             skillId: crud.deletingItem.id,
-        } as unknown as Parameters<typeof deleteAdminSkill>[0])
+        })
 
         notifications.success("deleted")
         crud.removeItem(crud.deletingItem.id)
