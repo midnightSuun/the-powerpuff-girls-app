@@ -2,7 +2,7 @@
 
 import { MoreVertical } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
 
 import { useHeaderToolbarAction } from "@/components/header-toolbar-action"
 import { Button } from "@/components/ui/button"
@@ -19,6 +19,95 @@ export interface Column<T> {
     className?: string
     render?: (item: T) => React.ReactNode
 }
+
+interface AdminTableRowProps<T> {
+    item: T
+    columns: Column<T>[]
+    isMenuOpen: boolean
+    onToggleMenu: (id: string | number) => void
+    onEditClick?: (item: T) => void
+    onDeleteClick?: (item: T) => void
+    menuRef?: React.RefObject<HTMLDivElement | null>
+    editText: string
+    deleteText: string
+}
+
+function AdminTableRowComponent<T extends { id: string | number }>({
+    item,
+    columns,
+    isMenuOpen,
+    onToggleMenu,
+    onEditClick,
+    onDeleteClick,
+    menuRef,
+    editText,
+    deleteText,
+}: AdminTableRowProps<T>) {
+    return (
+        <tr className="h-14 border-b border-[#383838] hover:bg-muted/10 transition-colors">
+            {columns.map((col) => (
+                <td
+                    key={col.key}
+                    className={`px-4 align-middle text-muted-foreground ${col.className ?? ""}`}
+                >
+                    {col.render
+                        ? col.render(item)
+                        : String(
+                              (item as Record<string, unknown>)[col.key] ?? "",
+                          )}
+                </td>
+            ))}
+            {(onEditClick || onDeleteClick) && (
+                <td className="px-4 text-right relative align-middle">
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        className="h-8 min-w-8 p-0 text-muted-foreground hover:text-foreground"
+                        onClick={() => onToggleMenu(item.id)}
+                    >
+                        <MoreVertical className="h-4 w-4" />
+                    </Button>
+
+                    {isMenuOpen && (
+                        <div
+                            ref={menuRef}
+                            className="absolute right-4 top-10 z-50 w-32 border border-border bg-background p-1 shadow-md rounded-none text-left"
+                        >
+                            {onEditClick && (
+                                <button
+                                    type="button"
+                                    className="w-full text-left px-3 py-1.5 text-sm hover:bg-accent transition-colors"
+                                    onClick={() => {
+                                        onToggleMenu(item.id)
+                                        onEditClick(item)
+                                    }}
+                                >
+                                    {editText}
+                                </button>
+                            )}
+                            {onDeleteClick && (
+                                <button
+                                    type="button"
+                                    className="w-full text-left px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
+                                    onClick={() => {
+                                        onToggleMenu(item.id)
+                                        onDeleteClick(item)
+                                    }}
+                                >
+                                    {deleteText}
+                                </button>
+                            )}
+                        </div>
+                    )}
+                </td>
+            )}
+        </tr>
+    )
+}
+
+const AdminTableRow = memo(
+    AdminTableRowComponent,
+) as typeof AdminTableRowComponent
 
 interface AdminDataTableProps<T> {
     data: T[]
@@ -101,6 +190,9 @@ export function AdminDataTable<T extends { id: string | number }>({
             setSortOrder("asc")
         }
     }
+    const handleToggleMenu = useCallback((id: string | number) => {
+        setActiveMenuId((prev) => (prev === id ? null : id))
+    }, [])
 
     const processedData = useMemo(() => {
         let result = [...data]
@@ -157,7 +249,6 @@ export function AdminDataTable<T extends { id: string | number }>({
                                 return (
                                     <th
                                         key={col.key}
-
                                         className={`px-4 font-medium text-foreground align-middle ${
                                             col.sortable
                                                 ? "cursor-pointer select-none"
@@ -201,86 +292,18 @@ export function AdminDataTable<T extends { id: string | number }>({
                     <tbody>
                         {processedData.length > 0 ? (
                             processedData.map((item) => (
-                                <tr
+                                <AdminTableRow
                                     key={item.id}
-                                    className="h-14 border-b border-[#383838] hover:bg-muted/10 transition-colors"
-                                >
-                                    {columns.map((col) => (
-                                        <td
-                                            key={col.key}
-                                            className={`px-4 align-middle text-muted-foreground ${col.className ?? ""}`}
-                                        >
-                                            {col.render
-                                                ? col.render(item)
-                                                : String(
-                                                      (
-                                                          item as Record<
-                                                              string,
-                                                              unknown
-                                                          >
-                                                      )[col.key] ?? "",
-                                                  )}
-                                        </td>
-                                    ))}
-                                    {(onEditClick || onDeleteClick) && (
-                                        <td className="px-4 text-right relative align-middle">
-                                            <Button
-                                                type="button"
-                                                variant="ghost"
-                                                className="h-8 min-w-8 p-0 text-muted-foreground hover:text-foreground"
-                                                onClick={() =>
-                                                    setActiveMenuId(
-                                                        activeMenuId === item.id
-                                                            ? null
-                                                            : item.id,
-                                                    )
-                                                }
-                                            >
-                                                <MoreVertical className="h-4 w-4" />
-                                            </Button>
-
-                                            {activeMenuId === item.id && (
-                                                <div
-                                                    ref={menuRef}
-                                                    className="absolute right-4 top-10 z-50 w-32 border border-border bg-background p-1 shadow-md rounded-none text-left"
-                                                >
-                                                    {onEditClick && (
-                                                        <button
-                                                            type="button"
-                                                            className="w-full text-left px-3 py-1.5 text-sm hover:bg-accent transition-colors"
-                                                            onClick={() => {
-                                                                setActiveMenuId(
-                                                                    null,
-                                                                )
-                                                                onEditClick(
-                                                                    item,
-                                                                )
-                                                            }}
-                                                        >
-                                                            {tCommon("edit")}
-                                                        </button>
-                                                    )}
-                                                    {onDeleteClick && (
-                                                        <button
-                                                            type="button"
-                                                            className="w-full text-left px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
-                                                            onClick={() => {
-                                                                setActiveMenuId(
-                                                                    null,
-                                                                )
-                                                                onDeleteClick(
-                                                                    item,
-                                                                )
-                                                            }}
-                                                        >
-                                                            {tCommon("delete")}
-                                                        </button>
-                                                    )}
-                                                </div>
-                                            )}
-                                        </td>
-                                    )}
-                                </tr>
+                                    item={item}
+                                    columns={columns}
+                                    isMenuOpen={activeMenuId === item.id}
+                                    onToggleMenu={handleToggleMenu}
+                                    onEditClick={onEditClick}
+                                    onDeleteClick={onDeleteClick}
+                                    menuRef={menuRef}
+                                    editText={tCommon("edit")}
+                                    deleteText={tCommon("delete")}
+                                />
                             ))
                         ) : (
                             <tr className="h-14 border-b border-[#383838]">

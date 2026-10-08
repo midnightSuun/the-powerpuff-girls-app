@@ -1,4 +1,6 @@
-import type { ReactNode } from "react"
+"use client"
+
+import { memo, type ReactNode } from "react"
 
 import { SortArrow } from "@/components/sort-arrow"
 import {
@@ -20,6 +22,45 @@ export type TableColumn<T> = {
     sortLabel?: string
     render: (data: T) => ReactNode
 }
+
+interface TableRowItemProps<T> {
+    item: T
+    columns: TableColumn<T>[]
+    getRowHref?: (item: T) => string
+    getRowLabel?: (item: T) => string
+}
+
+function TableRowItemComponent<T>({
+    item,
+    columns,
+    getRowHref,
+    getRowLabel,
+}: TableRowItemProps<T>) {
+    const href = getRowHref?.(item)
+    const label = getRowLabel?.(item)
+
+    return (
+        <TableRow className={href ? "relative cursor-pointer" : undefined}>
+            {columns.map((column, columnIndex) => (
+                <TableCell key={column.id} className={column.className}>
+                    {href && columnIndex === 0 ? (
+                        <Link
+                            href={href}
+                            aria-label={label}
+                            className="after:absolute after:inset-0 after:z-10 after:content-['']"
+                        >
+                            {column.render(item)}
+                        </Link>
+                    ) : (
+                        column.render(item)
+                    )}
+                </TableCell>
+            ))}
+        </TableRow>
+    )
+}
+
+const TableRowItem = memo(TableRowItemComponent) as typeof TableRowItemComponent
 
 type Props<T> = {
     data: T[]
@@ -96,38 +137,15 @@ export const TableComponent = <T,>(props: Props<T>) => {
                         </TableCell>
                     </TableRow>
                 ) : null}
-                {props.data.map((item, index) => {
-                    const href = props.getRowHref?.(item)
-                    const label = props.getRowLabel?.(item)
-
-                    return (
-                        <TableRow
-                            key={index}
-                            className={
-                                href ? "relative cursor-pointer" : undefined
-                            }
-                        >
-                            {props.columns.map((column, columnIndex) => (
-                                <TableCell
-                                    key={column.id}
-                                    className={column.className}
-                                >
-                                    {href && columnIndex === 0 ? (
-                                        <Link
-                                            href={href}
-                                            aria-label={label}
-                                            className="after:absolute after:inset-0 after:z-10 after:content-['']"
-                                        >
-                                            {column.render(item)}
-                                        </Link>
-                                    ) : (
-                                        column.render(item)
-                                    )}
-                                </TableCell>
-                            ))}
-                        </TableRow>
-                    )
-                })}
+                {props.data.map((item, index) => (
+                    <TableRowItem
+                        key={index}
+                        item={item}
+                        columns={props.columns}
+                        getRowHref={props.getRowHref}
+                        getRowLabel={props.getRowLabel}
+                    />
+                ))}
             </TableBody>
         </Table>
     )
