@@ -1,6 +1,8 @@
 import { useTranslations } from "next-intl"
 import { useState } from "react"
 
+import { isNameDuplicate, normalizeName } from "@/lib/validate-unique-name"
+
 interface UseCreateLanguageModalProps {
     isOpen: boolean
     onClose: () => void
@@ -30,13 +32,13 @@ export function useCreateLanguageModal({
         }
     }
 
-    const isDuplicate = existingLanguageNames.some(
-        (l) => l.toLowerCase() === name.trim().toLowerCase(),
-    )
+    const trimmedName = normalizeName(name)
+    const trimmedIso2 = iso2.trim()
+    const isDuplicate = isNameDuplicate(name, existingLanguageNames)
 
     const inlineError =
-        isDuplicate && name.trim() ? t("errors.duplicate") : null
-    const isValid = Boolean(name.trim() && iso2.trim() && !isDuplicate)
+        isDuplicate && trimmedName ? t("errors.duplicate") : null
+    const isValid = Boolean(trimmedName && trimmedIso2 && !isDuplicate)
 
     const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault()
@@ -46,7 +48,7 @@ export function useCreateLanguageModal({
         setError(null)
 
         try {
-            await onCreate({ name: name.trim(), iso2: iso2.trim() })
+            await onCreate({ name: trimmedName, iso2: trimmedIso2 })
             onClose()
         } catch (err: unknown) {
             setError(

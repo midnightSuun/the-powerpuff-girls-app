@@ -1,5 +1,7 @@
 import { useState } from "react"
 
+import { isNameDuplicate, normalizeName } from "@/lib/validate-unique-name"
+
 export interface UseCreateDepartmentModalProps {
     isOpen: boolean
     existingNames?: string[]
@@ -26,12 +28,8 @@ export function useCreateDepartmentModal({
         }
     }
 
-    const trimmedName = name.trim()
-
-    const isDuplicate = existingNames.some(
-        (n) => n.toLowerCase() === trimmedName.toLowerCase(),
-    )
-
+    const trimmedName = normalizeName(name)
+    const isDuplicate = isNameDuplicate(name, existingNames)
     const inlineError = isDuplicate ? "alreadyExists" : null
     const isValid = trimmedName.length > 0 && !inlineError
 
