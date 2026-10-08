@@ -2,7 +2,8 @@
 
 import { useTranslations } from "next-intl"
 
-import { AdminDataTable, type Column } from "@/components/ui/admin-data-table"
+import type { Column } from "@/components/ui/admin-data-table"
+import { AdminNameCrudPage } from "@/components/ui/admin-name-crud-page"
 import {
     type AdminDepartmentItem,
     useAdminDepartmentsView,
@@ -40,20 +41,17 @@ export function AdminDepartmentsView({
     ]
 
     return (
-        <div className="w-full">
-            <AdminDataTable
-                data={departments}
-                columns={columns}
-                searchPlaceholder={tCommon("search")}
-                createButtonLabel={t("createButton")}
-                onCreateClick={() => setIsCreateOpen(true)}
-                onEditClick={(dept) => setEditingDepartment(dept)}
-                onDeleteClick={(dept) => setDeletingDepartment(dept)}
-                getSearchableString={(dept) => dept.name}
-                getSortValue={(dept) => dept.name}
-                emptyMessage={t("empty")}
-            />
-
+        <AdminNameCrudPage
+            data={departments}
+            columns={columns}
+            searchPlaceholder={tCommon("search")}
+            createButtonLabel={t("createButton")}
+            emptyMessage={t("empty")}
+            getItemName={(department) => department.name}
+            onCreateClick={() => setIsCreateOpen(true)}
+            onEditClick={(department) => setEditingDepartment(department)}
+            onDeleteClick={(department) => setDeletingDepartment(department)}
+        >
             <CreateDepartmentModal
                 isOpen={isCreateOpen}
                 onClose={() => setIsCreateOpen(false)}
@@ -75,6 +73,6 @@ export function AdminDepartmentsView({
                 departmentName={deletingDepartment?.name ?? ""}
                 onConfirm={handleDeleteConfirm}
             />
-        </div>
+        </AdminNameCrudPage>
     )
 }

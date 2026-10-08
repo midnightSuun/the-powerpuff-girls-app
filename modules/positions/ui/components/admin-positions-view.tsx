@@ -2,7 +2,8 @@
 
 import { useTranslations } from "next-intl"
 
-import { AdminDataTable, type Column } from "@/components/ui/admin-data-table"
+import type { Column } from "@/components/ui/admin-data-table"
+import { AdminNameCrudPage } from "@/components/ui/admin-name-crud-page"
 import {
     type AdminPositionItem,
     useAdminPositionsView,
@@ -40,20 +41,17 @@ export function AdminPositionsView({
     ]
 
     return (
-        <div className="w-full">
-            <AdminDataTable
-                data={positions}
-                columns={columns}
-                searchPlaceholder={tCommon("search")}
-                createButtonLabel={t("createButton")}
-                onCreateClick={() => setIsCreateOpen(true)}
-                onEditClick={(pos) => setEditingPosition(pos)}
-                onDeleteClick={(pos) => setDeletingPosition(pos)}
-                getSearchableString={(pos) => pos.name}
-                getSortValue={(pos) => pos.name}
-                emptyMessage={t("empty")}
-            />
-
+        <AdminNameCrudPage
+            data={positions}
+            columns={columns}
+            searchPlaceholder={tCommon("search")}
+            createButtonLabel={t("createButton")}
+            emptyMessage={t("empty")}
+            getItemName={(position) => position.name}
+            onCreateClick={() => setIsCreateOpen(true)}
+            onEditClick={(position) => setEditingPosition(position)}
+            onDeleteClick={(position) => setDeletingPosition(position)}
+        >
             <CreatePositionModal
                 isOpen={isCreateOpen}
                 onClose={() => setIsCreateOpen(false)}
@@ -75,6 +73,6 @@ export function AdminPositionsView({
                 positionName={deletingPosition?.name ?? ""}
                 onConfirm={handleDeleteConfirm}
             />
-        </div>
+        </AdminNameCrudPage>
     )
 }
