@@ -1,11 +1,12 @@
 "use client"
 
 import debounce from "debounce"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import { useTranslations } from "next-intl"
-import { ChangeEvent, useEffect, useRef, useState } from "react"
+import { ChangeEvent, useEffect, useRef, useState, useTransition } from "react"
 
 import { Input } from "@/components/ui/input"
+import { usePathname, useRouter } from "@/i18n/navigation"
 import { buildListSearchParams } from "@/lib/list-search-params"
 import { type SortOrder } from "@/lib/sort"
 
@@ -46,6 +47,7 @@ export function SearchInput({
     const path = usePathname()
     const router = useRouter()
     const searchParams = useSearchParams()
+    const [, startTransition] = useTransition()
 
     const querySearch = searchParams.get("search") ?? propSearch ?? ""
     const limitParam = Number(searchParams.get("limit"))
@@ -59,6 +61,7 @@ export function SearchInput({
     const [value, setValue] = useState(querySearch)
     const [prevSearch, setPrevSearch] = useState(querySearch)
     const latestRef = useRef({ limit, path, router, sortBy, sortOrder })
+    const startTransitionRef = useRef(startTransition)
     const updateSearchRef = useRef<(nextSearch: string) => void>(() => {})
 
     if (querySearch !== prevSearch) {
@@ -69,7 +72,8 @@ export function SearchInput({
 
     useEffect(() => {
         latestRef.current = { limit, path, router, sortBy, sortOrder }
-    }, [limit, path, router, sortBy, sortOrder])
+        startTransitionRef.current = startTransition
+    }, [limit, path, router, sortBy, sortOrder, startTransition])
 
     useEffect(() => {
         const updateSearch = debounce((nextSearch: string) => {
@@ -82,7 +86,11 @@ export function SearchInput({
                 sortOrder: current.sortOrder,
             })
 
-            current.router.replace(`${current.path}?${params}`)
+            startTransitionRef.current(() => {
+                current.router.replace(`${current.path}?${params}`, {
+                    scroll: false,
+                })
+            })
         }, SEARCH_DEBOUNCE_MS)
 
         updateSearchRef.current = updateSearch
@@ -105,11 +113,12 @@ export function SearchInput({
                 <SearchIcon />
             </span>
             <Input
-                type="text"
+                type="search"
                 value={value}
                 onChange={handleSearch}
                 placeholder={t("search")}
-                className="h-9 w-full rounded-full border border-input bg-background pr-4 pl-9 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+                aria-label={t("search")}
+                className="h-9 w-full rounded-full border border-input bg-background pr-4 pl-9 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 [&::-webkit-search-cancel-button]:appearance-none"
             />
         </label>
     )

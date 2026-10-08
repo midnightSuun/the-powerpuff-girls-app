@@ -17,9 +17,14 @@ export const buildListSearchParams = ({
 }: ListQuery) => {
     const params = new URLSearchParams()
 
+    const normalizedSearch = search.trim()
+
     params.set("page", String(page))
     params.set("limit", String(limit))
-    params.set("search", search)
+
+    if (normalizedSearch) {
+        params.set("search", normalizedSearch)
+    }
 
     if (sortBy) {
         params.set("sortBy", sortBy)

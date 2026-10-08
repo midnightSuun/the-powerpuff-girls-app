@@ -10,6 +10,7 @@ import {
 } from "react"
 
 import { UsersPageLoader } from "./users-page-loader"
+import { UsersTableSkeleton } from "./users-table-skeleton"
 
 type Props = {
     children: ReactNode
@@ -38,14 +39,10 @@ const UsersTableFallback = ({
     previous: ReactNode
 }) => {
     return (
-        <>
-            {previous ? (
-                <div inert aria-hidden>
-                    {previous}
-                </div>
-            ) : null}
+        <div className="relative min-h-40" aria-busy="true">
+            {previous ? <div inert>{previous}</div> : <UsersTableSkeleton />}
             <UsersPageLoader label={label} />
-        </>
+        </div>
     )
 }
 

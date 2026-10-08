@@ -15,12 +15,13 @@ export async function getUsers(
     cacheLife("hours")
     cacheTag("users")
 
+    const normalizedSearch = search.trim()
     const gql = await getGql()
     const data = await gql.request(GetUsersDocument, {
         params: {
             limit,
             page,
-            search,
+            ...(normalizedSearch ? { search: normalizedSearch } : {}),
             sort_by: sortBy,
             sort_order: sortBy ? sortOrder : undefined,
         },
