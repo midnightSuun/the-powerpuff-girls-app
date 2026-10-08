@@ -32,6 +32,7 @@ interface AdminDataTableProps<T> {
     emptyMessage?: string
     limit?: number
     search?: string
+    showSearchInput?: boolean
     createButtonClassName?: string
     defaultSortKey?: string
 }
@@ -48,6 +49,7 @@ export function AdminDataTable<T extends { id: string | number }>({
     emptyMessage = "No items found",
     limit = 10,
     search = "",
+    showSearchInput = true,
     defaultSortKey = "type",
 }: AdminDataTableProps<T>) {
     const locale = useLocale()
@@ -124,14 +126,16 @@ export function AdminDataTable<T extends { id: string | number }>({
     return (
         <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between gap-4">
-                <SearchInput limit={limit} search={search} />
+                {showSearchInput ? (
+                    <SearchInput limit={limit} search={search} />
+                ) : null}
 
                 {createButtonLabel && onCreateClick && (
                     <AddItemButton
                         label={createButtonLabel}
                         onClick={onCreateClick}
                         variant="primaryV2"
-                        className="cursor-pointer text-[#d7352c] hover:text-[#b5332b] dark:text-[#f06b65] dark:hover:text-[#ff8a84] lg:!h-auto lg:!min-w-40 lg:!px-[30px] lg:!py-[16px]"
+                        className={`${showSearchInput ? "" : "ml-auto "}cursor-pointer text-[#d7352c] hover:text-[#b5332b] dark:text-[#f06b65] dark:hover:text-[#ff8a84] lg:!h-auto lg:!min-w-40 lg:!px-[30px] lg:!py-[16px]`}
                     />
                 )}
             </div>

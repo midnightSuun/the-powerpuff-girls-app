@@ -1,7 +1,7 @@
 import { LoadingText } from "@/components/loading-text"
 import { parsePaginationSearchParams } from "@/lib/pagination-search-params"
 import { UsersPage } from "@/modules/users"
-import { UsersTableFrame } from "@/modules/users/ui/users-table-frame"
+import { UsersTableFrame } from "@/modules/users"
 
 type Props = {
     searchParams: Promise<Record<string, string | string[] | undefined>>

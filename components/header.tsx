@@ -40,10 +40,12 @@ const PAGES: (DefaultPage | PageWithTabs)[] = [
     {
         path: "/skills",
         title: "skills",
+        showSearch: true,
     },
     {
         path: "/languages",
         title: "languages",
+        showSearch: true,
     },
     {
         path: "/settings",

@@ -8,6 +8,14 @@ type ListQuery = {
     sortOrder?: SortOrder
 }
 
+type RawSearchParam = string | string[] | null | undefined
+
+export const readListSearch = (search: RawSearchParam) => {
+    const value = Array.isArray(search) ? search[0] : search
+
+    return value?.trim() ?? ""
+}
+
 export const buildListSearchParams = ({
     page,
     limit,

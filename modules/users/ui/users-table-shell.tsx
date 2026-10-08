@@ -25,7 +25,7 @@ const columns = [
     { id: "open", label: "", className: undefined },
 ] as const
 
-export const UsersTableSkeleton = () => {
+export const UsersTableShell = () => {
     const t = useTranslations("Users.columns")
 
     return (

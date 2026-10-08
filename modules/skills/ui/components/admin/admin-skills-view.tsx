@@ -12,11 +12,13 @@ import { type AdminSkillItem, EditSkillModal } from "./edit-skill-admin-modal"
 interface AdminSkillsViewProps {
     initialSkills: AdminSkillItem[]
     categories: CategoryOption[]
+    search?: string
 }
 
 export function AdminSkillsView({
     initialSkills,
     categories,
+    search = "",
 }: AdminSkillsViewProps) {
     const tAdmin = useTranslations("Skills.admin")
     const tSkills = useTranslations("Skills")
@@ -66,6 +68,8 @@ export function AdminSkillsView({
                 data={formattedSkills}
                 columns={columns}
                 defaultSortKey="type"
+                search={search}
+                showSearchInput={false}
                 searchPlaceholder={tAdmin("search")}
                 createButtonLabel={tAdmin("create")}
                 onCreateClick={() => setIsCreateOpen(true)}

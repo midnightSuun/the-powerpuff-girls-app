@@ -10,11 +10,12 @@ import {
 } from "react"
 
 import { UsersPageLoader } from "./users-page-loader"
-import { UsersTableSkeleton } from "./users-table-skeleton"
+import { UsersTableShell } from "./users-table-shell"
 
 type Props = {
     children: ReactNode
     label?: ReactNode
+    placeholder?: ReactNode
 }
 
 const UsersTableResolved = ({
@@ -33,25 +34,37 @@ const UsersTableResolved = ({
 
 const UsersTableFallback = ({
     label,
+    placeholder,
     previous,
 }: {
     label?: ReactNode
+    placeholder?: ReactNode
     previous: ReactNode
 }) => {
     return (
         <div className="relative min-h-40" aria-busy="true">
-            {previous ? <div inert>{previous}</div> : <UsersTableSkeleton />}
+            {previous ? (
+                <div inert>{previous}</div>
+            ) : (
+                (placeholder ?? <UsersTableShell />)
+            )}
             <UsersPageLoader label={label} />
         </div>
     )
 }
 
-export const UsersTableFrame = ({ children, label }: Props) => {
+export const UsersTableFrame = ({ children, label, placeholder }: Props) => {
     const [previous, setPrevious] = useState<ReactNode>(null)
 
     return (
         <Suspense
-            fallback={<UsersTableFallback label={label} previous={previous} />}
+            fallback={
+                <UsersTableFallback
+                    label={label}
+                    placeholder={placeholder}
+                    previous={previous}
+                />
+            }
         >
             <UsersTableResolved onResolved={setPrevious}>
                 {children}

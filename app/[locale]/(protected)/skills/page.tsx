@@ -1,7 +1,8 @@
 import { redirect } from "next/navigation"
 import { getTranslations } from "next-intl/server"
-import { Suspense } from "react"
 
+import { LoadingText } from "@/components/loading-text"
+import { readListSearch } from "@/lib/list-search-params"
 import { getUserRole } from "@/modules/auth/helpers/get-current-session"
 import {
     getAdminSkills,
@@ -11,10 +12,23 @@ import { getUserSkills } from "@/modules/skills/api/skills"
 import { getAuthUserId } from "@/modules/skills/helpers/get-auth-user-id"
 import { AdminSkillsView } from "@/modules/skills/ui/components/admin/admin-skills-view"
 import { Skills } from "@/modules/skills/ui/skills"
+import { UsersTableFrame } from "@/modules/users/ui/users-table-frame"
 export const instant = false
 
-async function SkillsContent() {
-    const userId = await getAuthUserId()
+type Props = {
+    searchParams: Promise<Record<string, string | string[] | undefined>>
+}
+
+async function SkillsContent({
+    searchParams,
+}: {
+    searchParams: Props["searchParams"]
+}) {
+    const [userId, resolvedSearchParams] = await Promise.all([
+        getAuthUserId(),
+        searchParams,
+    ])
+    const search = readListSearch(resolvedSearchParams.search)
 
     if (!userId) {
         redirect("/login")
@@ -32,6 +46,7 @@ async function SkillsContent() {
                 <AdminSkillsView
                     initialSkills={skills}
                     categories={categories}
+                    search={search}
                 />
             </div>
         )
@@ -39,17 +54,27 @@ async function SkillsContent() {
 
     const userSkills = await getUserSkills(userId)
 
-    return <Skills userSkills={userSkills} role={userRole} canManageSkills />
+    return (
+        <Skills
+            userSkills={userSkills}
+            role={userRole}
+            canManageSkills
+            search={search}
+        />
+    )
 }
 
-export default async function SkillsPage() {
+export default async function SkillsPage({ searchParams }: Props) {
     const t = await getTranslations("Common")
 
     return (
         <main className="min-h-screen w-full">
-            <Suspense fallback={<div className="p-6">{t("loading")}</div>}>
-                <SkillsContent />
-            </Suspense>
+            <UsersTableFrame
+                label={<LoadingText namespace="Common" />}
+                placeholder={<div className="p-6">{t("loading")}</div>}
+            >
+                <SkillsContent searchParams={searchParams} />
+            </UsersTableFrame>
         </main>
     )
 }
