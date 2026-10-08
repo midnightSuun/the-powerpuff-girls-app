@@ -9,6 +9,7 @@ import type { UpdateProfileInput } from "../api/update-profile"
 import { updateProfile } from "../api/update-profile"
 import { updateUserProfile } from "../api/update-user-profile"
 import { uploadProfileAvatar } from "../api/upload-profile-avatar"
+import { ALLOWED_AVATAR_TYPES, MAX_AVATAR_SIZE } from "../constants"
 
 interface ProfileOption {
     id: string
@@ -31,9 +32,6 @@ interface UserData {
     department?: ProfileOption | null
     position?: ProfileOption | null
 }
-
-const MAX_AVATAR_SIZE = 5 * 1024 * 1024
-const ALLOWED_AVATAR_TYPES = new Set(["image/png", "image/jpeg", "image/gif"])
 
 export function useUserProfile(
     user: UserData,
