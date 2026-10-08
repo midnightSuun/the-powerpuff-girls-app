@@ -40,24 +40,36 @@ export async function createAdminLanguage(language: CreateLanguageInput) {
     } catch (err: unknown) {
         console.error("Failed to create language:", err)
         const t = await getTranslations("Languages.admin.errors")
-        throw new Error(t("invalidData"))
+        throw new Error(t("createFailed"))
     }
 }
 
 export async function updateAdminLanguage(language: UpdateLanguageInput) {
     await requireAdmin()
-    const gql = await getGql()
-    const data = await gql.request(UpdateLanguageDocument, { language })
+    try {
+        const gql = await getGql()
+        const data = await gql.request(UpdateLanguageDocument, { language })
 
-    revalidatePath("/languages")
-    return data.updateLanguage
+        revalidatePath("/languages")
+        return data.updateLanguage
+    } catch (error) {
+        console.error("Failed to update language:", error)
+        const t = await getTranslations("Languages.admin.errors")
+        throw new Error(t("updateFailed"))
+    }
 }
 
 export async function deleteAdminLanguage(language: DeleteLanguageInput) {
     await requireAdmin()
-    const gql = await getGql()
-    const data = await gql.request(DeleteLanguageDocument, { language })
+    try {
+        const gql = await getGql()
+        const data = await gql.request(DeleteLanguageDocument, { language })
 
-    revalidatePath("/languages")
-    return data.deleteLanguage
+        revalidatePath("/languages")
+        return data.deleteLanguage
+    } catch (error) {
+        console.error("Failed to delete language:", error)
+        const t = await getTranslations("Languages.delete.errors")
+        throw new Error(t("failed"))
+    }
 }

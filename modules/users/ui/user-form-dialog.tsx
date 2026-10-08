@@ -148,78 +148,64 @@ export const UserFormDialog = ({
                 </DialogDescription>
                 <form className="flex flex-col gap-4" onSubmit={onSubmit}>
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        <Field label={labelFor(tColumns("email"))}>
-                            <Input
-                                type="email"
-                                aria-label={tColumns("email")}
-                                placeholder={
-                                    lockCredentials
-                                        ? undefined
-                                        : tColumns("email")
-                                }
-                                autoComplete="off"
-                                value={email}
-                                disabled={lockCredentials}
-                                onChange={(event) =>
-                                    onFieldChange("email", event.target.value)
-                                }
-                                className={
-                                    lockCredentials
-                                        ? `${createUserFieldClassName} ${disabledFieldClassName}`
-                                        : createUserFieldClassName
-                                }
-                            />
-                        </Field>
-                        <Field label={labelFor(tDialog("password"))}>
-                            <CreateUserPasswordInput
-                                label={tDialog("password")}
-                                value={
-                                    lockCredentials ? hiddenPassword : password
-                                }
-                                disabled={lockCredentials}
-                                onChange={(value) =>
-                                    onFieldChange("password", value)
-                                }
-                            />
-                        </Field>
-                        <Field label={labelFor(tColumns("firstName"))}>
-                            <Input
-                                aria-label={tColumns("firstName")}
-                                placeholder={
-                                    showFieldLabels
-                                        ? undefined
-                                        : tColumns("firstName")
-                                }
-                                autoComplete="off"
-                                value={firstName}
-                                onChange={(event) =>
-                                    onFieldChange(
-                                        "firstName",
-                                        event.target.value,
-                                    )
-                                }
-                                className={createUserFieldClassName}
-                            />
-                        </Field>
-                        <Field label={labelFor(tColumns("lastName"))}>
-                            <Input
-                                aria-label={tColumns("lastName")}
-                                placeholder={
-                                    showFieldLabels
-                                        ? undefined
-                                        : tColumns("lastName")
-                                }
-                                autoComplete="off"
-                                value={lastName}
-                                onChange={(event) =>
-                                    onFieldChange(
-                                        "lastName",
-                                        event.target.value,
-                                    )
-                                }
-                                className={createUserFieldClassName}
-                            />
-                        </Field>
+                        <Input
+                            type="email"
+                            label={labelFor(tColumns("email"))}
+                            aria-label={tColumns("email")}
+                            placeholder={
+                                lockCredentials ? undefined : tColumns("email")
+                            }
+                            autoComplete="off"
+                            value={email}
+                            disabled={lockCredentials}
+                            onChange={(event) =>
+                                onFieldChange("email", event.target.value)
+                            }
+                            className={
+                                lockCredentials
+                                    ? `${createUserFieldClassName} ${disabledFieldClassName}`
+                                    : createUserFieldClassName
+                            }
+                        />
+                        <CreateUserPasswordInput
+                            label={tDialog("password")}
+                            showLabel={showFieldLabels}
+                            value={lockCredentials ? hiddenPassword : password}
+                            disabled={lockCredentials}
+                            onChange={(value) =>
+                                onFieldChange("password", value)
+                            }
+                        />
+                        <Input
+                            label={labelFor(tColumns("firstName"))}
+                            aria-label={tColumns("firstName")}
+                            placeholder={
+                                showFieldLabels
+                                    ? undefined
+                                    : tColumns("firstName")
+                            }
+                            autoComplete="off"
+                            value={firstName}
+                            onChange={(event) =>
+                                onFieldChange("firstName", event.target.value)
+                            }
+                            className={createUserFieldClassName}
+                        />
+                        <Input
+                            label={labelFor(tColumns("lastName"))}
+                            aria-label={tColumns("lastName")}
+                            placeholder={
+                                showFieldLabels
+                                    ? undefined
+                                    : tColumns("lastName")
+                            }
+                            autoComplete="off"
+                            value={lastName}
+                            onChange={(event) =>
+                                onFieldChange("lastName", event.target.value)
+                            }
+                            className={createUserFieldClassName}
+                        />
                         <Field label={labelFor(tColumns("department"))}>
                             <CreateUserSelect
                                 label={tColumns("department")}

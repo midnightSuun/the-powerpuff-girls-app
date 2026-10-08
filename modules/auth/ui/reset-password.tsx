@@ -37,51 +37,17 @@ export function ResetPasswordPage() {
                     className="w-full flex flex-col items-center space-y-6"
                     noValidate
                 >
-                    <div className="w-full space-y-1">
-                        <PasswordField
-                            placeholder={t("newPasswordPlaceholder")}
-                            aria-invalid={!!errors.newPassword}
-                            aria-describedby={
-                                errors.newPassword
-                                    ? "new-password-error"
-                                    : undefined
-                            }
-                            error={errors.newPassword?.message}
-                            {...register("newPassword")}
-                        />
-                        {errors.newPassword && (
-                            <span
-                                id="new-password-error"
-                                className="text-xs text-destructive"
-                                role="alert"
-                            >
-                                {errors.newPassword.message}
-                            </span>
-                        )}
-                    </div>
+                    <PasswordField
+                        label={t("newPasswordPlaceholder")}
+                        error={errors.newPassword?.message}
+                        {...register("newPassword")}
+                    />
 
-                    <div className="w-full space-y-1">
-                        <PasswordField
-                            placeholder={t("confirmPasswordPlaceholder")}
-                            aria-invalid={!!errors.confirmPassword}
-                            aria-describedby={
-                                errors.confirmPassword
-                                    ? "confirm-password-error"
-                                    : undefined
-                            }
-                            error={errors.confirmPassword?.message}
-                            {...register("confirmPassword")}
-                        />
-                        {errors.confirmPassword && (
-                            <span
-                                id="confirm-password-error"
-                                className="text-xs text-destructive"
-                                role="alert"
-                            >
-                                {errors.confirmPassword.message}
-                            </span>
-                        )}
-                    </div>
+                    <PasswordField
+                        label={t("confirmPasswordPlaceholder")}
+                        error={errors.confirmPassword?.message}
+                        {...register("confirmPassword")}
+                    />
 
                     {serverError && (
                         <p
@@ -95,12 +61,8 @@ export function ResetPasswordPage() {
                     <div className="w-full flex flex-col items-center pt-6 space-y-6">
                         <Button
                             type="submit"
+                            variant="primary"
                             disabled={!isValid || isPending}
-                            className={`w-40 text-white transition-opacity ${
-                                !isValid || isPending
-                                    ? "bg-button-primary-default/50 cursor-not-allowed"
-                                    : "bg-button-primary-default hover:bg-button-primary-default/90 cursor-pointer"
-                            }`}
                         >
                             {isPending
                                 ? t("submittingButton")

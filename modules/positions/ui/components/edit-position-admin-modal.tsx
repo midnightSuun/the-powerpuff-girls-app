@@ -42,10 +42,8 @@ export function EditPositionModal(props: EditPositionModalProps) {
         >
             <div className="space-y-4">
                 <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground">
-                        {t("positionName")}
-                    </label>
                     <Input
+                        label={t("positionName")}
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder={t("positionPlaceholder")}

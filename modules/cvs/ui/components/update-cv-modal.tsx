@@ -65,39 +65,35 @@ export function UpdateCvModal({
         >
             <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1">
-                    <label className="text-xs text-gray-500 dark:text-gray-400">
-                        {t("name")} *
-                    </label>
                     <Input
                         type="text"
+                        label={`${t("name")} *`}
                         maxLength={255}
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         className="rounded-none"
+                        error={
+                            hasSubmitted && !name.trim()
+                                ? t("nameRequired")
+                                : undefined
+                        }
                     />
-                    {hasSubmitted && !name.trim() && (
-                        <span className="text-xs text-red-500">
-                            {t("nameRequired")}
-                        </span>
-                    )}
                 </div>
 
                 <div className="flex flex-col gap-1">
-                    <label className="text-xs text-gray-500 dark:text-gray-400">
-                        {t("education")} *
-                    </label>
                     <Input
                         type="text"
+                        label={`${t("education")} *`}
                         maxLength={255}
                         value={education}
                         onChange={(e) => setEducation(e.target.value)}
                         className="rounded-none"
+                        error={
+                            hasSubmitted && !education.trim()
+                                ? t("educationRequired")
+                                : undefined
+                        }
                     />
-                    {hasSubmitted && !education.trim() && (
-                        <span className="text-xs text-red-500">
-                            {t("educationRequired")}
-                        </span>
-                    )}
                 </div>
 
                 <div className="flex flex-col gap-1">

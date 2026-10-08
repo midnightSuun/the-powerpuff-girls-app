@@ -56,19 +56,19 @@ export function CreateCvModal({
             <div className="flex flex-col gap-4">
                 <Input
                     type="text"
+                    label={t("name")}
                     maxLength={255}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder={t("name")}
                     className="rounded-none border-input bg-background px-4 py-6 text-sm shadow-none focus-visible:ring-1 focus-visible:ring-ring"
                 />
 
                 <Input
                     type="text"
+                    label={t("education")}
                     maxLength={255}
                     value={education}
                     onChange={(e) => setEducation(e.target.value)}
-                    placeholder={t("education")}
                     className="rounded-none border-input bg-background px-4 py-6 text-sm shadow-none focus-visible:ring-1 focus-visible:ring-ring"
                 />
 

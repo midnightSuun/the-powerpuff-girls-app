@@ -12,11 +12,13 @@ export const createLoginSchema = (messages: Messages) =>
         email: z
             .string()
             .min(1, { message: messages.emailRequired })
-            .email({ message: messages.invalidEmail }),
+            .email({ message: messages.invalidEmail })
+            .prefault(""),
         password: z
             .string()
             .min(1, { message: messages.passwordRequired })
-            .min(6, { message: messages.passwordMin }),
+            .min(6, { message: messages.passwordMin })
+            .prefault(""),
     })
 
 export type LoginFormData = z.infer<ReturnType<typeof createLoginSchema>>

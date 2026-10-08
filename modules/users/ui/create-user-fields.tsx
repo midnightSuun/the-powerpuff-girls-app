@@ -20,11 +20,13 @@ export const CreateUserPasswordInput = ({
     value,
     onChange,
     disabled = false,
+    showLabel = false,
 }: {
     label: string
     value: string
     onChange?: (value: string) => void
     disabled?: boolean
+    showLabel?: boolean
 }) => {
     const t = useTranslations("Auth.Login")
     const [isVisible, setIsVisible] = useState(false)
@@ -34,36 +36,39 @@ export const CreateUserPasswordInput = ({
     }
 
     return (
-        <div className="relative">
-            <Input
-                type={isVisible ? "text" : "password"}
-                aria-label={label}
-                placeholder={label}
-                autoComplete="new-password"
-                value={value}
-                disabled={disabled}
-                onChange={(event) => onChange?.(event.target.value)}
-                className={cn(
-                    createUserFieldClassName,
-                    "pr-10",
-                    disabled &&
-                        "disabled:bg-[#e6e6e6] disabled:text-button-secondary-default disabled:opacity-100 dark:disabled:bg-[#3a3a3a] dark:disabled:text-[#aeaeae]",
-                )}
-            />
-            <button
-                type="button"
-                onClick={handleToggleVisibility}
-                aria-label={isVisible ? t("hidePassword") : t("showPassword")}
-                aria-pressed={isVisible}
-                className="absolute top-1/2 right-3 inline-flex -translate-y-1/2 text-button-secondary-default outline-none hover:text-[#2e2e2e] focus-visible:ring-3 focus-visible:ring-button-primary-default/30ry-default/30 dark:text-[#aeaeae] dark:hover:text-[#f5f5f7]"
-            >
-                {isVisible ? (
-                    <EyeOff aria-hidden className="size-5" />
-                ) : (
-                    <Eye aria-hidden className="size-5" />
-                )}
-            </button>
-        </div>
+        <Input
+            type={isVisible ? "text" : "password"}
+            label={showLabel ? label : undefined}
+            aria-label={label}
+            placeholder={showLabel ? undefined : label}
+            autoComplete="new-password"
+            value={value}
+            disabled={disabled}
+            onChange={(event) => onChange?.(event.target.value)}
+            className={cn(
+                createUserFieldClassName,
+                "pr-10",
+                disabled &&
+                    "disabled:bg-[#e6e6e6] disabled:text-button-secondary-default disabled:opacity-100 dark:disabled:bg-[#3a3a3a] dark:disabled:text-[#aeaeae]",
+            )}
+            endAdornment={
+                <button
+                    type="button"
+                    onClick={handleToggleVisibility}
+                    aria-label={
+                        isVisible ? t("hidePassword") : t("showPassword")
+                    }
+                    aria-pressed={isVisible}
+                    className="absolute top-1/2 right-3 inline-flex -translate-y-1/2 text-button-secondary-default outline-none hover:text-[#2e2e2e] focus-visible:ring-3 focus-visible:ring-button-primary-default/30 dark:text-[#aeaeae] dark:hover:text-[#f5f5f7]"
+                >
+                    {isVisible ? (
+                        <EyeOff aria-hidden className="size-5" />
+                    ) : (
+                        <Eye aria-hidden className="size-5" />
+                    )}
+                </button>
+            }
+        />
     )
 }
 

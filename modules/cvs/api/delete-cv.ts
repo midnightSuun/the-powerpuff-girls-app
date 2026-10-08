@@ -2,6 +2,7 @@
 
 import { ClientError } from "graphql-request"
 import { cookies } from "next/headers"
+import { getTranslations } from "next-intl/server"
 
 import { DeleteCvDocument, getGql } from "@/gql"
 import { ACCESS_TOKEN_COOKIE } from "@/modules/auth/consts"
@@ -10,9 +11,11 @@ import { getCurrentSession } from "@/modules/auth/helpers/get-current-session"
 export async function deleteCvAction(
     cvId: string,
 ): Promise<{ error?: string }> {
+    const t = await getTranslations("CV.list")
+    const authMessages = await getTranslations("Auth.messages")
     const session = await getCurrentSession()
     if (!session) {
-        return { error: "Your session has expired. Please log in again." }
+        return { error: authMessages("sessionExpired") }
     }
 
     if (!cvId) {
@@ -23,7 +26,7 @@ export async function deleteCvAction(
         const cookieStore = await cookies()
         const token = cookieStore.get(ACCESS_TOKEN_COOKIE)?.value
         if (!token) {
-            return { error: "Your session has expired. Please log in again." }
+            return { error: authMessages("sessionExpired") }
         }
 
         const gql = await getGql(token)
@@ -47,13 +50,12 @@ export async function deleteCvAction(
 
         if (/expired|unauthor/i.test(message)) {
             return {
-                error: "Your session has expired. Please log in again.",
+                error: authMessages("sessionExpired"),
             }
         }
 
-        return {
-            error: message || "Failed to delete CV. Please try again.",
-        }
+        console.error("Failed to delete CV:", error)
+        return { error: t("deleteError") }
     }
 
     return {}

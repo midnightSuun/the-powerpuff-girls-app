@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl"
 import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
+import * as z from "zod"
 
 import { type AuthActionState, login } from "../api/login"
 import { AUTH_NOTIFICATION_STORAGE_KEY } from "../consts"
@@ -24,7 +25,11 @@ export function useLogin() {
         register,
         handleSubmit,
         formState: { errors, isValid },
-    } = useForm<LoginFormData>({
+    } = useForm<
+        z.input<ReturnType<typeof createLoginSchema>>,
+        unknown,
+        LoginFormData
+    >({
         resolver: zodResolver(
             createLoginSchema({
                 emailRequired: validation("emailRequired"),
@@ -34,6 +39,10 @@ export function useLogin() {
             }),
         ),
         mode: "onChange",
+        defaultValues: {
+            email: "",
+            password: "",
+        },
     })
 
     const onSubmit = (data: LoginFormData) => {

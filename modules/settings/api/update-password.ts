@@ -43,9 +43,8 @@ export async function updateSettingsPasswordAction(
             }
         }
 
-        return {
-            error: message || t("passwordUpdateFailed"),
-        }
+        console.error("Password update failed:", error)
+        return { error: t("passwordUpdateFailed") }
     }
 
     return {}
