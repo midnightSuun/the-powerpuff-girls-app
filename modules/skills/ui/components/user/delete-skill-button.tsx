@@ -53,7 +53,7 @@ export function DeleteSkillsButton({
 
                     <Button
                         type="button"
-                        variant="primary"
+                        variant="ghost"
                         disabled={!hasSelected || isSubmitting}
                         onClick={() => setIsModalOpen(true)}
                     >
@@ -66,6 +66,7 @@ export function DeleteSkillsButton({
                     onClose={() => setIsModalOpen(false)}
                     onConfirm={handleDeleteConfirm}
                     count={selectedSkills.length}
+                    selectedSkills={selectedSkills}
                 />
             </>
         )

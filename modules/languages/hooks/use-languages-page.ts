@@ -5,6 +5,7 @@ import { useState } from "react"
 
 import type { Proficiency } from "@/gql/generated/graphql"
 import { useActionNotifications } from "@/hooks/use-action-notifications"
+import { useUserSelectionState } from "@/hooks/use-user-selection-state"
 
 import {
     addProfileLanguage,
@@ -23,9 +24,7 @@ export function useLanguagesPage({
 }: UseLanguagesPageProps) {
     const router = useRouter()
     const notifications = useActionNotifications()
-
-    const [isRemovalMode, setIsRemovalMode] = useState(false)
-    const [selectedLanguages, setSelectedLanguages] = useState<string[]>([])
+    const selection = useUserSelectionState<string>()
 
     const [isAddOpen, setIsAddOpen] = useState(false)
     const [editingLang, setEditingLang] = useState<{
@@ -35,17 +34,13 @@ export function useLanguagesPage({
     const [isRemoveConfirmOpen, setIsRemoveConfirmOpen] = useState(false)
 
     const toggleSelectLanguage = (name: string) => {
-        if (!isRemovalMode) {
+        if (!selection.isSelectionMode) {
             const lang = initialUserLanguages.find((l) => l.name === name)
             if (lang) setEditingLang(lang)
             return
         }
 
-        setSelectedLanguages((prev) =>
-            prev.includes(name)
-                ? prev.filter((n) => n !== name)
-                : [...prev, name],
-        )
+        selection.toggleSelection(name)
     }
 
     const handleAdd = async (name: string, proficiency: Proficiency) => {
@@ -72,19 +67,18 @@ export function useLanguagesPage({
     const handleDelete = async () => {
         await deleteProfileLanguages({
             userId,
-            name: selectedLanguages,
+            name: selection.selectedItems,
         })
         notifications.success("deleted")
-        setSelectedLanguages([])
-        setIsRemovalMode(false)
+        selection.resetSelection()
         router.refresh()
     }
 
     return {
-        isRemovalMode,
-        setIsRemovalMode,
-        selectedLanguages,
-        setSelectedLanguages,
+        isRemovalMode: selection.isSelectionMode,
+        setIsRemovalMode: selection.setIsSelectionMode,
+        selectedLanguages: selection.selectedItems,
+        setSelectedLanguages: selection.setSelectedItems,
         isAddOpen,
         setIsAddOpen,
         editingLang,

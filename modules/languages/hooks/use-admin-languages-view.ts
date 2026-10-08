@@ -1,6 +1,5 @@
-import { useState } from "react"
-
 import { useActionNotifications } from "@/hooks/use-action-notifications"
+import { useAdminCrudState } from "@/hooks/use-admin-crud-state"
 import {
     createAdminLanguage,
     deleteAdminLanguage,
@@ -16,30 +15,18 @@ export function useAdminLanguagesView({
     initialLanguages,
 }: UseAdminLanguagesViewProps) {
     const notifications = useActionNotifications()
-    const [languages, setLanguages] =
-        useState<AdminLanguageItem[]>(initialLanguages)
-    const [isCreateOpen, setIsCreateOpen] = useState(false)
-    const [editingLanguage, setEditingLanguage] =
-        useState<AdminLanguageItem | null>(null)
-    const [deletingLanguage, setDeletingLanguage] =
-        useState<AdminLanguageItem | null>(null)
+    const crud = useAdminCrudState(initialLanguages)
 
     const handleCreate = async (data: { name: string; iso2: string }) => {
-        const created = await createAdminLanguage({
-            name: data.name,
-            iso2: data.iso2,
-        })
+        const created = await createAdminLanguage(data)
 
         notifications.success("created")
         if (created) {
-            setLanguages((prev) => [
-                ...prev,
-                {
-                    id: created.id,
-                    name: created.name,
-                    iso2: created.iso2,
-                },
-            ])
+            crud.addItem({
+                id: created.id,
+                name: created.name,
+                iso2: created.iso2,
+            })
         }
     }
 
@@ -55,37 +42,31 @@ export function useAdminLanguagesView({
 
         notifications.success("updated")
         if (updated) {
-            setLanguages((prev) =>
-                prev.map((l) =>
-                    l.id === id
-                        ? {
-                              ...l,
-                              name: updated.name,
-                              iso2: updated.iso2,
-                          }
-                        : l,
-                ),
-            )
+            crud.updateItem(id, {
+                name: updated.name,
+                iso2: updated.iso2,
+            })
         }
     }
 
     const handleDeleteConfirm = async () => {
-        if (!deletingLanguage) return
+        if (!crud.deletingItem) return
         await deleteAdminLanguage({
-            languageId: deletingLanguage.id,
+            languageId: crud.deletingItem.id,
         } as unknown as Parameters<typeof deleteAdminLanguage>[0])
+
         notifications.success("deleted")
-        setLanguages((prev) => prev.filter((l) => l.id !== deletingLanguage.id))
+        crud.removeItem(crud.deletingItem.id)
     }
 
     return {
-        languages,
-        isCreateOpen,
-        setIsCreateOpen,
-        editingLanguage,
-        setEditingLanguage,
-        deletingLanguage,
-        setDeletingLanguage,
+        languages: crud.items,
+        isCreateOpen: crud.isCreateOpen,
+        setIsCreateOpen: crud.setIsCreateOpen,
+        editingLanguage: crud.editingItem,
+        setEditingLanguage: crud.setEditingItem,
+        deletingLanguage: crud.deletingItem,
+        setDeletingLanguage: crud.setDeletingItem,
         handleCreate,
         handleUpdate,
         handleDeleteConfirm,

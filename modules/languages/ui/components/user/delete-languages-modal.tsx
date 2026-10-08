@@ -10,6 +10,7 @@ interface DeleteLanguagesModalProps {
     isOpen: boolean
     onClose: () => void
     count: number
+    selectedLanguages?: string[]
     onConfirm: () => Promise<void>
 }
 
@@ -17,6 +18,7 @@ export function DeleteLanguagesModal({
     isOpen,
     onClose,
     count,
+    selectedLanguages = [],
     onConfirm,
 }: DeleteLanguagesModalProps) {
     const t = useTranslations("Languages.delete")
@@ -26,12 +28,22 @@ export function DeleteLanguagesModal({
         onClose,
     })
 
+    const description = t.rich("confirmation", {
+        count: count,
+        b: (chunks) => (
+            <strong className="font-bold text-foreground">{chunks}</strong>
+        ),
+        bold: (chunks) => (
+            <strong className="font-bold text-foreground">{chunks}</strong>
+        ),
+    })
+
     return (
         <DeleteModal
             isOpen={isOpen}
             onClose={onClose}
             title={count === 1 ? t("titleSingular") : t("titlePlural")}
-            description={t("confirmation", { count })}
+            description={description}
             cancelText={t("cancel")}
             confirmText={t("confirm")}
             deletingText={t("removing")}

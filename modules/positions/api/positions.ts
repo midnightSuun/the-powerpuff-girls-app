@@ -12,8 +12,10 @@ import {
     UpdatePositionDocument,
     UpdatePositionInput,
 } from "@/gql/generated/graphql"
+import { requireAdmin } from "@/modules/auth/helpers/require-admin"
 
 export async function getAdminPositions() {
+    await requireAdmin()
     const gql = await getGql()
     const data = await gql.request(GetPositionsDocument, {
         params: { limit: 100 },
@@ -26,6 +28,7 @@ export async function getAdminPositions() {
 }
 
 export async function createAdminPosition(position: CreatePositionInput) {
+    await requireAdmin()
     try {
         const gql = await getGql()
         const data = await gql.request(CreatePositionDocument, { position })
@@ -39,6 +42,7 @@ export async function createAdminPosition(position: CreatePositionInput) {
 }
 
 export async function updateAdminPosition(position: UpdatePositionInput) {
+    await requireAdmin()
     try {
         const gql = await getGql()
         const data = await gql.request(UpdatePositionDocument, { position })
@@ -52,6 +56,7 @@ export async function updateAdminPosition(position: UpdatePositionInput) {
 }
 
 export async function deleteAdminPosition(position: DeletePositionInput) {
+    await requireAdmin()
     try {
         const gql = await getGql()
         const data = await gql.request(DeletePositionDocument, { position })
