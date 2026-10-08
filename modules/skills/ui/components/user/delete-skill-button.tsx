@@ -66,6 +66,7 @@ export function DeleteSkillsButton({
                     onClose={() => setIsModalOpen(false)}
                     onConfirm={handleDeleteConfirm}
                     count={selectedSkills.length}
+                    selectedSkills={selectedSkills}
                 />
             </>
         )

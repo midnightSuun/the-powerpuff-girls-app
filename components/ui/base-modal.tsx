@@ -5,6 +5,7 @@ import { X } from "lucide-react"
 import type { ComponentProps } from "react"
 
 import { Button } from "@/components/ui/button"
+import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock"
 
 interface BaseModalProps {
     isOpen: boolean
@@ -54,6 +55,8 @@ export function BaseModal({
     onSubmit,
     onConfirm,
 }: BaseModalProps) {
+    useBodyScrollLock(isOpen)
+
     if (!isOpen) return null
 
     const content = (
@@ -101,10 +104,7 @@ export function BaseModal({
                     variant="secondary"
                     onClick={onClose}
                     disabled={isPending}
-                    className={cn(
-                        "border border-border text-border dark:border-auth-card-border dark:text-auth-card-border",
-                        cancelButtonClassName,
-                    )}
+                    className={cn(cancelButtonClassName)}
                 >
                     {cancelText}
                 </Button>

@@ -27,11 +27,11 @@ export function SkillCategory({
     if (skills.length === 0) return null
 
     return (
-        <div className="mb-6">
-            <p className="font-roboto text-[16px] font-normal leading-6 tracking-[0.15px] text-foreground mb-4">
+        <div className="mb-8">
+            <p className=" text-base font-normal leading-6 tracking-[0.15px] text-foreground mb-4">
                 {title}
             </p>
-            <div className="grid grid-cols-1 gap-y-2 sm:grid-cols-2 md:grid-cols-3">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-12 lg:gap-x-16 gap-y-3.5">
                 {skills.map((skill) => (
                     <ProgressListItem
                         key={skill.name}

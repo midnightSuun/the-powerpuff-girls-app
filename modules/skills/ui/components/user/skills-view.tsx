@@ -47,20 +47,18 @@ export function SkillsView({
     return (
         <div
             className={
-                compact ? "mx-auto w-full max-w-275" : "flex items-start gap-16"
+                compact
+                    ? "mx-auto w-full max-w-275"
+                    : "w-full max-w-6xl px-6 py-6 lg:pl-50"
             }
         >
-            <div
-                className={
-                    compact ? "w-full pt-6 pl-0" : "max-w-213 flex-1 pt-6 pl-50"
-                }
-            >
+            <div className="w-full">
                 {categories.length === 0 ? (
                     <div className="py-12 text-center text-sm font-normal text-muted-foreground">
                         {t("empty")}
                     </div>
                 ) : (
-                    <div className="space-y-8">
+                    <div className="space-y-6">
                         {categories.map((category) => (
                             <SkillCategory
                                 key={category.id}
@@ -81,10 +79,8 @@ export function SkillsView({
 
                 {canManageSkills && (
                     <div
-                        className={`mt-8 flex flex-wrap items-center gap-6 text-xs font-medium tracking-wider text-muted-foreground ${
-                            compact
-                                ? "justify-center gap-12 sm:translate-x-8"
-                                : "justify-end"
+                        className={`mt-10 flex items-center justify-end gap-8 text-xs font-medium tracking-wider text-muted-foreground ${
+                            compact ? "justify-center" : ""
                         }`}
                     >
                         {!isSelectionMode && (
