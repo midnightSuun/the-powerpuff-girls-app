@@ -14,6 +14,7 @@ interface SkillsProps {
     role?: UserRole | null
     compact?: boolean
     canManageSkills?: boolean
+    search?: string
 }
 
 const FRONTEND_SKILLS = new Set([
@@ -75,15 +76,20 @@ function resolveCategoryId(
     return "other"
 }
 
+const matchesSearch = (value: string, search: string) =>
+    value.toLocaleLowerCase().includes(search)
+
 export async function Skills({
     userSkills,
     role,
     compact = false,
     canManageSkills: canManageSkillsOverride,
+    search = "",
 }: SkillsProps) {
     const t = await getTranslations("Skills")
     const canManageSkills = canManageSkillsOverride ?? role === "Employee"
     const availableSkills = canManageSkills ? await getAvailableSkills() : []
+    const normalizedSearch = search.trim().toLocaleLowerCase()
 
     const categoriesByTitle = new Map<
         string,
@@ -109,7 +115,17 @@ export async function Skills({
         }
     }
 
-    const categories = [...categoriesByTitle.values()]
+    const categories = [...categoriesByTitle.values()].flatMap((category) => {
+        if (!normalizedSearch) return [category]
+
+        if (matchesSearch(category.title, normalizedSearch)) return [category]
+
+        const skills = category.skills.filter((skill) =>
+            matchesSearch(skill.name, normalizedSearch),
+        )
+
+        return skills.length > 0 ? [{ ...category, skills }] : []
+    })
 
     return (
         <SkillsView

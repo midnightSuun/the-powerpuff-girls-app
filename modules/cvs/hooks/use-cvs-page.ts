@@ -1,9 +1,10 @@
 import { useRouter } from "next/navigation"
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 import { useState } from "react"
 
 import { useActionNotifications } from "@/hooks/use-action-notifications"
 import { useAdminCrudState } from "@/hooks/use-admin-crud-state"
+import { sortByLocale, type SortOrder } from "@/lib/sort"
 
 import { createCvAction } from "../api/create-cv"
 import { deleteCvAction } from "../api/delete-cv"
@@ -17,6 +18,7 @@ interface UseCvsPageProps {
 
 export function useCvsPage({ initialCvs, targetUserId }: UseCvsPageProps) {
     const router = useRouter()
+    const locale = useLocale()
     const t = useTranslations("CV.list")
     const notifications = useActionNotifications()
     const {
@@ -31,18 +33,13 @@ export function useCvsPage({ initialCvs, targetUserId }: UseCvsPageProps) {
         removeItem,
     } = useAdminCrudState(initialCvs)
 
-    const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
+    const [sortOrder, setSortOrder] = useState<SortOrder>("asc")
     const [activeMenuId, setActiveMenuId] = useState<string | null>(null)
 
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [error, setError] = useState<string | null>(null)
 
-    const sortedCvs = [...cvs].sort((a, b) => {
-        if (sortOrder === "asc") {
-            return a.name.localeCompare(b.name)
-        }
-        return b.name.localeCompare(a.name)
-    })
+    const sortedCvs = sortByLocale(cvs, (cv) => cv.name, sortOrder, locale)
 
     const toggleSort = () => {
         setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"))

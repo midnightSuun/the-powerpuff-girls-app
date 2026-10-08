@@ -2,7 +2,7 @@ import { Suspense } from "react"
 
 import { LoadingText } from "@/components/loading-text"
 import { UserPage } from "@/modules/users"
-import { UserProfileSkeleton } from "@/modules/users/ui/user-profile-skeleton"
+import { UserProfileSkeleton } from "@/modules/users"
 
 type Props = {
     params: Promise<{ locale: string; userId: string }>

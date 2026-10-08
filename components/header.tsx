@@ -40,14 +40,28 @@ const PAGES: (DefaultPage | PageWithTabs)[] = [
     {
         path: "/skills",
         title: "skills",
+        showSearch: true,
     },
     {
         path: "/languages",
         title: "languages",
+        showSearch: true,
     },
     {
         path: "/settings",
         title: "settings",
+    },
+    {
+        path: "/departments",
+        title: "departments",
+    },
+    {
+        path: "/positions",
+        title: "positions",
+    },
+    {
+        path: "/projects",
+        title: "projects",
     },
     {
         path: "/users/{userId}",

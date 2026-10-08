@@ -97,7 +97,7 @@ export function SkillsView({
                             isSelectionMode={isSelectionMode}
                             onToggleSelectionMode={setIsSelectionMode}
                             onClearSelection={clearSelection}
-                            disabled={typedSkills.length === 0}
+                            disabled={categories.length === 0}
                         />
                     </div>
                 )}

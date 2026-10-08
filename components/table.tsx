@@ -10,7 +10,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { Link } from "@/i18n/navigation"
-import { type SortOrder } from "@/lib/user-sort"
+import { type SortOrder } from "@/lib/sort"
 
 export type TableColumn<T> = {
     id: string
@@ -29,6 +29,7 @@ type Props<T> = {
     sortBy?: string
     sortOrder?: SortOrder
     getSortHref?: (sortKey: string) => string
+    emptyMessage?: string
 }
 
 export const TableComponent = <T,>(props: Props<T>) => {
@@ -85,6 +86,16 @@ export const TableComponent = <T,>(props: Props<T>) => {
                 </TableRow>
             </TableHeader>
             <TableBody>
+                {props.data.length === 0 && props.emptyMessage ? (
+                    <TableRow className="hover:bg-transparent">
+                        <TableCell
+                            colSpan={props.columns.length}
+                            className="h-14 text-center text-[#626262] dark:text-[#aeaeae]"
+                        >
+                            {props.emptyMessage}
+                        </TableCell>
+                    </TableRow>
+                ) : null}
                 {props.data.map((item, index) => {
                     const href = props.getRowHref?.(item)
                     const label = props.getRowLabel?.(item)

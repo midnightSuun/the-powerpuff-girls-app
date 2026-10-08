@@ -1,23 +1,23 @@
 import { cacheLife, cacheTag } from "next/cache"
 
 import { getGql, GetUsersDocument } from "@/gql"
-import {
-    sortByLocale,
-    type SortOrder,
-    type UserSortField,
-} from "@/lib/user-sort"
+import { sortByLocale, type SortOrder } from "@/lib/sort"
+import { type UserSortField } from "@/lib/user-sort"
 import { type User } from "@/types"
 
 const FETCH_LIMIT = 100
 
-const getSortValue = (user: User, sortBy: UserSortField) => {
-    if (sortBy === "first_name") return user.profile.first_name ?? ""
-    if (sortBy === "last_name") return user.profile.last_name ?? ""
-    if (sortBy === "email") return user.email
-    if (sortBy === "department") return user.department?.name ?? ""
+type RelationSortField = "department" | "position"
 
-    return user.position?.name ?? ""
-}
+const isRelationSortField = (
+    sortBy: UserSortField | undefined,
+): sortBy is RelationSortField =>
+    sortBy === "department" || sortBy === "position"
+
+const getRelationSortValue = (user: User, sortBy: RelationSortField) =>
+    sortBy === "department"
+        ? (user.department?.name ?? "")
+        : (user.position?.name ?? "")
 
 export async function getUsers(
     limit: number,
@@ -31,11 +31,19 @@ export async function getUsers(
     cacheLife("hours")
     cacheTag("users")
 
+    const normalizedSearch = search.trim()
     const gql = await getGql()
+    const searchParams = normalizedSearch ? { search: normalizedSearch } : {}
 
-    if (!sortBy) {
+    if (!isRelationSortField(sortBy)) {
         const data = await gql.request(GetUsersDocument, {
-            params: { limit, page, search },
+            params: {
+                limit,
+                page,
+                ...searchParams,
+                sort_by: sortBy,
+                sort_order: sortBy ? sortOrder : undefined,
+            },
         })
 
         return {
@@ -45,7 +53,7 @@ export async function getUsers(
     }
 
     const firstPage = await gql.request(GetUsersDocument, {
-        params: { limit: FETCH_LIMIT, page: 1, search },
+        params: { limit: FETCH_LIMIT, page: 1, ...searchParams },
     })
     const pageCount = firstPage.users.total_pages
     const otherPages =
@@ -56,7 +64,7 @@ export async function getUsers(
                           params: {
                               limit: FETCH_LIMIT,
                               page: index + 2,
-                              search,
+                              ...searchParams,
                           },
                       }),
                   ),
@@ -67,7 +75,7 @@ export async function getUsers(
     )
     const sorted = sortByLocale(
         items,
-        (user) => getSortValue(user, sortBy),
+        (user) => getRelationSortValue(user, sortBy),
         sortOrder,
         locale,
     )

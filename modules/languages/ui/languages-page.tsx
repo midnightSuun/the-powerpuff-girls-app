@@ -20,6 +20,7 @@ interface LanguagesPageProps {
     allSystemLanguages: Array<{ id: string; name: string; iso2?: string }>
     userId: string
     canManageLanguages: boolean
+    search?: string
 }
 
 export function LanguagesPage({
@@ -27,8 +28,15 @@ export function LanguagesPage({
     allSystemLanguages,
     userId,
     canManageLanguages,
+    search = "",
 }: LanguagesPageProps) {
     const t = useTranslations("Languages")
+    const normalizedSearch = search.trim().toLocaleLowerCase()
+    const visibleLanguages = normalizedSearch
+        ? initialUserLanguages.filter((language) =>
+              language.name.toLocaleLowerCase().includes(normalizedSearch),
+          )
+        : initialUserLanguages
 
     const {
         isRemovalMode,
@@ -57,7 +65,7 @@ export function LanguagesPage({
                     {t("currentLanguages")}
                 </p>
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-12 lg:gap-x-16 gap-y-3.5">
-                    {initialUserLanguages.map((language) => (
+                    {visibleLanguages.map((language) => (
                         <ProgressListItem
                             key={language.name}
                             name={language.name}
@@ -80,7 +88,7 @@ export function LanguagesPage({
                             }}
                         />
                     ))}
-                    {initialUserLanguages.length === 0 && (
+                    {visibleLanguages.length === 0 && (
                         <p className="col-span-full text-sm text-muted-foreground">
                             {t("empty")}
                         </p>
@@ -98,7 +106,7 @@ export function LanguagesPage({
                                 <RemoveItemsButton
                                     label={t("actions.remove")}
                                     onClick={() => setIsRemovalMode(true)}
-                                    disabled={initialUserLanguages.length === 0}
+                                    disabled={visibleLanguages.length === 0}
                                 />
                             </>
                         ) : (

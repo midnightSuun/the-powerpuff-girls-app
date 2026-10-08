@@ -581,9 +581,29 @@
             "cancel": "Anuluj",
             "submit": "Utwórz",
             "close": "Zamknij",
-            "employee": "Pracownik"
+            "employee": "Pracownik",
+            "admin": "Administrator",
+            "updateTitle": "Aktualizuj użytkownika",
+            "updateDescription": "Aktualizuj istniejącego użytkownika",
+            "update": "Aktualizuj",
+            "view": "Podgląd",
+            "delete": "Usuń",
+            "deleteTitle": "Usuń użytkownika",
+            "deleteDescription": "Czy na pewno chcesz usunąć użytkownika <strong>{name}</strong>?",
+            "confirm": "Potwierdź",
+            "deleting": "Usuwanie..."
+        },
+        "messages": {
+            "createForbidden": "Tylko administrator może tworzyć użytkowników.",
+            "createFailed": "Nie udało się utworzyć użytkownika. Spróbuj ponownie.",
+            "updateForbidden": "Tylko administrator może aktualizować użytkowników.",
+            "updateFailed": "Nie udało się zaktualizować użytkownika. Spróbuj ponownie.",
+            "deleteForbidden": "Tylko administrator może usuwać użytkowników.",
+            "deleteSelfForbidden": "Nie możesz usunąć własnego konta.",
+            "deleteFailed": "Nie udało się usunąć użytkownika. Spróbuj ponownie."
         },
         "loading": "Ładowanie użytkowników...",
+        "noResults": "Brak wyników",
         "columns": {
             "avatar": "Awatar",
             "firstName": "Imię",

@@ -581,9 +581,29 @@
             "cancel": "Abbrechen",
             "submit": "Erstellen",
             "close": "Schließen",
-            "employee": "Mitarbeiter"
+            "employee": "Mitarbeiter",
+            "admin": "Administrator",
+            "updateTitle": "Benutzer aktualisieren",
+            "updateDescription": "Bestehenden Benutzer aktualisieren",
+            "update": "Aktualisieren",
+            "view": "Ansehen",
+            "delete": "Löschen",
+            "deleteTitle": "Benutzer löschen",
+            "deleteDescription": "Möchten Sie den Benutzer <strong>{name}</strong> wirklich löschen?",
+            "confirm": "Bestätigen",
+            "deleting": "Wird gelöscht..."
+        },
+        "messages": {
+            "createForbidden": "Nur ein Administrator kann Benutzer erstellen.",
+            "createFailed": "Der Benutzer konnte nicht erstellt werden. Bitte versuchen Sie es erneut.",
+            "updateForbidden": "Nur ein Administrator kann Benutzer aktualisieren.",
+            "updateFailed": "Der Benutzer konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut.",
+            "deleteForbidden": "Nur ein Administrator kann Benutzer löschen.",
+            "deleteSelfForbidden": "Sie können Ihr eigenes Konto nicht löschen.",
+            "deleteFailed": "Der Benutzer konnte nicht gelöscht werden. Bitte versuchen Sie es erneut."
         },
         "loading": "Benutzer werden geladen...",
+        "noResults": "Keine Ergebnisse",
         "columns": {
             "avatar": "Avatar",
             "firstName": "Vorname",

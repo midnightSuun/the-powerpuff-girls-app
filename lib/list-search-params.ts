@@ -1,4 +1,4 @@
-import { type SortOrder } from "@/lib/user-sort"
+import { type SortOrder } from "@/lib/sort"
 
 type ListQuery = {
     page: number
@@ -6,6 +6,14 @@ type ListQuery = {
     search: string
     sortBy?: string
     sortOrder?: SortOrder
+}
+
+type RawSearchParam = string | string[] | null | undefined
+
+export const readListSearch = (search: RawSearchParam) => {
+    const value = Array.isArray(search) ? search[0] : search
+
+    return value?.trim() ?? ""
 }
 
 export const buildListSearchParams = ({
@@ -17,9 +25,14 @@ export const buildListSearchParams = ({
 }: ListQuery) => {
     const params = new URLSearchParams()
 
+    const normalizedSearch = search.trim()
+
     params.set("page", String(page))
     params.set("limit", String(limit))
-    params.set("search", search)
+
+    if (normalizedSearch) {
+        params.set("search", normalizedSearch)
+    }
 
     if (sortBy) {
         params.set("sortBy", sortBy)

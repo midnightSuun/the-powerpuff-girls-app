@@ -581,9 +581,29 @@
             "cancel": "Annulla",
             "submit": "Crea",
             "close": "Chiudi",
-            "employee": "Dipendente"
+            "employee": "Dipendente",
+            "admin": "Amministratore",
+            "updateTitle": "Aggiorna utente",
+            "updateDescription": "Aggiorna un utente esistente",
+            "update": "Aggiorna",
+            "view": "Visualizza",
+            "delete": "Elimina",
+            "deleteTitle": "Elimina utente",
+            "deleteDescription": "Eliminare l'utente <strong>{name}</strong>?",
+            "confirm": "Conferma",
+            "deleting": "Eliminazione..."
+        },
+        "messages": {
+            "createForbidden": "Solo un amministratore può creare utenti.",
+            "createFailed": "Impossibile creare l'utente. Riprova.",
+            "updateForbidden": "Solo un amministratore può aggiornare gli utenti.",
+            "updateFailed": "Impossibile aggiornare l'utente. Riprova.",
+            "deleteForbidden": "Solo un amministratore può eliminare gli utenti.",
+            "deleteSelfForbidden": "Non puoi eliminare il tuo account.",
+            "deleteFailed": "Impossibile eliminare l'utente. Riprova."
         },
         "loading": "Caricamento utenti...",
+        "noResults": "Nessun risultato",
         "columns": {
             "avatar": "Avatar",
             "firstName": "Nome",

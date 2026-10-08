@@ -1,11 +1,13 @@
 "use client"
 
 import { MoreVertical } from "lucide-react"
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 import { useEffect, useMemo, useRef, useState } from "react"
 
+import { useHeaderToolbarAction } from "@/components/header-toolbar-action"
 import { Button } from "@/components/ui/button"
 import { AddItemButton } from "@/components/ui/list-management-buttons"
+import { sortByLocale, type SortOrder } from "@/lib/sort"
 
 import { SearchInput } from "../search-input"
 import { SortArrow } from "../sort-arrow"
@@ -31,6 +33,7 @@ interface AdminDataTableProps<T> {
     emptyMessage?: string
     limit?: number
     search?: string
+    showSearchInput?: boolean
     createButtonClassName?: string
     defaultSortKey?: string
 }
@@ -47,17 +50,27 @@ export function AdminDataTable<T extends { id: string | number }>({
     emptyMessage = "No items found",
     limit = 10,
     search = "",
+    showSearchInput = true,
     defaultSortKey = "type",
 }: AdminDataTableProps<T>) {
+    const locale = useLocale()
     const tCommon = useTranslations("Admin.common")
 
     const [sortColumnKey, setSortColumnKey] = useState<string>(defaultSortKey)
-    const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
+    const [sortOrder, setSortOrder] = useState<SortOrder>("asc")
     const [activeMenuId, setActiveMenuId] = useState<string | number | null>(
         null,
     )
 
     const menuRef = useRef<HTMLDivElement | null>(null)
+    const headerActionLabel =
+        !showSearchInput && createButtonLabel && onCreateClick
+            ? createButtonLabel
+            : null
+
+    useHeaderToolbarAction(headerActionLabel, () => {
+        onCreateClick?.()
+    })
 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
@@ -100,18 +113,18 @@ export function AdminDataTable<T extends { id: string | number }>({
         }
 
         if (getSortValue) {
-            result.sort((a, b) => {
-                const valA = getSortValue(a, sortColumnKey)
-                const valB = getSortValue(b, sortColumnKey)
-                return sortOrder === "asc"
-                    ? valA.localeCompare(valB)
-                    : valB.localeCompare(valA)
-            })
+            result = sortByLocale(
+                result,
+                (item) => getSortValue(item, sortColumnKey),
+                sortOrder,
+                locale,
+            )
         }
 
         return result
     }, [
         data,
+        locale,
         search,
         sortColumnKey,
         sortOrder,
@@ -121,18 +134,19 @@ export function AdminDataTable<T extends { id: string | number }>({
 
     return (
         <div className="flex flex-col gap-4">
-            <div className="flex items-center justify-between gap-4">
-                <SearchInput limit={limit} search={search} />
-
-                {createButtonLabel && onCreateClick && (
-                    <AddItemButton
-                        label={createButtonLabel}
-                        onClick={onCreateClick}
-                        variant="primaryV2"
-                        className="cursor-pointer text-[#d7352c] hover:text-[#b5332b] dark:text-[#f06b65] dark:hover:text-[#ff8a84] lg:!h-auto lg:!min-w-40 lg:!px-[30px] lg:!py-[16px]"
-                    />
-                )}
-            </div>
+            {showSearchInput ? (
+                <div className="flex items-center justify-between gap-4">
+                    <SearchInput limit={limit} search={search} />
+                    {createButtonLabel && onCreateClick ? (
+                        <AddItemButton
+                            label={createButtonLabel}
+                            onClick={onCreateClick}
+                            variant="primaryV2"
+                            className="cursor-pointer text-[#d7352c] hover:text-[#b5332b] dark:text-[#f06b65] dark:hover:text-[#ff8a84] lg:!h-auto lg:!min-w-40 lg:!px-[30px] lg:!py-[16px]"
+                        />
+                    ) : null}
+                </div>
+            ) : null}
 
             <div className="w-full overflow-x-auto">
                 <table className="w-full text-left text-sm">

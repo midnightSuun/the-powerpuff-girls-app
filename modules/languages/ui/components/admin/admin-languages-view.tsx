@@ -12,6 +12,7 @@ import { EditLanguageModal } from "./edit-language-admin-modal"
 
 interface AdminLanguagesViewProps {
     initialLanguages: AdminLanguageItem[]
+    search?: string
 }
 
 const NATIVE_LANGUAGE_NAMES: Record<string, string> = {
@@ -48,6 +49,7 @@ function getNativeLanguageName(iso2: string, fallbackName: string): string {
 
 export function AdminLanguagesView({
     initialLanguages,
+    search = "",
 }: AdminLanguagesViewProps) {
     const t = useTranslations("Languages.admin")
 
@@ -95,6 +97,8 @@ export function AdminLanguagesView({
                 data={formattedLanguages}
                 columns={columns}
                 defaultSortKey="name"
+                search={search}
+                showSearchInput={false}
                 searchPlaceholder={t("search")}
                 createButtonLabel={t("createButton")}
                 onCreateClick={() => setIsCreateOpen(true)}
