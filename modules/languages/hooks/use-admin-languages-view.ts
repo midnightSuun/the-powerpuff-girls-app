@@ -38,7 +38,7 @@ export function useAdminLanguagesView({
             languageId: id,
             name: data.name,
             iso2: data.iso2,
-        } as unknown as Parameters<typeof updateAdminLanguage>[0])
+        })
 
         notifications.success("updated")
         if (updated) {
@@ -53,7 +53,7 @@ export function useAdminLanguagesView({
         if (!crud.deletingItem) return
         await deleteAdminLanguage({
             languageId: crud.deletingItem.id,
-        } as unknown as Parameters<typeof deleteAdminLanguage>[0])
+        })
 
         notifications.success("deleted")
         crud.removeItem(crud.deletingItem.id)

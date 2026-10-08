@@ -3,6 +3,7 @@ import { type SyntheticEvent, useState } from "react"
 
 import type { ProjectTableItem } from "@/components/projects-table-view"
 import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock"
+import { toDateInputValue } from "@/lib/date"
 
 import type { ProjectFormData } from "./use-admin-projects"
 
@@ -14,14 +15,6 @@ interface UseProjectFormProps {
         project: ProjectTableItem | null,
         data: ProjectFormData,
     ) => Promise<void>
-}
-
-function toDateInputValue(value?: string | null) {
-    if (!value) return ""
-    if (/^\d{4}-\d{2}-\d{2}/.test(value)) return value.slice(0, 10)
-
-    const date = new Date(value)
-    return Number.isNaN(date.getTime()) ? "" : date.toISOString().slice(0, 10)
 }
 
 export function useProjectForm({

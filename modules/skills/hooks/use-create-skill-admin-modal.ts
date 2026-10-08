@@ -1,6 +1,8 @@
 import { useTranslations } from "next-intl"
 import { useState } from "react"
 
+import { isNameDuplicate, normalizeName } from "@/lib/validate-unique-name"
+
 interface UseCreateSkillAdminModalProps {
     isOpen: boolean
     onClose: () => void
@@ -30,12 +32,11 @@ export function useCreateSkillAdminModal({
         }
     }
 
-    const isDuplicate = existingSkillNames.some(
-        (s) => s.toLowerCase() === name.trim().toLowerCase(),
-    )
+    const trimmedName = normalizeName(name)
+    const isDuplicate = isNameDuplicate(name, existingSkillNames)
 
-    const inlineError = isDuplicate && name.trim() ? t("duplicate") : null
-    const isValid = Boolean(name.trim() && categoryId && !isDuplicate)
+    const inlineError = isDuplicate && trimmedName ? t("duplicate") : null
+    const isValid = Boolean(trimmedName && categoryId && !isDuplicate)
 
     const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault()
@@ -45,7 +46,7 @@ export function useCreateSkillAdminModal({
         setError(null)
 
         try {
-            await onCreate({ name: name.trim(), categoryId })
+            await onCreate({ name: trimmedName, categoryId })
             onClose()
         } catch (err: unknown) {
             console.error("Failed to create skill:", err)
