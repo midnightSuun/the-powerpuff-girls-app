@@ -9,6 +9,7 @@ import { useRouter } from "@/i18n/navigation"
 
 import { getProfileOptions } from "../api/get-profile-options"
 import { updateUser } from "../api/update-user"
+import { getUserRoleOptions } from "../user-role-options"
 
 export type EditableUser = GetUsersQuery["users"]["items"][number]
 
@@ -59,10 +60,7 @@ export const useUpdateUserDialog = (user: EditableUser, isOpen: boolean) => {
         user.position ? [user.position] : [],
     )
 
-    const roleOptions: SelectOption[] = [
-        { id: "Employee", name: tDialog("employee") },
-        { id: "Admin", name: tDialog("admin") },
-    ]
+    const roleOptions = getUserRoleOptions(tDialog)
 
     const handleChange = (field: keyof FormState, value: string) => {
         setForm((current) => ({

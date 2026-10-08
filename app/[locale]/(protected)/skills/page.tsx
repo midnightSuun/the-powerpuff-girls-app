@@ -1,7 +1,10 @@
 import { redirect } from "next/navigation"
-import { getTranslations } from "next-intl/server"
 
-import { LoadingText } from "@/components/loading-text"
+import { ProgressListSkeleton } from "@/components/progress-list-skeleton"
+import {
+    AdminTableSkeleton,
+    type AdminTableSkeletonColumn,
+} from "@/components/ui/admin-table-skeleton"
 import { readListSearch } from "@/lib/list-search-params"
 import { getUserRole } from "@/modules/auth/helpers/get-current-session"
 import {
@@ -13,7 +16,27 @@ import { getAuthUserId } from "@/modules/skills/helpers/get-auth-user-id"
 import { AdminSkillsView } from "@/modules/skills/ui/components/admin/admin-skills-view"
 import { Skills } from "@/modules/skills/ui/skills"
 import { UsersTableFrame } from "@/modules/users/ui/users-table-frame"
+
 export const instant = false
+
+const adminColumns: AdminTableSkeletonColumn[] = [
+    {
+        id: "name",
+        headerClassName: "h-3 w-16",
+        cellClassName: "h-4 w-32",
+    },
+    {
+        id: "type",
+        className: "hidden lg:table-cell",
+        headerClassName: "h-3 w-12",
+        cellClassName: "h-4 w-24",
+    },
+    {
+        id: "category",
+        headerClassName: "h-3 w-20",
+        cellClassName: "h-4 w-28",
+    },
+]
 
 type Props = {
     searchParams: Promise<Record<string, string | string[] | undefined>>
@@ -65,13 +88,20 @@ async function SkillsContent({
 }
 
 export default async function SkillsPage({ searchParams }: Props) {
-    const t = await getTranslations("Common")
+    const role = await getUserRole()
 
     return (
         <main className="min-h-screen w-full">
             <UsersTableFrame
-                label={<LoadingText namespace="Common" />}
-                placeholder={<div className="p-6">{t("loading")}</div>}
+                placeholder={
+                    role === "Admin" ? (
+                        <div className="p-6">
+                            <AdminTableSkeleton columns={adminColumns} />
+                        </div>
+                    ) : (
+                        <ProgressListSkeleton />
+                    )
+                }
             >
                 <SkillsContent searchParams={searchParams} />
             </UsersTableFrame>

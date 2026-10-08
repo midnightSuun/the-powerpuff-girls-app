@@ -1,3 +1,6 @@
+import { Suspense } from "react"
+
+import { ProgressListSkeleton } from "@/components/progress-list-skeleton"
 import { getCurrentSession } from "@/modules/auth/helpers/get-current-session"
 import { getUserSkills } from "@/modules/skills/api/skills"
 import { Skills } from "@/modules/skills/ui/skills"
@@ -9,7 +12,7 @@ interface SkillsPageProps {
     }>
 }
 
-export default async function SkillsPage({ params }: SkillsPageProps) {
+async function SkillsContent({ params }: SkillsPageProps) {
     const { userId } = await params
 
     const [userSkills, session] = await Promise.all([
@@ -27,5 +30,13 @@ export default async function SkillsPage({ params }: SkillsPageProps) {
                 compact={false}
             />
         </div>
+    )
+}
+
+export default function SkillsPage({ params }: SkillsPageProps) {
+    return (
+        <Suspense fallback={<ProgressListSkeleton />}>
+            <SkillsContent params={params} />
+        </Suspense>
     )
 }
