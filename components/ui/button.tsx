@@ -17,7 +17,7 @@ const buttonVariants = cva(
                     "pt-[16px] pb-[16px] px-[30px]",
                 primaryV2:
                     "flex items-center justify-center min-w-40 w-fit whitespace-nowrap rounded-full border border-transparent bg-transparent text-button-primary-default hover:bg-transparent hover:border-button-primary-default hover:text-button-primary-default active:bg-button-primary-active active:border-button-primary-default active:text-button-primary-default disabled:bg-button-disabled disabled:border-transparent disabled:text-text-primary-disabled pt-[16px] pb-[16px] px-[30px]",
-                ghost: "flex items-center justify-center min-w-40 w-fit whitespace-nowrap rounded-full border border-transparent bg-transparent text-button-secondary-default hover:border-button-secondary-default hover:bg-transparent hover:text-button-secondary-default active:bg-button-disabled active:text-button-secondary-default disabled:bg-button-disabled disabled:border-transparent disabled:text-text-primary-disabled pt-[16px] pb-[16px] px-[30px]",
+                ghost: "flex items-center justify-center min-w-40 w-fit whitespace-nowrap rounded-full border border-transparent bg-transparent text-button-secondary-default dark:text-[#F5F5F7] hover:border-button-secondary-default dark:hover:border-[#F5F5F7] hover:bg-transparent hover:text-button-secondary-default dark:hover:text-[#F5F5F7] active:bg-button-disabled active:text-button-secondary-default dark:active:text-[#F5F5F7] disabled:bg-button-disabled disabled:border-transparent disabled:text-text-primary-disabled pt-[16px] pb-[16px] px-[30px]",
             },
             size: {
                 default:

@@ -44,7 +44,7 @@ export function DeleteSkillsButton({
                 <div className="flex items-center gap-3">
                     <Button
                         type="button"
-                        variant="secondary"
+                        variant="ghost"
                         onClick={handleCancel}
                         disabled={isSubmitting}
                     >
