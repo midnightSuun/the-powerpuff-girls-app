@@ -154,6 +154,7 @@ export function LanguagesPage({
                         isOpen={isRemoveConfirmOpen}
                         onClose={() => setIsRemoveConfirmOpen(false)}
                         count={selectedLanguages.length}
+                        selectedLanguages={selectedLanguages}
                         onConfirm={handleDelete}
                     />
                 </>

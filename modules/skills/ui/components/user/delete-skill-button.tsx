@@ -44,7 +44,7 @@ export function DeleteSkillsButton({
                 <div className="flex items-center gap-3">
                     <Button
                         type="button"
-                        variant="ghost"
+                        variant="secondary"
                         onClick={handleCancel}
                         disabled={isSubmitting}
                     >
@@ -53,7 +53,7 @@ export function DeleteSkillsButton({
 
                     <Button
                         type="button"
-                        variant="primary"
+                        variant="ghost"
                         disabled={!hasSelected || isSubmitting}
                         onClick={() => setIsModalOpen(true)}
                     >
