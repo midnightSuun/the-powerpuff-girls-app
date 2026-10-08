@@ -7,19 +7,19 @@ interface ListActionButtonProps {
     onClick?: () => void
     disabled?: boolean
     className?: string
+    variant?: "ghost" | "primaryV2" | "primary" | "secondary"
 }
 
-interface AddItemButtonProps extends Omit<ListActionButtonProps, "onClick"> {
-    onClick?: () => void
+interface AddItemButtonProps extends ListActionButtonProps {
     iconOnlyBelowLg?: boolean
-    variant?: "ghost" | "primaryV2"
 }
+
 export function AddItemButton({
     label,
     onClick,
     disabled,
     className,
-    iconOnlyBelowLg = true,
+    iconOnlyBelowLg = false,
     variant = "ghost",
 }: AddItemButtonProps) {
     return (
@@ -27,9 +27,9 @@ export function AddItemButton({
             type="button"
             variant={variant}
             aria-label={iconOnlyBelowLg ? label : undefined}
-            className={`inline-flex items-center justify-center gap-2 px-4 border-transparent text-muted-foreground hover:text-foreground whitespace-nowrap ${
+            className={`inline-flex items-center justify-center gap-2 whitespace-nowrap ${
                 iconOnlyBelowLg
-                    ? "!h-8 !w-8 !min-w-0 !p-0 lg:!h-9 lg:!w-auto lg:!px-2 lg:!py-0"
+                    ? "h-8 w-8 min-w-0 p-0 lg:h-auto lg:w-auto lg:px-4 lg:py-2"
                     : ""
             } ${className || ""}`}
             onClick={onClick}
@@ -50,21 +50,20 @@ export function RemoveItemsButton({
     onClick,
     disabled,
     className,
+    variant = "primaryV2",
 }: ListActionButtonProps) {
     return (
         <Button
             type="button"
-            variant="primaryV2"
-            className={`inline-flex w-auto max-w-full items-center justify-center gap-2 px-4 whitespace-normal ${
+            variant={variant}
+            className={`inline-flex w-auto max-w-full items-center justify-center gap-2 whitespace-nowrap ${
                 className || ""
             }`}
             onClick={onClick}
             disabled={disabled}
         >
             <Trash2 className="h-5 w-5 shrink-0" />
-            <span className="min-w-0 wrap-break-word whitespace-normal">
-                {label}
-            </span>
+            <span className="min-w-0 whitespace-nowrap">{label}</span>
         </Button>
     )
 }

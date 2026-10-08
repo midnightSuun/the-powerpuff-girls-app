@@ -1,5 +1,4 @@
-import { useState } from "react"
-
+import { useAdminCrudState } from "@/hooks/use-admin-crud-state"
 import {
     createAdminDepartment,
     deleteAdminDepartment,
@@ -18,45 +17,32 @@ interface UseAdminDepartmentsViewProps {
 export function useAdminDepartmentsView({
     initialDepartments,
 }: UseAdminDepartmentsViewProps) {
-    const [prevInitial, setPrevInitial] = useState(initialDepartments)
-    const [departments, setDepartments] =
-        useState<AdminDepartmentItem[]>(initialDepartments)
-
-    if (prevInitial !== initialDepartments) {
-        setPrevInitial(initialDepartments)
-        setDepartments(initialDepartments)
-    }
-
-    const [isCreateOpen, setIsCreateOpen] = useState(false)
-    const [editingDepartment, setEditingDepartment] =
-        useState<AdminDepartmentItem | null>(null)
-    const [deletingDepartment, setDeletingDepartment] =
-        useState<AdminDepartmentItem | null>(null)
+    const crud = useAdminCrudState(initialDepartments)
 
     const handleCreate = async (data: { name: string }) => {
         await createAdminDepartment({ name: data.name })
-        setIsCreateOpen(false)
+        crud.setIsCreateOpen(false)
     }
 
     const handleUpdate = async (id: string, data: { name: string }) => {
         await updateAdminDepartment({ departmentId: id, name: data.name })
-        setEditingDepartment(null)
+        crud.setEditingItem(null)
     }
 
     const handleDeleteConfirm = async () => {
-        if (!deletingDepartment) return
-        await deleteAdminDepartment({ departmentId: deletingDepartment.id })
-        setDeletingDepartment(null)
+        if (!crud.deletingItem) return
+        await deleteAdminDepartment({ departmentId: crud.deletingItem.id })
+        crud.setDeletingItem(null)
     }
 
     return {
-        departments,
-        isCreateOpen,
-        setIsCreateOpen,
-        editingDepartment,
-        setEditingDepartment,
-        deletingDepartment,
-        setDeletingDepartment,
+        departments: crud.items,
+        isCreateOpen: crud.isCreateOpen,
+        setIsCreateOpen: crud.setIsCreateOpen,
+        editingDepartment: crud.editingItem,
+        setEditingDepartment: crud.setEditingItem,
+        deletingDepartment: crud.deletingItem,
+        setDeletingDepartment: crud.setDeletingItem,
         handleCreate,
         handleUpdate,
         handleDeleteConfirm,

@@ -5,6 +5,7 @@ import { useState } from "react"
 
 import type { Mastery } from "@/gql/generated/graphql"
 import { useActionNotifications } from "@/hooks/use-action-notifications"
+import { useUserSelectionState } from "@/hooks/use-user-selection-state"
 import { updateCvSkill } from "@/modules/skills/api/skills"
 
 import { Skill } from "../ui/components/user/skill-category"
@@ -16,17 +17,8 @@ interface UseSkillsViewProps {
 export function useSkillsView({ cvId }: UseSkillsViewProps) {
     const router = useRouter()
     const notifications = useActionNotifications()
-    const [isSelectionMode, setIsSelectionMode] = useState(false)
-    const [selectedSkills, setSelectedSkills] = useState<string[]>([])
+    const selection = useUserSelectionState<string>()
     const [editingSkill, setEditingSkill] = useState<Skill | null>(null)
-
-    const handleToggleSkill = (skillName: string) => {
-        setSelectedSkills((prev) =>
-            prev.includes(skillName)
-                ? prev.filter((name) => name !== skillName)
-                : [...prev, skillName],
-        )
-    }
 
     const handleUpdateSkill = async (newMastery: Mastery) => {
         if (!editingSkill) return
@@ -43,13 +35,13 @@ export function useSkillsView({ cvId }: UseSkillsViewProps) {
     }
 
     return {
-        isSelectionMode,
-        setIsSelectionMode,
-        selectedSkills,
-        clearSelection: () => setSelectedSkills([]),
+        isSelectionMode: selection.isSelectionMode,
+        setIsSelectionMode: selection.setIsSelectionMode,
+        selectedSkills: selection.selectedItems,
+        clearSelection: selection.clearSelection,
         editingSkill,
         setEditingSkill,
-        handleToggleSkill,
+        handleToggleSkill: selection.toggleSelection,
         handleUpdateSkill,
     }
 }

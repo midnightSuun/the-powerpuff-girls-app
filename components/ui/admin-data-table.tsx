@@ -143,7 +143,8 @@ export function AdminDataTable<T extends { id: string | number }>({
                                 return (
                                     <th
                                         key={col.key}
-                                        className={`group px-4 font-roboto text-sm font-medium leading-6 tracking-[0.15px] text-foreground align-middle ${
+
+                                        className={`px-4 font-medium text-foreground align-middle ${
                                             col.sortable
                                                 ? "cursor-pointer select-none"
                                                 : ""
