@@ -1,6 +1,5 @@
-import { useState } from "react"
-
 import { useActionNotifications } from "@/hooks/use-action-notifications"
+import { useAdminCrudState } from "@/hooks/use-admin-crud-state"
 import {
     createAdminSkill,
     deleteAdminSkill,
@@ -14,32 +13,19 @@ interface UseAdminSkillsViewProps {
 
 export function useAdminSkillsView({ initialSkills }: UseAdminSkillsViewProps) {
     const notifications = useActionNotifications()
-    const [skills, setSkills] = useState<AdminSkillItem[]>(initialSkills)
-    const [isCreateOpen, setIsCreateOpen] = useState(false)
-    const [editingSkill, setEditingSkill] = useState<AdminSkillItem | null>(
-        null,
-    )
-    const [deletingSkill, setDeletingSkill] = useState<AdminSkillItem | null>(
-        null,
-    )
+    const crud = useAdminCrudState(initialSkills)
 
     const handleCreate = async (data: { name: string; categoryId: string }) => {
-        const created = await createAdminSkill({
-            name: data.name,
-            categoryId: data.categoryId,
-        })
+        const created = await createAdminSkill(data)
 
         notifications.success("created")
         if (created) {
-            setSkills((prev) => [
-                ...prev,
-                {
-                    id: created.id,
-                    name: created.name,
-                    category: created.category?.name ?? "",
-                    categoryId: created.category?.id ?? "",
-                },
-            ])
+            crud.addItem({
+                id: created.id,
+                name: created.name,
+                category: created.category?.name ?? "",
+                categoryId: created.category?.id ?? "",
+            })
         }
     }
 
@@ -55,38 +41,32 @@ export function useAdminSkillsView({ initialSkills }: UseAdminSkillsViewProps) {
 
         notifications.success("updated")
         if (updated) {
-            setSkills((prev) =>
-                prev.map((s) =>
-                    s.id === id
-                        ? {
-                              ...s,
-                              name: updated.name,
-                              category: updated.category?.name ?? "",
-                              categoryId: updated.category?.id ?? "",
-                          }
-                        : s,
-                ),
-            )
+            crud.updateItem(id, {
+                name: updated.name,
+                category: updated.category?.name ?? "",
+                categoryId: updated.category?.id ?? "",
+            })
         }
     }
 
     const handleDeleteConfirm = async () => {
-        if (!deletingSkill) return
+        if (!crud.deletingItem) return
         await deleteAdminSkill({
-            skillId: deletingSkill.id,
+            skillId: crud.deletingItem.id,
         } as unknown as Parameters<typeof deleteAdminSkill>[0])
+
         notifications.success("deleted")
-        setSkills((prev) => prev.filter((s) => s.id !== deletingSkill.id))
+        crud.removeItem(crud.deletingItem.id)
     }
 
     return {
-        skills,
-        isCreateOpen,
-        setIsCreateOpen,
-        editingSkill,
-        setEditingSkill,
-        deletingSkill,
-        setDeletingSkill,
+        skills: crud.items,
+        isCreateOpen: crud.isCreateOpen,
+        setIsCreateOpen: crud.setIsCreateOpen,
+        editingSkill: crud.editingItem,
+        setEditingSkill: crud.setEditingItem,
+        deletingSkill: crud.deletingItem,
+        setDeletingSkill: crud.setDeletingItem,
         handleCreate,
         handleUpdate,
         handleDeleteConfirm,

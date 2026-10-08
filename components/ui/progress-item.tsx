@@ -8,12 +8,12 @@ const PROGRESS_STYLES = {
     none: {
         width: "0%",
         colorClass: "bg-transparent",
-        trackBgClass: "bg-muted",
+        trackBgClass: "bg-[#CACACA] dark:bg-[#3B3B3B]",
     },
     beginner: {
         width: "25%",
         colorClass: "bg-neutral-500 dark:bg-neutral-400",
-        trackBgClass: "bg-muted",
+        trackBgClass: "bg-[#CACACA] dark:bg-[#3B3B3B]",
     },
     intermediate: {
         width: "45%",
@@ -68,10 +68,10 @@ export function ProgressItem({
     return (
         <div className="flex items-center gap-3">
             <div
-                className={`relative h-1.5 w-16 shrink-0 overflow-hidden rounded-full ${config.trackBgClass}`}
+                className={`relative h-1.5 w-16 shrink-0 overflow-hidden rounded-none ${config.trackBgClass}`}
             >
                 <div
-                    className={`h-full rounded-full transition-all duration-300 ${config.colorClass}`}
+                    className={`h-full rounded-none transition-all duration-300 ${config.colorClass}`}
                     style={{ width: config.width }}
                 />
             </div>

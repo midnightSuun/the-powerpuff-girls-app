@@ -1,10 +1,11 @@
 "use client"
 
-import { MoreVertical, Plus } from "lucide-react"
+import { MoreVertical } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useEffect, useMemo, useRef, useState } from "react"
 
 import { Button } from "@/components/ui/button"
+import { AddItemButton } from "@/components/ui/list-management-buttons"
 
 import { SearchInput } from "../search-input"
 import { SortArrow } from "../sort-arrow"
@@ -13,6 +14,7 @@ export interface Column<T> {
     key: string
     label: string
     sortable?: boolean
+    className?: string
     render?: (item: T) => React.ReactNode
 }
 
@@ -123,15 +125,12 @@ export function AdminDataTable<T extends { id: string | number }>({
                 <SearchInput limit={limit} search={search} />
 
                 {createButtonLabel && onCreateClick && (
-                    <Button
-                        type="button"
-                        variant="primaryV2"
+                    <AddItemButton
+                        label={createButtonLabel}
                         onClick={onCreateClick}
-                        className="flex items-center gap-1.5 cursor-pointer"
-                    >
-                        <Plus className="h-4 w-4" />
-                        {createButtonLabel}
-                    </Button>
+                        variant="primaryV2"
+                        className="cursor-pointer text-[#d7352c] hover:text-[#b5332b] dark:text-[#f06b65] dark:hover:text-[#ff8a84] lg:!h-auto lg:!min-w-40 lg:!px-[30px] lg:!py-[16px]"
+                    />
                 )}
             </div>
 
@@ -144,11 +143,12 @@ export function AdminDataTable<T extends { id: string | number }>({
                                 return (
                                     <th
                                         key={col.key}
-                                        className={`px-4 font-semibold text-foreground align-middle ${
+
+                                        className={`px-4 font-medium text-foreground align-middle ${
                                             col.sortable
                                                 ? "cursor-pointer select-none"
                                                 : ""
-                                        }`}
+                                        } ${col.className ?? ""}`}
                                         onClick={
                                             col.sortable
                                                 ? () => handleSort(col.key)
@@ -157,12 +157,23 @@ export function AdminDataTable<T extends { id: string | number }>({
                                     >
                                         <div className="flex items-center gap-1.5">
                                             {col.label}
-                                            {col.sortable && isSorted && (
-                                                <SortArrow
-                                                    descending={
-                                                        sortOrder === "desc"
+                                            {col.sortable && (
+                                                <span
+                                                    className={
+                                                        isSorted
+                                                            ? "opacity-100"
+                                                            : "opacity-30 group-hover:opacity-70 transition-opacity"
                                                     }
-                                                />
+                                                >
+                                                    <SortArrow
+                                                        descending={
+                                                            isSorted
+                                                                ? sortOrder ===
+                                                                  "desc"
+                                                                : false
+                                                        }
+                                                    />
+                                                </span>
                                             )}
                                         </div>
                                     </th>
@@ -183,7 +194,7 @@ export function AdminDataTable<T extends { id: string | number }>({
                                     {columns.map((col) => (
                                         <td
                                             key={col.key}
-                                            className="px-4 align-middle text-muted-foreground"
+                                            className={`px-4 align-middle text-muted-foreground ${col.className ?? ""}`}
                                         >
                                             {col.render
                                                 ? col.render(item)

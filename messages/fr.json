@@ -266,6 +266,10 @@
             "title": "Page non trouvée",
             "description": "La page que vous recherchez a peut-être été supprimée,\na vu son nom modifié ou est temporairement indisponible.",
             "actionText": "Accueil"
+        },
+        "MobileNotSupported": {
+            "title": "Oups",
+            "description": "Cette application n'est pas prise en charge sur les appareils mobiles.\nVeuillez l'ouvrir sur un ordinateur ou une tablette pour continuer."
         }
     },
     "Settings": {
@@ -531,7 +535,7 @@
         "role": "Rôle",
         "memberSince": "Membre depuis le {date}",
         "uploadAvatar": "Télécharger une photo de profil",
-        "avatarRequirements": "png, jpg ou gif de 0,5 Mo maximum",
+        "avatarRequirements": "png, jpg ou gif de 5 Mo maximum",
         "firstName": "Prénom",
         "lastName": "Nom",
         "department": "Département",
@@ -550,7 +554,7 @@
             "firstNameTooLong": "Le prénom ne doit pas dépasser 100 caractères",
             "lastNameTooLong": "Le nom ne doit pas dépasser 100 caractères",
             "unsupportedFileType": "Type de fichier non pris en charge",
-            "fileTooLarge": "La taille du fichier ne doit pas dépasser 0,5 Mo"
+            "fileTooLarge": "La taille du fichier ne doit pas dépasser 5 Mo"
         },
         "messages": {
             "profileUpdated": "Profil mis à jour avec succès",

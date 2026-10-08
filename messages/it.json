@@ -266,6 +266,10 @@
             "title": "Pagina non trovata",
             "description": "La pagina che stai cercando potrebbe essere stata rimossa,\naver cambiato nome o essere temporaneamente non disponibile.",
             "actionText": "Vai alla Home"
+        },
+        "MobileNotSupported": {
+            "title": "Ops",
+            "description": "Questa app non è supportata sui dispositivi mobili.\nApribile su un computer o un tablet per continuare."
         }
     },
     "Settings": {
@@ -531,7 +535,7 @@
         "role": "Ruolo",
         "memberSince": "Membro dal {date}",
         "uploadAvatar": "Carica immagine dell'avatar",
-        "avatarRequirements": "png, jpg o gif di massimo 0,5 MB",
+        "avatarRequirements": "png, jpg o gif di massimo 5 MB",
         "firstName": "Nome",
         "lastName": "Cognome",
         "department": "Dipartimento",
@@ -550,7 +554,7 @@
             "firstNameTooLong": "Il nome non deve superare i 100 caratteri",
             "lastNameTooLong": "Il cognome non deve superare i 100 caratteri",
             "unsupportedFileType": "Tipo di file non supportato",
-            "fileTooLarge": "La dimensione del file non deve superare 0,5 MB"
+            "fileTooLarge": "La dimensione del file non deve superare 5 MB"
         },
         "messages": {
             "profileUpdated": "Profilo aggiornato con successo",

@@ -51,7 +51,12 @@ export function AdminSkillsView({
 
     const columns: Column<AdminSkillItem>[] = [
         { key: "name", label: tAdmin("name"), sortable: true },
-        { key: "type", label: "Type", sortable: true },
+        {
+            key: "type",
+            label: "Type",
+            sortable: true,
+            className: "hidden lg:table-cell",
+        },
         { key: "category", label: tAdmin("category"), sortable: true },
     ]
 

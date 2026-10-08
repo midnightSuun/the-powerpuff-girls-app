@@ -17,9 +17,11 @@ const sortableColumn = (
     sortKey: UserSortField,
     sortLabel: string,
     render: TableColumn<User>["render"],
+    className?: string,
 ): TableColumn<User> => ({
     id,
     label,
+    className,
     sortKey,
     sortLabel,
     render,
@@ -64,6 +66,7 @@ export function getUsersColumns(
             "email",
             sortLabel(t("email")),
             (user) => user.email,
+            "hidden lg:table-cell",
         ),
         sortableColumn(
             "department",
@@ -78,13 +81,14 @@ export function getUsersColumns(
             "position",
             sortLabel(t("position")),
             (user) => user.position?.name,
+            "hidden lg:table-cell",
         ),
         {
             id: "open",
             label: "",
-            render: () =>
+            render: (user) =>
                 isAdmin ? (
-                    <UserRowMenu label={t("openMenu")} />
+                    <UserRowMenu label={t("openMenu")} user={user} />
                 ) : (
                     <ChevronRight className="size-4 text-muted-foreground" />
                 ),

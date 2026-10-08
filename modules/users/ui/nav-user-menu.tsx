@@ -36,8 +36,10 @@ type Props = {
 }
 
 export const NavUserMenu = ({ user }: Props) => {
-    const { isMobile, setOpenMobile } = useSidebar()
+    const { isMobile, isTablet, state, setOpenMobile } = useSidebar()
     const t = useTranslations("User.nav")
+    const isTabletExpanded = isTablet && state === "expanded"
+    const isTabletCollapsed = isTablet && state === "collapsed"
     const fullName =
         [user.firstName, user.lastName].filter(Boolean).join(" ") || user.email
 
@@ -78,9 +80,11 @@ export const NavUserMenu = ({ user }: Props) => {
                             <span className="truncate font-medium">
                                 {fullName}
                             </span>
-                            <span className="truncate text-xs text-muted-foreground">
-                                {t("viewProfile")}
-                            </span>
+                            {!isTablet ? (
+                                <span className="truncate text-xs text-muted-foreground">
+                                    {t("viewProfile")}
+                                </span>
+                            ) : null}
                         </div>
                         <ChevronsUpDown
                             className="ml-auto size-4 text-muted-foreground group-data-[collapsible=icon]:hidden"
@@ -88,36 +92,92 @@ export const NavUserMenu = ({ user }: Props) => {
                         />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
-                        className="min-w-56 rounded-lg"
-                        side={isMobile ? "bottom" : "right"}
-                        align="end"
-                        sideOffset={4}
+                        className={
+                            isTabletExpanded
+                                ? "w-36 min-w-0 rounded-md p-0"
+                                : isTabletCollapsed
+                                  ? "w-12 min-w-0 rounded-md p-1"
+                                  : "min-w-56 rounded-lg"
+                        }
+                        side={isMobile ? "bottom" : isTablet ? "top" : "right"}
+                        align={
+                            isTabletCollapsed
+                                ? "center"
+                                : isTabletExpanded
+                                  ? "end"
+                                  : "end"
+                        }
+                        sideOffset={isTablet ? 0 : 4}
                     >
                         <DropdownMenuGroup>
                             <DropdownMenuItem
                                 nativeButton={false}
                                 render={<Link href={`/users/${user.id}`} />}
                                 onClick={handleCloseMobileSidebar}
+                                className={
+                                    isTabletExpanded
+                                        ? "rounded-none px-2.5 py-1.5"
+                                        : isTabletCollapsed
+                                          ? "justify-center px-0"
+                                          : undefined
+                                }
                             >
                                 <User />
-                                {t("profile")}
+                                <span
+                                    className={
+                                        isTabletCollapsed
+                                            ? "sr-only"
+                                            : undefined
+                                    }
+                                >
+                                    {t("profile")}
+                                </span>
                             </DropdownMenuItem>
+                            {isTablet ? <DropdownMenuSeparator /> : null}
                             <DropdownMenuItem
                                 nativeButton={false}
                                 render={<Link href="/settings" />}
                                 onClick={handleCloseMobileSidebar}
+                                className={
+                                    isTabletExpanded
+                                        ? "rounded-none px-2.5 py-1.5"
+                                        : isTabletCollapsed
+                                          ? "justify-center px-0"
+                                          : undefined
+                                }
                             >
                                 <Settings />
-                                {t("settings")}
+                                <span
+                                    className={
+                                        isTabletCollapsed
+                                            ? "sr-only"
+                                            : undefined
+                                    }
+                                >
+                                    {t("settings")}
+                                </span>
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
-                        <DropdownMenuSeparator />
+                        {!isTablet ? <DropdownMenuSeparator /> : null}
                         <DropdownMenuItem
                             variant="destructive"
                             onClick={handleLogout}
+                            className={
+                                isTabletExpanded
+                                    ? "rounded-none px-2.5 py-1.5"
+                                    : isTabletCollapsed
+                                      ? "justify-center px-0"
+                                      : undefined
+                            }
                         >
                             <LogOut />
-                            {t("logout")}
+                            <span
+                                className={
+                                    isTabletCollapsed ? "sr-only" : undefined
+                                }
+                            >
+                                {t("logout")}
+                            </span>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

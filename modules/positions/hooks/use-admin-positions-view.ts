@@ -1,5 +1,4 @@
-import { useState } from "react"
-
+import { useAdminCrudState } from "@/hooks/use-admin-crud-state"
 import {
     createAdminPosition,
     deleteAdminPosition,
@@ -18,45 +17,32 @@ interface UseAdminPositionsViewProps {
 export function useAdminPositionsView({
     initialPositions,
 }: UseAdminPositionsViewProps) {
-    const [prevInitial, setPrevInitial] = useState(initialPositions)
-    const [positions, setPositions] =
-        useState<AdminPositionItem[]>(initialPositions)
-
-    if (prevInitial !== initialPositions) {
-        setPrevInitial(initialPositions)
-        setPositions(initialPositions)
-    }
-
-    const [isCreateOpen, setIsCreateOpen] = useState(false)
-    const [editingPosition, setEditingPosition] =
-        useState<AdminPositionItem | null>(null)
-    const [deletingPosition, setDeletingPosition] =
-        useState<AdminPositionItem | null>(null)
+    const crud = useAdminCrudState(initialPositions)
 
     const handleCreate = async (data: { name: string }) => {
         await createAdminPosition({ name: data.name })
-        setIsCreateOpen(false)
+        crud.setIsCreateOpen(false)
     }
 
     const handleUpdate = async (id: string, data: { name: string }) => {
         await updateAdminPosition({ positionId: id, name: data.name })
-        setEditingPosition(null)
+        crud.setEditingItem(null)
     }
 
     const handleDeleteConfirm = async () => {
-        if (!deletingPosition) return
-        await deleteAdminPosition({ positionId: deletingPosition.id })
-        setDeletingPosition(null)
+        if (!crud.deletingItem) return
+        await deleteAdminPosition({ positionId: crud.deletingItem.id })
+        crud.setDeletingItem(null)
     }
 
     return {
-        positions,
-        isCreateOpen,
-        setIsCreateOpen,
-        editingPosition,
-        setEditingPosition,
-        deletingPosition,
-        setDeletingPosition,
+        positions: crud.items,
+        isCreateOpen: crud.isCreateOpen,
+        setIsCreateOpen: crud.setIsCreateOpen,
+        editingPosition: crud.editingItem,
+        setEditingPosition: crud.setEditingItem,
+        deletingPosition: crud.deletingItem,
+        setDeletingPosition: crud.setDeletingItem,
         handleCreate,
         handleUpdate,
         handleDeleteConfirm,

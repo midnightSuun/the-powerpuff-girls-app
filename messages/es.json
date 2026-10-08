@@ -266,6 +266,10 @@
             "title": "Página no encontrada",
             "description": "Es posible que la página que buscas haya sido eliminada,\nhaya cambiado de nombre o no esté disponible temporalmente.",
             "actionText": "Ir al inicio"
+        },
+        "MobileNotSupported": {
+            "title": "Vaya",
+            "description": "Esta aplicación no es compatible con dispositivos móviles.\nÁbrela en un ordenador o una tablet para continuar."
         }
     },
     "Settings": {
@@ -531,7 +535,7 @@
         "role": "Rol",
         "memberSince": "Miembro desde el {date}",
         "uploadAvatar": "Subir imagen de avatar",
-        "avatarRequirements": "png, jpg o gif de un máximo de 0,5 MB",
+        "avatarRequirements": "png, jpg o gif de un máximo de 5 MB",
         "firstName": "Nombre",
         "lastName": "Apellidos",
         "department": "Departamento",
@@ -550,7 +554,7 @@
             "firstNameTooLong": "El nombre debe tener 100 caracteres o menos",
             "lastNameTooLong": "Los apellidos deben tener 100 caracteres o menos",
             "unsupportedFileType": "Tipo de archivo no compatible",
-            "fileTooLarge": "El tamaño del archivo no debe superar los 0,5 MB"
+            "fileTooLarge": "El tamaño del archivo no debe superar los 5 MB"
         },
         "messages": {
             "profileUpdated": "Perfil actualizado correctamente",
