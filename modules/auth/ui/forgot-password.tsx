@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useTranslations } from "next-intl"
 
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 
 import { useForgotPassword } from "../hooks/use-forgot-password"
 
@@ -37,28 +38,14 @@ export function ForgotPasswordPage() {
                     className="w-full flex flex-col items-center space-y-6"
                 >
                     <div className="w-full space-y-1">
-                        <label
-                            htmlFor="email"
-                            className="block text-xs uppercase tracking-wider text-muted-foreground"
-                        >
-                            {t("emailLabel")}
-                        </label>
-                        <input
+                        <Input
                             id="email"
                             type="email"
+                            label={t("emailLabel")}
                             placeholder={t("emailPlaceholder")}
+                            error={errors.email?.message}
                             {...register("email")}
-                            className={`w-full bg-transparent border rounded-md px-4 py-3 text-sm focus:outline-none focus:border-red-500 transition-colors placeholder:text-muted-foreground ${
-                                errors.email
-                                    ? "border-red-500"
-                                    : "border-auth-card-border"
-                            }`}
                         />
-                        {errors.email && (
-                            <span className="text-xs text-red-400">
-                                {errors.email.message}
-                            </span>
-                        )}
                     </div>
 
                     {serverError && (
@@ -82,12 +69,8 @@ export function ForgotPasswordPage() {
                     <div className="w-full flex flex-col items-center pt-6 space-y-6">
                         <Button
                             type="submit"
+                            variant="primary"
                             disabled={!isValid || isPending}
-                            className={`w-44 text-white transition-opacity ${
-                                !isValid || isPending
-                                    ? "bg-red-600/50 cursor-not-allowed"
-                                    : "bg-red-600 hover:bg-red-700 cursor-pointer"
-                            }`}
                         >
                             {isPending
                                 ? t("submittingButton")

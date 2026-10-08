@@ -36,7 +36,8 @@ export async function login(
             accessToken: data.login.access_token,
             refreshToken: data.login.refresh_token,
         }
-    } catch {
+    } catch (error) {
+        console.error("Login failed:", error)
         return {
             error: t("loginFailed"),
         }

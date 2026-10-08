@@ -51,10 +51,8 @@ export function EditLanguageModal(props: EditLanguageModalProps) {
         >
             <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1">
-                    <span className="text-xs text-muted-foreground">
-                        {t("languageName")}
-                    </span>
                     <Input
+                        label={t("languageName")}
                         placeholder={t("languagePlaceholder")}
                         value={name}
                         onChange={(e) => setName(e.target.value)}
@@ -64,10 +62,8 @@ export function EditLanguageModal(props: EditLanguageModalProps) {
                 </div>
 
                 <div className="flex flex-col gap-1">
-                    <span className="text-xs text-muted-foreground">
-                        {t("isoCode")}
-                    </span>
                     <Input
+                        label={t("isoCode")}
                         placeholder={t("isoCodePlaceholder")}
                         value={iso2}
                         onChange={(e) => setIso2(e.target.value)}

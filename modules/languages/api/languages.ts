@@ -1,6 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
+import { getTranslations } from "next-intl/server"
 
 import { getGql } from "@/gql"
 import {
@@ -45,29 +46,51 @@ export async function getAvailableLanguages() {
 }
 
 export async function addProfileLanguage(language: AddProfileLanguageInput) {
-    const gql = await getGql()
-    const data = await gql.request(AddProfileLanguageDocument, { language })
+    try {
+        const gql = await getGql()
+        const data = await gql.request(AddProfileLanguageDocument, { language })
 
-    revalidatePath("/languages")
-    return data
+        revalidatePath("/languages")
+        return data
+    } catch (error) {
+        console.error("Failed to add profile language:", error)
+        const t = await getTranslations("Languages.add.errors")
+        throw new Error(t("failed"))
+    }
 }
 
 export async function updateProfileLanguage(
     language: UpdateProfileLanguageInput,
 ) {
-    const gql = await getGql()
-    const data = await gql.request(UpdateProfileLanguageDocument, { language })
+    try {
+        const gql = await getGql()
+        const data = await gql.request(UpdateProfileLanguageDocument, {
+            language,
+        })
 
-    revalidatePath("/languages")
-    return data
+        revalidatePath("/languages")
+        return data
+    } catch (error) {
+        console.error("Failed to update profile language:", error)
+        const t = await getTranslations("Languages.edit.errors")
+        throw new Error(t("failed"))
+    }
 }
 
 export async function deleteProfileLanguages(
     language: DeleteProfileLanguageInput,
 ) {
-    const gql = await getGql()
-    const data = await gql.request(DeleteProfileLanguageDocument, { language })
+    try {
+        const gql = await getGql()
+        const data = await gql.request(DeleteProfileLanguageDocument, {
+            language,
+        })
 
-    revalidatePath("/languages")
-    return data
+        revalidatePath("/languages")
+        return data
+    } catch (error) {
+        console.error("Failed to delete profile languages:", error)
+        const t = await getTranslations("Languages.delete.errors")
+        throw new Error(t("failed"))
+    }
 }

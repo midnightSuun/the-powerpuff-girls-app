@@ -3,7 +3,9 @@
 import Link from "next/link"
 import { useTranslations } from "next-intl"
 
+import { PasswordField } from "@/components/password-field"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 
 import { useLogin } from "../hooks/use-login"
 import { AuthTabs } from "./components/authTabs"
@@ -11,8 +13,6 @@ import { AuthTabs } from "./components/authTabs"
 export function Login() {
     const t = useTranslations("Auth.Login")
     const {
-        showPassword,
-        setShowPassword,
         serverError,
         isPending,
         register,
@@ -38,97 +38,30 @@ export function Login() {
 
                 <form
                     onSubmit={handleSubmit(onSubmit)}
-                    className="w-full flex flex-col items-center space-y-6"
+                    className="w-full flex flex-col items-center space-y-8"
                     noValidate
                 >
-                    <div className="w-full space-y-1">
-                        <input
+                    <div className="w-full">
+                        <Input
                             type="email"
-                            placeholder={t("emailPlaceholder")}
+                            label={t("emailPlaceholder")}
+                            error={errors.email?.message}
                             aria-invalid={!!errors.email}
-                            aria-describedby={
-                                errors.email ? "email-error" : undefined
-                            }
+                            autoComplete="email"
                             {...register("email")}
-                            className={`w-full bg-transparent border rounded-md px-4 py-3 text-sm focus:outline-none focus:border-red-500 transition-colors text-foreground placeholder:text-muted-foreground ${
-                                errors.email
-                                    ? "border-destructive"
-                                    : "border-input"
-                            }`}
                         />
-                        {errors.email && (
-                            <span
-                                id="email-error"
-                                className="text-xs text-destructive"
-                                role="alert"
-                            >
-                                {errors.email.message}
-                            </span>
-                        )}
                     </div>
 
-                    <div className="w-full relative space-y-1">
-                        <div className="relative">
-                            <input
-                                type={showPassword ? "text" : "password"}
-                                placeholder={t("passwordPlaceholder")}
-                                aria-invalid={!!errors.password}
-                                aria-describedby={
-                                    errors.password
-                                        ? "password-error"
-                                        : undefined
-                                }
-                                {...register("password")}
-                                className={`w-full bg-transparent border rounded-md px-4 py-3 text-sm focus:outline-none focus:border-red-500 transition-colors pr-12 text-foreground placeholder:text-muted-foreground ${
-                                    errors.password
-                                        ? "border-destructive"
-                                        : "border-input"
-                                }`}
-                            />
-
-                            <button
-                                type="button"
-                                onClick={() => setShowPassword(!showPassword)}
-                                aria-label={
-                                    showPassword
-                                        ? t("hidePassword")
-                                        : t("showPassword")
-                                }
-                                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground transition-colors"
-                            >
-                                <svg
-                                    className="w-4 h-4"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                >
-                                    {showPassword ? (
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={1.5}
-                                            d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
-                                        />
-                                    ) : (
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={1.5}
-                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                                        />
-                                    )}
-                                </svg>
-                            </button>
-                        </div>
-                        {errors.password && (
-                            <span
-                                id="password-error"
-                                className="text-xs text-destructive"
-                                role="alert"
-                            >
-                                {errors.password.message}
-                            </span>
-                        )}
+                    <div className="w-full">
+                        <PasswordField
+                            type="password"
+                            label={t("passwordPlaceholder")}
+                            placeholder={t("passwordPlaceholder")}
+                            error={errors.password?.message}
+                            aria-invalid={!!errors.password}
+                            autoComplete="current-password"
+                            {...register("password")}
+                        />
                     </div>
 
                     {serverError && (
@@ -140,15 +73,11 @@ export function Login() {
                         </p>
                     )}
 
-                    <div className="w-full flex flex-col items-center pt-6 space-y-6">
+                    <div className="w-full flex flex-col items-center pt-2 space-y-6">
                         <Button
                             type="submit"
+                            variant="primary"
                             disabled={!isValid || isPending}
-                            className={`w-40 text-white transition-opacity ${
-                                !isValid || isPending
-                                    ? "bg-button-primary-default/50 cursor-not-allowed"
-                                    : "bg-button-primary-default hover:bg-button-primary-default/90 cursor-pointer"
-                            }`}
                         >
                             {isPending
                                 ? t("submittingButton")
@@ -157,7 +86,7 @@ export function Login() {
 
                         <Link
                             href="/forgot-password"
-                            className="text-[11px] font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors"
+                            className="text-[11px] font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
                         >
                             {t("forgotPassword")}
                         </Link>

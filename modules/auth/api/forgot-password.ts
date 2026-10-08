@@ -1,6 +1,5 @@
 "use server"
 
-import { ClientError } from "graphql-request"
 import { getTranslations } from "next-intl/server"
 
 import { ForgotPasswordDocument, getGql } from "@/gql"
@@ -14,15 +13,7 @@ export async function requestPasswordReset(
         await gql.request(ForgotPasswordDocument, { email: email.trim() })
         return {}
     } catch (error) {
-        const message =
-            error instanceof ClientError
-                ? (error.response.errors
-                      ?.map(({ message }) => message)
-                      .join(" ") ?? "")
-                : ""
-
-        return {
-            error: message || t("forgotFailed"),
-        }
+        console.error("Password reset request failed:", error)
+        return { error: t("forgotFailed") }
     }
 }
