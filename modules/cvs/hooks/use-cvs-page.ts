@@ -3,6 +3,7 @@ import { useTranslations } from "next-intl"
 import { useState } from "react"
 
 import { useActionNotifications } from "@/hooks/use-action-notifications"
+import { useAdminCrudState } from "@/hooks/use-admin-crud-state"
 
 import { createCvAction } from "../api/create-cv"
 import { deleteCvAction } from "../api/delete-cv"
@@ -18,13 +19,19 @@ export function useCvsPage({ initialCvs, targetUserId }: UseCvsPageProps) {
     const router = useRouter()
     const t = useTranslations("CV.list")
     const notifications = useActionNotifications()
+    const {
+        items: cvs,
+        isCreateOpen,
+        setIsCreateOpen,
+        editingItem: editingCv,
+        setEditingItem: setEditingCv,
+        deletingItem: deletingCv,
+        setDeletingItem: setDeletingCv,
+        updateItem,
+        removeItem,
+    } = useAdminCrudState(initialCvs)
 
-    const [cvs, setCvs] = useState<CvItem[]>(initialCvs)
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
-
-    const [isCreateOpen, setIsCreateOpen] = useState(false)
-    const [editingCv, setEditingCv] = useState<CvItem | null>(null)
-    const [deletingCv, setDeletingCv] = useState<CvItem | null>(null)
     const [activeMenuId, setActiveMenuId] = useState<string | null>(null)
 
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -94,11 +101,7 @@ export function useCvsPage({ initialCvs, targetUserId }: UseCvsPageProps) {
             }
 
             notifications.success("updated")
-            setCvs(
-                cvs.map((cv) =>
-                    cv.id === editingCv.id ? { ...cv, ...data } : cv,
-                ),
-            )
+            updateItem(editingCv.id, data)
             setEditingCv(null)
             router.refresh()
         } catch {
@@ -122,7 +125,7 @@ export function useCvsPage({ initialCvs, targetUserId }: UseCvsPageProps) {
             }
 
             notifications.success("deleted")
-            setCvs(cvs.filter((cv) => cv.id !== deletingCv.id))
+            removeItem(deletingCv.id)
             setDeletingCv(null)
             router.refresh()
         } catch {
