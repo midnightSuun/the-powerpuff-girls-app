@@ -3,6 +3,7 @@ import { type SyntheticEvent, useState } from "react"
 
 import { useActionNotifications } from "@/hooks/use-action-notifications"
 import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock"
+import { toDateInputValue } from "@/lib/date"
 import type { CvProjectItem, ProjectOption } from "@/modules/cvs/types"
 
 import { addCvProject, updateCvProject } from "../api/projects"
@@ -15,14 +16,6 @@ interface UseCvProjectFormProps {
     project?: CvProjectItem | null
     projects: ProjectOption[]
     existingProjectIds: string[]
-}
-
-function toDateInputValue(value?: string | null) {
-    if (!value) return ""
-    if (/^\d{4}-\d{2}-\d{2}/.test(value)) return value.slice(0, 10)
-
-    const date = new Date(value)
-    return Number.isNaN(date.getTime()) ? "" : date.toISOString().slice(0, 10)
 }
 
 function linesToList(value: string) {
