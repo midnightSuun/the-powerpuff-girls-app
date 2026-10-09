@@ -7,8 +7,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import type { GetProfileOptionsQuery, GetUserQuery, UserRole } from "@/gql"
 
-import { useUserProfile } from "../hooks/use-user-profile"
-import { UserAvatar } from "./user-avatar"
+import { useUserProfile } from "../../../hooks/use-user-profile"
+import { UserAvatar } from "../../user-avatar"
 
 interface UserProfileFormProps {
     user: GetUserQuery["user"]

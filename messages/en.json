@@ -739,5 +739,10 @@
             "profileUpdated": "Profile updated successfully.",
             "verificationFailed": "Failed to send verification email."
         }
+    },
+    "Calendar": {
+        "clear": "Clear",
+        "today": "Today",
+        "placeholder": "DD.MM.YYYY"
     }
 }

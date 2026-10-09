@@ -6,7 +6,7 @@ import { type SubmitEvent } from "react"
 import {
     type EditableUser,
     useUpdateUserDialog,
-} from "../hooks/use-update-user-dialog"
+} from "../../../hooks/use-update-user-dialog"
 import { UserFormDialog, type UserFormField } from "./user-form-dialog"
 
 type Props = {
