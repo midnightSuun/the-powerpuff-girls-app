@@ -61,7 +61,6 @@ type Props = {
     submitLabel: string
     isSubmitting: boolean
     onSubmit: (event: SubmitEvent<HTMLFormElement>) => void
-    trigger?: ReactNode
     showFieldLabels?: boolean
     lockCredentials?: boolean
     email: string
@@ -104,7 +103,6 @@ export const UserFormDialog = ({
     submitLabel,
     isSubmitting,
     onSubmit,
-    trigger,
     showFieldLabels = false,
     lockCredentials = false,
     email,
@@ -126,7 +124,6 @@ export const UserFormDialog = ({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            {trigger}
             <DialogContent
                 showCloseButton={false}
                 overlayClassName="bg-black/50 backdrop-blur-none"

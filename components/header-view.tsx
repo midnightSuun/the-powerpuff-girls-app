@@ -9,7 +9,6 @@ import { SearchInput } from "@/components/search-input"
 import { AddItemButton } from "@/components/ui/list-management-buttons"
 import { Link, usePathname } from "@/i18n/navigation"
 import { routing } from "@/i18n/routing"
-import { CreateUserDialog } from "@/modules/users/ui/create-user-dialog"
 
 export type HeaderCopyKey =
     | "users"
@@ -20,7 +19,6 @@ export type HeaderCopyKey =
     | "positions"
     | "projects"
     | "profile"
-    | "createUser"
     | "cvs"
     | "cvDetails"
     | "cvSkills"
@@ -40,7 +38,6 @@ type HeaderDefaultPage = {
     path: string
     title: HeaderCopyKey
     showSearch?: boolean
-    action?: "createUser"
 }
 
 type HeaderTabsPage = {
@@ -218,7 +215,6 @@ const useHeaderCopy = (): HeaderCopy => {
         positions: tPositions("title"),
         projects: tProjects("title"),
         profile: tNav("profile"),
-        createUser: tUsers("createUser"),
         cvs: tCvs("title"),
         cvDetails: tCv("tabs.details").toLowerCase(),
         cvSkills: tCv("tabs.skills").toLowerCase(),
@@ -262,7 +258,7 @@ const DefaultPageHeader = ({
     copy: HeaderCopy
 }) => {
     const toolbarAction = useHeaderToolbarActionValue()
-    const showToolbar = Boolean(page.showSearch || page.action || toolbarAction)
+    const showToolbar = Boolean(page.showSearch || toolbarAction)
 
     return (
         <header className="w-full shrink-0 bg-[#f5f5f7] dark:bg-[#2e2e2e]">
@@ -284,11 +280,6 @@ const DefaultPageHeader = ({
                                 variant="primaryV2"
                                 className={headerToolbarButtonClassName}
                             />
-                        </div>
-                    ) : null}
-                    {page.action === "createUser" ? (
-                        <div className="ml-auto">
-                            <CreateUserDialog label={copy.createUser} />
                         </div>
                     ) : null}
                 </div>

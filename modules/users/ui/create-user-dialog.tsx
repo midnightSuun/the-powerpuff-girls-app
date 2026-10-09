@@ -2,17 +2,12 @@
 
 import { useTranslations } from "next-intl"
 
-import { DialogTrigger } from "@/components/ui/dialog"
-import { AddItemButton } from "@/components/ui/list-management-buttons"
+import { useHeaderToolbarAction } from "@/components/header-toolbar-action"
 
 import { useCreateUserDialog } from "../hooks/use-create-user-dialog"
 import { UserFormDialog } from "./user-form-dialog"
 
-type Props = {
-    label: string
-}
-
-export const CreateUserDialog = ({ label }: Props) => {
+export const CreateUserDialog = () => {
     const t = useTranslations("Users")
     const tDialog = useTranslations("Users.dialog")
     const {
@@ -26,6 +21,10 @@ export const CreateUserDialog = ({ label }: Props) => {
         handleChange,
         handleSubmit,
     } = useCreateUserDialog()
+
+    useHeaderToolbarAction(t("createUser"), () => {
+        handleOpenChange(true)
+    })
 
     return (
         <UserFormDialog
@@ -47,11 +46,6 @@ export const CreateUserDialog = ({ label }: Props) => {
             positions={positions}
             roleOptions={roleOptions}
             onFieldChange={handleChange}
-            trigger={
-                <DialogTrigger
-                    render={<AddItemButton label={label} variant="primaryV2" />}
-                />
-            }
         />
     )
 }

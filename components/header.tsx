@@ -10,7 +10,6 @@ type DefaultPage = {
     path: string
     title: HeaderCopyKey
     showSearch?: boolean
-    action?: "createUser"
 }
 
 type PageWithTabs = {
@@ -31,7 +30,6 @@ const PAGES: (DefaultPage | PageWithTabs)[] = [
         path: "/users",
         title: "users",
         showSearch: true,
-        action: "createUser",
     },
     {
         path: "/cv",
@@ -128,7 +126,7 @@ const loadSecondBreadcrumb = async (pagePath: string, id: string) => {
     }
 }
 
-const toClientPages = (isAdmin: boolean): HeaderPage[] =>
+const toClientPages = (): HeaderPage[] =>
     PAGES.map((page) => {
         if (isPageWithTabs(page)) {
             return {
@@ -146,7 +144,6 @@ const toClientPages = (isAdmin: boolean): HeaderPage[] =>
             path: page.path,
             title: page.title,
             showSearch: page.showSearch,
-            action: isAdmin ? page.action : undefined,
         }
     })
 
@@ -156,7 +153,7 @@ export const Header = async () => {
 
     return (
         <HeaderView
-            pages={toClientPages(isAdmin)}
+            pages={toClientPages()}
             initialBreadcrumb={null}
             viewerId={session?.userId ?? null}
             isAdmin={isAdmin}
