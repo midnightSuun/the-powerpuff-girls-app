@@ -1,6 +1,7 @@
 "use client"
 
 import { BaseModal } from "@/components/ui/base-modal"
+import { DatePicker } from "@/components/ui/date-picker"
 import { Input } from "@/components/ui/input"
 import {
     Select,
@@ -107,26 +108,27 @@ export function CvProjectFormModal(props: CvProjectFormModalProps) {
                     />
                 </div>
 
-                <div>
-                    <Input
-                        type="date"
-                        label={t("startDate")}
-                        required
+                <label className="relative flex flex-col gap-1 text-xs text-muted-foreground">
+                    <span className="absolute -top-1.5 left-2 z-10 bg-background px-1 text-[10px]">
+                        {t("startDate")}
+                    </span>
+                    <DatePicker
                         value={startDate}
-                        onChange={(event) => setStartDate(event.target.value)}
+                        onChange={setStartDate}
                         className={fieldClassName}
                     />
-                </div>
+                </label>
 
-                <div>
-                    <Input
-                        type="date"
-                        label={t("endDate")}
+                <label className="relative flex flex-col gap-1 text-xs text-muted-foreground">
+                    <span className="absolute -top-1.5 left-2 z-10 bg-background px-1 text-[10px]">
+                        {t("endDate")}
+                    </span>
+                    <DatePicker
                         value={endDate}
-                        onChange={(event) => setEndDate(event.target.value)}
+                        onChange={setEndDate}
                         className={fieldClassName}
                     />
-                </div>
+                </label>
 
                 <label className="relative flex flex-col gap-1 text-xs text-muted-foreground sm:col-span-2">
                     <span className="absolute -top-1.5 left-2 z-10 bg-background px-1 text-[10px]">

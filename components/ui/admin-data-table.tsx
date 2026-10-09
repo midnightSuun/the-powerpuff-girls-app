@@ -44,7 +44,7 @@ function AdminTableRowComponent<T extends { id: string | number }>({
     deleteText,
 }: AdminTableRowProps<T>) {
     return (
-        <tr className="h-14 border-b border-[#383838] hover:bg-muted/10 transition-colors">
+        <tr className="h-14 border-b border-[#AEAEAE] dark:border-[#383838] hover:bg-muted/10 transition-colors">
             {columns.map((col) => (
                 <td
                     key={col.key}
@@ -243,7 +243,7 @@ export function AdminDataTable<T extends { id: string | number }>({
             <div className="w-full overflow-x-auto">
                 <table className="w-full text-left text-sm">
                     <thead>
-                        <tr className="h-12 border-b border-[#383838]">
+                        <tr className="h-12 border-b border-[#AEAEAE] dark:border-[#383838]">
                             {columns.map((col) => {
                                 const isSorted = sortColumnKey === col.key
                                 return (
@@ -306,7 +306,7 @@ export function AdminDataTable<T extends { id: string | number }>({
                                 />
                             ))
                         ) : (
-                            <tr className="h-14 border-b border-[#383838]">
+                            <tr className="h-14 border-b border-[#AEAEAE] dark:border-[#383838]">
                                 <td
                                     colSpan={
                                         columns.length +

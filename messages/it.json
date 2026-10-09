@@ -738,5 +738,10 @@
             "profileUpdated": "Profilo aggiornato con successo.",
             "verificationFailed": "Impossibile inviare l'e-mail di verifica."
         }
+    },
+    "Calendar": {
+        "clear": "Cancella",
+        "today": "Oggi",
+        "placeholder": "GG/MM/AAAA"
     }
 }
