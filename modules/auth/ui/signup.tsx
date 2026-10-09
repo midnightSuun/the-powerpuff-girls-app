@@ -45,6 +45,7 @@ export function Signup() {
                         <Input
                             type="email"
                             label={t("emailPlaceholder")}
+                            placeholder={t("emailPlaceholder")}
                             error={errors.email?.message}
                             aria-invalid={!!errors.email}
                             {...register("email")}
@@ -53,12 +54,14 @@ export function Signup() {
 
                     <PasswordField
                         label={t("passwordPlaceholder")}
+                        placeholder={t("passwordPlaceholder")}
                         error={errors.password?.message}
                         {...register("password")}
                     />
 
                     <PasswordField
                         label={t("confirmPasswordPlaceholder")}
+                        placeholder={t("confirmPasswordPlaceholder")}
                         error={errors.confirmPassword?.message}
                         {...register("confirmPassword")}
                     />

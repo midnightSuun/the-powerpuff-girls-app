@@ -207,7 +207,6 @@
             "invalidEmail": "Please enter a valid email address",
             "passwordRequired": "Password is required",
             "passwordMin": "Password must be at least 6 characters long",
-            "passwordMin8": "Password must be at least 8 characters",
             "confirmPassword": "Please confirm your password",
             "passwordsDoNotMatch": "Passwords do not match",
             "codeLength": "Verification code must be exactly 6 digits.",
@@ -223,6 +222,8 @@
             "unknownError": "Unknown error",
             "signupEmailFailed": "Failed to sign up due to mail server error. Please try again later.",
             "forgotFailed": "Failed to send reset instructions. Please try again.",
+            "forgotAccountNotFound": "No account found with this email address",
+            "forgotServerError": "Something went wrong. Please try again later",
             "forgotInstructionsSent": "Instructions have been sent to your email.",
             "resetTokenInvalid": "Reset token is missing or invalid. Open the link from your email again.",
             "resetExpired": "This reset link has expired. Please request a new one.",
@@ -738,5 +739,10 @@
             "profileUpdated": "Profile updated successfully.",
             "verificationFailed": "Failed to send verification email."
         }
+    },
+    "Calendar": {
+        "clear": "Clear",
+        "today": "Today",
+        "placeholder": "DD.MM.YYYY"
     }
 }

@@ -207,7 +207,6 @@
             "invalidEmail": "Wprowadź poprawny adres e-mail",
             "passwordRequired": "Hasło jest wymagane",
             "passwordMin": "Hasło musi mieć co najmniej 6 znaków",
-            "passwordMin8": "Hasło musi mieć co najmniej 8 znaków",
             "confirmPassword": "Potwierdź swoje hasło",
             "passwordsDoNotMatch": "Hasła nie zgadzają się",
             "codeLength": "Kod weryfikacyjny musi składać się dokładnie z 6 cyfr.",
@@ -223,6 +222,8 @@
             "unknownError": "Nieznany błąd",
             "signupEmailFailed": "Rejestracja nie powiodła się z powodu błędu serwera pocztowego. Spróbuj ponownie później.",
             "forgotFailed": "Nie udało się wysłać instrukcji resetowania. Spróbuj ponownie.",
+            "forgotAccountNotFound": "Nie znaleziono konta z tym adresem e-mail",
+            "forgotServerError": "Coś poszło nie tak. Spróbuj ponownie później",
             "forgotInstructionsSent": "Instrukcje zostały wysłane na Twój adres e-mail.",
             "resetTokenInvalid": "Token resetowania jest nieprawidłowy lub go brakuje. Otwórz link z e-maila ponownie.",
             "resetExpired": "Ten link resetowania wygasł. Poproś o nowy.",
@@ -738,5 +739,10 @@
             "profileUpdated": "Profil został pomyślnie zaktualizowany.",
             "verificationFailed": "Nie udało się wysłać e-maila weryfikacyjnego."
         }
+    },
+    "Calendar": {
+        "clear": "Wyczyść",
+        "today": "Dzisiaj",
+        "placeholder": "DD.MM.RRRR"
     }
 }

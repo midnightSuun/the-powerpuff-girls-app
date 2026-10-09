@@ -31,7 +31,7 @@ export function useResetPassword() {
         resolver: zodResolver(
             createResetPasswordSchema({
                 passwordRequired: validation("passwordRequired"),
-                passwordMin: validation("passwordMin8"),
+                passwordMin: validation("passwordMin"),
                 confirmPassword: validation("confirmPassword"),
                 passwordsDoNotMatch: validation("passwordsDoNotMatch"),
             }),

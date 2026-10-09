@@ -39,12 +39,14 @@ export function ResetPasswordPage() {
                 >
                     <PasswordField
                         label={t("newPasswordPlaceholder")}
+                        placeholder={t("newPasswordPlaceholder")}
                         error={errors.newPassword?.message}
                         {...register("newPassword")}
                     />
 
                     <PasswordField
                         label={t("confirmPasswordPlaceholder")}
+                        placeholder={t("confirmPasswordPlaceholder")}
                         error={errors.confirmPassword?.message}
                         {...register("confirmPassword")}
                     />

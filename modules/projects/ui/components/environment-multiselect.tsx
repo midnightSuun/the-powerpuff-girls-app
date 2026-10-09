@@ -1,170 +1,211 @@
 "use client"
 
-import { ChevronDown, Plus, X } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
-
-import { Input } from "@/components/ui/input"
+import { cn } from "cn"
+import { Check, ChevronDown, ChevronUp, X } from "lucide-react"
+import { useEffect, useRef, useState, useSyncExternalStore } from "react"
+import { createPortal } from "react-dom"
 
 interface EnvironmentMultiselectProps {
     options: string[]
     value: string[]
     onChange: (value: string[]) => void
-    placeholder: string
-    addLabel: string
-    removeLabel: (value: string) => string
+    placeholder?: string
+    addLabel?: string
+    removeLabel?: (value: string) => string
     compact?: boolean
+    error?: string
+    className?: string
 }
+
+const subscribe = () => () => {}
+const getSnapshot = () => true
+const getServerSnapshot = () => false
 
 export function EnvironmentMultiselect({
     options,
-    value,
+    value = [],
     onChange,
-    placeholder,
-    addLabel,
-    removeLabel,
-    compact = false,
+    placeholder = "Position",
+    error,
+    className,
 }: EnvironmentMultiselectProps) {
-    const [customOption, setCustomOption] = useState("")
     const [isOpen, setIsOpen] = useState(false)
+    const mounted = useSyncExternalStore(
+        subscribe,
+        getSnapshot,
+        getServerSnapshot,
+    )
     const containerRef = useRef<HTMLDivElement>(null)
-    const allOptions = Array.from(new Set([...options, ...value]))
+    const [coords, setCoords] = useState<{
+        top: number
+        left: number
+        width: number
+    }>({
+        top: 0,
+        left: 0,
+        width: 0,
+    })
+
+    const updateCoords = () => {
+        if (containerRef.current) {
+            const rect = containerRef.current.getBoundingClientRect()
+            setCoords({
+                top: rect.bottom + 4,
+                left: rect.left,
+                width: rect.width,
+            })
+        }
+    }
 
     useEffect(() => {
-        if (!isOpen) return
+        if (isOpen) {
+            updateCoords()
+            window.addEventListener("resize", updateCoords)
+            window.addEventListener("scroll", updateCoords, true)
+        }
+        return () => {
+            window.removeEventListener("resize", updateCoords)
+            window.removeEventListener("scroll", updateCoords, true)
+        }
+    }, [isOpen])
 
-        const closeOnOutsideClick = (event: PointerEvent) => {
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            const target = event.target as Node
             if (
-                event.target instanceof Node &&
-                !containerRef.current?.contains(event.target)
+                containerRef.current &&
+                !containerRef.current.contains(target)
             ) {
+                const portalEl = document.getElementById(
+                    "multiselect-dropdown-portal",
+                )
+                if (portalEl && portalEl.contains(target)) {
+                    return
+                }
                 setIsOpen(false)
             }
         }
-
-        document.addEventListener("pointerdown", closeOnOutsideClick)
+        document.addEventListener("mousedown", handleClickOutside)
         return () =>
-            document.removeEventListener("pointerdown", closeOnOutsideClick)
-    }, [isOpen])
+            document.removeEventListener("mousedown", handleClickOutside)
+    }, [])
 
-    const toggleOption = (option: string, selected: boolean) => {
-        onChange(
-            selected
-                ? [...value, option]
-                : value.filter((item) => item !== option),
-        )
+    const handleToggleOption = (option: string) => {
+        if (value.includes(option)) {
+            onChange(value.filter((item) => item !== option))
+        } else {
+            onChange([...value, option])
+        }
     }
 
-    const addCustomOption = () => {
-        const option = customOption.trim()
-        if (!option) return
-        if (!value.includes(option)) onChange([...value, option])
-        setCustomOption("")
+    const handleRemoveTag = (e: React.MouseEvent, optionToRemove: string) => {
+        e.stopPropagation()
+        onChange(value.filter((item) => item !== optionToRemove))
     }
 
     return (
-        <div
-            ref={containerRef}
-            onKeyDown={(event) => {
-                if (event.key === "Escape") setIsOpen(false)
-            }}
-            className="relative"
-        >
+        <div ref={containerRef} className="relative w-full select-none">
             <div
-                className={`flex flex-wrap items-center gap-1.5 rounded-none border border-border bg-background px-2.5 text-foreground ${
-                    compact ? "min-h-8" : "min-h-10"
-                } ${compact ? "py-1" : "py-1.5"}`}
-            >
-                {value.length === 0 && (
-                    <span className="text-xs text-muted-foreground">
-                        {placeholder}
-                    </span>
+                onClick={() => setIsOpen(!isOpen)}
+                className={cn(
+                    "flex min-h-9 w-full cursor-pointer items-center justify-between gap-1.5 border bg-background px-2.5 py-1.5 text-xs transition-colors",
+                    "border-[#2E2E2E] text-[#2E2E2E] dark:border-[#F5F5F7] dark:text-[#F5F5F7]",
+                    error && "border-red-500 dark:border-red-500",
+                    className,
                 )}
-                {value.map((option) => (
-                    <span
-                        key={option}
-                        className="inline-flex items-center gap-1 rounded-full border border-border bg-muted px-2 py-0.5 text-xs text-foreground"
-                    >
-                        {option}
-                        <button
-                            type="button"
-                            aria-label={removeLabel(option)}
-                            onClick={() => toggleOption(option, false)}
-                            className="text-muted-foreground hover:text-foreground"
-                        >
-                            <X aria-hidden="true" className="size-3" />
-                        </button>
-                    </span>
-                ))}
+            >
+                <div className="flex flex-wrap items-center gap-1.5 pr-2">
+                    {value.length > 0 ? (
+                        value.map((item) => (
+                            <span
+                                key={item}
+                                className={cn(
+                                    "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-normal transition-colors",
+                                    "border-[#2E2E2E] text-[#2E2E2E] dark:border-[#F5F5F7] dark:text-[#F5F5F7]",
+                                )}
+                            >
+                                <span>{item}</span>
+                                <button
+                                    type="button"
+                                    onClick={(e) => handleRemoveTag(e, item)}
+                                    className="flex h-3 w-3 items-center justify-center rounded-full hover:opacity-70"
+                                >
+                                    <X className="h-2.5 w-2.5" />
+                                </button>
+                            </span>
+                        ))
+                    ) : (
+                        <span className="text-muted-foreground">
+                            {placeholder}
+                        </span>
+                    )}
+                </div>
 
-                <button
-                    type="button"
-                    aria-label={placeholder}
-                    aria-expanded={isOpen}
-                    aria-controls="environment-options"
-                    onClick={() => setIsOpen((open) => !open)}
-                    className="ml-auto inline-flex size-7 shrink-0 items-center justify-center rounded text-muted-foreground outline-none hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
-                >
-                    <ChevronDown aria-hidden="true" className="size-4" />
-                </button>
+                <div className="flex shrink-0 items-center justify-center">
+                    {isOpen ? (
+                        <ChevronUp className="h-4 w-4 text-[#2E2E2E] dark:text-[#F5F5F7]" />
+                    ) : (
+                        <ChevronDown className="h-4 w-4 text-[#2E2E2E] dark:text-[#F5F5F7]" />
+                    )}
+                </div>
             </div>
 
-            {isOpen && (
-                <div
-                    id="environment-options"
-                    role="region"
-                    aria-label={placeholder}
-                    className="mt-2 w-full rounded-md border border-border bg-popover p-2 text-popover-foreground shadow-sm"
-                >
-                    <div className="flex gap-1.5 pb-2">
-                        <Input
-                            value={customOption}
-                            onChange={(event) =>
-                                setCustomOption(event.target.value)
-                            }
-                            onKeyDown={(event) => {
-                                if (event.key === "Enter") {
-                                    event.preventDefault()
-                                    addCustomOption()
-                                }
-                            }}
-                            placeholder={addLabel}
-                            className="h-8 bg-background text-xs"
-                        />
-                        <button
-                            type="button"
-                            aria-label={addLabel}
-                            disabled={!customOption.trim()}
-                            onClick={(event) => {
-                                event.preventDefault()
-                                addCustomOption()
-                            }}
-                            className="inline-flex size-8 shrink-0 items-center justify-center rounded border border-border bg-background text-foreground hover:bg-accent disabled:pointer-events-none disabled:opacity-50"
-                        >
-                            <Plus aria-hidden="true" className="size-4" />
-                        </button>
-                    </div>
-                    <div className="grid max-h-40 grid-cols-1 gap-x-2 gap-y-1 overflow-y-auto sm:grid-cols-2">
-                        {allOptions.map((option) => (
-                            <label
-                                key={option}
-                                className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-xs hover:bg-accent"
-                            >
-                                <input
-                                    type="checkbox"
-                                    checked={value.includes(option)}
-                                    onChange={(event) =>
-                                        toggleOption(
-                                            option,
-                                            event.target.checked,
-                                        )
-                                    }
-                                    className="size-3.5 accent-primary"
-                                />
-                                <span>{option}</span>
-                            </label>
-                        ))}
-                    </div>
-                </div>
+            {isOpen &&
+                mounted &&
+                createPortal(
+                    <div
+                        id="multiselect-dropdown-portal"
+                        style={{
+                            position: "fixed",
+                            top: `${coords.top}px`,
+                            left: `${coords.left}px`,
+                            width: `${coords.width}px`,
+                        }}
+                        className={cn(
+                            "z-[9999] max-h-56 overflow-y-auto border bg-background shadow-xl",
+                            "border-[#2E2E2E] dark:border-[#F5F5F7]",
+                        )}
+                    >
+                        {options.map((option) => {
+                            const isSelected = value.includes(option)
+
+                            return (
+                                <div
+                                    key={option}
+                                    onClick={() => handleToggleOption(option)}
+                                    className={cn(
+                                        "flex cursor-pointer items-center gap-2.5 px-3 py-2 text-xs transition-colors",
+                                        "text-[#2E2E2E] dark:text-[#F5F5F7]",
+                                        "hover:bg-[#AEAEAE] dark:hover:bg-[#626262]",
+                                        isSelected &&
+                                            "bg-[#626262] text-[#F5F5F7] dark:bg-[#F5F5F7] dark:text-[#2E2E2E]",
+                                    )}
+                                >
+                                    <div
+                                        className={cn(
+                                            "flex h-4 w-4 shrink-0 items-center justify-center border transition-colors",
+                                            isSelected
+                                                ? "border-[#F5F5F7] bg-transparent dark:border-[#2E2E2E]"
+                                                : "border-[#2E2E2E] dark:border-[#F5F5F7]",
+                                        )}
+                                    >
+                                        {isSelected && (
+                                            <Check className="h-3 w-3 text-[#F5F5F7] dark:text-[#2E2E2E]" />
+                                        )}
+                                    </div>
+
+                                    <span className="font-normal font-sans">
+                                        {option}
+                                    </span>
+                                </div>
+                            )
+                        })}
+                    </div>,
+                    document.body,
+                )}
+
+            {error && (
+                <span className="mt-1 text-[10px] text-red-500">{error}</span>
             )}
         </div>
     )

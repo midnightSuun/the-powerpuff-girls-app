@@ -57,6 +57,7 @@ export function EmailVerification({
                     <div className="flex justify-center gap-3 w-full">
                         {Array.from({ length: 6 }).map((_, index) => {
                             const digitValue = codeValue[index] || ""
+                            const hasError = Boolean(errors.code)
                             return (
                                 <Input
                                     key={index}
@@ -67,6 +68,8 @@ export function EmailVerification({
                                     inputMode="numeric"
                                     maxLength={1}
                                     value={digitValue}
+                                    error={hasError ? "" : undefined}
+                                    aria-invalid={hasError}
                                     onChange={(e) =>
                                         handleChange(e.target.value, index)
                                     }

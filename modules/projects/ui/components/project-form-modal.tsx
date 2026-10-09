@@ -2,6 +2,7 @@
 
 import type { ProjectTableItem } from "@/components/projects-table-view"
 import { BaseModal } from "@/components/ui/base-modal"
+import { DatePicker } from "@/components/ui/date-picker"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import type { ProjectFormData } from "@/modules/projects/hooks/use-admin-projects"
@@ -68,53 +69,77 @@ export function ProjectFormModal(props: ProjectFormModalProps) {
             cancelButtonClassName="h-10 w-[138px] rounded-full border-foreground px-0 py-0 text-[10px] text-foreground hover:bg-accent"
             confirmButtonClassName="h-10 w-[138px] rounded-full bg-[#cf2f32] px-0 py-0 text-[10px] text-white hover:bg-[#b92529]"
         >
-            <div className="grid grid-cols-1 gap-x-2 gap-y-5 sm:grid-cols-2">
-                <Input
-                    required
-                    maxLength={255}
-                    label={t("name")}
-                    value={name}
-                    onChange={(event) => setName(event.target.value)}
-                    className={fieldClassName(isEditing)}
-                />
-
-                <Input
-                    required
-                    maxLength={255}
-                    label={t("domain")}
-                    value={domain}
-                    onChange={(event) => setDomain(event.target.value)}
-                    className={fieldClassName(isEditing)}
-                />
-
-                <div className="relative">
+            <div className="grid grid-cols-1 gap-x-2 gap-y-4 sm:grid-cols-2">
+                <div className="relative flex flex-col pt-4">
+                    {Boolean(name) && (
+                        <span className="absolute top-0 left-0 text-[10px] text-muted-foreground">
+                            {t("name")}
+                        </span>
+                    )}
                     <Input
                         required
-                        type="date"
-                        label={t("startDate")}
-                        value={startDate}
-                        onChange={(event) => setStartDate(event.target.value)}
-                        className={`${fieldClassName(isEditing)} scheme-lightolor-scheme:dark]`}
+                        maxLength={255}
+                        value={name}
+                        onChange={(event) => setName(event.target.value)}
+                        placeholder={Boolean(name) ? undefined : t("name")}
+                        className={fieldClassName(isEditing)}
                     />
                 </div>
 
-                <div className="relative">
+                <div className="relative flex flex-col pt-4">
+                    {Boolean(domain) && (
+                        <span className="absolute top-0 left-0 text-[10px] text-muted-foreground">
+                            {t("domain")}
+                        </span>
+                    )}
                     <Input
-                        type="date"
-                        label={t("endDate")}
-                        value={endDate}
-                        onChange={(event) => setEndDate(event.target.value)}
-                        className={`${fieldClassName(isEditing)} scheme-light dark:scheme-dark`}
+                        required
+                        maxLength={255}
+                        value={domain}
+                        onChange={(event) => setDomain(event.target.value)}
+                        placeholder={Boolean(domain) ? undefined : t("domain")}
+                        className={fieldClassName(isEditing)}
                     />
                 </div>
 
-                <label
-                    className={`relative flex flex-col gap-1 text-xs text-muted-foreground sm:col-span-2 ${
-                        isEditing ? "pt-2" : ""
-                    }`}
-                >
-                    {isEditing && (
-                        <span className="absolute left-2 top-0 z-10 bg-background px-1 text-[10px]">
+                <div className="relative flex flex-col pt-4">
+                    {Boolean(startDate) && (
+                        <span className="absolute top-0 left-0 text-[10px] text-muted-foreground">
+                            {t("startDate")}
+                        </span>
+                    )}
+                    <DatePicker
+                        value={startDate}
+                        onChange={(newStart) => {
+                            setStartDate(newStart)
+                            if (endDate && newStart > endDate) {
+                                setEndDate("")
+                            }
+                        }}
+                        maxDate={endDate || undefined}
+                        placeholder={t("startDate")}
+                        className={fieldClassName(isEditing)}
+                    />
+                </div>
+
+                <div className="relative flex flex-col pt-4">
+                    {Boolean(endDate) && (
+                        <span className="absolute top-0 left-0 text-[10px] text-muted-foreground">
+                            {t("endDate")}
+                        </span>
+                    )}
+                    <DatePicker
+                        value={endDate}
+                        onChange={setEndDate}
+                        minDate={startDate || undefined}
+                        placeholder={t("endDate")}
+                        className={fieldClassName(isEditing)}
+                    />
+                </div>
+
+                <div className="relative flex flex-col pt-4 sm:col-span-2">
+                    {Boolean(description) && (
+                        <span className="absolute top-0 left-0 text-[10px] text-muted-foreground">
                             {t("description")}
                         </span>
                     )}
@@ -123,20 +148,18 @@ export function ProjectFormModal(props: ProjectFormModalProps) {
                         aria-label={t("description")}
                         value={description}
                         onChange={(event) => setDescription(event.target.value)}
-                        placeholder={isEditing ? undefined : t("description")}
+                        placeholder={
+                            Boolean(description) ? undefined : t("description")
+                        }
                         className={`resize-none rounded-none border-border bg-background px-2.5 py-2 text-xs text-foreground shadow-none placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring ${
                             isEditing ? "min-h-25.5" : "min-h-20"
                         }`}
                     />
-                </label>
+                </div>
 
-                <div
-                    className={`relative flex flex-col gap-1 text-xs text-muted-foreground sm:col-span-2 ${
-                        isEditing ? "pt-2" : ""
-                    }`}
-                >
-                    {isEditing && (
-                        <span className="absolute left-2 top-0 z-10 bg-background px-1 text-[10px]">
+                <div className="relative flex flex-col pt-4 sm:col-span-2">
+                    {environment.length > 0 && (
+                        <span className="absolute top-0 left-0 text-[10px] text-muted-foreground">
                             {t("environment")}
                         </span>
                     )}

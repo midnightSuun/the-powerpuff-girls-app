@@ -15,6 +15,7 @@ export function PasswordField({
     label,
     error,
     className,
+    placeholder,
     ...props
 }: PasswordFieldProps) {
     const [showPassword, setShowPassword] = useState(false)
@@ -24,6 +25,7 @@ export function PasswordField({
             type={showPassword ? "text" : "password"}
             label={label}
             error={error}
+            placeholder={placeholder}
             className={cn(
                 "pr-10 [&::-ms-reveal]:hidden [&::-ms-clear]:hidden [&::-webkit-password-toggle-button]:appearance-none",
                 className,

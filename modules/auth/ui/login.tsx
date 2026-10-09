@@ -45,6 +45,7 @@ export function Login() {
                         <Input
                             type="email"
                             label={t("emailPlaceholder")}
+                            placeholder={t("emailPlaceholder")}
                             error={errors.email?.message}
                             aria-invalid={!!errors.email}
                             autoComplete="email"
