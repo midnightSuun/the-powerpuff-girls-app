@@ -13,7 +13,7 @@ export const createResetPasswordSchema = (messages: Messages) =>
             newPassword: z
                 .string()
                 .min(1, { message: messages.passwordRequired })
-                .min(8, { message: messages.passwordMin }),
+                .min(6, { message: messages.passwordMin }),
             confirmPassword: z
                 .string()
                 .min(1, { message: messages.confirmPassword }),

@@ -165,6 +165,9 @@ export function SettingsPage() {
                         <div className="space-y-1">
                             <PasswordField
                                 label={t("passwordSection.currentPlaceholder")}
+                                placeholder={t(
+                                    "passwordSection.currentPlaceholder",
+                                )}
                                 error={errors.password?.message}
                                 {...register("password")}
                             />
@@ -173,6 +176,9 @@ export function SettingsPage() {
                         <div className="space-y-1">
                             <PasswordField
                                 label={t("passwordSection.newPlaceholder")}
+                                placeholder={t(
+                                    "passwordSection.newPlaceholder",
+                                )}
                                 error={errors.newPassword?.message}
                                 {...register("newPassword")}
                             />
@@ -181,6 +187,9 @@ export function SettingsPage() {
                         <div className="space-y-1">
                             <PasswordField
                                 label={t("passwordSection.confirmPlaceholder")}
+                                placeholder={t(
+                                    "passwordSection.confirmPlaceholder",
+                                )}
                                 error={errors.confirmPassword?.message}
                                 {...register("confirmPassword")}
                             />
