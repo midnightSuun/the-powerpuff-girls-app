@@ -17,7 +17,7 @@ import {
 } from "@/modules/languages/api/languages"
 import { AdminLanguagesView } from "@/modules/languages/ui/components/admin/admin-languages-view"
 import { LanguagesPage } from "@/modules/languages/ui/languages-page"
-import { UsersTableFrame } from "@/modules/users/ui/users-table-frame"
+import { UsersTableFrame } from "@/modules/users/ui/components/list/users-table-frame"
 
 export const instant = false
 

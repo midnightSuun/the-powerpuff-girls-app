@@ -15,9 +15,9 @@ import {
 import { useActionNotifications } from "@/hooks/use-action-notifications"
 import { Link, useRouter } from "@/i18n/navigation"
 
-import { deleteUser } from "../api/delete-user"
-import type { EditableUser } from "../hooks/use-update-user-dialog"
-import { UpdateUserDialog } from "./update-user-dialog"
+import { deleteUser } from "../../../api/delete-user"
+import type { EditableUser } from "../../../hooks/use-update-user-dialog"
+import { UpdateUserDialog } from "../form/update-user-dialog"
 
 type Props = {
     label: string

@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl"
 import { DialogTrigger } from "@/components/ui/dialog"
 import { AddItemButton } from "@/components/ui/list-management-buttons"
 
-import { useCreateUserDialog } from "../hooks/use-create-user-dialog"
+import { useCreateUserDialog } from "../../../hooks/use-create-user-dialog"
 import { UserFormDialog } from "./user-form-dialog"
 
 type Props = {
