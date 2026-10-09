@@ -18,6 +18,9 @@ function Input({
     endAdornment,
     "aria-describedby": ariaDescribedBy,
     "aria-invalid": ariaInvalid,
+    disabled,
+    value,
+    defaultValue,
     ...props
 }: InputProps) {
     const generatedId = React.useId()
@@ -27,26 +30,58 @@ function Input({
         .filter(Boolean)
         .join(" ")
 
+    const [isFocused, setIsFocused] = React.useState(false)
+    const [internalValue, setInternalValue] = React.useState(
+        defaultValue !== undefined ? String(defaultValue) : "",
+    )
+
+    // Если компонент управляемый (передан value), берем его, иначе используем внутренний стейт инпута
+    const currentValue = value !== undefined ? value : internalValue
+    const hasValue = Boolean(currentValue)
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (value === undefined) {
+            setInternalValue(e.target.value)
+        }
+        props.onChange?.(e)
+    }
+
+    const shouldShowLabel = isFocused || hasValue || Boolean(error) || disabled
+
     return (
-        <div className="w-full space-y-1">
+        <div className="w-full space-y-1.5">
+            {label && (
+                <label
+                    htmlFor={inputId}
+                    className={cn(
+                        "block text-xs font-medium ml-4 transition-all duration-200 select-none",
+                        shouldShowLabel
+                            ? "opacity-100 h-auto"
+                            : "opacity-0 h-0 overflow-hidden pointer-events-none",
+                        error ? "text-destructive" : "text-muted-foreground",
+                    )}
+                >
+                    {label}
+                </label>
+            )}
+
             <div className="relative">
-                {label && (
-                    <label
-                        htmlFor={inputId}
-                        className={cn(
-                            "absolute -top-4.5 left-3.5 px-1 bg-background text-xs font-medium transition-colors pointer-events-none select-none z-10",
-                            error
-                                ? "text-destructive"
-                                : "text-muted-foreground",
-                        )}
-                    >
-                        {label}
-                    </label>
-                )}
                 <InputPrimitive
                     id={inputId}
                     type={type}
                     data-slot="input"
+                    disabled={disabled}
+                    value={value}
+                    defaultValue={defaultValue}
+                    onFocus={(e) => {
+                        setIsFocused(true)
+                        props.onFocus?.(e)
+                    }}
+                    onBlur={(e) => {
+                        setIsFocused(false)
+                        props.onBlur?.(e)
+                    }}
+                    onChange={handleInputChange}
                     aria-describedby={describedBy || undefined}
                     aria-invalid={error ? true : ariaInvalid}
                     className={cn(
@@ -63,10 +98,11 @@ function Input({
                 />
                 {endAdornment}
             </div>
+
             {error && (
                 <p
                     id={errorId}
-                    className="text-xs text-destructive"
+                    className="text-xs text-destructive ml-4"
                     role="alert"
                 >
                     {error}

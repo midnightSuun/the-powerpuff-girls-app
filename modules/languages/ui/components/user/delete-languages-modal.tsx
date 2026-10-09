@@ -18,7 +18,6 @@ export function DeleteLanguagesModal({
     isOpen,
     onClose,
     count,
-    selectedLanguages = [],
     onConfirm,
 }: DeleteLanguagesModalProps) {
     const t = useTranslations("Languages.delete")
