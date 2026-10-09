@@ -219,7 +219,7 @@
             "signupRequired": "Veuillez remplir tous les champs.",
             "passwordsDoNotMatch": "Les mots de passe ne correspondent pas.",
             "emailAlreadyTaken": "Cet e-mail est déjà utilisé. Veuillez en utiliser un autre ou vous connecter.",
-            "serverError": "Erreur serveur : {message}",
+            "serverError": "Une erreur s'est produite. Veuillez réessayer.",
             "unknownError": "Erreur inconnue",
             "signupEmailFailed": "Échec de l'inscription en raison d'une erreur du serveur de messagerie. Veuillez réessayer plus tard.",
             "forgotFailed": "Échec de l'envoi des instructions de réinitialisation. Veuillez réessayer.",
@@ -233,7 +233,8 @@
             "verificationSent": "Un nouvel e-mail de vérification a été envoyé.",
             "sessionExpired": "Votre session a expiré. Veuillez vous connecter et réessayer.",
             "loginSuccess": "Vous vous êtes connecté avec succès à votre compte",
-            "signupVerificationSent": "Un e-mail de confirmation a été envoyé à votre adresse e-mail."
+            "signupVerificationSent": "Un e-mail de confirmation a été envoyé à votre adresse e-mail.",
+            "signupEmailNotSent": "Votre compte a été créé et vous êtes connecté, mais l'e-mail de vérification n'a pas pu être envoyé. Vous pourrez réessayer sur l'écran suivant."
         }
     },
     "Common": {
@@ -457,7 +458,8 @@
             "empty": "Vous n'avez pas encore de CV",
             "createError": "Échec de la création du CV. Veuillez réessayer.",
             "updateError": "Échec de la mise à jour du CV. Veuillez réessayer.",
-            "deleteError": "Échec de la suppression du CV. Veuillez réessayer."
+            "deleteError": "Échec de la suppression du CV. Veuillez réessayer.",
+            "fetchError": "Échec du chargement du CV. Veuillez réessayer."
         },
         "form": {
             "name": "Nom",

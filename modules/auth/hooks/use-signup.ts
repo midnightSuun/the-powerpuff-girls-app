@@ -60,12 +60,15 @@ export function useSignup() {
                         closeButton: true,
                     })
                 } else {
-                    toast.error(notifications("error"), {
-                        description: messages("signupEmailFailed"),
+                    toast.warning(notifications("warning"), {
+                        description: messages("signupEmailNotSent"),
                         closeButton: true,
                     })
                 }
-                router.push(result.redirectTo)
+                const sendFailed = result.confirmationEmailSent
+                    ? ""
+                    : "&sendFailed=true"
+                router.push(`${result.redirectTo}${sendFailed}`)
             }
         })
     }

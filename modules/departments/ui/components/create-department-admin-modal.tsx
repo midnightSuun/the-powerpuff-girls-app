@@ -39,10 +39,8 @@ export function CreateDepartmentModal(props: CreateDepartmentModalProps) {
         >
             <div className="space-y-4">
                 <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground">
-                        {t("departmentName")}
-                    </label>
                     <Input
+                        label={t("departmentName")}
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder={t("departmentPlaceholder")}

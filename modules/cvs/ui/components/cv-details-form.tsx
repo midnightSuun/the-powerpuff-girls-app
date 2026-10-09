@@ -46,15 +46,10 @@ export function CvDetailsForm({ cv, onUpdate }: CvDetailsFormProps) {
             )}
 
             <div className="flex flex-col gap-1">
-                <label
-                    htmlFor="cv-name"
-                    className="pl-2 text-xs text-muted-foreground"
-                >
-                    {t("name")}
-                </label>
                 <Input
                     id="cv-name"
                     type="text"
+                    label={t("name")}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className="h-8 rounded-none border-[#cccccc] bg-transparent px-2 text-xs shadow-none focus-visible:ring-1 focus-visible:ring-ring dark:border-border"
@@ -62,15 +57,10 @@ export function CvDetailsForm({ cv, onUpdate }: CvDetailsFormProps) {
             </div>
 
             <div className="flex flex-col gap-1">
-                <label
-                    htmlFor="cv-education"
-                    className="pl-2 text-xs text-muted-foreground"
-                >
-                    {t("education")}
-                </label>
                 <Input
                     id="cv-education"
                     type="text"
+                    label={t("education")}
                     value={education}
                     onChange={(e) => setEducation(e.target.value)}
                     className="h-8 rounded-none border-[#cccccc] bg-transparent px-2 text-xs shadow-none focus-visible:ring-1 focus-visible:ring-ring dark:border-border"

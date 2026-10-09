@@ -219,7 +219,7 @@
             "signupRequired": "Compila tutti i campi.",
             "passwordsDoNotMatch": "Le password non coincidono.",
             "emailAlreadyTaken": "Questo indirizzo e-mail è già in uso. Usane un altro o accedi.",
-            "serverError": "Errore del server: {message}",
+            "serverError": "Si è verificato un errore. Riprova.",
             "unknownError": "Errore sconosciuto",
             "signupEmailFailed": "Registrazione fallita a causa di un errore del server di posta. Riprova più tardi.",
             "forgotFailed": "Impossibile inviare le istruzioni di ripristino. Riprova.",
@@ -233,7 +233,8 @@
             "verificationSent": "Una nuova e-mail di verifica è stata inviata.",
             "sessionExpired": "La tua sessione è scaduta. Accedi e riprova.",
             "loginSuccess": "Accesso al tuo account effettuato con successo",
-            "signupVerificationSent": "Un'e-mail di conferma è stata inviata al tuo indirizzo e-mail."
+            "signupVerificationSent": "Un'e-mail di conferma è stata inviata al tuo indirizzo e-mail.",
+            "signupEmailNotSent": "Il tuo account è stato creato e hai effettuato l'accesso, ma non è stato possibile inviare l'e-mail di verifica. Potrai riprovare nella schermata successiva."
         }
     },
     "Common": {
@@ -457,7 +458,8 @@
             "empty": "Non hai ancora nessun CV",
             "createError": "Impossibile creare il CV. Riprova.",
             "updateError": "Impossibile aggiornare il CV. Riprova.",
-            "deleteError": "Impossibile eliminare il CV. Riprova."
+            "deleteError": "Impossibile eliminare il CV. Riprova.",
+            "fetchError": "Impossibile caricare il CV. Riprova."
         },
         "form": {
             "name": "Nome",

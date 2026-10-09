@@ -70,10 +70,8 @@ export function CreateSkillModal(props: CreateSkillModalProps) {
         >
             <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1">
-                    <span className="text-xs text-muted-foreground">
-                        {tAdmin("skill")}
-                    </span>
                     <Input
+                        label={tAdmin("skill")}
                         placeholder={tAdmin("skill")}
                         value={name}
                         onChange={(e) => setName(e.target.value)}

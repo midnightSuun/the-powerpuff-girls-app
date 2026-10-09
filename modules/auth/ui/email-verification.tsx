@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl"
 
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 
 import { useEmailVerification } from "../hooks/use-email-verification"
 
@@ -57,7 +58,7 @@ export function EmailVerification({
                         {Array.from({ length: 6 }).map((_, index) => {
                             const digitValue = codeValue[index] || ""
                             return (
-                                <input
+                                <Input
                                     key={index}
                                     ref={(el) => {
                                         inputRefs.current[index] = el
@@ -71,7 +72,7 @@ export function EmailVerification({
                                     }
                                     onPaste={handlePaste}
                                     onKeyDown={(e) => handleKeyDown(e, index)}
-                                    className="w-11 h-12 text-center text-lg bg-transparent border border-input rounded-md focus:outline-none focus:border-primary transition-colors text-foreground"
+                                    className="w-11 h-12 text-center text-lg p-0"
                                 />
                             )
                         })}
@@ -107,12 +108,8 @@ export function EmailVerification({
                     <div className="w-full flex flex-col items-center pt-4 space-y-4">
                         <Button
                             type="submit"
+                            variant="primary"
                             disabled={!isValid || isPending}
-                            className={`w-36 text-white transition-opacity ${
-                                !isValid || isPending
-                                    ? "bg-button-disabled cursor-not-allowed"
-                                    : "bg-button-primary-default hover:bg-button-primary-default/90 cursor-pointer"
-                            }`}
                         >
                             {isPending
                                 ? t("submittingButton")

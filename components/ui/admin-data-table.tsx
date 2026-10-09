@@ -234,7 +234,7 @@ export function AdminDataTable<T extends { id: string | number }>({
                             label={createButtonLabel}
                             onClick={onCreateClick}
                             variant="primaryV2"
-                            className="cursor-pointer text-[#d7352c] hover:text-[#b5332b] dark:text-[#f06b65] dark:hover:text-[#ff8a84] lg:!h-auto lg:!min-w-40 lg:!px-[30px] lg:!py-[16px]"
+                            className="cursor-pointer text-[#d7352c] hover:text-[#b5332b] dark:text-[#f06b65] dark:hover:text-[#ff8a84] lg:h-auto! lg:min-w-40! lg:px-7.5! lg:py-4!"
                         />
                     ) : null}
                 </div>

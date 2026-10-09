@@ -3,41 +3,42 @@
 import { Eye, EyeOff } from "lucide-react"
 import { useState } from "react"
 
-interface PasswordFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
+import { Input } from "@/components/ui/input"
+import { cn } from "@/lib/utils"
+
+interface PasswordFieldProps extends React.ComponentProps<"input"> {
     label?: string
     error?: string
 }
 
 export function PasswordField({
-    label = "",
+    label,
     error,
+    className,
     ...props
 }: PasswordFieldProps) {
     const [showPassword, setShowPassword] = useState(false)
 
     return (
-        <div className="space-y-1 w-full">
-            {label && (
-                <label className="block text-sm font-medium text-foreground">
-                    {label}
-                </label>
+        <Input
+            type={showPassword ? "text" : "password"}
+            label={label}
+            error={error}
+            className={cn(
+                "pr-10 [&::-ms-reveal]:hidden [&::-ms-clear]:hidden [&::-webkit-password-toggle-button]:appearance-none",
+                className,
             )}
-            <div className="relative">
-                <input
-                    type={showPassword ? "text" : "password"}
-                    className="block w-full border border-border/80 rounded-lg px-4 py-3 pr-10 bg-transparent text-sm placeholder:text-muted-foreground outline-none transition-colors focus-visible:ring-1 focus-visible:ring-primary text-foreground"
-                    {...props}
-                />
+            endAdornment={
                 <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                    className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
                     tabIndex={-1}
                 >
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
-            </div>
-            {error && <p className="text-xs text-destructive">{error}</p>}
-        </div>
+            }
+            {...props}
+        />
     )
 }

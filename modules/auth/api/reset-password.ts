@@ -40,9 +40,8 @@ export async function resetPasswordAction(
             }
         }
 
-        return {
-            error: message || t("resetFailed"),
-        }
+        console.error("Password reset failed:", error)
+        return { error: t("resetFailed") }
     }
 
     const cookieStore = await cookies()

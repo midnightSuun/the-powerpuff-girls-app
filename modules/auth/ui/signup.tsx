@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl"
 
 import { PasswordField } from "@/components/password-field"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 
 import { useSignup } from "../hooks/use-signup"
 import { AuthTabs } from "./components/authTabs"
@@ -41,39 +42,23 @@ export function Signup() {
                     noValidate
                 >
                     <div className="w-full space-y-1">
-                        <input
+                        <Input
                             type="email"
-                            placeholder={t("emailPlaceholder")}
+                            label={t("emailPlaceholder")}
+                            error={errors.email?.message}
                             aria-invalid={!!errors.email}
-                            aria-describedby={
-                                errors.email ? "email-error" : undefined
-                            }
                             {...register("email")}
-                            className={`w-full bg-transparent border rounded-md px-4 py-3 text-sm focus:outline-none focus:border-red-500 transition-colors text-foreground placeholder:text-muted-foreground ${
-                                errors.email
-                                    ? "border-destructive"
-                                    : "border-input"
-                            }`}
                         />
-                        {errors.email && (
-                            <span
-                                id="email-error"
-                                className="text-xs text-destructive"
-                                role="alert"
-                            >
-                                {errors.email.message}
-                            </span>
-                        )}
                     </div>
 
                     <PasswordField
-                        placeholder={t("passwordPlaceholder")}
+                        label={t("passwordPlaceholder")}
                         error={errors.password?.message}
                         {...register("password")}
                     />
 
                     <PasswordField
-                        placeholder={t("confirmPasswordPlaceholder")}
+                        label={t("confirmPasswordPlaceholder")}
                         error={errors.confirmPassword?.message}
                         {...register("confirmPassword")}
                     />
@@ -90,12 +75,8 @@ export function Signup() {
                     <div className="w-full flex flex-col items-center pt-6 space-y-6">
                         <Button
                             type="submit"
+                            variant="primary"
                             disabled={!isValid || isPending}
-                            className={`w-44 text-white transition-opacity ${
-                                !isValid || isPending
-                                    ? "bg-button-primary-default/50 cursor-not-allowed"
-                                    : "bg-button-primary-default hover:bg-button-primary-default/90 cursor-pointer"
-                            }`}
                         >
                             {isPending
                                 ? t("submittingButton")
