@@ -4,7 +4,7 @@ import { type TableColumn } from "@/components/table"
 import { type GetUsersQuery } from "@/gql"
 import { type UserSortField } from "@/lib/user-sort"
 
-import { UserAvatar } from "../../user-avatar"
+import { UserAvatar } from "./user-avatar"
 import { UserRowMenu } from "./user-row-menu"
 
 type User = GetUsersQuery["users"]["items"][number]

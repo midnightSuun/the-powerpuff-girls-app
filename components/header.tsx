@@ -36,6 +36,7 @@ const PAGES: (DefaultPage | PageWithTabs)[] = [
     {
         path: "/cv",
         title: "cvs",
+        showSearch: true,
     },
     {
         path: "/skills",

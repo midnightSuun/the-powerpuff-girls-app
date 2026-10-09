@@ -5,7 +5,7 @@ import { PaginationComponent } from "@/components/pagination"
 import { type PaginationSearchParams } from "@/lib/pagination-search-params"
 import { getCurrentSession } from "@/modules/auth/helpers/get-current-session"
 
-import { getUsers } from "../../../api/get-users"
+import { getUsers } from "../api/get-users"
 import { UsersTableClient } from "./users-table-client"
 
 type Props = PaginationSearchParams

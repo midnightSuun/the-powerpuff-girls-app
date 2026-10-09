@@ -5,8 +5,7 @@ import { Suspense } from "react"
 import { PaginationComponent } from "@/components/pagination"
 import { routing } from "@/i18n/routing"
 import { getCurrentSession } from "@/modules/auth/helpers/get-current-session"
-import { CvsListSkeleton } from "@/modules/cvs"
-import { CvsPageView } from "@/modules/cvs"
+import { CvsListSkeleton, CvsPageView } from "@/modules/cvs"
 import { getAdminCvs, getUserCvs } from "@/modules/cvs/api/cvs"
 
 interface PageProps {
@@ -65,7 +64,7 @@ async function CvsContent({
                 initialCvs={initialCvs}
                 isAdmin={isAdmin}
                 search={search}
-                limit={limit}
+                showSearch={false}
             />
             <PaginationComponent
                 totalPages={paginatedResult?.total_pages ?? 0}
@@ -81,7 +80,7 @@ async function CvsContent({
 export default function CvsPage({ searchParams }: PageProps) {
     return (
         <main className="min-h-screen w-full">
-            <Suspense fallback={<CvsListSkeleton />}>
+            <Suspense fallback={<CvsListSkeleton showSearch={false} />}>
                 <CvsContent searchParams={searchParams} />
             </Suspense>
         </main>

@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import { Suspense } from "react"
 
+import { readListSearch } from "@/lib/list-search-params"
 import {
     getCurrentSession,
     getUserRole,
@@ -8,7 +9,12 @@ import {
 import { getAdminDepartments } from "@/modules/departments/api/departments"
 import { AdminDepartmentsView } from "@/modules/departments/ui/components/admin-departments-view"
 
-async function DepartmentsContent() {
+type Props = {
+    searchParams: Promise<Record<string, string | string[] | undefined>>
+}
+async function DepartmentsContent({ searchParams }: Props) {
+    const resolvedSearchParams = await searchParams
+    const search = readListSearch(resolvedSearchParams.search)
     const session = await getCurrentSession()
 
     if (!session) {
@@ -20,7 +26,7 @@ async function DepartmentsContent() {
         redirect("/")
     }
 
-    const departments = await getAdminDepartments()
+    const departments = await getAdminDepartments(search)
 
     return (
         <div className="p-6">
@@ -29,11 +35,11 @@ async function DepartmentsContent() {
     )
 }
 
-export default function Page() {
+export default function Page({ searchParams }: Props) {
     return (
         <main className="min-h-screen w-full">
             <Suspense fallback={<div className="p-6">Loading...</div>}>
-                <DepartmentsContent />
+                <DepartmentsContent searchParams={searchParams} />
             </Suspense>
         </main>
     )

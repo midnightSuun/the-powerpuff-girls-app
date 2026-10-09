@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import { Suspense } from "react"
 
+import { readListSearch } from "@/lib/list-search-params"
 import {
     getCurrentSession,
     getUserRole,
@@ -8,7 +9,13 @@ import {
 import { getAdminPositions } from "@/modules/positions/api/positions"
 import { AdminPositionsView } from "@/modules/positions/ui/components/admin-positions-view"
 
-async function PositionsContent() {
+type Props = {
+    searchParams: Promise<Record<string, string | string[] | undefined>>
+}
+
+async function PositionsContent({ searchParams }: Props) {
+    const resolvedSearchParams = await searchParams
+    const search = readListSearch(resolvedSearchParams.search)
     const session = await getCurrentSession()
 
     if (!session) {
@@ -20,7 +27,7 @@ async function PositionsContent() {
         redirect("/")
     }
 
-    const positions = await getAdminPositions()
+    const positions = await getAdminPositions(search)
 
     return (
         <div className="p-6">
@@ -29,11 +36,11 @@ async function PositionsContent() {
     )
 }
 
-export default function Page() {
+export default function Page({ searchParams }: Props) {
     return (
         <main className="min-h-screen w-full">
             <Suspense fallback={<div className="p-6">Loading...</div>}>
-                <PositionsContent />
+                <PositionsContent searchParams={searchParams} />
             </Suspense>
         </main>
     )
