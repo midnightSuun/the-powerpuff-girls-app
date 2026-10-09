@@ -7,7 +7,7 @@ import { TableComponent } from "@/components/table"
 import { buildListSearchParams } from "@/lib/list-search-params"
 import { type SortOrder } from "@/lib/sort"
 
-import { type getUsers } from "../api/get-users"
+import { type getUsers } from "../../../api/get-users"
 import { getUsersColumns } from "./users-columns"
 
 export type UserItem = Awaited<ReturnType<typeof getUsers>>["users"][number]

@@ -1,5 +1,3 @@
-import type { ReactNode } from "react"
-
 import { Skeleton } from "@/components/ui/skeleton"
 
 const profileFields = [
@@ -9,20 +7,13 @@ const profileFields = [
     { id: "position", labelClassName: "h-3 w-16" },
 ] as const
 
-type Props = {
-    label?: ReactNode
-}
-
-export const UserProfileSkeleton = ({ label }: Props) => {
+export const UserProfileSkeleton = () => {
     return (
         <main className="min-h-0 w-full flex-1 bg-background px-6 py-6 text-foreground">
             <div
                 aria-busy="true"
-                aria-live="polite"
-                role="status"
                 className="mx-auto w-full max-w-5xl space-y-8 px-4 py-6 sm:px-8"
             >
-                {label ? <span className="sr-only">{label}</span> : null}
                 <div className="flex flex-col items-center space-y-4 text-center">
                     <div className="flex items-center justify-center gap-4">
                         <Skeleton className="size-28 shrink-0 rounded-full" />

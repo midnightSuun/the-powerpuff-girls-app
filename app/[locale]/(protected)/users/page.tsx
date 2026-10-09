@@ -29,7 +29,7 @@ async function UsersContent({
 
 export default function UsersRoute({ searchParams }: Props) {
     return (
-        <UsersTableFrame label={<LoadingText namespace="Users" />}>
+        <UsersTableFrame>
             <UsersContent searchParams={searchParams} />
         </UsersTableFrame>
     )

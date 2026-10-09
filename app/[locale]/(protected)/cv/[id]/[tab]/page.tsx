@@ -2,6 +2,7 @@ import { notFound } from "next/navigation"
 import { Suspense } from "react"
 
 import { CvDetailsPage } from "@/modules/cvs/ui/cv-details-page"
+import { CvDetailsSkeleton } from "@/modules/cvs/ui/cv-details-skeleton"
 import type { CvDetailsTab } from "@/modules/cvs/ui/cvs-details-page-view"
 
 interface PageProps {
@@ -21,7 +22,7 @@ export default async function CvTabPage({ params }: PageProps) {
     if (!activeTab) notFound()
 
     return (
-        <Suspense fallback={<div className="min-h-[60vh]" aria-busy="true" />}>
+        <Suspense fallback={<CvDetailsSkeleton tab={activeTab} />}>
             <CvDetailsPage id={id} activeTab={activeTab} />
         </Suspense>
     )

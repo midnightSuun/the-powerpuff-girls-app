@@ -1,3 +1,6 @@
+import { Suspense } from "react"
+
+import { ProgressListSkeleton } from "@/components/progress-list-skeleton"
 import { getCurrentSession } from "@/modules/auth/helpers/get-current-session"
 import {
     getAvailableLanguages,
@@ -12,7 +15,7 @@ interface PageProps {
     }>
 }
 
-export default async function UserLanguagesTab({ params }: PageProps) {
+async function UserLanguagesContent({ params }: PageProps) {
     const { userId } = await params
 
     const [userLanguagesData, allSystemLanguages, session] = await Promise.all([
@@ -31,5 +34,13 @@ export default async function UserLanguagesTab({ params }: PageProps) {
             allSystemLanguages={allSystemLanguages}
             canManageLanguages={canManageLanguages}
         />
+    )
+}
+
+export default function UserLanguagesTab({ params }: PageProps) {
+    return (
+        <Suspense fallback={<ProgressListSkeleton groups={1} />}>
+            <UserLanguagesContent params={params} />
+        </Suspense>
     )
 }

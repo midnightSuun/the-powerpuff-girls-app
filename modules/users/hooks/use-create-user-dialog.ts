@@ -9,6 +9,7 @@ import { useRouter } from "@/i18n/navigation"
 
 import { createUser } from "../api/create-user"
 import { getProfileOptions } from "../api/get-profile-options"
+import { getUserRoleOptions } from "../user-role-options"
 
 type SelectOption = {
     id: string
@@ -47,10 +48,7 @@ export const useCreateUserDialog = () => {
     const [departments, setDepartments] = useState<SelectOption[]>([])
     const [positions, setPositions] = useState<SelectOption[]>([])
 
-    const roleOptions: SelectOption[] = [
-        { id: "Employee", name: tDialog("employee") },
-        { id: "Admin", name: tDialog("admin") },
-    ]
+    const roleOptions = getUserRoleOptions(tDialog)
 
     const handleOpenChange = (open: boolean) => {
         setIsOpen(open)
