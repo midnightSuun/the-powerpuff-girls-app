@@ -736,5 +736,10 @@
             "profileUpdated": "Profil erfolgreich aktualisiert.",
             "verificationFailed": "Fehler beim Senden der Bestätigungs-E-Mail."
         }
+    },
+    "Calendar": {
+        "clear": "Löschen",
+        "today": "Heute",
+        "placeholder": "TT.MM.JJJJ"
     }
 }

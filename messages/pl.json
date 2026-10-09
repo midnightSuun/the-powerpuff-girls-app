@@ -736,5 +736,10 @@
             "profileUpdated": "Profil został pomyślnie zaktualizowany.",
             "verificationFailed": "Nie udało się wysłać e-maila weryfikacyjnego."
         }
+    },
+    "Calendar": {
+        "clear": "Wyczyść",
+        "today": "Dzisiaj",
+        "placeholder": "DD.MM.RRRR"
     }
 }

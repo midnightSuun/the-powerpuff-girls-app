@@ -1,6 +1,7 @@
 "use client"
 
 import { BaseModal } from "@/components/ui/base-modal"
+import { DatePicker } from "@/components/ui/date-picker"
 import { Input } from "@/components/ui/input"
 import {
     Select,
@@ -113,11 +114,9 @@ export function CvProjectFormModal(props: CvProjectFormModalProps) {
                     <span className="absolute -top-1.5 left-2 z-10 bg-background px-1 text-[10px]">
                         {t("startDate")}
                     </span>
-                    <Input
-                        type="date"
-                        required
+                    <DatePicker
                         value={startDate}
-                        onChange={(event) => setStartDate(event.target.value)}
+                        onChange={setStartDate}
                         className={fieldClassName}
                     />
                 </label>
@@ -126,10 +125,9 @@ export function CvProjectFormModal(props: CvProjectFormModalProps) {
                     <span className="absolute -top-1.5 left-2 z-10 bg-background px-1 text-[10px]">
                         {t("endDate")}
                     </span>
-                    <Input
-                        type="date"
+                    <DatePicker
                         value={endDate}
-                        onChange={(event) => setEndDate(event.target.value)}
+                        onChange={setEndDate}
                         className={fieldClassName}
                     />
                 </label>

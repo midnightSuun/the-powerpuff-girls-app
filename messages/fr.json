@@ -736,5 +736,10 @@
             "profileUpdated": "Profil mis à jour avec succès.",
             "verificationFailed": "Échec de l'envoi de l'e-mail de vérification."
         }
+    },
+    "Calendar": {
+        "clear": "Effacer",
+        "today": "Aujourd'hui",
+        "placeholder": "JJ/MM/AAAA"
     }
 }

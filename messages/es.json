@@ -736,5 +736,10 @@
             "profileUpdated": "Perfil actualizado correctamente.",
             "verificationFailed": "Error al enviar el correo electrónico de verificación."
         }
+    },
+    "Calendar": {
+        "clear": "Limpiar",
+        "today": "Hoy",
+        "placeholder": "DD/MM/AAAA"
     }
 }
