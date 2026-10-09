@@ -7,7 +7,10 @@ import {
     ProjectsTableView,
     type ProjectTableItem,
 } from "@/components/projects-table-view"
-import { useAdminProjects } from "@/modules/projects/hooks/use-admin-projects"
+import {
+    type ProjectFormData,
+    useAdminProjects,
+} from "@/modules/projects/hooks/use-admin-projects"
 import { ProjectFormModal } from "@/modules/projects/ui/components/project-form-modal"
 
 interface AdminProjectsViewProps {
@@ -24,7 +27,9 @@ export function AdminProjectsView({
     const [isCreateOpen, setIsCreateOpen] = useState(false)
     const [editingProject, setEditingProject] =
         useState<ProjectTableItem | null>(null)
+
     const t = useTranslations("Admin.projects")
+
     const {
         isRemoving,
         removeError,
@@ -32,6 +37,22 @@ export function AdminProjectsView({
         handleSave,
         handleDelete,
     } = useAdminProjects()
+
+    const onSaveProject = async (
+        project: ProjectTableItem | null,
+        data: ProjectFormData,
+    ) => {
+        await handleSave(project, data)
+        setIsCreateOpen(false)
+        setEditingProject(null)
+    }
+
+    const onDeleteProject = async (
+        project: ProjectTableItem,
+    ): Promise<boolean> => {
+        const success = await handleDelete(project)
+        return Boolean(success)
+    }
 
     return (
         <>
@@ -43,7 +64,7 @@ export function AdminProjectsView({
                 searchLabel={searchLabel}
                 onAdd={() => setIsCreateOpen(true)}
                 onEdit={setEditingProject}
-                onDelete={handleDelete}
+                onDelete={onDeleteProject}
                 onDeleteClose={() => setRemoveError(null)}
                 isDeleting={isRemoving}
                 deleteError={removeError}
@@ -74,7 +95,7 @@ export function AdminProjectsView({
                         setIsCreateOpen(false)
                         setEditingProject(null)
                     }}
-                    onSave={handleSave}
+                    onSave={onSaveProject}
                 />
             )}
         </>

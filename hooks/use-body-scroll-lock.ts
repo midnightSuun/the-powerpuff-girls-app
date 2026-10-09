@@ -3,14 +3,10 @@
 import { useEffect } from "react"
 
 let lockCount = 0
-let lockedBody: HTMLElement | null = null
-let originalOverflow = ""
 
 function acquireBodyScrollLock() {
     if (lockCount === 0) {
-        lockedBody = document.body
-        originalOverflow = lockedBody.style.overflow
-        lockedBody.style.overflow = "hidden"
+        document.body.style.overflow = "hidden"
     }
 
     lockCount += 1
@@ -19,11 +15,10 @@ function acquireBodyScrollLock() {
     return () => {
         if (released) return
         released = true
-        lockCount -= 1
+        lockCount = Math.max(0, lockCount - 1)
 
-        if (lockCount === 0 && lockedBody) {
-            lockedBody.style.overflow = originalOverflow
-            lockedBody = null
+        if (lockCount === 0) {
+            document.body.style.removeProperty("overflow")
         }
     }
 }

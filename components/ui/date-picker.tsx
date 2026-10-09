@@ -3,7 +3,8 @@
 import { cn } from "cn"
 import { CalendarIcon } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, useSyncExternalStore } from "react"
+import { createPortal } from "react-dom"
 
 import { Calendar } from "./calendar"
 
@@ -12,25 +13,71 @@ interface DatePickerProps {
     onChange: (val: string) => void
     placeholder?: string
     className?: string
+    minDate?: string
+    maxDate?: string
 }
+
+const subscribe = () => () => {}
+const getSnapshot = () => true
+const getServerSnapshot = () => false
 
 export function DatePicker({
     value,
     onChange,
     placeholder,
     className,
+    minDate,
+    maxDate,
 }: DatePickerProps) {
     const locale = useLocale()
     const t = useTranslations("Calendar")
     const [isOpen, setIsOpen] = useState(false)
+    const mounted = useSyncExternalStore(
+        subscribe,
+        getSnapshot,
+        getServerSnapshot,
+    )
     const containerRef = useRef<HTMLDivElement>(null)
+    const [coords, setCoords] = useState<{ top: number; left: number }>({
+        top: 0,
+        left: 0,
+    })
+
+    const updateCoords = () => {
+        if (containerRef.current) {
+            const rect = containerRef.current.getBoundingClientRect()
+            setCoords({
+                top: rect.bottom + 4,
+                left: rect.left,
+            })
+        }
+    }
+
+    useEffect(() => {
+        if (isOpen) {
+            updateCoords()
+            window.addEventListener("resize", updateCoords)
+            window.addEventListener("scroll", updateCoords, true)
+        }
+        return () => {
+            window.removeEventListener("resize", updateCoords)
+            window.removeEventListener("scroll", updateCoords, true)
+        }
+    }, [isOpen])
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
+            const target = event.target as Node
             if (
                 containerRef.current &&
-                !containerRef.current.contains(event.target as Node)
+                !containerRef.current.contains(target)
             ) {
+                const portalEl = document.getElementById(
+                    "datepicker-dropdown-portal",
+                )
+                if (portalEl && portalEl.contains(target)) {
+                    return
+                }
                 setIsOpen(false)
             }
         }
@@ -49,6 +96,8 @@ export function DatePicker({
     })()
 
     const handleDateSelect = (newDate: string) => {
+        if (minDate && newDate < minDate) return
+        if (maxDate && newDate > maxDate) return
         onChange(newDate)
         setIsOpen(false)
     }
@@ -69,11 +118,22 @@ export function DatePicker({
                 <CalendarIcon className="h-4 w-4 text-muted-foreground dark:text-[#AEAEAE]" />
             </div>
 
-            {isOpen && (
-                <div className="absolute top-full left-0 z-50 mt-1">
-                    <Calendar value={value} onChange={handleDateSelect} />
-                </div>
-            )}
+            {isOpen &&
+                mounted &&
+                createPortal(
+                    <div
+                        id="datepicker-dropdown-portal"
+                        style={{
+                            position: "fixed",
+                            top: `${coords.top}px`,
+                            left: `${coords.left}px`,
+                        }}
+                        className="z-[9999]"
+                    >
+                        <Calendar value={value} onChange={handleDateSelect} />
+                    </div>,
+                    document.body,
+                )}
         </div>
     )
 }

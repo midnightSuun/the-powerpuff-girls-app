@@ -74,10 +74,12 @@ export function CvProjectFormModal(props: CvProjectFormModalProps) {
             confirmButtonClassName="h-9 w-[120px] px-0 py-0 text-[10px]"
         >
             <div className="grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-2">
-                <label className="relative flex flex-col gap-1 text-xs text-muted-foreground">
-                    <span className="absolute -top-1.5 left-2 z-10 bg-background px-1 text-[10px]">
-                        {t("project")}
-                    </span>
+                <div className="relative flex flex-col pt-4">
+                    {Boolean(projectId) && (
+                        <span className="absolute top-0 left-0 text-[10px] text-muted-foreground">
+                            {t("project")}
+                        </span>
+                    )}
                     <Select
                         value={projectId}
                         onValueChange={(value) => setProjectId(value ?? "")}
@@ -96,87 +98,129 @@ export function CvProjectFormModal(props: CvProjectFormModalProps) {
                             ))}
                         </SelectContent>
                     </Select>
-                </label>
+                </div>
 
-                <div>
+                <div className="relative flex flex-col pt-4">
+                    {Boolean(selectedProject?.domain) && (
+                        <span className="absolute top-0 left-0 text-[10px] text-muted-foreground">
+                            {t("domain")}
+                        </span>
+                    )}
                     <Input
-                        label={t("domain")}
                         value={selectedProject?.domain ?? ""}
+                        placeholder={
+                            selectedProject?.domain ? undefined : t("domain")
+                        }
                         readOnly
                         disabled
                         className={`${fieldClassName} ${disabledFieldClassName}`}
                     />
                 </div>
-
-                <label className="relative flex flex-col gap-1 text-xs text-muted-foreground">
-                    <span className="absolute -top-1.5 left-2 z-10 bg-background px-1 text-[10px]">
-                        {t("startDate")}
-                    </span>
+                <div className="relative flex flex-col pt-4">
+                    {Boolean(startDate) && (
+                        <span className="absolute top-0 left-0 text-[10px] text-muted-foreground">
+                            {t("startDate")}
+                        </span>
+                    )}
                     <DatePicker
                         value={startDate}
-                        onChange={setStartDate}
+                        onChange={(newStart) => {
+                            setStartDate(newStart)
+                            if (endDate && newStart > endDate) {
+                                setEndDate("")
+                            }
+                        }}
+                        maxDate={endDate || undefined}
+                        placeholder={t("startDate")}
                         className={fieldClassName}
                     />
-                </label>
+                </div>
 
-                <label className="relative flex flex-col gap-1 text-xs text-muted-foreground">
-                    <span className="absolute -top-1.5 left-2 z-10 bg-background px-1 text-[10px]">
-                        {t("endDate")}
-                    </span>
+                <div className="relative flex flex-col pt-4">
+                    {Boolean(endDate) && (
+                        <span className="absolute top-0 left-0 text-[10px] text-muted-foreground">
+                            {t("endDate")}
+                        </span>
+                    )}
                     <DatePicker
                         value={endDate}
                         onChange={setEndDate}
+                        minDate={startDate || undefined}
+                        placeholder={t("endDate")}
                         className={fieldClassName}
                     />
-                </label>
-
-                <label className="relative flex flex-col gap-1 text-xs text-muted-foreground sm:col-span-2">
-                    <span className="absolute -top-1.5 left-2 z-10 bg-background px-1 text-[10px]">
-                        {t("description")}
-                    </span>
+                </div>
+                <div className="relative flex flex-col pt-4 sm:col-span-2">
+                    {Boolean(selectedProject?.description) && (
+                        <span className="absolute top-0 left-0 text-[10px] text-muted-foreground">
+                            {t("description")}
+                        </span>
+                    )}
                     <Textarea
                         value={selectedProject?.description ?? ""}
+                        placeholder={
+                            selectedProject?.description
+                                ? undefined
+                                : t("description")
+                        }
                         readOnly
                         disabled
                         className={`${disabledFieldClassName} min-h-20 resize-none rounded-none border-[#cccccc] bg-muted p-2.5 text-xs leading-5 shadow-none dark:border-border`}
                     />
-                </label>
-
-                <div className="relative flex min-h-9 flex-wrap items-center gap-1.5 border border-[#cccccc] bg-muted px-2.5 py-1.5 sm:col-span-2 dark:border-border">
-                    <span className="absolute -top-1.5 left-2 z-10 bg-background px-1 text-[10px] text-muted-foreground">
-                        {t("environment")}
-                    </span>
-                    {selectedProject?.environment.map((environment) => (
-                        <span
-                            key={environment}
-                            className="rounded-full border border-border px-2 py-0.5 text-[11px] text-muted-foreground"
-                        >
-                            {environment}
-                        </span>
-                    ))}
-                    <span className="ml-auto text-muted-foreground">⌄</span>
                 </div>
 
-                <div className="sm:col-span-2">
+                <div className="relative flex flex-col pt-4 sm:col-span-2">
+                    {Boolean(selectedProject?.environment?.length) && (
+                        <span className="absolute top-0 left-0 text-[10px] text-muted-foreground">
+                            {t("environment")}
+                        </span>
+                    )}
+                    <div className="flex min-h-9 flex-wrap items-center gap-1.5 border border-[#cccccc] bg-muted px-2.5 py-1.5 dark:border-border">
+                        {selectedProject?.environment.map((environment) => (
+                            <span
+                                key={environment}
+                                className="rounded-full border border-border px-2 py-0.5 text-[11px] text-muted-foreground"
+                            >
+                                {environment}
+                            </span>
+                        ))}
+                        <span className="ml-auto text-muted-foreground">⌄</span>
+                    </div>
+                </div>
+
+                <div className="relative flex flex-col pt-4 sm:col-span-2">
+                    {Boolean(roles) && (
+                        <span className="absolute top-0 left-0 text-[10px] text-muted-foreground">
+                            {t("roles")}
+                        </span>
+                    )}
                     <Input
-                        label={t("roles")}
                         value={roles}
                         onChange={(event) => setRoles(event.target.value)}
+                        placeholder={Boolean(roles) ? undefined : t("roles")}
                         className={fieldClassName}
                     />
                 </div>
 
-                <label className="relative flex flex-col gap-1 text-xs text-muted-foreground sm:col-span-2">
-                    <span className="sr-only">{t("responsibilities")}</span>
+                <div className="relative flex flex-col pt-4 sm:col-span-2">
+                    {Boolean(responsibilities) && (
+                        <span className="absolute top-0 left-0 text-[10px] text-muted-foreground">
+                            {t("responsibilities")}
+                        </span>
+                    )}
                     <Textarea
                         value={responsibilities}
                         onChange={(event) =>
                             setResponsibilities(event.target.value)
                         }
-                        placeholder={t("responsibilities")}
+                        placeholder={
+                            Boolean(responsibilities)
+                                ? undefined
+                                : t("responsibilities")
+                        }
                         className="min-h-20 resize-y rounded-none border-[#cccccc] bg-background px-2.5 py-2 text-xs text-foreground shadow-none dark:border-border"
                     />
-                </label>
+                </div>
             </div>
         </BaseModal>
     )
