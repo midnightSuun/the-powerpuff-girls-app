@@ -1,17 +1,11 @@
 "use client"
 
-import {
-    ArrowDown,
-    ArrowUp,
-    MoreVertical,
-    Pencil,
-    Search,
-    Trash2,
-} from "lucide-react"
+import { ArrowDown, ArrowUp, MoreVertical, Pencil, Trash2 } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl"
 import type { ReactNode } from "react"
 import { Fragment } from "react"
 
+import { SearchInput } from "@/components/search-input"
 import { DeleteModal } from "@/components/ui/delete-item-modal"
 import {
     DropdownMenu,
@@ -19,7 +13,6 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
 import { AddItemButton } from "@/components/ui/list-management-buttons"
 import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock"
 import { type SortField, useProjectsTable } from "@/hooks/use-projects-table"
@@ -38,8 +31,8 @@ interface ProjectsTableViewProps<T extends ProjectTableItem> {
     projects: T[]
     canManage: boolean
     addLabel?: string
-    searchPlaceholder: string
-    searchLabel?: string
+    search?: string
+    showSearchInput?: boolean
     emptyMessage?: string
     showDates?: boolean
     addDisabled?: boolean
@@ -82,8 +75,8 @@ export function ProjectsTableView<T extends ProjectTableItem>({
     projects,
     canManage,
     addLabel,
-    searchPlaceholder,
-    searchLabel,
+    search = "",
+    showSearchInput = false,
     emptyMessage,
     showDates = true,
     addDisabled = false,
@@ -100,15 +93,13 @@ export function ProjectsTableView<T extends ProjectTableItem>({
     const t = useTranslations("CV.projects")
 
     const {
-        search,
-        setSearch,
         sortField,
         sortDirection,
         itemToRemove,
         setItemToRemove,
         visibleItems,
         toggleSort,
-    } = useProjectsTable({ items: projects, locale })
+    } = useProjectsTable({ items: projects, locale, search })
     useBodyScrollLock(Boolean(itemToRemove))
 
     const actionCopy = manageCopy ?? {
@@ -130,33 +121,25 @@ export function ProjectsTableView<T extends ProjectTableItem>({
         return <SortIcon aria-hidden="true" className="size-3" />
     }
 
+    const showToolbar =
+        showSearchInput || Boolean(canManage && onAdd && addLabel)
+
     return (
         <div className="space-y-3">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <label className="relative block w-full sm:max-w-77.5">
-                    <Search
-                        aria-hidden="true"
-                        className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
-                    />
-                    <Input
-                        type="search"
-                        value={search}
-                        onChange={(event) => setSearch(event.target.value)}
-                        placeholder={searchPlaceholder}
-                        aria-label={searchLabel ?? searchPlaceholder}
-                        className="h-7.5 rounded-full border-[#cccccc] pl-8 text-xs dark:border-border"
-                    />
-                </label>
+            {showToolbar ? (
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    {showSearchInput ? <SearchInput search={search} /> : null}
 
-                {canManage && onAdd && addLabel && (
-                    <AddItemButton
-                        label={addLabel}
-                        onClick={onAdd}
-                        disabled={addDisabled}
-                        className="self-end text-xs font-medium text-[#d7352c] hover:text-[#b5332b] dark:text-[#f06b65] dark:hover:text-[#ff8a84] sm:self-auto"
-                    />
-                )}
-            </div>
+                    {canManage && onAdd && addLabel ? (
+                        <AddItemButton
+                            label={addLabel}
+                            onClick={onAdd}
+                            disabled={addDisabled}
+                            className="self-end text-xs font-medium text-[#d7352c] hover:text-[#b5332b] dark:text-[#f06b65] dark:hover:text-[#ff8a84] sm:self-auto"
+                        />
+                    ) : null}
+                </div>
+            ) : null}
 
             <div className="overflow-x-auto">
                 <table className="w-full min-w-120 border-collapse text-left text-sm">

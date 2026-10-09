@@ -5,7 +5,6 @@ import { AdminDataTable, type Column } from "@/components/ui/admin-data-table"
 interface AdminNameCrudPageProps<T extends { id: string | number }> {
     data: T[]
     columns: Column<T>[]
-    searchPlaceholder: string
     createButtonLabel: string
     emptyMessage: string
     getItemName: (item: T) => string
@@ -18,7 +17,6 @@ interface AdminNameCrudPageProps<T extends { id: string | number }> {
 export function AdminNameCrudPage<T extends { id: string | number }>({
     data,
     columns,
-    searchPlaceholder,
     createButtonLabel,
     emptyMessage,
     getItemName,
@@ -32,7 +30,7 @@ export function AdminNameCrudPage<T extends { id: string | number }>({
             <AdminDataTable
                 data={data}
                 columns={columns}
-                searchPlaceholder={searchPlaceholder}
+                showSearchInput={false}
                 createButtonLabel={createButtonLabel}
                 onCreateClick={onCreateClick}
                 onEditClick={onEditClick}

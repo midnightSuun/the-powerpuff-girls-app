@@ -1,14 +1,25 @@
 import { redirect } from "next/navigation"
-import { getTranslations } from "next-intl/server"
-import { Suspense } from "react"
 
 import { ProjectListSkeleton } from "@/components/project-list-skeleton"
+import { readListSearch } from "@/lib/list-search-params"
 import { getCurrentSession } from "@/modules/auth/helpers/get-current-session"
 import { getAvailableProjects } from "@/modules/cvs/api/projects"
 import { AdminProjectsView } from "@/modules/projects/ui/admin-projects-view"
+import { UsersTableFrame } from "@/modules/users"
 
-async function ProjectsContent() {
-    const session = await getCurrentSession()
+type Props = {
+    searchParams: Promise<Record<string, string | string[] | undefined>>
+}
+
+async function ProjectsContent({
+    searchParams,
+}: {
+    searchParams: Props["searchParams"]
+}) {
+    const [session, resolvedSearchParams] = await Promise.all([
+        getCurrentSession(),
+        searchParams,
+    ])
 
     if (!session) {
         redirect("/login")
@@ -18,34 +29,28 @@ async function ProjectsContent() {
         redirect("/")
     }
 
-    const [projects, tAdmin] = await Promise.all([
-        getAvailableProjects(),
-        getTranslations("Admin.projects"),
-    ])
+    const search = readListSearch(resolvedSearchParams.search)
+    const projects = await getAvailableProjects()
 
     return (
         <div className="p-6">
-            <AdminProjectsView
-                projects={projects}
-                searchPlaceholder={tAdmin("search")}
-                searchLabel={tAdmin("searchLabel")}
-            />
+            <AdminProjectsView projects={projects} search={search} />
         </div>
     )
 }
 
-export default function AdminProjectsPage() {
+export default function AdminProjectsPage({ searchParams }: Props) {
     return (
         <main className="min-h-screen w-full">
-            <Suspense
-                fallback={
+            <UsersTableFrame
+                placeholder={
                     <div className="p-6">
                         <ProjectListSkeleton />
                     </div>
                 }
             >
-                <ProjectsContent />
-            </Suspense>
+                <ProjectsContent searchParams={searchParams} />
+            </UsersTableFrame>
         </main>
     )
 }
