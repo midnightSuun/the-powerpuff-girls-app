@@ -5,6 +5,7 @@ import { useActionNotifications } from "@/hooks/use-action-notifications"
 import { useRouter } from "@/i18n/navigation"
 import { sendProfileVerificationAction } from "@/modules/auth/api/verification"
 
+import { deleteAvatar } from "../api/delete-profile-avatar"
 import type { UpdateProfileInput } from "../api/update-profile"
 import { updateProfile } from "../api/update-profile"
 import { updateUserProfile } from "../api/update-user-profile"
@@ -56,6 +57,9 @@ export function useUserProfile(
     const [avatarPreview, setAvatarPreview] = useState<string | null>(
         user.profile?.avatar ?? null,
     )
+
+    const [isAvatarDeleted, setIsAvatarDeleted] = useState(false)
+
     const [hasSubmitted, setHasSubmitted] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [isVerifyingEmail, setIsVerifyingEmail] = useState(false)
@@ -114,6 +118,7 @@ export function useUserProfile(
 
         setAvatarError(null)
         setAvatarFile(file)
+        setIsAvatarDeleted(false)
 
         const tempPreview = URL.createObjectURL(file)
         setAvatarPreview(tempPreview)
@@ -194,6 +199,29 @@ export function useUserProfile(
         }
     }
 
+    const handleRemoveAvatar = async () => {
+        if (!canEdit) return
+        try {
+            setAvatarError(null)
+            setAvatarFile(null)
+            setAvatarPreview(null)
+            setIsAvatarDeleted(true)
+
+            const result = await deleteAvatar({ userId: String(user.id) })
+
+            if (!result.success) {
+                notifications.error(result.error || messages("updateFailed"))
+                return
+            }
+
+            notifications.success("update")
+            router.refresh()
+        } catch (error) {
+            console.error("Failed to delete avatar:", error)
+            notifications.error(messages("avatarUploadFailed"))
+        }
+    }
+
     const handleVerifyEmail = async () => {
         setIsVerifyingEmail(true)
         try {
@@ -228,7 +256,7 @@ export function useUserProfile(
         positionId,
         setPositionId,
         avatarFile,
-        avatarPreview,
+        avatarPreview: isAvatarDeleted ? null : avatarPreview,
         isAssignmentChanged,
         hasSubmitted,
         isSubmitting,
@@ -239,5 +267,6 @@ export function useUserProfile(
         handleUpdate,
         handleAvatarChange,
         handleVerifyEmail,
+        handleRemoveAvatar,
     }
 }

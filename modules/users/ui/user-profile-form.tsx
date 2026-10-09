@@ -1,6 +1,7 @@
 "use client"
 
 import { useLocale, useTranslations } from "next-intl"
+import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -26,6 +27,7 @@ export function UserProfileForm({
 }: UserProfileFormProps) {
     const t = useTranslations("User")
     const locale = useLocale()
+    const [isHovered, setIsHovered] = useState(false)
 
     const departmentOptions =
         user.department &&
@@ -57,6 +59,7 @@ export function UserProfileForm({
         isValid,
         handleUpdate,
         handleAvatarChange,
+        handleRemoveAvatar,
         handleVerifyEmail,
     } = useUserProfile(user, currentUserId, currentUserRole)
 
@@ -82,6 +85,11 @@ export function UserProfileForm({
           }).format(createdAtDate)
         : user.created_at
 
+    const currentAvatarSrc =
+        avatarPreview !== null
+            ? (avatarPreview ?? user.profile?.avatar ?? null)
+            : null
+
     return (
         <form
             onSubmit={handleUpdate}
@@ -89,16 +97,35 @@ export function UserProfileForm({
         >
             <div className="flex flex-col items-center text-center space-y-4">
                 <div className="flex items-center justify-center gap-4">
-                    <div className="w-28 h-28 text-3xl shrink-0 shadow-sm rounded-full overflow-hidden">
-                        <UserAvatar
-                            src={avatarPreview ?? user.profile?.avatar ?? null}
-                            firstName={firstName}
-                            lastName={lastName}
-                            email={user.email}
-                            fallbackClassName="bg-[#c63031] text-white"
-                            avatarClassName="size-full"
-                        />
+                    <div className="relative inline-block">
+                        <div
+                            className="relative w-28 h-28 text-3xl shrink-0 shadow-sm rounded-full overflow-hidden group cursor-pointer"
+                            onMouseEnter={() => setIsHovered(true)}
+                            onMouseLeave={() => setIsHovered(false)}
+                        >
+                            <UserAvatar
+                                src={currentAvatarSrc}
+                                firstName={firstName}
+                                lastName={lastName}
+                                email={user.email}
+                                fallbackClassName="bg-[#c63031] text-white"
+                                avatarClassName="size-full"
+                            />
+                        </div>
+
+                        {canEdit && currentAvatarSrc && isHovered && (
+                            <button
+                                type="button"
+                                onClick={handleRemoveAvatar}
+                                aria-label="Remove avatar"
+                                className="absolute -top-1 -right-1 size-7 rounded-full bg-button-primary-default text-white flex items-center justify-center text-xs shadow-md hover:bg-[#b02a2b] transition-transform hover:scale-105 z-30"
+                                onMouseEnter={() => setIsHovered(true)}
+                            >
+                                ✕
+                            </button>
+                        )}
                     </div>
+
                     {canEdit && (
                         <label className="cursor-pointer inline-flex flex-col items-start text-left">
                             <span className="text-sm font-medium text-foreground hover:underline flex items-center gap-2">
@@ -118,7 +145,7 @@ export function UserProfileForm({
                                 {t("uploadAvatar")}
                             </span>
                             <span className="text-xs text-muted-foreground mt-1">
-                                {t("avatarRequirements")}
+                                png, jpg or gif no more than 0.5MB
                             </span>
                             <input
                                 type="file"
@@ -160,14 +187,13 @@ export function UserProfileForm({
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
                         disabled={!canEdit}
-                        aria-invalid={hasSubmitted && !firstName.trim()}
+                        error={
+                            hasSubmitted && !firstName.trim()
+                                ? t("errors.firstNameRequired")
+                                : undefined
+                        }
                         className="h-12 bg-background border-input text-foreground rounded-md shadow-xs disabled:cursor-not-allowed"
                     />
-                    {hasSubmitted && !firstName.trim() && (
-                        <span className="text-xs text-red-500">
-                            {t("errors.firstNameRequired")}
-                        </span>
-                    )}
                 </div>
 
                 <div className="flex flex-col gap-2">
@@ -180,14 +206,13 @@ export function UserProfileForm({
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
                         disabled={!canEdit}
-                        aria-invalid={hasSubmitted && !lastName.trim()}
+                        error={
+                            hasSubmitted && !lastName.trim()
+                                ? t("errors.lastNameRequired")
+                                : undefined
+                        }
                         className="h-12 bg-background border-input text-foreground rounded-md shadow-xs disabled:cursor-not-allowed"
                     />
-                    {hasSubmitted && !lastName.trim() && (
-                        <span className="text-xs text-red-500">
-                            {t("errors.lastNameRequired")}
-                        </span>
-                    )}
                 </div>
 
                 <div className="flex flex-col gap-2">
