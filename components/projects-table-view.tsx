@@ -153,7 +153,6 @@ export function ProjectsTableView<T extends ProjectTableItem>({
                         label={addLabel}
                         onClick={onAdd}
                         disabled={addDisabled}
-                        className="self-end text-xs font-medium text-[#d7352c] hover:text-[#b5332b] dark:text-[#f06b65] dark:hover:text-[#ff8a84] sm:self-auto"
                     />
                 )}
             </div>
