@@ -1,18 +1,114 @@
 import { Input as InputPrimitive } from "@base-ui/react/input"
-import { cn } from "cn"
 import * as React from "react"
 
-function Input({ className, type, ...props }: React.ComponentProps<"input">) {
+import { cn } from "@/lib/utils"
+
+interface InputProps extends React.ComponentProps<"input"> {
+    label?: string
+    error?: string
+    endAdornment?: React.ReactNode
+}
+
+function Input({
+    className,
+    type,
+    id,
+    label,
+    error,
+    endAdornment,
+    "aria-describedby": ariaDescribedBy,
+    "aria-invalid": ariaInvalid,
+    disabled,
+    value,
+    defaultValue,
+    ...props
+}: InputProps) {
+    const generatedId = React.useId()
+    const inputId = id ?? generatedId
+    const errorId = `${inputId}-error`
+    const describedBy = [ariaDescribedBy, error ? errorId : undefined]
+        .filter(Boolean)
+        .join(" ")
+
+    const [isFocused, setIsFocused] = React.useState(false)
+    const [internalValue, setInternalValue] = React.useState(
+        defaultValue !== undefined ? String(defaultValue) : "",
+    )
+
+    // Если компонент управляемый (передан value), берем его, иначе используем внутренний стейт инпута
+    const currentValue = value !== undefined ? value : internalValue
+    const hasValue = Boolean(currentValue)
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (value === undefined) {
+            setInternalValue(e.target.value)
+        }
+        props.onChange?.(e)
+    }
+
+    const shouldShowLabel = isFocused || hasValue || Boolean(error) || disabled
+
     return (
-        <InputPrimitive
-            type={type}
-            data-slot="input"
-            className={cn(
-                "h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40",
-                className,
+        <div className="w-full space-y-1.5">
+            {label && (
+                <label
+                    htmlFor={inputId}
+                    className={cn(
+                        "block text-xs font-medium ml-4 transition-all duration-200 select-none",
+                        shouldShowLabel
+                            ? "opacity-100 h-auto"
+                            : "opacity-0 h-0 overflow-hidden pointer-events-none",
+                        error ? "text-destructive" : "text-muted-foreground",
+                    )}
+                >
+                    {label}
+                </label>
             )}
-            {...props}
-        />
+
+            <div className="relative">
+                <InputPrimitive
+                    id={inputId}
+                    type={type}
+                    data-slot="input"
+                    disabled={disabled}
+                    value={value}
+                    defaultValue={defaultValue}
+                    onFocus={(e) => {
+                        setIsFocused(true)
+                        props.onFocus?.(e)
+                    }}
+                    onBlur={(e) => {
+                        setIsFocused(false)
+                        props.onBlur?.(e)
+                    }}
+                    onChange={handleInputChange}
+                    aria-describedby={describedBy || undefined}
+                    aria-invalid={error ? true : ariaInvalid}
+                    className={cn(
+                        "h-12 w-full min-w-0 rounded-lg border border-[#AEAEAE] bg-transparent px-4 py-3 text-base transition-colors outline-none",
+                        "hover:border-button-secondary-default",
+                        "focus-visible:border-button-secondary-default focus-visible:ring-0",
+                        "disabled:pointer-events-none disabled:cursor-not-allowed disabled:border-[#C4C4C6] disabled:bg-[#C4C4C6]/10 disabled:opacity-60",
+                        "aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20",
+                        "placeholder:text-muted-foreground text-foreground md:text-sm",
+                        endAdornment && "pr-10",
+                        className,
+                    )}
+                    {...props}
+                />
+                {endAdornment}
+            </div>
+
+            {error && (
+                <p
+                    id={errorId}
+                    className="text-xs text-destructive ml-4"
+                    role="alert"
+                >
+                    {error}
+                </p>
+            )}
+        </div>
     )
 }
 

@@ -1,7 +1,10 @@
 import { redirect } from "next/navigation"
-import { getTranslations } from "next-intl/server"
 
-import { LoadingText } from "@/components/loading-text"
+import { ProgressListSkeleton } from "@/components/progress-list-skeleton"
+import {
+    AdminTableSkeleton,
+    type AdminTableSkeletonColumn,
+} from "@/components/ui/admin-table-skeleton"
 import { readListSearch } from "@/lib/list-search-params"
 import {
     getCurrentSession,
@@ -14,8 +17,28 @@ import {
 } from "@/modules/languages/api/languages"
 import { AdminLanguagesView } from "@/modules/languages/ui/components/admin/admin-languages-view"
 import { LanguagesPage } from "@/modules/languages/ui/languages-page"
-import { UsersTableFrame } from "@/modules/users/ui/users-table-frame"
+import { UsersTableFrame } from "@/modules/users/ui/components/list/users-table-frame"
+
 export const instant = false
+
+const adminColumns: AdminTableSkeletonColumn[] = [
+    {
+        id: "name",
+        headerClassName: "h-3 w-16",
+        cellClassName: "h-4 w-28",
+    },
+    {
+        id: "iso",
+        headerClassName: "h-3 w-10",
+        cellClassName: "h-4 w-10",
+    },
+    {
+        id: "native",
+        className: "hidden lg:table-cell",
+        headerClassName: "h-3 w-24",
+        cellClassName: "h-4 w-28",
+    },
+]
 
 type Props = {
     searchParams: Promise<Record<string, string | string[] | undefined>>
@@ -67,13 +90,20 @@ async function LanguagesContent({
 }
 
 export default async function Page({ searchParams }: Props) {
-    const t = await getTranslations("Common")
+    const role = await getUserRole()
 
     return (
         <main className="min-h-screen w-full">
             <UsersTableFrame
-                label={<LoadingText namespace="Common" />}
-                placeholder={<div className="p-6">{t("loading")}</div>}
+                placeholder={
+                    role === "Admin" ? (
+                        <div className="p-6">
+                            <AdminTableSkeleton columns={adminColumns} />
+                        </div>
+                    ) : (
+                        <ProgressListSkeleton groups={1} />
+                    )
+                }
             >
                 <LanguagesContent searchParams={searchParams} />
             </UsersTableFrame>

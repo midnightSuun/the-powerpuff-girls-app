@@ -12,11 +12,17 @@ export function AuthTabs({ activeTab }: AuthTabsProps) {
     const isSignIn = activeTab === "signin"
 
     return (
-        <div className="absolute top-12 left-1/2 -translate-x-1/2 flex space-x-16 text-sm font-semibold tracking-wider">
+        <div
+            role="tablist"
+            aria-label="Authentication Tabs"
+            className="absolute top-12 left-1/2 -translate-x-1/2 flex space-x-16 text-sm font-semibold tracking-wider"
+        >
             <div className={`relative pb-3 ${isSignIn ? "text-red-500" : ""}`}>
                 <Link
+                    role="tab"
+                    aria-selected={isSignIn}
                     href="/login"
-                    className={`transition-colors hover:text-foreground ${
+                    className={`transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm ${
                         isSignIn ? "text-red-500" : "text-muted-foreground"
                     }`}
                 >
@@ -29,8 +35,10 @@ export function AuthTabs({ activeTab }: AuthTabsProps) {
 
             <div className={`relative pb-3 ${!isSignIn ? "text-red-500" : ""}`}>
                 <Link
+                    role="tab"
+                    aria-selected={!isSignIn}
                     href="/register"
-                    className={`transition-colors hover:text-foreground ${
+                    className={`transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm ${
                         !isSignIn ? "text-red-500" : "text-muted-foreground"
                     }`}
                 >

@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import type { GetProfileOptionsQuery, GetUserQuery, UserRole } from "@/gql"
 
-import { useUserProfile } from "../hooks/use-user-profile"
-import { UserAvatar } from "./user-avatar"
+import { useUserProfile } from "../../../hooks/use-user-profile"
+import { UserAvatar } from "../../user-avatar"
 
 interface UserProfileFormProps {
     user: GetUserQuery["user"]
@@ -151,15 +151,10 @@ export function UserProfileForm({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                 <div className="flex flex-col gap-2">
-                    <label
-                        htmlFor="profile-first-name"
-                        className="text-xs font-medium text-muted-foreground uppercase tracking-wider"
-                    >
-                        {t("firstName")}
-                    </label>
                     <Input
                         id="profile-first-name"
                         type="text"
+                        label={t("firstName")}
                         maxLength={100}
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
@@ -175,15 +170,10 @@ export function UserProfileForm({
                 </div>
 
                 <div className="flex flex-col gap-2">
-                    <label
-                        htmlFor="profile-last-name"
-                        className="text-xs font-medium text-muted-foreground uppercase tracking-wider"
-                    >
-                        {t("lastName")}
-                    </label>
                     <Input
                         id="profile-last-name"
                         type="text"
+                        label={t("lastName")}
                         maxLength={100}
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}

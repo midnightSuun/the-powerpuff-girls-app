@@ -1,6 +1,6 @@
 import { type PaginationSearchParams } from "@/lib/pagination-search-params"
 
-import { UsersList } from "./users-list"
+import { UsersList } from "./components/list/users-list"
 
 type Props = PaginationSearchParams
 

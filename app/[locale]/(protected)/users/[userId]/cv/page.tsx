@@ -1,4 +1,3 @@
-import { getTranslations } from "next-intl/server"
 import { Suspense } from "react"
 
 import { PaginationComponent } from "@/components/pagination"
@@ -6,6 +5,7 @@ import { redirect } from "@/i18n/navigation"
 import { routing } from "@/i18n/routing"
 import { getCurrentSession } from "@/modules/auth/helpers/get-current-session"
 import { getUserCvs } from "@/modules/cvs/api/cvs"
+import { CvsListSkeleton } from "@/modules/cvs/ui/cvs-list-skeleton"
 import { CvsPageView } from "@/modules/cvs/ui/cvs-page-view"
 
 interface PageProps {
@@ -87,11 +87,15 @@ async function UserCvsContent({ params, searchParams }: PageProps) {
     )
 }
 
-export default async function UserCvsPage({ params, searchParams }: PageProps) {
-    const t = await getTranslations("Common")
-
+export default function UserCvsPage({ params, searchParams }: PageProps) {
     return (
-        <Suspense fallback={<div className="p-6">{t("loading")}</div>}>
+        <Suspense
+            fallback={
+                <main className="min-h-0 w-full flex-1 bg-background px-6 py-6 text-foreground">
+                    <CvsListSkeleton />
+                </main>
+            }
+        >
             <UserCvsContent params={params} searchParams={searchParams} />
         </Suspense>
     )

@@ -44,7 +44,7 @@ export async function signup(
             refreshToken: data.signup.refresh_token,
         }
     } catch (error) {
-        console.error("🔴 FULL SIGNUP ERROR:", error)
+        console.error("Signup failed:", error)
 
         const errorMessage =
             error instanceof ClientError
@@ -52,8 +52,6 @@ export async function signup(
                       ?.map(({ message }) => message)
                       .join(" ") ?? "")
                 : String(error)
-
-        console.log("🔴 PARSED ERROR MESSAGE:", errorMessage)
 
         const isUserExists =
             errorMessage.includes("userAlreadyExists") ||
@@ -79,17 +77,16 @@ export async function signup(
                     refreshToken: loginData.login.refresh_token,
                 }
             } catch (loginError) {
-                console.error("🔴 LOGIN FALLBACK ERROR:", loginError)
+                console.error(
+                    "Login after failed verification email:",
+                    loginError,
+                )
                 return {
                     error: t("signupEmailFailed"),
                 }
             }
         } else {
-            return {
-                error: t("serverError", {
-                    message: errorMessage || t("unknownError"),
-                }),
-            }
+            return { error: t("serverError") }
         }
     }
 

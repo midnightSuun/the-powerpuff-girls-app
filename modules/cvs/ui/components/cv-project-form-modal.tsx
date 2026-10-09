@@ -98,17 +98,15 @@ export function CvProjectFormModal(props: CvProjectFormModalProps) {
                     </Select>
                 </label>
 
-                <label className="relative flex flex-col gap-1 text-xs text-muted-foreground">
-                    <span className="absolute -top-1.5 left-2 z-10 bg-background px-1 text-[10px]">
-                        {t("domain")}
-                    </span>
+                <div>
                     <Input
+                        label={t("domain")}
                         value={selectedProject?.domain ?? ""}
                         readOnly
                         disabled
                         className={`${fieldClassName} ${disabledFieldClassName}`}
                     />
-                </label>
+                </div>
 
                 <label className="relative flex flex-col gap-1 text-xs text-muted-foreground">
                     <span className="absolute -top-1.5 left-2 z-10 bg-background px-1 text-[10px]">
@@ -159,15 +157,14 @@ export function CvProjectFormModal(props: CvProjectFormModalProps) {
                     <span className="ml-auto text-muted-foreground">⌄</span>
                 </div>
 
-                <label className="relative flex flex-col gap-1 text-xs text-muted-foreground sm:col-span-2">
-                    <span className="sr-only">{t("roles")}</span>
+                <div className="sm:col-span-2">
                     <Input
+                        label={t("roles")}
                         value={roles}
                         onChange={(event) => setRoles(event.target.value)}
-                        placeholder={t("roles")}
                         className={fieldClassName}
                     />
-                </label>
+                </div>
 
                 <label className="relative flex flex-col gap-1 text-xs text-muted-foreground sm:col-span-2">
                     <span className="sr-only">{t("responsibilities")}</span>

@@ -219,7 +219,7 @@
             "signupRequired": "Please fill in all fields.",
             "passwordsDoNotMatch": "Passwords do not match.",
             "emailAlreadyTaken": "This email is already taken. Please use a different one or log in.",
-            "serverError": "Server Error: {message}",
+            "serverError": "Something went wrong. Please try again.",
             "unknownError": "Unknown error",
             "signupEmailFailed": "Failed to sign up due to mail server error. Please try again later.",
             "forgotFailed": "Failed to send reset instructions. Please try again.",
@@ -233,7 +233,8 @@
             "verificationSent": "A new verification email has been sent.",
             "sessionExpired": "Your session expired. Please sign in and try again.",
             "loginSuccess": "You have successfully logged in to your account",
-            "signupVerificationSent": "A confirmation email has been sent to your email address."
+            "signupVerificationSent": "A confirmation email has been sent to your email address.",
+            "signupEmailNotSent": "Your account was created and you are signed in, but the verification email could not be sent. You can try again on the next screen."
         }
     },
     "Common": {
@@ -457,7 +458,8 @@
             "empty": "You have no CVs yet",
             "createError": "Failed to create CV. Please try again.",
             "updateError": "Failed to update CV. Please try again.",
-            "deleteError": "Failed to delete CV. Please try again."
+            "deleteError": "Failed to delete CV. Please try again.",
+            "fetchError": "Failed to load CV. Please try again."
         },
         "form": {
             "name": "Name",

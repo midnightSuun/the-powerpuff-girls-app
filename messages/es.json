@@ -219,7 +219,7 @@
             "signupRequired": "Por favor, completa todos los campos.",
             "passwordsDoNotMatch": "Las contraseñas no coinciden.",
             "emailAlreadyTaken": "Este correo electrónico ya está en uso. Utiliza otro o inicia sesión.",
-            "serverError": "Error del servidor: {message}",
+            "serverError": "Se ha producido un error. Inténtalo de nuevo.",
             "unknownError": "Error desconocido",
             "signupEmailFailed": "Error al registrarse debido a un error en el servidor de correo. Inténtalo de nuevo más tarde.",
             "forgotFailed": "Error al enviar las instrucciones de restablecimiento. Inténtalo de nuevo.",
@@ -233,7 +233,8 @@
             "verificationSent": "Se ha enviado un nuevo correo electrónico de verificación.",
             "sessionExpired": "Tu sesión ha caducado. Inicia sesión e inténtalo de nuevo.",
             "loginSuccess": "Has iniciado sesión correctamente en tu cuenta",
-            "signupVerificationSent": "Se ha enviado un correo electrónico de confirmación a tu dirección de correo."
+            "signupVerificationSent": "Se ha enviado un correo electrónico de confirmación a tu dirección de correo.",
+            "signupEmailNotSent": "Tu cuenta se creó y has iniciado sesión, pero no se pudo enviar el correo de verificación. Puedes volver a intentarlo en la siguiente pantalla."
         }
     },
     "Common": {
@@ -457,7 +458,8 @@
             "empty": "Aún no tienes ningún CV",
             "createError": "Error al crear el CV. Por favor, inténtalo de nuevo.",
             "updateError": "Error al actualizar el CV. Por favor, inténtalo de nuevo.",
-            "deleteError": "Error al eliminar el CV. Por favor, inténtalo de nuevo."
+            "deleteError": "Error al eliminar el CV. Por favor, inténtalo de nuevo.",
+            "fetchError": "Error al cargar el CV. Por favor, inténtalo de nuevo."
         },
         "form": {
             "name": "Nombre",

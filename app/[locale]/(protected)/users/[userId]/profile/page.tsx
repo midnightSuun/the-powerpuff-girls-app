@@ -1,8 +1,6 @@
 import { Suspense } from "react"
 
-import { LoadingText } from "@/components/loading-text"
-import { UserPage } from "@/modules/users"
-import { UserProfileSkeleton } from "@/modules/users"
+import { UserPage, UserProfileSkeleton } from "@/modules/users"
 
 type Props = {
     params: Promise<{ locale: string; userId: string }>
@@ -16,11 +14,7 @@ async function UserContent({ params }: Props) {
 
 export default function UserTabRoute({ params }: Props) {
     return (
-        <Suspense
-            fallback={
-                <UserProfileSkeleton label={<LoadingText namespace="User" />} />
-            }
-        >
+        <Suspense fallback={<UserProfileSkeleton />}>
             <UserContent params={params} />
         </Suspense>
     )

@@ -44,7 +44,7 @@ function AdminTableRowComponent<T extends { id: string | number }>({
     deleteText,
 }: AdminTableRowProps<T>) {
     return (
-        <tr className="h-14 border-b border-[#383838] hover:bg-muted/10 transition-colors">
+        <tr className="h-14 border-b border-[#AEAEAE] dark:border-[#383838] hover:bg-muted/10 transition-colors">
             {columns.map((col) => (
                 <td
                     key={col.key}
@@ -234,7 +234,7 @@ export function AdminDataTable<T extends { id: string | number }>({
                             label={createButtonLabel}
                             onClick={onCreateClick}
                             variant="primaryV2"
-                            className="cursor-pointer text-[#d7352c] hover:text-[#b5332b] dark:text-[#f06b65] dark:hover:text-[#ff8a84] lg:!h-auto lg:!min-w-40 lg:!px-[30px] lg:!py-[16px]"
+                            className="cursor-pointer text-[#d7352c] hover:text-[#b5332b] dark:text-[#f06b65] dark:hover:text-[#ff8a84] lg:h-auto! lg:min-w-40! lg:px-7.5! lg:py-4!"
                         />
                     ) : null}
                 </div>
@@ -243,7 +243,7 @@ export function AdminDataTable<T extends { id: string | number }>({
             <div className="w-full overflow-x-auto">
                 <table className="w-full text-left text-sm">
                     <thead>
-                        <tr className="h-12 border-b border-[#383838]">
+                        <tr className="h-12 border-b border-[#AEAEAE] dark:border-[#383838]">
                             {columns.map((col) => {
                                 const isSorted = sortColumnKey === col.key
                                 return (
@@ -306,7 +306,7 @@ export function AdminDataTable<T extends { id: string | number }>({
                                 />
                             ))
                         ) : (
-                            <tr className="h-14 border-b border-[#383838]">
+                            <tr className="h-14 border-b border-[#AEAEAE] dark:border-[#383838]">
                                 <td
                                     colSpan={
                                         columns.length +

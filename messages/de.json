@@ -219,7 +219,7 @@
             "signupRequired": "Bitte füllen Sie alle Felder aus.",
             "passwordsDoNotMatch": "Passwörter stimmen nicht überein.",
             "emailAlreadyTaken": "Diese E-Mail ist bereits vergeben. Bitte verwenden Sie eine andere oder melden Sie sich an.",
-            "serverError": "Serverfehler: {message}",
+            "serverError": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
             "unknownError": "Unbekannter Fehler",
             "signupEmailFailed": "Registrierung aufgrund eines E-Mail-Serverfehlers fehlgeschlagen. Bitte versuchen Sie es später erneut.",
             "forgotFailed": "Fehler beim Senden der Anweisungen zum Zurücksetzen. Bitte versuchen Sie es erneut.",
@@ -233,7 +233,8 @@
             "verificationSent": "Eine neue Bestätigungs-E-Mail wurde gesendet.",
             "sessionExpired": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich an und versuchen Sie es erneut.",
             "loginSuccess": "Sie haben sich erfolgreich in Ihrem Konto angemeldet",
-            "signupVerificationSent": "Eine Bestätigungs-E-Mail wurde an Ihre E-Mail-Adresse gesendet."
+            "signupVerificationSent": "Eine Bestätigungs-E-Mail wurde an Ihre E-Mail-Adresse gesendet.",
+            "signupEmailNotSent": "Ihr Konto wurde erstellt und Sie sind angemeldet, aber die Bestätigungs-E-Mail konnte nicht gesendet werden. Sie können es auf dem nächsten Bildschirm erneut versuchen."
         }
     },
     "Common": {
@@ -457,7 +458,8 @@
             "empty": "Sie haben noch keine Lebensläufe",
             "createError": "Fehler beim Erstellen des Lebenslaufs. Bitte versuchen Sie es erneut.",
             "updateError": "Fehler beim Aktualisieren des Lebenslaufs. Bitte versuchen Sie es erneut.",
-            "deleteError": "Fehler beim Löschen des Lebenslaufs. Bitte versuchen Sie es erneut."
+            "deleteError": "Fehler beim Löschen des Lebenslaufs. Bitte versuchen Sie es erneut.",
+            "fetchError": "Fehler beim Laden des Lebenslaufs. Bitte versuchen Sie es erneut."
         },
         "form": {
             "name": "Name",

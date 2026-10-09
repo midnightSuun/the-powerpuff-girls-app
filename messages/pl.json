@@ -219,7 +219,7 @@
             "signupRequired": "Wypełnij wszystkie pola.",
             "passwordsDoNotMatch": "Hasła nie zgadzają się.",
             "emailAlreadyTaken": "Ten adres e-mail jest już zajęty. Użyj innego lub zaloguj się.",
-            "serverError": "Błąd serwera: {message}",
+            "serverError": "Coś poszło nie tak. Spróbuj ponownie.",
             "unknownError": "Nieznany błąd",
             "signupEmailFailed": "Rejestracja nie powiodła się z powodu błędu serwera pocztowego. Spróbuj ponownie później.",
             "forgotFailed": "Nie udało się wysłać instrukcji resetowania. Spróbuj ponownie.",
@@ -233,7 +233,8 @@
             "verificationSent": "Wysłano nowy e-mail weryfikacyjny.",
             "sessionExpired": "Twoja sesja wygasła. Zaloguj się i spróbuj ponownie.",
             "loginSuccess": "Pomyślnie zalogowano się na konto",
-            "signupVerificationSent": "Wysłano e-mail z potwierdzeniem na Twój adres e-mail."
+            "signupVerificationSent": "Wysłano e-mail z potwierdzeniem na Twój adres e-mail.",
+            "signupEmailNotSent": "Twoje konto zostało utworzone i jesteś zalogowany, ale nie udało się wysłać e-maila weryfikacyjnego. Możesz spróbować ponownie na następnym ekranie."
         }
     },
     "Common": {
@@ -457,7 +458,8 @@
             "empty": "Nie masz jeszcze żadnych CV",
             "createError": "Nie udało się utworzyć CV. Spróbuj ponownie.",
             "updateError": "Nie udało się zaktualizować CV. Spróbuj ponownie.",
-            "deleteError": "Nie udało się usunąć CV. Spróbuj ponownie."
+            "deleteError": "Nie udało się usunąć CV. Spróbuj ponownie.",
+            "fetchError": "Nie udało się załadować CV. Spróbuj ponownie."
         },
         "form": {
             "name": "Nazwa",

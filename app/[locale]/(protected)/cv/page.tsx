@@ -1,12 +1,13 @@
 import { redirect } from "next/navigation"
-import { getLocale, getTranslations } from "next-intl/server"
+import { getLocale } from "next-intl/server"
 import { Suspense } from "react"
 
 import { PaginationComponent } from "@/components/pagination"
 import { routing } from "@/i18n/routing"
 import { getCurrentSession } from "@/modules/auth/helpers/get-current-session"
+import { CvsListSkeleton } from "@/modules/cvs"
+import { CvsPageView } from "@/modules/cvs"
 import { getAdminCvs, getUserCvs } from "@/modules/cvs/api/cvs"
-import { CvsPageView } from "@/modules/cvs/ui/cvs-page-view"
 
 interface PageProps {
     searchParams: Promise<{
@@ -77,12 +78,10 @@ async function CvsContent({
     )
 }
 
-export default async function CvsPage({ searchParams }: PageProps) {
-    const t = await getTranslations("Common")
-
+export default function CvsPage({ searchParams }: PageProps) {
     return (
         <main className="min-h-screen w-full">
-            <Suspense fallback={<div className="p-6">{t("loading")}</div>}>
+            <Suspense fallback={<CvsListSkeleton />}>
                 <CvsContent searchParams={searchParams} />
             </Suspense>
         </main>

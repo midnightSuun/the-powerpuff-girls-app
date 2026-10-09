@@ -219,7 +219,7 @@
             "signupRequired": "Preencha todos os campos.",
             "passwordsDoNotMatch": "As palavras-passe não coincidem.",
             "emailAlreadyTaken": "Este e-mail já está a ser utilizado. Utilize outro ou inicie sessão.",
-            "serverError": "Erro do servidor: {message}",
+            "serverError": "Algo correu mal. Tente novamente.",
             "unknownError": "Erro desconhecido",
             "signupEmailFailed": "Falha ao registar devido a um erro no servidor de correio. Tente novamente mais tarde.",
             "forgotFailed": "Falha ao enviar as instruções de redefinição. Tente novamente.",
@@ -233,7 +233,8 @@
             "verificationSent": "Foi enviado um novo e-mail de verificação.",
             "sessionExpired": "A sua sessão expirou. Inicie sessão e tente novamente.",
             "loginSuccess": "Iniciou sessão com sucesso na sua conta",
-            "signupVerificationSent": "Foi enviado um e-mail de confirmação para o seu endereço de e-mail."
+            "signupVerificationSent": "Foi enviado um e-mail de confirmação para o seu endereço de e-mail.",
+            "signupEmailNotSent": "A sua conta foi criada e iniciou sessão, mas não foi possível enviar o e-mail de verificação. Pode tentar novamente no ecrã seguinte."
         }
     },
     "Common": {
@@ -457,7 +458,8 @@
             "empty": "Ainda não tem nenhum CV",
             "createError": "Falha ao criar o CV. Tente novamente.",
             "updateError": "Falha ao atualizar o CV. Tente novamente.",
-            "deleteError": "Falha ao eliminar o CV. Tente novamente."
+            "deleteError": "Falha ao eliminar o CV. Tente novamente.",
+            "fetchError": "Falha ao carregar o CV. Tente novamente."
         },
         "form": {
             "name": "Nome",

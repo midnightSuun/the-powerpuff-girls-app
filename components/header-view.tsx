@@ -9,7 +9,7 @@ import { SearchInput } from "@/components/search-input"
 import { AddItemButton } from "@/components/ui/list-management-buttons"
 import { Link, usePathname } from "@/i18n/navigation"
 import { routing } from "@/i18n/routing"
-import { CreateUserDialog } from "@/modules/users/ui/create-user-dialog"
+import { CreateUserDialog } from "@/modules/users/ui/components/form/create-user-dialog"
 
 export type HeaderCopyKey =
     | "users"
