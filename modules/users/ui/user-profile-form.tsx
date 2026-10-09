@@ -155,6 +155,7 @@ export function UserProfileForm({
                         id="profile-first-name"
                         type="text"
                         label={t("firstName")}
+                        placeholder={t("firstName")}
                         maxLength={100}
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
@@ -174,6 +175,7 @@ export function UserProfileForm({
                         id="profile-last-name"
                         type="text"
                         label={t("lastName")}
+                        placeholder={t("lastName")}
                         maxLength={100}
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}

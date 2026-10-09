@@ -21,6 +21,7 @@ function Input({
     disabled,
     value,
     defaultValue,
+    placeholder,
     ...props
 }: InputProps) {
     const generatedId = React.useId()
@@ -35,7 +36,6 @@ function Input({
         defaultValue !== undefined ? String(defaultValue) : "",
     )
 
-    // Если компонент управляемый (передан value), берем его, иначе используем внутренний стейт инпута
     const currentValue = value !== undefined ? value : internalValue
     const hasValue = Boolean(currentValue)
 
@@ -73,6 +73,7 @@ function Input({
                     disabled={disabled}
                     value={value}
                     defaultValue={defaultValue}
+                    placeholder={placeholder}
                     onFocus={(e) => {
                         setIsFocused(true)
                         props.onFocus?.(e)
@@ -83,7 +84,7 @@ function Input({
                     }}
                     onChange={handleInputChange}
                     aria-describedby={describedBy || undefined}
-                    aria-invalid={error ? true : ariaInvalid}
+                    aria-invalid={error !== undefined ? true : ariaInvalid}
                     className={cn(
                         "h-12 w-full min-w-0 rounded-lg border border-[#AEAEAE] bg-transparent px-4 py-3 text-base transition-colors outline-none",
                         "hover:border-button-secondary-default",
