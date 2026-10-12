@@ -47,7 +47,6 @@ export const UserRowMenu = ({ label, user }: Props) => {
     const [isUpdateOpen, setIsUpdateOpen] = useState(false)
     const [isDeleteOpen, setIsDeleteOpen] = useState(false)
     const [isDeleting, setIsDeleting] = useState(false)
-    const [deleteError, setDeleteError] = useState<string | null>(null)
     const pendingActionRef = useRef<PendingAction | null>(null)
 
     const handleUpdate = () => {
@@ -65,29 +64,24 @@ export const UserRowMenu = ({ label, user }: Props) => {
         pendingActionRef.current = null
 
         if (action === "update") setIsUpdateOpen(true)
-        if (action === "delete") {
-            setDeleteError(null)
-            setIsDeleteOpen(true)
-        }
+        if (action === "delete") setIsDeleteOpen(true)
     }
 
     const handleCloseDelete = () => {
         if (isDeleting) return
 
-        setDeleteError(null)
         setIsDeleteOpen(false)
     }
 
     const handleConfirmDelete = async () => {
         setIsDeleting(true)
-        setDeleteError(null)
 
         const result = await deleteUser(user.id)
 
         setIsDeleting(false)
 
         if (!result.success) {
-            setDeleteError(result.error ?? tMessages("deleteFailed"))
+            notifications.error(result.error ?? tMessages("deleteFailed"))
             return
         }
 
@@ -142,7 +136,6 @@ export const UserRowMenu = ({ label, user }: Props) => {
                 confirmText={tDialog("confirm")}
                 deletingText={tDialog("deleting")}
                 isDeleting={isDeleting}
-                error={deleteError}
                 cancelButtonClassName={cancelButtonClassName}
                 confirmButtonClassName={confirmButtonClassName}
             />

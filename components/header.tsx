@@ -2,6 +2,7 @@ import { ReactNode } from "react"
 
 import type { HeaderCopyKey, HeaderPage } from "@/components/header-view"
 import { HeaderView } from "@/components/header-view"
+import { getHeaderCopy } from "@/components/header-view/get-header-copy"
 import { getCurrentSession } from "@/modules/auth/helpers/get-current-session"
 import { getCvById } from "@/modules/cvs/api/get-cv"
 import { getUser } from "@/modules/users/api/get-user"
@@ -17,6 +18,7 @@ type PageWithTabs = {
     firstBreadcrumb: HeaderCopyKey
     breadcrumbParam: string
     showBreadcrumbIcon: boolean
+    preserveBreadcrumbCase?: boolean
     getSecondBreadcrumb: (id: string) => Promise<ReactNode>
     tabs: {
         label: HeaderCopyKey
@@ -70,7 +72,18 @@ const PAGES: (DefaultPage | PageWithTabs)[] = [
         firstBreadcrumb: "users",
         breadcrumbParam: "userId",
         showBreadcrumbIcon: true,
-        getSecondBreadcrumb: async (id: string) => (await getUser(id)).email,
+        preserveBreadcrumbCase: true,
+        getSecondBreadcrumb: async (id: string) => {
+            const user = await getUser(id)
+            const firstName = user.profile.first_name?.trim() ?? ""
+            const lastName = user.profile.last_name?.trim() ?? ""
+
+            if (firstName && lastName) {
+                return `${firstName} ${lastName}`
+            }
+
+            return user.email
+        },
         tabs: [
             { label: "profile", path: "/profile" },
             { label: "skills", path: "/skills" },
@@ -135,6 +148,7 @@ const toClientPages = (): HeaderPage[] =>
                 firstBreadcrumb: page.firstBreadcrumb,
                 breadcrumbParam: page.breadcrumbParam,
                 showBreadcrumbIcon: page.showBreadcrumbIcon,
+                preserveBreadcrumbCase: page.preserveBreadcrumbCase,
                 tabs: page.tabs,
             }
         }
@@ -150,10 +164,13 @@ const toClientPages = (): HeaderPage[] =>
 export const Header = async () => {
     const session = await getCurrentSession()
     const isAdmin = session?.role === "Admin"
+    const { copy, breadcrumbLabel } = await getHeaderCopy()
 
     return (
         <HeaderView
             pages={toClientPages()}
+            copy={copy}
+            breadcrumbLabel={breadcrumbLabel}
             initialBreadcrumb={null}
             viewerId={session?.userId ?? null}
             isAdmin={isAdmin}
