@@ -4,11 +4,13 @@ import { useLocale, useTranslations } from "next-intl"
 import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import type { GetProfileOptionsQuery, GetUserQuery, UserRole } from "@/gql"
 
+import { getUserDisplayName } from "../get-user-display-name"
 import { useUserProfile } from "../hooks/use-user-profile"
+import { withCurrentOption } from "../select-option"
 import { UserAvatar } from "./user-avatar"
+import { UserProfileSelect, UserProfileTextField } from "./user-profile-field"
 
 interface UserProfileFormProps {
     user: GetUserQuery["user"]
@@ -29,15 +31,8 @@ export function UserProfileForm({
     const locale = useLocale()
     const [isHovered, setIsHovered] = useState(false)
 
-    const departmentOptions =
-        user.department &&
-        !departments.some(({ id }) => id === user.department?.id)
-            ? [user.department, ...departments]
-            : departments
-    const positionOptions =
-        user.position && !positions.some(({ id }) => id === user.position?.id)
-            ? [user.position, ...positions]
-            : positions
+    const departmentOptions = withCurrentOption(departments, user.department)
+    const positionOptions = withCurrentOption(positions, user.position)
 
     const {
         canEdit,
@@ -162,8 +157,7 @@ export function UserProfileForm({
 
                 <div className="space-y-1">
                     <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-                        {[firstName, lastName].filter(Boolean).join(" ") ||
-                            user.email}
+                        {getUserDisplayName(firstName, lastName, user.email)}
                     </h1>
                     <p className="text-sm text-muted-foreground">
                         {user.email}
@@ -177,110 +171,56 @@ export function UserProfileForm({
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                <div className="flex flex-col gap-2">
-                    <Input
-                        id="profile-first-name"
-                        type="text"
-                        label={t("firstName")}
-                        placeholder={t("firstName")}
-                        maxLength={100}
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                        disabled={!canEdit}
-                        error={
-                            hasSubmitted && !firstName.trim()
-                                ? t("errors.firstNameRequired")
-                                : undefined
-                        }
-                        className="h-12 bg-background border-input text-foreground rounded-md shadow-xs disabled:cursor-not-allowed"
-                    />
-                </div>
-
-                <div className="flex flex-col gap-2">
-                    <Input
-                        id="profile-last-name"
-                        type="text"
-                        label={t("lastName")}
-                        placeholder={t("lastName")}
-                        maxLength={100}
-                        value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                        disabled={!canEdit}
-                        error={
-                            hasSubmitted && !lastName.trim()
-                                ? t("errors.lastNameRequired")
-                                : undefined
-                        }
-                        className="h-12 bg-background border-input text-foreground rounded-md shadow-xs disabled:cursor-not-allowed"
-                    />
-                </div>
-
-                <div className="flex flex-col gap-2">
-                    <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                        {t("department")}
-                    </label>
-                    <div className="relative">
-                        <select
-                            value={departmentId}
-                            onChange={(event) =>
-                                setDepartmentId(event.target.value)
-                            }
-                            disabled={!canEdit}
-                            aria-invalid={hasSubmitted && !departmentId}
-                            className="w-full h-12 px-4 rounded-md border border-input bg-background text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring disabled:bg-muted disabled:opacity-100 disabled:cursor-not-allowed enabled:cursor-pointer appearance-none shadow-xs"
-                        >
-                            <option value="">{t("selectDepartment")}</option>
-                            {departmentOptions.map((department) => (
-                                <option
-                                    key={department.id}
-                                    value={department.id}
-                                >
-                                    {department.name}
-                                </option>
-                            ))}
-                        </select>
-                        <span className="absolute right-4 top-4 pointer-events-none text-xs text-muted-foreground">
-                            ▼
-                        </span>
-                    </div>
-                    {hasSubmitted && !departmentId && (
-                        <span className="text-xs text-red-500">
-                            {t("errors.departmentRequired")}
-                        </span>
-                    )}
-                </div>
-
-                <div className="flex flex-col gap-2">
-                    <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                        {t("position")}
-                    </label>
-                    <div className="relative">
-                        <select
-                            value={positionId}
-                            onChange={(event) =>
-                                setPositionId(event.target.value)
-                            }
-                            disabled={!canEdit}
-                            aria-invalid={hasSubmitted && !positionId}
-                            className="w-full h-12 px-4 rounded-md border border-input bg-background text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring disabled:bg-muted disabled:opacity-100 disabled:cursor-not-allowed enabled:cursor-pointer appearance-none shadow-xs"
-                        >
-                            <option value="">{t("selectPosition")}</option>
-                            {positionOptions.map((position) => (
-                                <option key={position.id} value={position.id}>
-                                    {position.name}
-                                </option>
-                            ))}
-                        </select>
-                        <span className="absolute right-4 top-4 pointer-events-none text-xs text-muted-foreground">
-                            ▼
-                        </span>
-                    </div>
-                    {hasSubmitted && !positionId && (
-                        <span className="text-xs text-red-500">
-                            {t("errors.positionRequired")}
-                        </span>
-                    )}
-                </div>
+                <UserProfileTextField
+                    id="profile-first-name"
+                    label={t("firstName")}
+                    value={firstName}
+                    disabled={!canEdit}
+                    error={
+                        hasSubmitted && !firstName.trim()
+                            ? t("errors.firstNameRequired")
+                            : undefined
+                    }
+                    onChange={setFirstName}
+                />
+                <UserProfileTextField
+                    id="profile-last-name"
+                    label={t("lastName")}
+                    value={lastName}
+                    disabled={!canEdit}
+                    error={
+                        hasSubmitted && !lastName.trim()
+                            ? t("errors.lastNameRequired")
+                            : undefined
+                    }
+                    onChange={setLastName}
+                />
+                <UserProfileSelect
+                    label={t("department")}
+                    placeholder={t("selectDepartment")}
+                    value={departmentId}
+                    options={departmentOptions}
+                    disabled={!canEdit}
+                    error={
+                        hasSubmitted && !departmentId
+                            ? t("errors.departmentRequired")
+                            : undefined
+                    }
+                    onChange={setDepartmentId}
+                />
+                <UserProfileSelect
+                    label={t("position")}
+                    placeholder={t("selectPosition")}
+                    value={positionId}
+                    options={positionOptions}
+                    disabled={!canEdit}
+                    error={
+                        hasSubmitted && !positionId
+                            ? t("errors.positionRequired")
+                            : undefined
+                    }
+                    onChange={setPositionId}
+                />
             </div>
 
             {canEdit && (

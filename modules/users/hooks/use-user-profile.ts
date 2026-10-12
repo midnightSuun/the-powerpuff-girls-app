@@ -53,7 +53,6 @@ export function useUserProfile(
     const [lastName, setLastName] = useState(initialLastName)
     const [departmentId, setDepartmentId] = useState(user.department?.id ?? "")
     const [positionId, setPositionId] = useState(user.position?.id ?? "")
-    const [avatarFile, setAvatarFile] = useState<File | null>(null)
     const [avatarPreview, setAvatarPreview] = useState<string | null>(
         user.profile?.avatar ?? null,
     )
@@ -117,7 +116,6 @@ export function useUserProfile(
         }
 
         setAvatarError(null)
-        setAvatarFile(file)
         setIsAvatarDeleted(false)
 
         const tempPreview = URL.createObjectURL(file)
@@ -203,7 +201,6 @@ export function useUserProfile(
         if (!canEdit) return
         try {
             setAvatarError(null)
-            setAvatarFile(null)
             setAvatarPreview(null)
             setIsAvatarDeleted(true)
 
@@ -255,9 +252,7 @@ export function useUserProfile(
         setDepartmentId,
         positionId,
         setPositionId,
-        avatarFile,
         avatarPreview: isAvatarDeleted ? null : avatarPreview,
-        isAssignmentChanged,
         hasSubmitted,
         isSubmitting,
         isVerifyingEmail,

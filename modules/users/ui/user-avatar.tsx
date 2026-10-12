@@ -2,6 +2,8 @@ import { cn } from "cn"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
+import { getUserDisplayName } from "../get-user-display-name"
+
 type Props = {
     src: string | null
     firstName: string | null
@@ -22,13 +24,13 @@ export function UserAvatar({
     fallbackClassName,
     avatarClassName,
 }: Props) {
-    const name = [firstName, lastName].filter(Boolean).join(" ")
+    const name = getUserDisplayName(firstName, lastName, email)
     const initial =
         getInitial(firstName) || getInitial(lastName) || getInitial(email)
 
     return (
         <Avatar className={avatarClassName}>
-            {src ? <AvatarImage src={src} alt={name || email} /> : null}
+            {src ? <AvatarImage src={src} alt={name} /> : null}
             <AvatarFallback className={cn("rounded-full", fallbackClassName)}>
                 {initial}
             </AvatarFallback>

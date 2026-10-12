@@ -2,7 +2,7 @@
 
 import { X } from "lucide-react"
 import { useTranslations } from "next-intl"
-import { type ReactNode, type SubmitEvent } from "react"
+import { type SubmitEvent } from "react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -14,16 +14,16 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
 
+import type { SelectOption } from "../select-option"
+import { CreateUserPasswordInput } from "./create-user-fields"
 import {
-    createUserFieldClassName,
-    CreateUserPasswordInput,
-    CreateUserSelect,
-} from "./create-user-fields"
+    type UserFormField,
+    UserFormSelectField,
+    UserFormTextField,
+} from "./user-form-field"
 
-const disabledFieldClassName =
-    "disabled:bg-[#e6e6e6] disabled:text-[#626262] disabled:opacity-100 dark:disabled:bg-[#3a3a3a] dark:disabled:text-[#aeaeae]"
+export type { UserFormField }
 
 const secondaryButtonClassName =
     "h-10 w-40 rounded-[40px] px-6 py-0 text-sm leading-[24.5px] font-medium tracking-[0.4px] uppercase dark:border-[#aeaeae] dark:text-[#aeaeae] dark:hover:bg-transparent dark:hover:text-[#f5f5f7]"
@@ -38,20 +38,6 @@ const closeClassName =
     "inline-flex size-8 shrink-0 items-center justify-center text-[#626262] outline-none hover:text-[#2e2e2e] focus-visible:ring-3 focus-visible:ring-[#c63031]/30 dark:text-[#aeaeae] dark:hover:text-[#f5f5f7]"
 
 const hiddenPassword = "••••••••"
-
-export type UserFormField =
-    | "email"
-    | "password"
-    | "firstName"
-    | "lastName"
-    | "departmentId"
-    | "positionId"
-    | "role"
-
-type SelectOption = {
-    id: string
-    name: string
-}
 
 type Props = {
     open: boolean
@@ -74,25 +60,6 @@ type Props = {
     positions: SelectOption[]
     roleOptions: SelectOption[]
     onFieldChange: (field: UserFormField, value: string) => void
-}
-
-const Field = ({
-    label,
-    children,
-}: {
-    label?: string
-    children: ReactNode
-}) => {
-    if (!label) return children
-
-    return (
-        <label className="flex flex-col gap-1">
-            <span className="text-xs leading-4 text-button-secondary-default dark:text-[#aeaeae]">
-                {label}
-            </span>
-            {children}
-        </label>
-    )
 }
 
 export const UserFormDialog = ({
@@ -120,7 +87,6 @@ export const UserFormDialog = ({
     const tDialog = useTranslations("Users.dialog")
     const tColumns = useTranslations("Users.columns")
     const tUser = useTranslations("User")
-    const labelFor = (label: string) => (showFieldLabels ? label : undefined)
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -145,24 +111,13 @@ export const UserFormDialog = ({
                 </DialogDescription>
                 <form className="flex flex-col gap-4" onSubmit={onSubmit}>
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        <Input
+                        <UserFormTextField
                             type="email"
-                            label={labelFor(tColumns("email"))}
-                            aria-label={tColumns("email")}
-                            placeholder={
-                                lockCredentials ? undefined : tColumns("email")
-                            }
-                            autoComplete="off"
+                            label={tColumns("email")}
                             value={email}
+                            showLabel={showFieldLabels}
                             disabled={lockCredentials}
-                            onChange={(event) =>
-                                onFieldChange("email", event.target.value)
-                            }
-                            className={
-                                lockCredentials
-                                    ? `${createUserFieldClassName} ${disabledFieldClassName}`
-                                    : createUserFieldClassName
-                            }
+                            onChange={(value) => onFieldChange("email", value)}
                         />
                         <CreateUserPasswordInput
                             label={tDialog("password")}
@@ -173,74 +128,54 @@ export const UserFormDialog = ({
                                 onFieldChange("password", value)
                             }
                         />
-                        <Input
-                            label={labelFor(tColumns("firstName"))}
-                            aria-label={tColumns("firstName")}
-                            placeholder={
-                                showFieldLabels
-                                    ? undefined
-                                    : tColumns("firstName")
-                            }
-                            autoComplete="off"
+                        <UserFormTextField
+                            label={tColumns("firstName")}
                             value={firstName}
-                            onChange={(event) =>
-                                onFieldChange("firstName", event.target.value)
+                            showLabel={showFieldLabels}
+                            onChange={(value) =>
+                                onFieldChange("firstName", value)
                             }
-                            className={createUserFieldClassName}
                         />
-                        <Input
-                            label={labelFor(tColumns("lastName"))}
-                            aria-label={tColumns("lastName")}
-                            placeholder={
-                                showFieldLabels
-                                    ? undefined
-                                    : tColumns("lastName")
-                            }
-                            autoComplete="off"
+                        <UserFormTextField
+                            label={tColumns("lastName")}
                             value={lastName}
-                            onChange={(event) =>
-                                onFieldChange("lastName", event.target.value)
+                            showLabel={showFieldLabels}
+                            onChange={(value) =>
+                                onFieldChange("lastName", value)
                             }
-                            className={createUserFieldClassName}
                         />
-                        <Field label={labelFor(tColumns("department"))}>
-                            <CreateUserSelect
-                                label={tColumns("department")}
-                                value={departmentId}
-                                options={departments}
-                                includeEmpty={
-                                    !showFieldLabels ||
-                                    departmentId.length === 0
-                                }
-                                onChange={(value) =>
-                                    onFieldChange("departmentId", value)
-                                }
-                            />
-                        </Field>
-                        <Field label={labelFor(tColumns("position"))}>
-                            <CreateUserSelect
-                                label={tColumns("position")}
-                                value={positionId}
-                                options={positions}
-                                includeEmpty={
-                                    !showFieldLabels || positionId.length === 0
-                                }
-                                onChange={(value) =>
-                                    onFieldChange("positionId", value)
-                                }
-                            />
-                        </Field>
-                        <Field label={tUser("role")}>
-                            <CreateUserSelect
-                                label={tUser("role")}
-                                value={role}
-                                options={roleOptions}
-                                includeEmpty={false}
-                                onChange={(value) =>
-                                    onFieldChange("role", value)
-                                }
-                            />
-                        </Field>
+                        <UserFormSelectField
+                            label={tColumns("department")}
+                            value={departmentId}
+                            options={departments}
+                            showLabel={showFieldLabels}
+                            includeEmpty={
+                                !showFieldLabels || departmentId.length === 0
+                            }
+                            onChange={(value) =>
+                                onFieldChange("departmentId", value)
+                            }
+                        />
+                        <UserFormSelectField
+                            label={tColumns("position")}
+                            value={positionId}
+                            options={positions}
+                            showLabel={showFieldLabels}
+                            includeEmpty={
+                                !showFieldLabels || positionId.length === 0
+                            }
+                            onChange={(value) =>
+                                onFieldChange("positionId", value)
+                            }
+                        />
+                        <UserFormSelectField
+                            label={tUser("role")}
+                            value={role}
+                            options={roleOptions}
+                            showLabel
+                            includeEmpty={false}
+                            onChange={(value) => onFieldChange("role", value)}
+                        />
                     </div>
                     <DialogFooter className="mx-0 mt-2 mb-0 flex-row flex-wrap justify-end gap-3 rounded-none border-0 border-t-0 bg-transparent p-0">
                         <DialogClose
