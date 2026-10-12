@@ -145,7 +145,7 @@ export function UserProfileForm({
                                 {t("uploadAvatar")}
                             </span>
                             <span className="text-xs text-muted-foreground mt-1">
-                                png, jpg or gif no more than 0.5MB
+                                png, jpg or gif no more than 5MB
                             </span>
                             <input
                                 type="file"

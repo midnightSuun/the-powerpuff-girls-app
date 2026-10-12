@@ -388,13 +388,12 @@
         "delete": {
             "titleSingular": "Fähigkeit entfernen",
             "titlePlural": "Fähigkeiten entfernen",
-            "confirmation": "Möchten Sie {count, plural, one {# Fähigkeit?} other {# Fähigkeiten?}} wirklich entfernen?",
+            "confirmationText": "Möchten Sie wirklich",
+            "countSkills": "{count, plural, one {# Fähigkeit} other {# Fähigkeiten}}",
+            "questionMark": " entfernen?",
             "cancel": "ABBRECHEN",
             "confirm": "BESTÄTIGEN",
-            "removing": "WIRD ENTFERNT...",
-            "errors": {
-                "failed": "Fehler beim Entfernen der Fähigkeiten. Bitte versuchen Sie es erneut."
-            }
+            "removing": "WIRD ENTFERNT..."
         },
         "admin": {
             "name": "Name",
@@ -694,6 +693,8 @@
                 "languagePlaceholder": "z. B. Deutsch",
                 "isoCode": "ISO-Code",
                 "isoCodePlaceholder": "z. B. de",
+                "nativeName": "Nativer Name",
+                "nativeNamePlaceholder": "Nativer Name",
                 "cancel": "ABBRECHEN",
                 "create": "ERSTELLEN",
                 "creating": "WIRD ERSTELLT..."
@@ -704,6 +705,8 @@
                 "languagePlaceholder": "Sprache",
                 "isoCode": "ISO-Code",
                 "isoCodePlaceholder": "ISO2",
+                "nativeName": "Nativer Name",
+                "nativeNamePlaceholder": "Nativer Name",
                 "cancel": "ABBRECHEN",
                 "save": "SPEICHERN",
                 "saving": "WIRD GESPEICHERT..."

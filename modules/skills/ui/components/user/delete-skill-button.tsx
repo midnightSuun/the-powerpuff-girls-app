@@ -53,7 +53,7 @@ export function DeleteSkillsButton({
 
                     <Button
                         type="button"
-                        variant="ghost"
+                        variant="primary"
                         disabled={!hasSelected || isSubmitting}
                         onClick={() => setIsModalOpen(true)}
                     >

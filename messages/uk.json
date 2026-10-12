@@ -388,9 +388,11 @@
         "delete": {
             "titleSingular": "Видалити навичку",
             "titlePlural": "Видалити навички",
-            "confirmation": "Ви впевнені, що хочете видалити {count, plural, one {# навичку?} few {# навички?} many {# навичок?} other {# навички?}}",
+            "confirmationText": "Ви впевнені, що хочете видалити",
+            "countSkills": "{count, plural, one {# навичку} few {# навички} many {# навичок} other {# навичок}}",
+            "questionMark": "?",
             "cancel": "СКАСУВАТИ",
-            "confirm": "ПІДТВЕРДИТИ",
+            "confirm": "ПІДТВЕРДИТЬ",
             "removing": "ВИДАЛЕННЯ...",
             "errors": {
                 "failed": "Не вдалося видалити навички. Спробуйте ще раз."
@@ -694,6 +696,8 @@
                 "languagePlaceholder": "напр. Українська",
                 "isoCode": "ISO",
                 "isoCodePlaceholder": "напр. uk",
+                "nativeName": "Рідна назва",
+                "nativeNamePlaceholder": "Рідна назва",
                 "cancel": "СКАСУВАТИ",
                 "create": "СТВОРИТИ",
                 "creating": "СТВОРЕННЯ..."
@@ -704,6 +708,8 @@
                 "languagePlaceholder": "Мова",
                 "isoCode": "ISO-код",
                 "isoCodePlaceholder": "ISO2",
+                "nativeName": "Рідна назва",
+                "nativeNamePlaceholder": "Рідна назва",
                 "cancel": "СКАСУВАТИ",
                 "save": "ЗБЕРЕГТИ",
                 "saving": "ЗБЕРЕЖЕННЯ..."

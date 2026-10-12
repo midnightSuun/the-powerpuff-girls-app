@@ -388,13 +388,15 @@
         "delete": {
             "titleSingular": "Supprimer la compétence",
             "titlePlural": "Supprimer les compétences",
-            "confirmation": "Êtes-vous sûr de vouloir supprimer {count, plural, one {# compétence ?} other {# compétences ?}}",
             "cancel": "ANNULER",
             "confirm": "CONFIRMER",
             "removing": "SUPPRESSION...",
             "errors": {
                 "failed": "Échec de la suppression des compétences. Veuillez réessayer."
-            }
+            },
+            "confirmationText": "Êtes-vous sûr de vouloir supprimer",
+            "countSkills": "{count, plural, one {# compétence} other {# compétences}}",
+            "questionMark": " ?"
         },
         "admin": {
             "name": "Nom",
@@ -694,6 +696,8 @@
                 "languagePlaceholder": "ex. Français",
                 "isoCode": "Code ISO",
                 "isoCodePlaceholder": "ex. fr",
+                "nativeName": "Nom natif",
+                "nativeNamePlaceholder": "Nom natif",
                 "cancel": "ANNULER",
                 "create": "CRÉER",
                 "creating": "CRÉATION..."
@@ -704,6 +708,8 @@
                 "languagePlaceholder": "Langue",
                 "isoCode": "Code ISO",
                 "isoCodePlaceholder": "ISO2",
+                "nativeName": "Nom natif",
+                "nativeNamePlaceholder": "Nom natif",
                 "cancel": "ANNULER",
                 "save": "ENREGISTRER",
                 "saving": "ENREGISTREMENT..."
