@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react"
-import { beforeEach, describe, expect, it, vi } from "vitest"
+import { cleanup, render, screen } from "@testing-library/react"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import { useResetPassword } from "../../hooks/use-reset-password"
 import { ResetPasswordPage } from "../reset-password"
@@ -39,8 +39,13 @@ describe("ResetPasswordPage Component", () => {
     }
 
     beforeEach(() => {
+        cleanup()
         vi.clearAllMocks()
         vi.mocked(useResetPassword).mockReturnValue(defaultHookValues)
+    })
+
+    afterEach(() => {
+        cleanup()
     })
 
     it("renders title, subtitle, password inputs, submit button and link correctly", () => {

@@ -1,6 +1,6 @@
-import { render, screen } from "@testing-library/react"
+import { cleanup, render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import { beforeEach, describe, expect, it, vi } from "vitest"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import { useCreateCv } from "../../hooks/use-сreate-сv"
 import { CreateCvModal } from "../components/create-cv-modal"
@@ -119,10 +119,15 @@ describe("CreateCvModal", () => {
     }
 
     beforeEach(() => {
+        cleanup()
         vi.clearAllMocks()
         vi.mocked(useCreateCv).mockReturnValue(
             defaultHookReturn as unknown as ReturnType<typeof useCreateCv>,
         )
+    })
+
+    afterEach(() => {
+        cleanup()
     })
 
     it("renders modal with translated texts and form fields when open", () => {

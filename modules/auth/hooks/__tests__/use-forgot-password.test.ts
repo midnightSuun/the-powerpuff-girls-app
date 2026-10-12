@@ -4,10 +4,6 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 import { requestPasswordReset } from "../../api/forgot-password"
 import { useForgotPassword } from "../use-forgot-password"
 
-vi.mock("next-intl", () => ({
-    useTranslations: () => (key: string) => key,
-}))
-
 vi.mock("../../api/forgot-password", () => ({
     requestPasswordReset: vi.fn(),
 }))

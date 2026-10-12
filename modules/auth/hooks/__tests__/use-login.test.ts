@@ -6,10 +6,6 @@ import { login } from "../../api/login"
 import { AUTH_NOTIFICATION_STORAGE_KEY } from "../../consts"
 import { useLogin } from "../use-login"
 
-vi.mock("next-intl", () => ({
-    useTranslations: () => (key: string) => key,
-}))
-
 vi.mock("../../api/login", () => ({
     login: vi.fn(),
 }))
