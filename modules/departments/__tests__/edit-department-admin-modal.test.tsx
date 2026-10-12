@@ -46,7 +46,6 @@ vi.mock("@/components/ui/base-modal", () => ({
                     {isPending ? pendingText : confirmText}
                 </button>
                 {children}{" "}
-                {/* Ошибка рендерится внутри children компонента EditDepartmentModal */}
             </div>
         ) : null,
 }))

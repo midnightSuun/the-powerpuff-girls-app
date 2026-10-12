@@ -36,7 +36,6 @@ vi.mock("@/components/ui/delete-item-modal", () => ({
         isOpen ? (
             <div data-testid="base-modal">
                 <h1>{title}</h1>
-                {/* Эмулируем подстановку name в перевод для мока */}
                 <p>{description} Engineering</p>
                 {error && <div data-testid="modal-error">{error}</div>}
                 <div data-testid="is-deleting">{String(isDeleting)}</div>

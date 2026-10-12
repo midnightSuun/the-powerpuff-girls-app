@@ -124,7 +124,6 @@ describe("useAdminDepartmentsView", () => {
                 deletingItem: deletingDept,
             } as unknown as ReturnType<typeof useAdminCrudState>)
 
-            // Исправление: приведение к типу через unknown или использование ожидаемой структуры с affected
             vi.mocked(deleteAdminDepartment).mockResolvedValueOnce({
                 affected: 1,
             } as unknown as Awaited<ReturnType<typeof deleteAdminDepartment>>)
