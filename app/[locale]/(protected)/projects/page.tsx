@@ -4,7 +4,7 @@ import { ProjectListSkeleton } from "@/components/project-list-skeleton"
 import { readListSearch } from "@/lib/list-search-params"
 import { getCurrentSession } from "@/modules/auth/helpers/get-current-session"
 import { getAvailableProjects } from "@/modules/cvs/api/projects"
-import { AdminProjectsView } from "@/modules/projects/ui/admin-projects-view"
+import { AdminProjectsView } from "@/modules/projects"
 import { UsersTableFrame } from "@/modules/users"
 
 type Props = {

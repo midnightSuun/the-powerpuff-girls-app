@@ -6,8 +6,7 @@ import {
     getCurrentSession,
     getUserRole,
 } from "@/modules/auth/helpers/get-current-session"
-import { getAdminPositions } from "@/modules/positions/api/positions"
-import { AdminPositionsView } from "@/modules/positions/ui/components/admin-positions-view"
+import { AdminPositionsView, getAdminPositions } from "@/modules/positions"
 
 type Props = {
     searchParams: Promise<Record<string, string | string[] | undefined>>

@@ -6,8 +6,10 @@ import {
     getCurrentSession,
     getUserRole,
 } from "@/modules/auth/helpers/get-current-session"
-import { getAdminDepartments } from "@/modules/departments/api/departments"
-import { AdminDepartmentsView } from "@/modules/departments/ui/components/admin-departments-view"
+import {
+    AdminDepartmentsView,
+    getAdminDepartments,
+} from "@/modules/departments"
 
 type Props = {
     searchParams: Promise<Record<string, string | string[] | undefined>>

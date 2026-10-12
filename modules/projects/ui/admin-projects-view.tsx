@@ -12,7 +12,8 @@ import {
     type ProjectFormData,
     useAdminProjects,
 } from "@/modules/projects/hooks/use-admin-projects"
-import { ProjectFormModal } from "@/modules/projects/ui/components/project-form-modal"
+
+import { ProjectFormModal } from "./project-form-modal"
 
 interface AdminProjectsViewProps {
     projects: ProjectTableItem[]
