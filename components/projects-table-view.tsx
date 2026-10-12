@@ -149,7 +149,7 @@ export function ProjectsTableView<T extends ProjectTableItem>({
                 </label>
 
                 {canManage && onAdd && addLabel && (
-                    <AddItemButton
+                   <AddItemButton
                         label={addLabel}
                         onClick={onAdd}
                         disabled={addDisabled}
