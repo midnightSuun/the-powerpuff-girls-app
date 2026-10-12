@@ -1,7 +1,7 @@
 import { getAuthUserId } from "@/modules/skills/helpers/get-auth-user-id"
 
 import { getUser } from "../api/get-user"
-import { NavUserMenu } from "./components/nav-user-menu"
+import { NavUserMenu } from "./nav-user-menu"
 
 export async function NavUser() {
     const userId = await getAuthUserId()

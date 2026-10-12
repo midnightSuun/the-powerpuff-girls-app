@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
 import { memo, useCallback } from "react"
 
+import { useHeaderToolbarAction } from "@/components/header-toolbar-action"
 import { SearchInput } from "@/components/search-input"
 import { Button } from "@/components/ui/button"
 
@@ -94,7 +95,8 @@ interface CvsPageViewProps {
     initialCvs: CvItem[]
     isAdmin: boolean
     search: string
-    limit: number
+    limit?: number
+    showSearch?: boolean
     targetUserId?: string
 }
 
@@ -103,6 +105,7 @@ export function CvsPageView({
     isAdmin,
     search,
     limit,
+    showSearch = true,
     targetUserId,
 }: CvsPageViewProps) {
     const router = useRouter()
@@ -157,12 +160,22 @@ export function CvsPageView({
         [setActiveMenuId, setDeletingCv],
     )
 
+    const handleOpenCreate = useCallback(() => {
+        setIsCreateOpen(true)
+    }, [setIsCreateOpen])
+
+    useHeaderToolbarAction(showSearch ? null : t("create"), handleOpenCreate)
+
     return (
-        <div className="p-6 space-y-6 max-w-7xl mx-auto">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <SearchInput limit={limit} search={search} />
-                <CreateCvTriggerButton onClick={() => setIsCreateOpen(true)} />
-            </div>
+        <div className="mx-auto max-w-7xl space-y-6 p-6">
+            {showSearch ? (
+                <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+                    <SearchInput limit={limit} search={search} />
+                    <div className="sm:ml-auto">
+                        <CreateCvTriggerButton onClick={handleOpenCreate} />
+                    </div>
+                </div>
+            ) : null}
 
             <div className="w-full overflow-visible">
                 <div className="grid grid-cols-[1fr_1fr_auto] lg:grid-cols-[35%_35%_25%_auto] items-center px-2 py-4 border-b border-border text-sm font-semibold text-muted-foreground">
@@ -194,11 +207,7 @@ export function CvsPageView({
                         ))
                     ) : (
                         <div className="py-8 text-center text-sm text-muted-foreground">
-                            {search
-                                ? t("noResults")
-                                : isAdmin
-                                  ? t("noResults")
-                                  : t("empty")}
+                            {search || isAdmin ? t("noResults") : t("empty")}
                         </div>
                     )}
                 </div>
