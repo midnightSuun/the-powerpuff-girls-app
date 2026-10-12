@@ -20,7 +20,7 @@ export function AddItemButton({
     disabled,
     className,
     iconOnlyBelowLg = false,
-    variant = "ghost",
+    variant = "primaryV2",
 }: AddItemButtonProps) {
     return (
         <Button
