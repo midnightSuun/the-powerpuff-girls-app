@@ -149,10 +149,12 @@ export function ProjectsTableView<T extends ProjectTableItem>({
                 </label>
 
                 {canManage && onAdd && addLabel && (
-                    <AddItemButton
+                   <AddItemButton
                         label={addLabel}
                         onClick={onAdd}
                         disabled={addDisabled}
+                        variant="primaryV2"
+                        className="self-end sm:self-auto"
                     />
                 )}
             </div>
