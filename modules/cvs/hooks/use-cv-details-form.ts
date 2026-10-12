@@ -18,14 +18,47 @@ export function useCvDetailsForm({
     const [description, setDescription] = useState(cv.description)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [error, setError] = useState<string | null>(null)
+    const [fieldErrors, setFieldErrors] = useState<{
+        name?: string
+        education?: string
+        description?: string
+    }>({})
 
     const isDirty =
         name !== cv.name ||
         education !== cv.education ||
         description !== cv.description
 
+    const validateFields = () => {
+        const errors: typeof fieldErrors = {}
+
+        if (!name.trim()) {
+            errors.name = "Name is required"
+        } else if (name.length > 255) {
+            errors.name = "Name must be 255 characters or less"
+        }
+
+        if (!education.trim()) {
+            errors.education = "Education is required"
+        } else if (education.length > 255) {
+            errors.education = "Education must be 255 characters or less"
+        }
+
+        if (!description.trim()) {
+            errors.description = "Description is required"
+        }
+
+        setFieldErrors(errors)
+        return Object.keys(errors).length === 0
+    }
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+
+        if (!validateFields()) {
+            return
+        }
+
         try {
             setIsSubmitting(true)
             setError(null)
@@ -37,6 +70,8 @@ export function useCvDetailsForm({
         }
     }
 
+    const hasValidationErrors = Object.keys(fieldErrors).length > 0
+
     return {
         name,
         setName,
@@ -46,7 +81,9 @@ export function useCvDetailsForm({
         setDescription,
         isSubmitting,
         error,
+        fieldErrors,
         isDirty,
         handleSubmit,
+        hasValidationErrors,
     }
 }
