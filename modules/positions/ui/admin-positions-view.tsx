@@ -21,7 +21,6 @@ export function AdminPositionsView({
     initialPositions,
 }: AdminPositionsViewProps) {
     const t = useTranslations("Admin.positions")
-    const tCommon = useTranslations("Admin.common")
 
     const {
         positions,
@@ -44,7 +43,6 @@ export function AdminPositionsView({
         <AdminNameCrudPage
             data={positions}
             columns={columns}
-            searchPlaceholder={tCommon("search")}
             createButtonLabel={t("createButton")}
             emptyMessage={t("empty")}
             getItemName={(position) => position.name}

@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl"
 import { useState } from "react"
 
+import { useHeaderToolbarAction } from "@/components/header-toolbar-action"
 import {
     ProjectsTableView,
     type ProjectTableItem,
@@ -11,25 +12,26 @@ import {
     type ProjectFormData,
     useAdminProjects,
 } from "@/modules/projects/hooks/use-admin-projects"
-import { ProjectFormModal } from "@/modules/projects/ui/components/project-form-modal"
+
+import { ProjectFormModal } from "./project-form-modal"
 
 interface AdminProjectsViewProps {
     projects: ProjectTableItem[]
-    searchPlaceholder: string
-    searchLabel: string
+    search?: string
 }
 
 export function AdminProjectsView({
     projects,
-    searchPlaceholder,
-    searchLabel,
+    search = "",
 }: AdminProjectsViewProps) {
     const [isCreateOpen, setIsCreateOpen] = useState(false)
     const [editingProject, setEditingProject] =
         useState<ProjectTableItem | null>(null)
 
     const t = useTranslations("Admin.projects")
-
+    useHeaderToolbarAction(t("createProject"), () => {
+        setIsCreateOpen(true)
+    })
     const {
         isRemoving,
         removeError,
@@ -59,10 +61,7 @@ export function AdminProjectsView({
             <ProjectsTableView
                 projects={projects}
                 canManage
-                addLabel={t("createProject")}
-                searchPlaceholder={searchPlaceholder}
-                searchLabel={searchLabel}
-                onAdd={() => setIsCreateOpen(true)}
+                search={search}
                 onEdit={setEditingProject}
                 onDelete={onDeleteProject}
                 onDeleteClose={() => setRemoveError(null)}

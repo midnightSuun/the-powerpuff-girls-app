@@ -4,7 +4,7 @@ import { getCurrentSession } from "@/modules/auth/helpers/get-current-session"
 
 import { getProfileOptions } from "../api/get-profile-options"
 import { getUser } from "../api/get-user"
-import { UserProfileForm } from "./components/profile/user-profile-form"
+import { UserProfileForm } from "./user-profile-form"
 
 type Props = {
     userId: string

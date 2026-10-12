@@ -21,7 +21,6 @@ export function AdminDepartmentsView({
     initialDepartments,
 }: AdminDepartmentsViewProps) {
     const t = useTranslations("Admin.departments")
-    const tCommon = useTranslations("Admin.common")
 
     const {
         departments,
@@ -44,7 +43,6 @@ export function AdminDepartmentsView({
         <AdminNameCrudPage
             data={departments}
             columns={columns}
-            searchPlaceholder={tCommon("search")}
             createButtonLabel={t("createButton")}
             emptyMessage={t("empty")}
             getItemName={(department) => department.name}

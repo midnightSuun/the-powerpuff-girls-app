@@ -1,7 +1,6 @@
-import { LoadingText } from "@/components/loading-text"
 import { parsePaginationSearchParams } from "@/lib/pagination-search-params"
-import { UsersPage } from "@/modules/users"
-import { UsersTableFrame } from "@/modules/users"
+import { getCurrentSession } from "@/modules/auth/helpers/get-current-session"
+import { CreateUserDialog, UsersPage, UsersTableFrame } from "@/modules/users"
 
 type Props = {
     searchParams: Promise<Record<string, string | string[] | undefined>>
@@ -27,10 +26,15 @@ async function UsersContent({
     )
 }
 
-export default function UsersRoute({ searchParams }: Props) {
+export default async function UsersRoute({ searchParams }: Props) {
+    const session = await getCurrentSession()
+
     return (
-        <UsersTableFrame>
-            <UsersContent searchParams={searchParams} />
-        </UsersTableFrame>
+        <>
+            {session?.role === "Admin" ? <CreateUserDialog /> : null}
+            <UsersTableFrame>
+                <UsersContent searchParams={searchParams} />
+            </UsersTableFrame>
+        </>
     )
 }

@@ -15,7 +15,7 @@ import { getUserSkills } from "@/modules/skills/api/skills"
 import { getAuthUserId } from "@/modules/skills/helpers/get-auth-user-id"
 import { AdminSkillsView } from "@/modules/skills/ui/components/admin/admin-skills-view"
 import { Skills } from "@/modules/skills/ui/skills"
-import { UsersTableFrame } from "@/modules/users/ui/components/list/users-table-frame"
+import { UsersTableFrame } from "@/modules/users/ui/users-table-frame"
 
 export const instant = false
 

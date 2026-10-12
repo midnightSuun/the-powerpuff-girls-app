@@ -21,7 +21,7 @@ import { Link } from "@/i18n/navigation"
 import { logout } from "@/modules/auth/api/logout"
 import { AUTH_NOTIFICATION_STORAGE_KEY } from "@/modules/auth/consts"
 
-import { UserAvatar } from "../user-avatar"
+import { UserAvatar } from "./user-avatar"
 
 export type NavUserData = {
     id: string

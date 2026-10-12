@@ -14,11 +14,11 @@ import {
 } from "@/gql/generated/graphql"
 import { requireAdmin } from "@/modules/auth/helpers/require-admin"
 
-export async function getAdminPositions() {
+export async function getAdminPositions(search: string) {
     await requireAdmin()
     const gql = await getGql()
     const data = await gql.request(GetPositionsDocument, {
-        params: { limit: 100 },
+        params: { limit: 100, search: search },
     })
 
     return (data.positions?.items ?? []).map((pos) => ({
