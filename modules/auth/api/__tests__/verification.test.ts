@@ -108,7 +108,7 @@ describe("Verification Server Actions", () => {
 
     describe("verifyMailAction", () => {
         it("returns error when OTP length is not 6 digits", async () => {
-            const result = await verifyMailAction("12345") // слишком короткий
+            const result = await verifyMailAction("12345")
 
             expect(result).toEqual({ error: "verificationInvalid" })
             expect(getGql).not.toHaveBeenCalled()

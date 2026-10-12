@@ -1,9 +1,17 @@
-import { render, screen } from "@testing-library/react"
-import { describe, expect, it } from "vitest"
+import { cleanup, render, screen } from "@testing-library/react"
+import { afterEach, beforeEach, describe, expect, it } from "vitest"
 
 import { AuthTabs } from "../components/authTabs"
 
 describe("AuthTabs Component", () => {
+    beforeEach(() => {
+        cleanup()
+    })
+
+    afterEach(() => {
+        cleanup()
+    })
+
     it("renders both tabs correctly", () => {
         render(<AuthTabs activeTab="signin" />)
 
