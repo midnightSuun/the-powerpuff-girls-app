@@ -1,5 +1,6 @@
 "use client"
 
+import { useSearchParams } from "next/navigation"
 import { useTranslations } from "next-intl"
 
 import { ProjectsTableView } from "@/components/projects-table-view"
@@ -22,6 +23,7 @@ export function CvProjectsView({
     canManageProjects,
 }: CvProjectsViewProps) {
     const t = useTranslations("CV.projects")
+    const search = useSearchParams().get("search") ?? ""
 
     const {
         isAddOpen,
@@ -43,8 +45,8 @@ export function CvProjectsView({
                 projects={projects}
                 canManage={canManageProjects}
                 addLabel={t("addProject")}
-                searchPlaceholder={t("search")}
-                searchLabel={t("searchLabel")}
+                search={search}
+                showSearchInput
                 addDisabled={!availableToAdd}
                 onAdd={() => setIsAddOpen(true)}
                 onEdit={setEditingProject}
@@ -56,24 +58,20 @@ export function CvProjectsView({
                 emptyMessage={t("empty")}
             />
 
-            {canManageProjects && (
-                <>
-                    {(isAddOpen || editingProject) && (
-                        <CvProjectFormModal
-                            isOpen
-                            onClose={() => {
-                                setIsAddOpen(false)
-                                setEditingProject(null)
-                            }}
-                            onSaved={refresh}
-                            cvId={cvId}
-                            project={editingProject}
-                            projects={availableProjects}
-                            existingProjectIds={existingProjectIds}
-                        />
-                    )}
-                </>
-            )}
+            {canManageProjects && (isAddOpen || editingProject) ? (
+                <CvProjectFormModal
+                    isOpen
+                    onClose={() => {
+                        setIsAddOpen(false)
+                        setEditingProject(null)
+                    }}
+                    onSaved={refresh}
+                    cvId={cvId}
+                    project={editingProject}
+                    projects={availableProjects}
+                    existingProjectIds={existingProjectIds}
+                />
+            ) : null}
         </div>
     )
 }

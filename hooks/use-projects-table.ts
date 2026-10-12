@@ -7,6 +7,7 @@ export type SortField = "name" | "start_date" | "end_date"
 interface UseProjectsTableProps<T> {
     items: T[]
     locale: string
+    search: string
 }
 
 export function useProjectsTable<
@@ -18,8 +19,7 @@ export function useProjectsTable<
         start_date?: string | null
         end_date?: string | null
     },
->({ items, locale }: UseProjectsTableProps<T>) {
-    const [search, setSearch] = useState("")
+>({ items, locale, search }: UseProjectsTableProps<T>) {
     const [sortField, setSortField] = useState<SortField>("name")
     const [sortDirection, setSortDirection] = useState<SortOrder>("desc")
     const [itemToRemove, setItemToRemove] = useState<T | null>(null)
@@ -54,8 +54,6 @@ export function useProjectsTable<
     }
 
     return {
-        search,
-        setSearch,
         sortField,
         sortDirection,
         itemToRemove,

@@ -108,8 +108,8 @@ export function SearchInput({
     }
 
     return (
-        <label className="relative block w-80 dark:drop-shadow-[0px_4px_2px_rgba(0,0,0,0.25)]">
-            <span className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2">
+        <label className="relative block w-80">
+            <span className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 z-10">
                 <SearchIcon />
             </span>
             <Input
@@ -118,7 +118,7 @@ export function SearchInput({
                 onChange={handleSearch}
                 placeholder={t("search")}
                 aria-label={t("search")}
-                className="h-9 w-full rounded-full border border-input bg-background pr-4 pl-9 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 [&::-webkit-search-cancel-button]:appearance-none"
+                className="h-10 w-full rounded-full border border-input bg-background pr-4 pl-9 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 [&::-webkit-search-cancel-button]:appearance-none"
             />
         </label>
     )
