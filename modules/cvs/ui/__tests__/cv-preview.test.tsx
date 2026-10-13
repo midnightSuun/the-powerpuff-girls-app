@@ -82,7 +82,16 @@ describe("CvPreview", () => {
         vi.mocked(useCvPreview).mockReturnValue(
             defaultHookReturn as unknown as ReturnType<typeof useCvPreview>,
         )
-        vi.spyOn(window, "print").mockImplementation(() => {})
+        // happy-dom does not define window.print by default
+        if (typeof window.print !== "function") {
+            Object.defineProperty(window, "print", {
+                configurable: true,
+                writable: true,
+                value: vi.fn(),
+            })
+        } else {
+            vi.spyOn(window, "print").mockImplementation(() => {})
+        }
     })
 
     afterEach(() => {
