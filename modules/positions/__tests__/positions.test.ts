@@ -18,7 +18,6 @@ import {
     updateAdminPosition,
 } from "../api/positions"
 
-// Мокаем зависимости
 vi.mock("@/gql", () => ({
     getGql: vi.fn(),
 }))

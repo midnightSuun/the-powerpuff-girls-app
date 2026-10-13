@@ -161,7 +161,7 @@ export function EnvironmentMultiselect({
                             width: `${coords.width}px`,
                         }}
                         className={cn(
-                            "z-[9999] max-h-56 overflow-y-auto border shadow-xl rounded-none",
+                            "z-9999 max-h-56 overflow-y-auto border shadow-xl rounded-none",
                             "border-[#D1D1D1] bg-[#F5F5F7] dark:border-auth-card-border dark:bg-[#454545]",
                         )}
                     >
@@ -175,9 +175,9 @@ export function EnvironmentMultiselect({
                                     className={cn(
                                         "flex cursor-pointer items-center gap-2.5 px-3 py-2 text-xs transition-colors",
                                         "text-gray-900 dark:text-foreground",
-                                        "hover:bg-[#AEAEAE] dark:hover:bg-[#626262]",
+                                        "hover:bg-[#AEAEAE] dark:hover:bg-button-secondary-default",
                                         isSelected &&
-                                            "bg-[#626262] !text-[#F5F5F7] dark:bg-[#F5F5F7] dark:!text-[#2E2E2E]",
+                                            "bg-button-secondary-default text-[#F5F5F7]! dark:bg-[#F5F5F7] dark:text-[#2E2E2E]!",
                                     )}
                                 >
                                     <div

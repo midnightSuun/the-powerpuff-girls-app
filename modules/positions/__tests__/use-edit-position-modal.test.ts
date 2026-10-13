@@ -70,11 +70,9 @@ describe("useEditPositionModal", () => {
             { initialProps: { existingNames: ["Frontend Developer"] } },
         )
 
-        // Та же позиция (не дубликат для себя)
         expect(result.current.inlineError).toBeNull()
         expect(result.current.isValid).toBe(true)
 
-        // Меняем на имя, которое уже занято другой позицией
         act(() => {
             result.current.setName("Backend Developer")
         })
