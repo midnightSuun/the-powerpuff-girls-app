@@ -1,3 +1,5 @@
+import { Suspense } from "react"
+
 import { parsePaginationSearchParams } from "@/lib/pagination-search-params"
 import { getCurrentSession } from "@/modules/auth/helpers/get-current-session"
 import { CreateUserDialog, UsersPage, UsersTableFrame } from "@/modules/users"
@@ -6,11 +8,18 @@ type Props = {
     searchParams: Promise<Record<string, string | string[] | undefined>>
 }
 
-async function UsersContent({
+const UsersAdminAction = async () => {
+    const session = await getCurrentSession()
+    if (session?.role !== "Admin") return null
+
+    return <CreateUserDialog />
+}
+
+const UsersContent = async ({
     searchParams,
 }: {
     searchParams: Props["searchParams"]
-}) {
+}) => {
     const resolvedSearchParams = await searchParams
     const { limit, page, search, sortBy, sortOrder } =
         parsePaginationSearchParams(resolvedSearchParams)
@@ -27,11 +36,11 @@ async function UsersContent({
 }
 
 export default async function UsersRoute({ searchParams }: Props) {
-    const session = await getCurrentSession()
-
     return (
         <>
-            {session?.role === "Admin" ? <CreateUserDialog /> : null}
+            <Suspense fallback={null}>
+                <UsersAdminAction />
+            </Suspense>
             <UsersTableFrame>
                 <UsersContent searchParams={searchParams} />
             </UsersTableFrame>
