@@ -10,7 +10,11 @@ interface CreateLanguageModalProps {
     isOpen: boolean
     onClose: () => void
     existingLanguageNames?: string[]
-    onCreate: (data: { name: string; iso2: string }) => Promise<void>
+    onCreate: (data: {
+        name: string
+        iso2: string
+        nativeName: string
+    }) => Promise<void>
 }
 
 export function CreateLanguageModal(props: CreateLanguageModalProps) {
@@ -22,6 +26,8 @@ export function CreateLanguageModal(props: CreateLanguageModalProps) {
         setName,
         iso2,
         setIso2,
+        nativeName,
+        setNativeName,
         inlineError,
         error,
         isSubmitting,
@@ -43,14 +49,21 @@ export function CreateLanguageModal(props: CreateLanguageModalProps) {
             onSubmit={handleSubmit}
         >
             <div className="flex flex-col gap-4">
-                <div className="flex flex-col gap-1">
+                <div className="relative flex flex-col pt-4">
+                    {Boolean(name) && (
+                        <span className="absolute left-0 top-0 text-[10px] text-muted-foreground">
+                            {t("languageName")}
+                        </span>
+                    )}
                     <Input
-                        label={t("languageName")}
-                        placeholder={t("languagePlaceholder")}
+                        placeholder={
+                            Boolean(name) ? undefined : t("languageName")
+                        }
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         disabled={isSubmitting}
-                        className="border border-[#D1D1D1] dark:border-auth-card-border bg-[#ECECEC] dark:bg-[#454545] rounded-none focus-visible:ring-0"
+                        maxLength={50}
+                        className="rounded-none border border-[#D1D1D1] bg-[#ECECEC] focus-visible:ring-0 dark:border-auth-card-border dark:bg-[#454545]"
                     />
                     {inlineError && (
                         <span className="mt-1 text-xs text-red-500">
@@ -59,15 +72,39 @@ export function CreateLanguageModal(props: CreateLanguageModalProps) {
                     )}
                 </div>
 
-                <div className="flex flex-col gap-1">
+                <div className="relative flex flex-col pt-4">
+                    {Boolean(iso2) && (
+                        <span className="absolute left-0 top-0 text-[10px] text-muted-foreground">
+                            {t("isoCode")}
+                        </span>
+                    )}
                     <Input
-                        label={t("isoCode")}
-                        placeholder={t("isoCodePlaceholder")}
+                        placeholder={Boolean(iso2) ? undefined : t("isoCode")}
                         value={iso2}
-                        onChange={(e) => setIso2(e.target.value)}
+                        onChange={(e) =>
+                            setIso2(e.target.value.toUpperCase().slice(0, 2))
+                        }
                         disabled={isSubmitting}
                         maxLength={2}
-                        className="border border-[#D1D1D1] dark:border-auth-card-border bg-[#ECECEC] dark:bg-[#454545] rounded-none focus-visible:ring-0"
+                        className="rounded-none border border-[#D1D1D1] bg-[#ECECEC] uppercase focus-visible:ring-0 dark:border-auth-card-border dark:bg-[#454545]"
+                    />
+                </div>
+
+                <div className="relative flex flex-col pt-4">
+                    {Boolean(nativeName) && (
+                        <span className="absolute left-0 top-0 text-[10px] text-muted-foreground">
+                            {t("nativeName")}
+                        </span>
+                    )}
+                    <Input
+                        placeholder={
+                            Boolean(nativeName) ? undefined : t("nativeName")
+                        }
+                        value={nativeName}
+                        onChange={(e) => setNativeName(e.target.value)}
+                        disabled={isSubmitting}
+                        maxLength={50}
+                        className="rounded-none border border-[#D1D1D1] bg-[#ECECEC] focus-visible:ring-0 dark:border-auth-card-border dark:bg-[#454545]"
                     />
                 </div>
             </div>

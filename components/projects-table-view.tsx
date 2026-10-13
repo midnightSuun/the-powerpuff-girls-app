@@ -141,7 +141,6 @@ export function ProjectsTableView<T extends ProjectTableItem>({
                     ) : null}
                 </div>
             ) : null}
-
             <div className="overflow-x-auto">
                 <table className="w-full min-w-120 border-collapse text-left text-sm">
                     <thead>
