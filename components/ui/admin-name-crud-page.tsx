@@ -1,4 +1,6 @@
-import type { ReactNode } from "react"
+"use client"
+
+import { memo, type ReactNode } from "react"
 
 import { AdminDataTable, type Column } from "@/components/ui/admin-data-table"
 
@@ -11,10 +13,10 @@ interface AdminNameCrudPageProps<T extends { id: string | number }> {
     onCreateClick: () => void
     onEditClick: (item: T) => void
     onDeleteClick: (item: T) => void
-    children: ReactNode
+    children?: ReactNode
 }
 
-export function AdminNameCrudPage<T extends { id: string | number }>({
+function AdminNameCrudPageInner<T extends { id: string | number }>({
     data,
     columns,
     createButtonLabel,
@@ -43,3 +45,9 @@ export function AdminNameCrudPage<T extends { id: string | number }>({
         </div>
     )
 }
+
+export const AdminNameCrudPage = memo(AdminNameCrudPageInner, (prev, next) => {
+    if (prev.createButtonLabel !== next.createButtonLabel) return false
+    if (JSON.stringify(prev.data) !== JSON.stringify(next.data)) return false
+    return true
+}) as typeof AdminNameCrudPageInner

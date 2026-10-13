@@ -5,19 +5,19 @@ import { useState } from "react"
 
 import type { Proficiency } from "@/gql/generated/graphql"
 
-interface UseAddLanguageProps {
+interface UseAddLanguageModalProps {
     onAdd: (name: string, proficiency: Proficiency) => Promise<void>
     availableLanguages: Array<{ id: string; name: string }>
     existingLanguages: Array<{ name: string }>
     onClose: () => void
 }
 
-export function useAddLanguage({
+export function useAddLanguageModal({
     onAdd,
     availableLanguages,
     existingLanguages,
     onClose,
-}: UseAddLanguageProps) {
+}: UseAddLanguageModalProps) {
     const t = useTranslations("Languages.add")
     const [selectedLanguageId, setSelectedLanguageId] = useState("")
     const [proficiency, setProficiency] = useState<Proficiency | "">("")

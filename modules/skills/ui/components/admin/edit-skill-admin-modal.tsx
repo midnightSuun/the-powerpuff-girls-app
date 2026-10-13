@@ -31,6 +31,9 @@ interface EditSkillModalProps {
     ) => Promise<void>
 }
 
+const clsx = (...classes: (string | undefined | false | null)[]) =>
+    classes.filter(Boolean).join(" ")
+
 export function EditSkillModal(props: EditSkillModalProps) {
     const { isOpen, onClose, categories } = props
     const tAdmin = useTranslations("Skills.admin")
@@ -93,7 +96,7 @@ export function EditSkillModal(props: EditSkillModalProps) {
                         onValueChange={(val) => setCategoryId(val ?? "")}
                         disabled={isSubmitting}
                     >
-                        <SelectTrigger className="w-full border border-[#D1D1D1] dark:border-auth-card-border bg-[#ECECEC] dark:bg-[#454545] px-4 py-6 text-sm text-gray-800 dark:text-foreground shadow-none focus:ring-0 rounded-none">
+                        <SelectTrigger className="w-full border border-[#D1D1D1] dark:border-auth-card-border bg-[#ECECEC] dark:bg-[#454545] px-4 py-6 text-sm text-gray-800 dark:text-foreground shadow-none focus:ring-0 rounded-none outline-none transition-colors">
                             <SelectValue placeholder={tAdmin("category")}>
                                 {categoryId
                                     ? tSkills(`categories.${categoryId}`, {
@@ -110,17 +113,37 @@ export function EditSkillModal(props: EditSkillModalProps) {
                         <SelectContent
                             side="bottom"
                             align="start"
-                            sideOffset={4}
+                            sideOffset={0}
                             alignItemWithTrigger={false}
-                            className="max-h-60 overflow-y-auto border border-[#D1D1D1] dark:border-auth-card-border bg-[#F5F5F7] dark:bg-[#454545] text-gray-900 dark:text-foreground p-1 shadow-lg rounded-none"
+                            className={clsx(
+                                "w-[var(--anchor-width)] max-h-60 overflow-y-auto p-0 shadow-xl rounded-none",
+                                "border border-[#D1D1D1] bg-[#F5F5F7]",
+                                "dark:border-auth-card-border dark:bg-[#454545]",
+                            )}
                         >
-                            {uniqueCategories.map((cat) => (
-                                <SelectItem key={cat.id} value={String(cat.id)}>
-                                    {tSkills(`categories.${cat.id}`, {
-                                        defaultValue: cat.name,
-                                    })}
-                                </SelectItem>
-                            ))}
+                            {uniqueCategories.map((cat) => {
+                                const isSelected =
+                                    String(categoryId) === String(cat.id)
+                                return (
+                                    <SelectItem
+                                        key={cat.id}
+                                        value={String(cat.id)}
+                                        className={clsx(
+                                            "relative flex w-full cursor-pointer items-center px-4 py-3 text-sm outline-none transition-colors rounded-none",
+                                            "[&_svg]:hidden pr-4",
+                                            isSelected
+                                                ? "bg-[#626262] !text-[#F5F5F7] [&_*]:!text-[#F5F5F7] focus:bg-[#626262] dark:bg-[#F5F5F7] dark:!text-[#2E2E2E] dark:[&_*]:!text-[#2E2E2E]"
+                                                : "text-gray-900 focus:bg-[#AEAEAE] hover:bg-[#AEAEAE] dark:text-foreground dark:focus:bg-[#626262] dark:hover:bg-[#626262]",
+                                        )}
+                                    >
+                                        <span className="font-sans font-normal">
+                                            {tSkills(`categories.${cat.id}`, {
+                                                defaultValue: cat.name,
+                                            })}
+                                        </span>
+                                    </SelectItem>
+                                )
+                            })}
                         </SelectContent>
                     </Select>
                 </div>

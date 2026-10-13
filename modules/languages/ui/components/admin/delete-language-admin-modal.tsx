@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl"
 
 import { DeleteModal } from "@/components/ui/delete-item-modal"
-import { useDeleteLanguageModal } from "@/modules/languages/hooks/use-delete-languages"
+import { useDeleteLanguageModal } from "@/modules/languages/hooks/use-delete-language-modal"
 
 interface DeleteLanguageModalProps {
     isOpen: boolean

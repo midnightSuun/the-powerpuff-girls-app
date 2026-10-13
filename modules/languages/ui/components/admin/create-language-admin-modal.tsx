@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl"
 
 import { BaseModal } from "@/components/ui/base-modal"
 import { Input } from "@/components/ui/input"
-import { useCreateLanguageModal } from "@/modules/languages/hooks/use-create-language-modal"
+import { useCreateLanguageAdminModal } from "@/modules/languages/hooks/use-create-language-admin-modal"
 
 interface CreateLanguageModalProps {
     isOpen: boolean
@@ -33,7 +33,7 @@ export function CreateLanguageModal(props: CreateLanguageModalProps) {
         isSubmitting,
         isValid,
         handleSubmit,
-    } = useCreateLanguageModal(props)
+    } = useCreateLanguageAdminModal(props)
 
     return (
         <BaseModal

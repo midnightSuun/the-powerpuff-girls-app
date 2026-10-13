@@ -2,7 +2,15 @@
 
 import { MoreVertical } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl"
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import {
+    memo,
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react"
 
 import { useHeaderToolbarAction } from "@/components/header-toolbar-action"
 import { Button } from "@/components/ui/button"
@@ -105,8 +113,20 @@ function AdminTableRowComponent<T extends { id: string | number }>({
     )
 }
 
+function areRowPropsEqual<T extends { id: string | number }>(
+    prev: AdminTableRowProps<T>,
+    next: AdminTableRowProps<T>,
+): boolean {
+    if (prev.isMenuOpen !== next.isMenuOpen) return false
+    if (prev.editText !== next.editText) return false
+    if (prev.deleteText !== next.deleteText) return false
+    if (JSON.stringify(prev.item) !== JSON.stringify(next.item)) return false
+    return true
+}
+
 const AdminTableRow = memo(
     AdminTableRowComponent,
+    areRowPropsEqual,
 ) as typeof AdminTableRowComponent
 
 interface AdminDataTableProps<T> {
@@ -127,7 +147,7 @@ interface AdminDataTableProps<T> {
     defaultSortKey?: string
 }
 
-export function AdminDataTable<T extends { id: string | number }>({
+function AdminDataTableInner<T extends { id: string | number }>({
     data,
     columns,
     createButtonLabel,
@@ -157,9 +177,25 @@ export function AdminDataTable<T extends { id: string | number }>({
             ? createButtonLabel
             : null
 
-    useHeaderToolbarAction(headerActionLabel, () => {
-        onCreateClick?.()
+    const callbacksRef = useRef({ onCreateClick, onEditClick, onDeleteClick })
+    useLayoutEffect(() => {
+        callbacksRef.current = { onCreateClick, onEditClick, onDeleteClick }
     })
+
+    const stableOnCreate = useCallback(
+        () => callbacksRef.current.onCreateClick?.(),
+        [],
+    )
+    const stableOnEdit = useCallback(
+        (item: T) => callbacksRef.current.onEditClick?.(item),
+        [],
+    )
+    const stableOnDelete = useCallback(
+        (item: T) => callbacksRef.current.onDeleteClick?.(item),
+        [],
+    )
+
+    useHeaderToolbarAction(headerActionLabel, stableOnCreate)
 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
@@ -182,14 +218,19 @@ export function AdminDataTable<T extends { id: string | number }>({
         }
     }, [])
 
-    const handleSort = (key: string) => {
-        if (sortColumnKey === key) {
-            setSortOrder(sortOrder === "asc" ? "desc" : "asc")
-        } else {
-            setSortColumnKey(key)
+    const handleSort = useCallback((key: string) => {
+        setSortColumnKey((prevKey) => {
+            if (prevKey === key) {
+                setSortOrder((prevOrder) =>
+                    prevOrder === "asc" ? "desc" : "asc",
+                )
+                return prevKey
+            }
             setSortOrder("asc")
-        }
-    }
+            return key
+        })
+    }, [])
+
     const handleToggleMenu = useCallback((id: string | number) => {
         setActiveMenuId((prev) => (prev === id ? null : id))
     }, [])
@@ -232,7 +273,7 @@ export function AdminDataTable<T extends { id: string | number }>({
                     {createButtonLabel && onCreateClick ? (
                         <AddItemButton
                             label={createButtonLabel}
-                            onClick={onCreateClick}
+                            onClick={stableOnCreate}
                             variant="primaryV2"
                             className="cursor-pointer text-[#d7352c] hover:text-[#b5332b] dark:text-[#f06b65] dark:hover:text-[#ff8a84] lg:h-auto! lg:min-w-40! lg:px-7.5! lg:py-4!"
                         />
@@ -298,8 +339,8 @@ export function AdminDataTable<T extends { id: string | number }>({
                                     columns={columns}
                                     isMenuOpen={activeMenuId === item.id}
                                     onToggleMenu={handleToggleMenu}
-                                    onEditClick={onEditClick}
-                                    onDeleteClick={onDeleteClick}
+                                    onEditClick={stableOnEdit}
+                                    onDeleteClick={stableOnDelete}
                                     menuRef={menuRef}
                                     editText={tCommon("edit")}
                                     deleteText={tCommon("delete")}
@@ -324,3 +365,28 @@ export function AdminDataTable<T extends { id: string | number }>({
         </div>
     )
 }
+
+function areTablePropsEqual<T extends { id: string | number }>(
+    prev: AdminDataTableProps<T>,
+    next: AdminDataTableProps<T>,
+) {
+    if (prev.search !== next.search) return false
+    if (prev.showSearchInput !== next.showSearchInput) return false
+    if (prev.createButtonLabel !== next.createButtonLabel) return false
+    if (prev.emptyMessage !== next.emptyMessage) return false
+
+    if (JSON.stringify(prev.data) !== JSON.stringify(next.data)) return false
+
+    if (
+        JSON.stringify(prev.columns.map((c) => c.key)) !==
+        JSON.stringify(next.columns.map((c) => c.key))
+    )
+        return false
+
+    return true
+}
+
+export const AdminDataTable = memo(
+    AdminDataTableInner,
+    areTablePropsEqual,
+) as typeof AdminDataTableInner
