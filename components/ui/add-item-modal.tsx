@@ -98,9 +98,7 @@ export function AddItemModal({
                                     value={String(item.id)}
                                     className={cn(
                                         "relative flex w-full cursor-pointer items-center px-4 py-3 text-sm outline-none transition-colors rounded-none",
-                                        // Скрываем стандартную галочку
                                         "[&_svg]:hidden pr-4",
-                                        // Активное состояние и hover в едином стиле
                                         isSelected
                                             ? "bg-[#626262] !text-[#F5F5F7] [&_*]:!text-[#F5F5F7] focus:bg-[#626262] dark:bg-[#F5F5F7] dark:!text-[#2E2E2E] dark:[&_*]:!text-[#2E2E2E]"
                                             : "text-gray-900 focus:bg-[#AEAEAE] hover:bg-[#AEAEAE] dark:text-foreground dark:focus:bg-[#626262] dark:hover:bg-[#626262]",
