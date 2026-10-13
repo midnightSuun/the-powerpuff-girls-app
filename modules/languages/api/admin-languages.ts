@@ -26,17 +26,27 @@ export async function getAdminLanguages() {
         id: lang.id,
         name: lang.name,
         iso2: lang.iso2,
+        nativeName: (lang as { native_name?: string }).native_name ?? "",
     }))
 }
 
-export async function createAdminLanguage(language: CreateLanguageInput) {
+export async function createAdminLanguage(data: {
+    name: string
+    iso2: string
+    nativeName?: string
+}) {
     await requireAdmin()
     try {
         const gql = await getGql()
-        const data = await gql.request(CreateLanguageDocument, { language })
+        const language: CreateLanguageInput = {
+            name: data.name,
+            iso2: data.iso2,
+            native_name: data.nativeName,
+        }
+        const resData = await gql.request(CreateLanguageDocument, { language })
 
         revalidatePath("/languages")
-        return data.createLanguage
+        return resData.createLanguage
     } catch (err: unknown) {
         console.error("Failed to create language:", err)
         const t = await getTranslations("Languages.admin.errors")
@@ -44,14 +54,25 @@ export async function createAdminLanguage(language: CreateLanguageInput) {
     }
 }
 
-export async function updateAdminLanguage(language: UpdateLanguageInput) {
+export async function updateAdminLanguage(data: {
+    id: string
+    name: string
+    iso2: string
+    nativeName?: string
+}) {
     await requireAdmin()
     try {
         const gql = await getGql()
-        const data = await gql.request(UpdateLanguageDocument, { language })
+        const language: UpdateLanguageInput = {
+            languageId: data.id, // <--- Передаём id в поле languageId
+            name: data.name,
+            iso2: data.iso2,
+            native_name: data.nativeName,
+        }
+        const resData = await gql.request(UpdateLanguageDocument, { language })
 
         revalidatePath("/languages")
-        return data.updateLanguage
+        return resData.updateLanguage
     } catch (error) {
         console.error("Failed to update language:", error)
         const t = await getTranslations("Languages.admin.errors")

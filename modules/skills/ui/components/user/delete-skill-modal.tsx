@@ -1,5 +1,7 @@
 "use client"
 
+import { useTranslations } from "next-intl"
+
 import { DeleteModal } from "@/components/ui/delete-item-modal"
 
 import { useDeleteSkillsModal } from "../../../hooks/use-delete-skill-modal"
@@ -13,28 +15,20 @@ interface DeleteSkillsModalProps {
 }
 
 export function DeleteSkillsModal(props: DeleteSkillsModalProps) {
-    const { isOpen, onClose, count, selectedSkills = [] } = props
-    const { t, isDeleting, error, handleConfirm } = useDeleteSkillsModal(props)
+    const { isOpen, onClose, count } = props
 
-    const singleSkillName =
-        count === 1 && selectedSkills.length === 1 ? selectedSkills[0] : null
+    const t = useTranslations("Skills.delete")
+    const { isDeleting, error, handleConfirm } = useDeleteSkillsModal(props)
 
-    const description = singleSkillName ? (
-        <>
-            Are you sure you want to delete skill{" "}
-            <strong className="font-bold text-foreground">
-                {singleSkillName}
+    const description = (
+        <span className="font-normal text-foreground">
+            {t("confirmationText")}
+            <strong className="font-bold">
+                {" "}
+                {t("countSkills", { count })}{" "}
             </strong>
-            ?
-        </>
-    ) : (
-        <>
-            Are you sure you want to delete{" "}
-            <strong className="font-bold text-foreground">
-                {count} {count === 1 ? "skill" : "skills"}
-            </strong>
-            ?
-        </>
+            {t("questionMark")}
+        </span>
     )
 
     return (
@@ -42,15 +36,11 @@ export function DeleteSkillsModal(props: DeleteSkillsModalProps) {
             isOpen={isOpen}
             onClose={onClose}
             onConfirm={handleConfirm}
-            title={
-                count > 1
-                    ? t("titlePlural", { defaultValue: "Delete skills" })
-                    : t("titleSingular", { defaultValue: "Delete skill" })
-            }
+            title={count === 1 ? t("titleSingular") : t("titlePlural")}
             description={description}
-            cancelText={t("cancel", { defaultValue: "CANCEL" })}
-            confirmText={t("confirm", { defaultValue: "CONFIRM" })}
-            deletingText={t("removing", { defaultValue: "Removing..." })}
+            cancelText={t("cancel")}
+            confirmText={t("confirm")}
+            deletingText={t("removing")}
             isDeleting={isDeleting}
             error={error}
         />

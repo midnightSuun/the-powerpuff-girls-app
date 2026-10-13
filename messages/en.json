@@ -388,7 +388,9 @@
         "delete": {
             "titleSingular": "Remove skill",
             "titlePlural": "Remove skills",
-            "confirmation": "Are you sure you want to remove {count, plural, one {# skill?} other {# skills?}}",
+            "confirmationText": "Are you sure you want to remove",
+            "countSkills": "{count, plural, one {# skill} other {# skills}}",
+            "questionMark": "?",
             "cancel": "CANCEL",
             "confirm": "CONFIRM",
             "removing": "REMOVING...",
@@ -696,7 +698,9 @@
                 "isoCodePlaceholder": "e.g. en",
                 "cancel": "CANCEL",
                 "create": "CREATE",
-                "creating": "CREATING..."
+                "creating": "CREATING...",
+                "nativeName": "Native name",
+                "nativeNamePlaceholder": "Native name"
             },
             "edit": {
                 "title": "Edit language",
@@ -704,6 +708,8 @@
                 "languagePlaceholder": "Language",
                 "isoCode": "ISO Code",
                 "isoCodePlaceholder": "ISO2",
+                "nativeName": "Native name",
+                "nativeNamePlaceholder": "Native name",
                 "cancel": "CANCEL",
                 "save": "SAVE",
                 "saving": "SAVING..."

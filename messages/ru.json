@@ -388,7 +388,9 @@
         "delete": {
             "titleSingular": "Удалить навык",
             "titlePlural": "Удалить навыки",
-            "confirmation": "Вы уверены, что хотите удалить {count, plural, one {# навык?} few {# языка?} many {# навыков?} other {# навыка?}}",
+            "confirmationText": "Вы уверены, что хотите удалить",
+            "countSkills": "{count, plural, one {# навык} few {# навыка} many {# навыков} other {# навыков}}",
+            "questionMark": "?",
             "cancel": "ОТМЕНА",
             "confirm": "ПОДТВЕРДИТЬ",
             "removing": "УДАЛЕНИЕ...",
@@ -696,7 +698,9 @@
                 "isoCodePlaceholder": "напр. en",
                 "cancel": "ОТМЕНА",
                 "create": "СОЗДАТЬ",
-                "creating": "СОЗДАНИЕ..."
+                "creating": "СОЗДАНИЕ...",
+                "nativeName": "Нативное название",
+                "nativeNamePlaceholder": "Нативное название"
             },
             "edit": {
                 "title": "Редактировать язык",
@@ -704,6 +708,8 @@
                 "languagePlaceholder": "Язык",
                 "isoCode": "ISO-код",
                 "isoCodePlaceholder": "ISO2",
+                "nativeName": "Нативное название",
+                "nativeNamePlaceholder": "Нативное название",
                 "cancel": "ОТМЕНА",
                 "save": "СОХРАНИТЬ",
                 "saving": "СОХРАНЕНИЕ..."

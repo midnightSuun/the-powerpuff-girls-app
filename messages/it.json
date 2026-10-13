@@ -388,13 +388,15 @@
         "delete": {
             "titleSingular": "Rimuovi competenza",
             "titlePlural": "Rimuovi competenze",
-            "confirmation": "Sei sicuro di voler rimuovere {count, plural, one {# competenza?} other {# competenze?}}",
             "cancel": "ANNULLA",
             "confirm": "CONFERMA",
             "removing": "RIMOZIONE...",
             "errors": {
                 "failed": "Impossibile rimuovere le competenze. Riprova."
-            }
+            },
+            "confirmationText": "Sei sicuro di voler rimuovere",
+            "countSkills": "{count, plural, one {# competenza} other {# competenze}}",
+            "questionMark": "?"
         },
         "admin": {
             "name": "Nome",
@@ -694,6 +696,8 @@
                 "languagePlaceholder": "es. Italiano",
                 "isoCode": "Codice ISO",
                 "isoCodePlaceholder": "es. it",
+                "nativeName": "Nome nativo",
+                "nativeNamePlaceholder": "Nome nativo",
                 "cancel": "ANNULLA",
                 "create": "CREA",
                 "creating": "CREAZIONE..."
@@ -704,6 +708,8 @@
                 "languagePlaceholder": "Lingua",
                 "isoCode": "Codice ISO",
                 "isoCodePlaceholder": "ISO2",
+                "nativeName": "Nome nativo",
+                "nativeNamePlaceholder": "Nome nativo",
                 "cancel": "ANNULLA",
                 "save": "SALVA",
                 "saving": "SALVATAGGIO..."
