@@ -7,13 +7,13 @@ import { useState } from "react"
 
 import { Input } from "@/components/ui/input"
 
+import type { SelectOption } from "../select-option"
+
 export const createUserFieldClassName =
     "h-12 w-full rounded border border-[#aeaeae] bg-transparent px-3 text-base leading-6 tracking-[0.15px] text-[#2e2e2e] shadow-none outline-none placeholder:text-[#626262] focus-visible:border-[#c63031] focus-visible:ring-0 md:text-base dark:bg-transparent dark:text-[#f5f5f7] dark:placeholder:text-[#aeaeae]"
 
-type SelectOption = {
-    id: string
-    name: string
-}
+export const disabledUserFieldClassName =
+    "disabled:bg-[#e6e6e6] disabled:text-button-secondary-default disabled:opacity-100 dark:disabled:bg-[#3a3a3a] dark:disabled:text-[#aeaeae]"
 
 export const CreateUserPasswordInput = ({
     label,
@@ -48,8 +48,7 @@ export const CreateUserPasswordInput = ({
             className={cn(
                 createUserFieldClassName,
                 "pr-10",
-                disabled &&
-                    "disabled:bg-[#e6e6e6] disabled:text-button-secondary-default disabled:opacity-100 dark:disabled:bg-[#3a3a3a] dark:disabled:text-[#aeaeae]",
+                disabled && disabledUserFieldClassName,
             )}
             endAdornment={
                 <button

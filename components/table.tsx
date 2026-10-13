@@ -70,6 +70,7 @@ type Props<T> = {
     sortBy?: string
     sortOrder?: SortOrder
     getSortHref?: (sortKey: string) => string
+    getRowKey?: (item: T, index: number) => string | number
     emptyMessage?: string
 }
 
@@ -139,7 +140,7 @@ export const TableComponent = <T,>(props: Props<T>) => {
                 ) : null}
                 {props.data.map((item, index) => (
                     <TableRowItem
-                        key={index}
+                        key={props.getRowKey?.(item, index) ?? index}
                         item={item}
                         columns={props.columns}
                         getRowHref={props.getRowHref}

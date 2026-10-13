@@ -1,22 +1,17 @@
 "use client"
 
 import { useTranslations } from "next-intl"
-import { type SubmitEvent, useEffect, useRef, useState } from "react"
+import { type SubmitEvent, useRef, useState } from "react"
 
 import type { GetUsersQuery, UserRole } from "@/gql"
 import { useActionNotifications } from "@/hooks/use-action-notifications"
 import { useRouter } from "@/i18n/navigation"
 
-import { getProfileOptions } from "../api/get-profile-options"
 import { updateUser } from "../api/update-user"
 import { getUserRoleOptions } from "../user-role-options"
+import { useProfileOptions } from "./use-profile-options"
 
 export type EditableUser = GetUsersQuery["users"]["items"][number]
-
-type SelectOption = {
-    id: string
-    name: string
-}
 
 type FormState = {
     firstName: string
@@ -34,17 +29,6 @@ const formFromUser = (user: EditableUser): FormState => ({
     role: user.role,
 })
 
-const withCurrentOption = (
-    options: SelectOption[],
-    current: SelectOption | null,
-) => {
-    if (!current || options.some((option) => option.id === current.id)) {
-        return options
-    }
-
-    return [current, ...options]
-}
-
 export const useUpdateUserDialog = (user: EditableUser, isOpen: boolean) => {
     const tDialog = useTranslations("Users.dialog")
     const tMessages = useTranslations("Users.messages")
@@ -53,11 +37,25 @@ export const useUpdateUserDialog = (user: EditableUser, isOpen: boolean) => {
     const isUpdatingRef = useRef(false)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [form, setForm] = useState<FormState>(() => formFromUser(user))
-    const [departments, setDepartments] = useState<SelectOption[]>(() =>
-        user.department ? [user.department] : [],
-    )
-    const [positions, setPositions] = useState<SelectOption[]>(() =>
-        user.position ? [user.position] : [],
+    const userKey = [
+        user.id,
+        user.profile.first_name ?? "",
+        user.profile.last_name ?? "",
+        user.department?.id ?? "",
+        user.position?.id ?? "",
+        user.role,
+    ].join("\0")
+    const [syncedUserKey, setSyncedUserKey] = useState(userKey)
+
+    if (userKey !== syncedUserKey) {
+        setSyncedUserKey(userKey)
+        setForm(formFromUser(user))
+    }
+
+    const { departments, positions } = useProfileOptions(
+        isOpen,
+        user.department,
+        user.position,
     )
 
     const roleOptions = getUserRoleOptions(tDialog)
@@ -68,31 +66,6 @@ export const useUpdateUserDialog = (user: EditableUser, isOpen: boolean) => {
             [field]: field === "role" ? (value as UserRole) : value,
         }))
     }
-
-    useEffect(() => {
-        if (!isOpen) return
-
-        let isCancelled = false
-
-        const loadOptions = async () => {
-            try {
-                const data = await getProfileOptions()
-                if (isCancelled) return
-                setDepartments(
-                    withCurrentOption(data.departments, user.department),
-                )
-                setPositions(withCurrentOption(data.positions, user.position))
-            } catch (error) {
-                console.error("Failed to load update user options:", error)
-            }
-        }
-
-        void loadOptions()
-
-        return () => {
-            isCancelled = true
-        }
-    }, [isOpen, user])
 
     const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
         event.preventDefault()
