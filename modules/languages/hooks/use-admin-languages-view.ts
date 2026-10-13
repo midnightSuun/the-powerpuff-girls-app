@@ -35,7 +35,7 @@ export function useAdminLanguagesView({
         data: { name: string; iso2: string },
     ) => {
         const updated = await updateAdminLanguage({
-            languageId: id,
+            id,
             name: data.name,
             iso2: data.iso2,
         })

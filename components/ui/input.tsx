@@ -57,7 +57,7 @@ function Input({
                         "block text-xs font-medium ml-4 transition-all duration-200 select-none",
                         shouldShowLabel
                             ? "opacity-100 h-auto"
-                            : "opacity-0 h-0 overflow-hidden pointer-events-none",
+                            : "opacity-100 overflow-hidden pointer-events-none",
                         error ? "text-destructive" : "text-muted-foreground",
                     )}
                 >

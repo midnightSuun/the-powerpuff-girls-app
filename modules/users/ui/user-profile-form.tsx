@@ -4,18 +4,13 @@ import { useLocale, useTranslations } from "next-intl"
 import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
 import type { GetProfileOptionsQuery, GetUserQuery, UserRole } from "@/gql"
 
+import { getUserDisplayName } from "../get-user-display-name"
 import { useUserProfile } from "../hooks/use-user-profile"
+import { withCurrentOption } from "../select-option"
 import { UserAvatar } from "./user-avatar"
+import { UserProfileSelect, UserProfileTextField } from "./user-profile-field"
 
 interface UserProfileFormProps {
     user: GetUserQuery["user"]
@@ -24,9 +19,6 @@ interface UserProfileFormProps {
     departments: GetProfileOptionsQuery["departments"]["items"]
     positions: GetProfileOptionsQuery["positions"]["items"]
 }
-
-const clsx = (...classes: (string | undefined | false | null)[]) =>
-    classes.filter(Boolean).join(" ")
 
 export function UserProfileForm({
     user,
@@ -39,15 +31,8 @@ export function UserProfileForm({
     const locale = useLocale()
     const [isHovered, setIsHovered] = useState(false)
 
-    const departmentOptions =
-        user.department &&
-        !departments.some(({ id }) => id === user.department?.id)
-            ? [user.department, ...departments]
-            : departments
-    const positionOptions =
-        user.position && !positions.some(({ id }) => id === user.position?.id)
-            ? [user.position, ...positions]
-            : positions
+    const departmentOptions = withCurrentOption(departments, user.department)
+    const positionOptions = withCurrentOption(positions, user.position)
 
     const {
         canEdit,
@@ -172,8 +157,7 @@ export function UserProfileForm({
 
                 <div className="space-y-1">
                     <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-                        {[firstName, lastName].filter(Boolean).join(" ") ||
-                            user.email}
+                        {getUserDisplayName(firstName, lastName, user.email)}
                     </h1>
                     <p className="text-sm text-muted-foreground">
                         {user.email}
@@ -187,199 +171,56 @@ export function UserProfileForm({
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                <div className="flex flex-col gap-2">
-                    <Input
-                        id="profile-first-name"
-                        type="text"
-                        label={t("firstName")}
-                        placeholder={t("firstName")}
-                        maxLength={100}
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                        disabled={!canEdit}
-                        error={
-                            hasSubmitted && !firstName.trim()
-                                ? t("errors.firstNameRequired")
-                                : undefined
-                        }
-                        className="h-12 bg-background border-input text-foreground rounded-md shadow-xs disabled:cursor-not-allowed"
-                    />
-                </div>
-
-                <div className="flex flex-col gap-2">
-                    <Input
-                        id="profile-last-name"
-                        type="text"
-                        label={t("lastName")}
-                        placeholder={t("lastName")}
-                        maxLength={100}
-                        value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                        disabled={!canEdit}
-                        error={
-                            hasSubmitted && !lastName.trim()
-                                ? t("errors.lastNameRequired")
-                                : undefined
-                        }
-                        className="h-12 bg-background border-input text-foreground rounded-md shadow-xs disabled:cursor-not-allowed"
-                    />
-                </div>
-
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm text-muted-foreground">
-                        {t("department")}
-                    </label>
-                    <Select
-                        value={departmentId}
-                        onValueChange={(val) => setDepartmentId(val ?? "")}
-                        disabled={!canEdit}
-                    >
-                        <SelectTrigger
-                            className={clsx(
-                                "w-full !h-12 !min-h-[48px] px-4 flex items-center justify-between shadow-xs transition-colors outline-none focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
-                                "rounded-md border border-input bg-background text-sm text-foreground",
-                                hasSubmitted &&
-                                    !departmentId &&
-                                    "border-red-500",
-                            )}
-                        >
-                            <div
-                                className={
-                                    !departmentId
-                                        ? "text-muted-foreground"
-                                        : "truncate"
-                                }
-                            >
-                                <SelectValue
-                                    placeholder={t("selectDepartment")}
-                                >
-                                    {departmentId
-                                        ? departmentOptions.find(
-                                              (d) =>
-                                                  String(d.id) ===
-                                                  String(departmentId),
-                                          )?.name
-                                        : undefined}
-                                </SelectValue>
-                            </div>
-                        </SelectTrigger>
-
-                        <SelectContent
-                            side="bottom"
-                            align="start"
-                            sideOffset={0}
-                            alignItemWithTrigger={false}
-                            className={clsx(
-                                "w-[var(--anchor-width)] max-h-60 overflow-y-auto p-0 shadow-xl rounded-none",
-                                "border border-[#D1D1D1] bg-[#F5F5F7]",
-                                "dark:border-auth-card-border dark:bg-[#454545]",
-                            )}
-                        >
-                            {departmentOptions.map((department) => {
-                                const isSelected =
-                                    departmentId === String(department.id)
-                                return (
-                                    <SelectItem
-                                        key={department.id}
-                                        value={String(department.id)}
-                                        className={clsx(
-                                            "relative flex w-full cursor-pointer items-center px-4 py-3 text-sm outline-none transition-colors rounded-none",
-                                            "[&_svg]:hidden pr-4",
-                                            isSelected
-                                                ? "bg-[#626262] !text-[#F5F5F7] [&_*]:!text-[#F5F5F7] focus:bg-[#626262] dark:bg-[#F5F5F7] dark:!text-[#2E2E2E] dark:[&_*]:!text-[#2E2E2E]"
-                                                : "text-gray-900 focus:bg-[#AEAEAE] hover:bg-[#AEAEAE] dark:text-foreground dark:focus:bg-[#626262] dark:hover:bg-[#626262]",
-                                        )}
-                                    >
-                                        <span className="font-sans font-normal">
-                                            {department.name}
-                                        </span>
-                                    </SelectItem>
-                                )
-                            })}
-                        </SelectContent>
-                    </Select>
-                    {hasSubmitted && !departmentId && (
-                        <span className="text-xs text-red-500">
-                            {t("errors.departmentRequired")}
-                        </span>
-                    )}
-                </div>
-
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm text-muted-foreground">
-                        {t("position")}
-                    </label>
-                    <Select
-                        value={positionId}
-                        onValueChange={(val) => setPositionId(val ?? "")}
-                        disabled={!canEdit}
-                    >
-                        <SelectTrigger
-                            className={clsx(
-                                "w-full !h-12 !min-h-[48px] px-4 flex items-center justify-between shadow-xs transition-colors outline-none focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
-                                "rounded-md border border-input bg-background text-sm text-foreground",
-                                hasSubmitted && !positionId && "border-red-500",
-                            )}
-                        >
-                            <div
-                                className={
-                                    !positionId
-                                        ? "text-muted-foreground"
-                                        : "truncate"
-                                }
-                            >
-                                <SelectValue placeholder={t("selectPosition")}>
-                                    {positionId
-                                        ? positionOptions.find(
-                                              (p) =>
-                                                  String(p.id) ===
-                                                  String(positionId),
-                                          )?.name
-                                        : undefined}
-                                </SelectValue>
-                            </div>
-                        </SelectTrigger>
-
-                        <SelectContent
-                            side="bottom"
-                            align="start"
-                            sideOffset={0}
-                            alignItemWithTrigger={false}
-                            className={clsx(
-                                "w-[var(--anchor-width)] max-h-60 overflow-y-auto p-0 shadow-xl rounded-none",
-                                "border border-[#D1D1D1] bg-[#F5F5F7]",
-                                "dark:border-auth-card-border dark:bg-[#454545]",
-                            )}
-                        >
-                            {positionOptions.map((position) => {
-                                const isSelected =
-                                    positionId === String(position.id)
-                                return (
-                                    <SelectItem
-                                        key={position.id}
-                                        value={String(position.id)}
-                                        className={clsx(
-                                            "relative flex w-full cursor-pointer items-center px-4 py-3 text-sm outline-none transition-colors rounded-none",
-                                            "[&_svg]:hidden pr-4",
-                                            isSelected
-                                                ? "bg-[#626262] !text-[#F5F5F7] [&_*]:!text-[#F5F5F7] focus:bg-[#626262] dark:bg-[#F5F5F7] dark:!text-[#2E2E2E] dark:[&_*]:!text-[#2E2E2E]"
-                                                : "text-gray-900 focus:bg-[#AEAEAE] hover:bg-[#AEAEAE] dark:text-foreground dark:focus:bg-[#626262] dark:hover:bg-[#626262]",
-                                        )}
-                                    >
-                                        <span className="font-sans font-normal">
-                                            {position.name}
-                                        </span>
-                                    </SelectItem>
-                                )
-                            })}
-                        </SelectContent>
-                    </Select>
-                    {hasSubmitted && !positionId && (
-                        <span className="text-xs text-red-500">
-                            {t("errors.positionRequired")}
-                        </span>
-                    )}
-                </div>
+                <UserProfileTextField
+                    id="profile-first-name"
+                    label={t("firstName")}
+                    value={firstName}
+                    disabled={!canEdit}
+                    error={
+                        hasSubmitted && !firstName.trim()
+                            ? t("errors.firstNameRequired")
+                            : undefined
+                    }
+                    onChange={setFirstName}
+                />
+                <UserProfileTextField
+                    id="profile-last-name"
+                    label={t("lastName")}
+                    value={lastName}
+                    disabled={!canEdit}
+                    error={
+                        hasSubmitted && !lastName.trim()
+                            ? t("errors.lastNameRequired")
+                            : undefined
+                    }
+                    onChange={setLastName}
+                />
+                <UserProfileSelect
+                    label={t("department")}
+                    placeholder={t("selectDepartment")}
+                    value={departmentId}
+                    options={departmentOptions}
+                    disabled={!canEdit}
+                    error={
+                        hasSubmitted && !departmentId
+                            ? t("errors.departmentRequired")
+                            : undefined
+                    }
+                    onChange={setDepartmentId}
+                />
+                <UserProfileSelect
+                    label={t("position")}
+                    placeholder={t("selectPosition")}
+                    value={positionId}
+                    options={positionOptions}
+                    disabled={!canEdit}
+                    error={
+                        hasSubmitted && !positionId
+                            ? t("errors.positionRequired")
+                            : undefined
+                    }
+                    onChange={setPositionId}
+                />
             </div>
 
             {canEdit && (

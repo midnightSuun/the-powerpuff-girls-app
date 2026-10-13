@@ -59,6 +59,7 @@ export function UsersTableClient({
             sortOrder={sortOrder}
             getSortHref={getSortHref}
             getRowHref={(user: UserItem) => `/users/${user.id}`}
+            getRowKey={(user) => user.id}
             emptyMessage={emptyMessage}
         />
     )
