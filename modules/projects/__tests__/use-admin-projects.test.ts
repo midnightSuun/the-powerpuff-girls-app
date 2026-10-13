@@ -68,7 +68,6 @@ describe("useAdminProjects", () => {
             back: vi.fn(),
             forward: vi.fn(),
             refresh: mockRefresh,
-            // Добавлено недостающее поле bfcacheId для AppRouterInstance
             bfcacheId: "",
         })
     })
