@@ -40,16 +40,18 @@ export function AdminPositionsView({
     ]
 
     return (
-        <AdminNameCrudPage
-            data={positions}
-            columns={columns}
-            createButtonLabel={t("createButton")}
-            emptyMessage={t("empty")}
-            getItemName={(position) => position.name}
-            onCreateClick={() => setIsCreateOpen(true)}
-            onEditClick={(position) => setEditingPosition(position)}
-            onDeleteClick={(position) => setDeletingPosition(position)}
-        >
+        <>
+            <AdminNameCrudPage
+                data={positions}
+                columns={columns}
+                createButtonLabel={t("createButton")}
+                emptyMessage={t("empty")}
+                getItemName={(position) => position.name}
+                onCreateClick={() => setIsCreateOpen(true)}
+                onEditClick={(position) => setEditingPosition(position)}
+                onDeleteClick={(position) => setDeletingPosition(position)}
+            />
+
             <CreatePositionModal
                 isOpen={isCreateOpen}
                 onClose={() => setIsCreateOpen(false)}
@@ -71,6 +73,6 @@ export function AdminPositionsView({
                 positionName={deletingPosition?.name ?? ""}
                 onConfirm={handleDeleteConfirm}
             />
-        </AdminNameCrudPage>
+        </>
     )
 }
