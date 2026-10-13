@@ -1,5 +1,6 @@
 "use client"
 
+import { cn } from "cn"
 import { ChevronsUpDown, LogOut, Settings, User } from "lucide-react"
 import { useTranslations } from "next-intl"
 
@@ -100,14 +101,20 @@ export const NavUserMenu = ({ user }: Props) => {
                             aria-hidden
                         />
                     </DropdownMenuTrigger>
+
                     <DropdownMenuContent
-                        className={
+                        className={cn(
+                            "border border-[#AEAEAE] dark:border-[#626262]",
+                            "bg-[#E2E2E4] dark:bg-[#454545]",
+                            "text-[#2E2E2E] dark:text-[#F5F5F7]",
+                            "rounded-[8px]",
+
                             isTabletExpanded
-                                ? "w-36 min-w-0 rounded-md p-0"
+                                ? "w-36 min-w-0 p-0"
                                 : isTabletCollapsed
-                                  ? "w-12 min-w-0 rounded-md p-1"
-                                  : "min-w-56 rounded-lg"
-                        }
+                                  ? "w-12 min-w-0 p-1"
+                                  : "min-w-56"
+                        )}
                         side={isMobile ? "bottom" : isTablet ? "top" : "right"}
                         align={isTabletCollapsed ? "center" : "end"}
                         sideOffset={isTablet ? 0 : 4}
@@ -116,26 +123,33 @@ export const NavUserMenu = ({ user }: Props) => {
                             <NavUserMenuItem
                                 href={`/users/${user.id}`}
                                 label={t("profile")}
-                                icon={<User />}
+                                icon={<User className="text-current" />}
                                 itemClassName={itemClassName}
                                 labelClassName={labelClassName}
                                 onClick={handleCloseMobileSidebar}
                             />
-                            {isTablet ? <DropdownMenuSeparator /> : null}
+
+                            {isTablet ? (
+                                <DropdownMenuSeparator className="bg-[#AEAEAE] dark:bg-[#626262]" />
+                            ) : null}
+
                             <NavUserMenuItem
                                 href="/settings"
                                 label={t("settings")}
-                                icon={<Settings />}
+                                icon={<Settings className="text-current" />}
                                 itemClassName={itemClassName}
                                 labelClassName={labelClassName}
                                 onClick={handleCloseMobileSidebar}
                             />
                         </DropdownMenuGroup>
-                        {!isTablet ? <DropdownMenuSeparator /> : null}
+
+                        {!isTablet ? (
+                            <DropdownMenuSeparator className="bg-[#AEAEAE] dark:bg-[#626262]" />
+                        ) : null}
+
                         <NavUserMenuItem
                             label={t("logout")}
-                            icon={<LogOut />}
-                            variant="destructive"
+                            icon={<LogOut className="text-current" />}
                             itemClassName={itemClassName}
                             labelClassName={labelClassName}
                             onClick={handleLogout}
