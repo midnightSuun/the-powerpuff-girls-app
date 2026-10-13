@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl"
 import { EditItemModal } from "@/components/ui/edit-item-modal"
 import type { Proficiency } from "@/gql/generated/graphql"
 
-import { useEditLanguage } from "../../../hooks/use-edit-language"
+import { useEditLanguageModal } from "../../../hooks/use-edit-language-modal"
 import { LanguageProficiencySelect } from "./language-proficiency-select"
 
 interface EditLanguageModalProps {
@@ -26,7 +26,7 @@ export function EditLanguageModal({
     const t = useTranslations("Languages.edit")
 
     const { proficiency, setProficiency, error, isSubmitting, handleSubmit } =
-        useEditLanguage({
+        useEditLanguageModal({
             currentProficiency,
             onSave,
             onClose,
