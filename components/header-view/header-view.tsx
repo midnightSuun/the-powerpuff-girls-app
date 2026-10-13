@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 
 import { usePathname } from "@/i18n/navigation"
 
+import { useBreadcrumbRefresh } from "./breadcrumb-refresh"
 import { DefaultPageHeader } from "./default-page-header"
 import { PageWithTabsHeader } from "./page-with-tabs-header"
 import { getVisibleTabs, normalizePathname, resolvePage } from "./resolve-page"
@@ -38,9 +39,12 @@ export const HeaderView = ({
             ? (resolved.match.params[resolved.page.breadcrumbParam] ?? "")
             : ""
     const pagePath = resolved?.page.type === "tabs" ? resolved.page.path : ""
-    const [loadedBreadcrumb, setLoadedBreadcrumb] =
-        useState<BreadcrumbResult | null>(initialBreadcrumb)
-    const secondBreadcrumb =
+    const { revision: breadcrumbRevision, snapshot: breadcrumbSnapshot } =
+        useBreadcrumbRefresh()
+    const [loadedBreadcrumb, setLoadedBreadcrumb] = useState<
+        (BreadcrumbResult & { revision: number }) | null
+    >(initialBreadcrumb ? { ...initialBreadcrumb, revision: 0 } : null)
+    const savedBreadcrumb =
         loadedBreadcrumb?.pagePath === pagePath &&
         loadedBreadcrumb.id === breadcrumbId
             ? loadedBreadcrumb.value
@@ -48,12 +52,22 @@ export const HeaderView = ({
                 initialBreadcrumb.id === breadcrumbId
               ? initialBreadcrumb.value
               : null
+    const secondBreadcrumb =
+        loadedBreadcrumb?.pagePath === pagePath &&
+        loadedBreadcrumb.id === breadcrumbId &&
+        loadedBreadcrumb.revision === breadcrumbRevision
+            ? loadedBreadcrumb.value
+            : breadcrumbSnapshot?.pagePath === pagePath &&
+                breadcrumbSnapshot.id === breadcrumbId
+              ? breadcrumbSnapshot.value
+              : savedBreadcrumb
 
     useEffect(() => {
         if (
             !breadcrumbId ||
             (loadedBreadcrumb?.pagePath === pagePath &&
-                loadedBreadcrumb.id === breadcrumbId)
+                loadedBreadcrumb.id === breadcrumbId &&
+                loadedBreadcrumb.revision === breadcrumbRevision)
         ) {
             return
         }
@@ -64,7 +78,12 @@ export const HeaderView = ({
             .then((value) => {
                 if (!isCurrent) return
 
-                setLoadedBreadcrumb({ pagePath, id: breadcrumbId, value })
+                setLoadedBreadcrumb({
+                    pagePath,
+                    id: breadcrumbId,
+                    value,
+                    revision: breadcrumbRevision,
+                })
             })
             .catch(() => {
                 if (!isCurrent) return
@@ -73,6 +92,7 @@ export const HeaderView = ({
                     pagePath,
                     id: breadcrumbId,
                     value: null,
+                    revision: breadcrumbRevision,
                 })
             })
 
@@ -81,9 +101,11 @@ export const HeaderView = ({
         }
     }, [
         breadcrumbId,
+        breadcrumbRevision,
         loadSecondBreadcrumb,
         loadedBreadcrumb?.id,
         loadedBreadcrumb?.pagePath,
+        loadedBreadcrumb?.revision,
         pagePath,
     ])
 

@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
 
+import { useBreadcrumbRefresh } from "@/components/header-view/breadcrumb-refresh"
 import { useActionNotifications } from "@/hooks/use-action-notifications"
 import { useRouter } from "@/i18n/navigation"
 import { sendProfileVerificationAction } from "@/modules/auth/api/verification"
@@ -40,6 +41,7 @@ export function useUserProfile(
     currentUserRole?: string | null,
 ) {
     const notifications = useActionNotifications()
+    const { refreshBreadcrumb } = useBreadcrumbRefresh()
     const router = useRouter()
     const errors = useTranslations("User.errors")
     const messages = useTranslations("User.messages")
@@ -171,6 +173,12 @@ export function useUserProfile(
                     )
                     return
                 }
+
+                refreshBreadcrumb({
+                    pagePath: "/users/{userId}",
+                    id: String(user.id),
+                    value: `${firstName.trim()} ${lastName.trim()}`,
+                })
             }
 
             if (isAssignmentChanged) {
