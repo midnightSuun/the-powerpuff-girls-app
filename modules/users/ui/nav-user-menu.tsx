@@ -1,5 +1,6 @@
 "use client"
 
+import { cn } from "cn"
 import { ChevronsUpDown, LogOut, Settings, User } from "lucide-react"
 import { useTranslations } from "next-intl"
 
@@ -91,14 +92,22 @@ export const NavUserMenu = ({ user }: Props) => {
                             aria-hidden
                         />
                     </DropdownMenuTrigger>
+
                     <DropdownMenuContent
-                        className={
+                        className={cn(
+                            // Наши новые стили окна меню
+                            "border border-[#AEAEAE] dark:border-[#626262]",
+                            "bg-[#E2E2E4] dark:bg-[#454545]",
+                            "text-[#2E2E2E] dark:text-[#F5F5F7]",
+                            "rounded-[8px]",
+
+                            // Оригинальная логика для планшета
                             isTabletExpanded
-                                ? "w-36 min-w-0 rounded-md p-0"
+                                ? "w-36 min-w-0 p-0"
                                 : isTabletCollapsed
-                                  ? "w-12 min-w-0 rounded-md p-1"
-                                  : "min-w-56 rounded-lg"
-                        }
+                                  ? "w-12 min-w-0 p-1"
+                                  : "min-w-56",
+                        )}
                         side={isMobile ? "bottom" : isTablet ? "top" : "right"}
                         align={
                             isTabletCollapsed
@@ -122,7 +131,7 @@ export const NavUserMenu = ({ user }: Props) => {
                                           : undefined
                                 }
                             >
-                                <User />
+                                <User className="text-current" />
                                 <span
                                     className={
                                         isTabletCollapsed
@@ -133,7 +142,11 @@ export const NavUserMenu = ({ user }: Props) => {
                                     {t("profile")}
                                 </span>
                             </DropdownMenuItem>
-                            {isTablet ? <DropdownMenuSeparator /> : null}
+
+                            {isTablet ? (
+                                <DropdownMenuSeparator className="bg-[#AEAEAE] dark:bg-[#626262]" />
+                            ) : null}
+
                             <DropdownMenuItem
                                 nativeButton={false}
                                 render={<Link href="/settings" />}
@@ -146,7 +159,7 @@ export const NavUserMenu = ({ user }: Props) => {
                                           : undefined
                                 }
                             >
-                                <Settings />
+                                <Settings className="text-current" />
                                 <span
                                     className={
                                         isTabletCollapsed
@@ -158,19 +171,23 @@ export const NavUserMenu = ({ user }: Props) => {
                                 </span>
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
-                        {!isTablet ? <DropdownMenuSeparator /> : null}
+
+                        {!isTablet ? (
+                            <DropdownMenuSeparator className="bg-[#AEAEAE] dark:bg-[#626262]" />
+                        ) : null}
+
                         <DropdownMenuItem
-                            variant="destructive"
                             onClick={handleLogout}
-                            className={
+                            className={cn(
+                                // Убрали variant="destructive" и оставили стандартное наследование цвета
                                 isTabletExpanded
                                     ? "rounded-none px-2.5 py-1.5"
                                     : isTabletCollapsed
                                       ? "justify-center px-0"
-                                      : undefined
-                            }
+                                      : undefined,
+                            )}
                         >
-                            <LogOut />
+                            <LogOut className="text-current" />
                             <span
                                 className={
                                     isTabletCollapsed ? "sr-only" : undefined
