@@ -7,6 +7,7 @@ import {
     getUserRole,
 } from "@/modules/auth/helpers/get-current-session"
 import { AdminPositionsView, getAdminPositions } from "@/modules/positions"
+export const instant = false
 
 type Props = {
     searchParams: Promise<Record<string, string | string[] | undefined>>

@@ -40,16 +40,20 @@ export function AdminDepartmentsView({
     ]
 
     return (
-        <AdminNameCrudPage
-            data={departments}
-            columns={columns}
-            createButtonLabel={t("createButton")}
-            emptyMessage={t("empty")}
-            getItemName={(department) => department.name}
-            onCreateClick={() => setIsCreateOpen(true)}
-            onEditClick={(department) => setEditingDepartment(department)}
-            onDeleteClick={(department) => setDeletingDepartment(department)}
-        >
+        <>
+            <AdminNameCrudPage
+                data={departments}
+                columns={columns}
+                createButtonLabel={t("createButton")}
+                emptyMessage={t("empty")}
+                getItemName={(department) => department.name}
+                onCreateClick={() => setIsCreateOpen(true)}
+                onEditClick={(department) => setEditingDepartment(department)}
+                onDeleteClick={(department) =>
+                    setDeletingDepartment(department)
+                }
+            />
+
             <CreateDepartmentModal
                 isOpen={isCreateOpen}
                 onClose={() => setIsCreateOpen(false)}
@@ -71,6 +75,6 @@ export function AdminDepartmentsView({
                 departmentName={deletingDepartment?.name ?? ""}
                 onConfirm={handleDeleteConfirm}
             />
-        </AdminNameCrudPage>
+        </>
     )
 }

@@ -5,6 +5,7 @@ import { AppSidebar } from "@/components/app-sidebar"
 import { Header } from "@/components/header"
 import { HeaderToolbarActionsProvider } from "@/components/header-toolbar-action"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+export const instant = false
 
 export default function ProtectedLayout({ children }: LayoutProps<"/">) {
     return (
