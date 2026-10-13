@@ -5,6 +5,13 @@ import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 import type { GetProfileOptionsQuery, GetUserQuery, UserRole } from "@/gql"
 
 import { useUserProfile } from "../hooks/use-user-profile"
@@ -17,6 +24,9 @@ interface UserProfileFormProps {
     departments: GetProfileOptionsQuery["departments"]["items"]
     positions: GetProfileOptionsQuery["positions"]["items"]
 }
+
+const clsx = (...classes: (string | undefined | false | null)[]) =>
+    classes.filter(Boolean).join(" ")
 
 export function UserProfileForm({
     user,
@@ -216,33 +226,78 @@ export function UserProfileForm({
                 </div>
 
                 <div className="flex flex-col gap-2">
-                    <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                    <label className="text-sm text-muted-foreground">
                         {t("department")}
                     </label>
-                    <div className="relative">
-                        <select
-                            value={departmentId}
-                            onChange={(event) =>
-                                setDepartmentId(event.target.value)
-                            }
-                            disabled={!canEdit}
-                            aria-invalid={hasSubmitted && !departmentId}
-                            className="w-full h-12 px-4 rounded-md border border-input bg-background text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring disabled:bg-muted disabled:opacity-100 disabled:cursor-not-allowed enabled:cursor-pointer appearance-none shadow-xs"
+                    <Select
+                        value={departmentId}
+                        onValueChange={(val) => setDepartmentId(val ?? "")}
+                        disabled={!canEdit}
+                    >
+                        <SelectTrigger
+                            className={clsx(
+                                "w-full !h-12 !min-h-[48px] px-4 flex items-center justify-between shadow-xs transition-colors outline-none focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
+                                "rounded-md border border-input bg-background text-sm text-foreground",
+                                hasSubmitted &&
+                                    !departmentId &&
+                                    "border-red-500",
+                            )}
                         >
-                            <option value="">{t("selectDepartment")}</option>
-                            {departmentOptions.map((department) => (
-                                <option
-                                    key={department.id}
-                                    value={department.id}
+                            <div
+                                className={
+                                    !departmentId
+                                        ? "text-muted-foreground"
+                                        : "truncate"
+                                }
+                            >
+                                <SelectValue
+                                    placeholder={t("selectDepartment")}
                                 >
-                                    {department.name}
-                                </option>
-                            ))}
-                        </select>
-                        <span className="absolute right-4 top-4 pointer-events-none text-xs text-muted-foreground">
-                            ▼
-                        </span>
-                    </div>
+                                    {departmentId
+                                        ? departmentOptions.find(
+                                              (d) =>
+                                                  String(d.id) ===
+                                                  String(departmentId),
+                                          )?.name
+                                        : undefined}
+                                </SelectValue>
+                            </div>
+                        </SelectTrigger>
+
+                        <SelectContent
+                            side="bottom"
+                            align="start"
+                            sideOffset={0}
+                            alignItemWithTrigger={false}
+                            className={clsx(
+                                "w-[var(--anchor-width)] max-h-60 overflow-y-auto p-0 shadow-xl rounded-none",
+                                "border border-[#D1D1D1] bg-[#F5F5F7]",
+                                "dark:border-auth-card-border dark:bg-[#454545]",
+                            )}
+                        >
+                            {departmentOptions.map((department) => {
+                                const isSelected =
+                                    departmentId === String(department.id)
+                                return (
+                                    <SelectItem
+                                        key={department.id}
+                                        value={String(department.id)}
+                                        className={clsx(
+                                            "relative flex w-full cursor-pointer items-center px-4 py-3 text-sm outline-none transition-colors rounded-none",
+                                            "[&_svg]:hidden pr-4",
+                                            isSelected
+                                                ? "bg-[#626262] !text-[#F5F5F7] [&_*]:!text-[#F5F5F7] focus:bg-[#626262] dark:bg-[#F5F5F7] dark:!text-[#2E2E2E] dark:[&_*]:!text-[#2E2E2E]"
+                                                : "text-gray-900 focus:bg-[#AEAEAE] hover:bg-[#AEAEAE] dark:text-foreground dark:focus:bg-[#626262] dark:hover:bg-[#626262]",
+                                        )}
+                                    >
+                                        <span className="font-sans font-normal">
+                                            {department.name}
+                                        </span>
+                                    </SelectItem>
+                                )
+                            })}
+                        </SelectContent>
+                    </Select>
                     {hasSubmitted && !departmentId && (
                         <span className="text-xs text-red-500">
                             {t("errors.departmentRequired")}
@@ -251,30 +306,74 @@ export function UserProfileForm({
                 </div>
 
                 <div className="flex flex-col gap-2">
-                    <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                    <label className="text-sm text-muted-foreground">
                         {t("position")}
                     </label>
-                    <div className="relative">
-                        <select
-                            value={positionId}
-                            onChange={(event) =>
-                                setPositionId(event.target.value)
-                            }
-                            disabled={!canEdit}
-                            aria-invalid={hasSubmitted && !positionId}
-                            className="w-full h-12 px-4 rounded-md border border-input bg-background text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring disabled:bg-muted disabled:opacity-100 disabled:cursor-not-allowed enabled:cursor-pointer appearance-none shadow-xs"
+                    <Select
+                        value={positionId}
+                        onValueChange={(val) => setPositionId(val ?? "")}
+                        disabled={!canEdit}
+                    >
+                        <SelectTrigger
+                            className={clsx(
+                                "w-full !h-12 !min-h-[48px] px-4 flex items-center justify-between shadow-xs transition-colors outline-none focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
+                                "rounded-md border border-input bg-background text-sm text-foreground",
+                                hasSubmitted && !positionId && "border-red-500",
+                            )}
                         >
-                            <option value="">{t("selectPosition")}</option>
-                            {positionOptions.map((position) => (
-                                <option key={position.id} value={position.id}>
-                                    {position.name}
-                                </option>
-                            ))}
-                        </select>
-                        <span className="absolute right-4 top-4 pointer-events-none text-xs text-muted-foreground">
-                            ▼
-                        </span>
-                    </div>
+                            <div
+                                className={
+                                    !positionId
+                                        ? "text-muted-foreground"
+                                        : "truncate"
+                                }
+                            >
+                                <SelectValue placeholder={t("selectPosition")}>
+                                    {positionId
+                                        ? positionOptions.find(
+                                              (p) =>
+                                                  String(p.id) ===
+                                                  String(positionId),
+                                          )?.name
+                                        : undefined}
+                                </SelectValue>
+                            </div>
+                        </SelectTrigger>
+
+                        <SelectContent
+                            side="bottom"
+                            align="start"
+                            sideOffset={0}
+                            alignItemWithTrigger={false}
+                            className={clsx(
+                                "w-[var(--anchor-width)] max-h-60 overflow-y-auto p-0 shadow-xl rounded-none",
+                                "border border-[#D1D1D1] bg-[#F5F5F7]",
+                                "dark:border-auth-card-border dark:bg-[#454545]",
+                            )}
+                        >
+                            {positionOptions.map((position) => {
+                                const isSelected =
+                                    positionId === String(position.id)
+                                return (
+                                    <SelectItem
+                                        key={position.id}
+                                        value={String(position.id)}
+                                        className={clsx(
+                                            "relative flex w-full cursor-pointer items-center px-4 py-3 text-sm outline-none transition-colors rounded-none",
+                                            "[&_svg]:hidden pr-4",
+                                            isSelected
+                                                ? "bg-[#626262] !text-[#F5F5F7] [&_*]:!text-[#F5F5F7] focus:bg-[#626262] dark:bg-[#F5F5F7] dark:!text-[#2E2E2E] dark:[&_*]:!text-[#2E2E2E]"
+                                                : "text-gray-900 focus:bg-[#AEAEAE] hover:bg-[#AEAEAE] dark:text-foreground dark:focus:bg-[#626262] dark:hover:bg-[#626262]",
+                                        )}
+                                    >
+                                        <span className="font-sans font-normal">
+                                            {position.name}
+                                        </span>
+                                    </SelectItem>
+                                )
+                            })}
+                        </SelectContent>
+                    </Select>
                     {hasSubmitted && !positionId && (
                         <span className="text-xs text-red-500">
                             {t("errors.positionRequired")}
