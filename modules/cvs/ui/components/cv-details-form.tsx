@@ -26,8 +26,10 @@ export function CvDetailsForm({ cv, onUpdate }: CvDetailsFormProps) {
         setDescription,
         isSubmitting,
         error,
+        fieldErrors,
         isDirty,
         handleSubmit,
+        hasValidationErrors,
     } = useCvDetailsForm({
         cv,
         onUpdate,
@@ -52,8 +54,17 @@ export function CvDetailsForm({ cv, onUpdate }: CvDetailsFormProps) {
                     label={t("name")}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                    maxLength={255}
                     className="h-8 rounded-none border-[#cccccc] bg-transparent px-2 text-xs shadow-none focus-visible:ring-1 focus-visible:ring-ring dark:border-border"
                 />
+                {fieldErrors.name && (
+                    <p className="pl-2 text-xs text-destructive">
+                        {fieldErrors.name}
+                    </p>
+                )}
+                <p className="pl-2 text-xs text-muted-foreground">
+                    {name.length}/255
+                </p>
             </div>
 
             <div className="flex flex-col gap-1">
@@ -63,8 +74,17 @@ export function CvDetailsForm({ cv, onUpdate }: CvDetailsFormProps) {
                     label={t("education")}
                     value={education}
                     onChange={(e) => setEducation(e.target.value)}
+                    maxLength={255}
                     className="h-8 rounded-none border-[#cccccc] bg-transparent px-2 text-xs shadow-none focus-visible:ring-1 focus-visible:ring-ring dark:border-border"
                 />
+                {fieldErrors.education && (
+                    <p className="pl-2 text-xs text-destructive">
+                        {fieldErrors.education}
+                    </p>
+                )}
+                <p className="pl-2 text-xs text-muted-foreground">
+                    {education.length}/255
+                </p>
             </div>
 
             <div className="flex flex-col gap-1">
@@ -80,12 +100,17 @@ export function CvDetailsForm({ cv, onUpdate }: CvDetailsFormProps) {
                     onChange={(e) => setDescription(e.target.value)}
                     className="min-h-30 resize-y rounded-none border-[#cccccc] bg-transparent p-2 text-xs leading-normal shadow-none focus-visible:ring-1 focus-visible:ring-ring dark:border-border"
                 />
+                {fieldErrors.description && (
+                    <p className="pl-2 text-xs text-destructive">
+                        {fieldErrors.description}
+                    </p>
+                )}
             </div>
 
             <div className="flex justify-end pt-1">
                 <Button
                     type="submit"
-                    disabled={!isDirty || isSubmitting}
+                    disabled={!isDirty || isSubmitting || hasValidationErrors}
                     className="h-8! w-26.5! min-w-26.5! px-0! py-0! rounded-full bg-[#d7352c] text-[10px] font-normal tracking-normal text-white shadow-none hover:bg-[#c52e26] disabled:bg-[#b8b8b8] disabled:text-white dark:disabled:bg-button-secondary-default"
                 >
                     {isSubmitting ? t("updating") : t("update")}
