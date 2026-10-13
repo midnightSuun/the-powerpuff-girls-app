@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import { useEditDepartmentModal } from "@/modules/departments/hooks/use-edit-department-modal"
 
-import { EditDepartmentModal } from "../ui/components/edit-department-admin-modal"
+import { EditDepartmentModal } from "../ui/edit-department-admin-modal"
 
 vi.mock("@/modules/departments/hooks/use-edit-department-modal", () => ({
     useEditDepartmentModal: vi.fn(),

@@ -11,6 +11,16 @@ vi.mock("../../hooks/use-cv-projects", () => ({
     useCvProjects: vi.fn(),
 }))
 
+vi.mock("next/navigation", () => ({
+    useSearchParams: () => ({
+        get: vi.fn().mockReturnValue(""),
+    }),
+    usePathname: () => "",
+    useRouter: () => ({
+        push: vi.fn(),
+    }),
+}))
+
 vi.mock("@/components/projects-table-view", () => ({
     ProjectsTableView: ({
         projects,

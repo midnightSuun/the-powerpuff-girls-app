@@ -10,18 +10,21 @@ vi.mock("@/components/ui/list-management-buttons", () => ({
         onClick,
         disabled,
         className,
+        variant,
     }: {
         label: string
         onClick: () => void
         disabled?: boolean
         className?: string
+        variant?: string
         iconOnlyBelowLg?: boolean
     }) => (
         <button
             type="button"
             onClick={onClick}
             disabled={disabled}
-            className={className}
+            className={`font-semibold text-red-600 ${className || ""}`}
+            data-variant={variant}
         >
             {label}
         </button>

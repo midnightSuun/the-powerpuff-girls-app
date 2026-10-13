@@ -5,11 +5,6 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 import { resetPasswordAction } from "../../api/reset-password"
 import { useResetPassword } from "../use-reset-password"
 
-vi.mock("next/navigation", () => ({
-    useRouter: vi.fn(),
-    useSearchParams: vi.fn(),
-}))
-
 vi.mock("../../api/reset-password", () => ({
     resetPasswordAction: vi.fn(),
 }))

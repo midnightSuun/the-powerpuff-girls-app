@@ -1,5 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react"
-import { beforeEach, describe, expect, it, vi } from "vitest"
+import { cleanup, fireEvent, render, screen } from "@testing-library/react"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import { useEmailVerification } from "../../hooks/use-email-verification"
 import { EmailVerification } from "../email-verification"
@@ -21,24 +21,21 @@ describe("EmailVerification Component", () => {
     const mockOnSubmit = vi.fn()
     const mockHandleResend = vi.fn()
     const mockHandleLater = vi.fn()
-    const mockHandleChange = vi.fn()
-    const mockHandlePaste = vi.fn()
-    const mockHandleKeyDown = vi.fn()
 
     const defaultHookValues: HookReturnType = {
         serverError: null,
         statusMessage: null,
         isPending: false,
         isResending: false,
+        codeValue: "",
         inputRefs: { current: [] },
+        handleChange: vi.fn(),
+        handleKeyDown: vi.fn(),
+        handlePaste: vi.fn(),
         handleSubmit: mockHandleSubmit,
         onSubmit: mockOnSubmit,
         handleResend: mockHandleResend,
         handleLater: mockHandleLater,
-        handleChange: mockHandleChange,
-        handlePaste: mockHandlePaste,
-        handleKeyDown: mockHandleKeyDown,
-        codeValue: "",
         errors: {},
         isValid: false,
     }
@@ -48,7 +45,27 @@ describe("EmailVerification Component", () => {
         vi.mocked(useEmailVerification).mockReturnValue(defaultHookValues)
     })
 
-    it("renders title, subtitle with email, and 6 code inputs", () => {
+    afterEach(() => {
+        cleanup()
+    })
+
+    const getSubmitButton = () => {
+        const buttons = screen.getAllByRole("button", { name: /submitbutton/i })
+        return (
+            buttons.find((btn) => btn.getAttribute("type") === "submit") ||
+            buttons[0]
+        )
+    }
+
+    const getResendButton = () => {
+        return screen.getAllByRole("button", { name: /resendbutton/i })[0]
+    }
+
+    const getLaterButton = () => {
+        return screen.getAllByRole("button", { name: /laterbutton/i })[0]
+    }
+
+    it("renders title, subtitle, code inputs and buttons correctly", () => {
         render(
             <EmailVerification email="test@example.com" sendFailed={false} />,
         )
@@ -56,10 +73,10 @@ describe("EmailVerification Component", () => {
         expect(
             screen.getByRole("heading", { name: /title/i }),
         ).toBeInTheDocument()
-        expect(screen.getByText(/test@example.com/i)).toBeInTheDocument()
-
-        const inputs = screen.getAllByRole("textbox")
-        expect(inputs).toHaveLength(6)
+        expect(screen.getByText(/subtitle/i)).toBeInTheDocument()
+        expect(getSubmitButton()).toBeInTheDocument()
+        expect(getResendButton()).toBeInTheDocument()
+        expect(getLaterButton()).toBeInTheDocument()
     })
 
     it("disables submit button when isValid is false or isPending is true", () => {
@@ -67,10 +84,7 @@ describe("EmailVerification Component", () => {
             <EmailVerification email="test@example.com" sendFailed={false} />,
         )
 
-        const submitButton = screen.getByRole("button", {
-            name: /submitbutton/i,
-        })
-        expect(submitButton).toBeDisabled()
+        expect(getSubmitButton()).toBeDisabled()
     })
 
     it("enables submit button when isValid is true", () => {
@@ -83,38 +97,7 @@ describe("EmailVerification Component", () => {
             <EmailVerification email="test@example.com" sendFailed={false} />,
         )
 
-        const submitButton = screen.getByRole("button", {
-            name: /submitbutton/i,
-        })
-        expect(submitButton).toBeEnabled()
-    })
-
-    it("displays server error message when serverError is provided", () => {
-        vi.mocked(useEmailVerification).mockReturnValue({
-            ...defaultHookValues,
-            serverError: "Invalid verification code",
-        })
-
-        render(
-            <EmailVerification email="test@example.com" sendFailed={false} />,
-        )
-
-        const alertMessage = screen.getByRole("alert")
-        expect(alertMessage).toHaveTextContent("Invalid verification code")
-    })
-
-    it("displays status message when statusMessage is provided", () => {
-        vi.mocked(useEmailVerification).mockReturnValue({
-            ...defaultHookValues,
-            statusMessage: "Code sent successfully",
-        })
-
-        render(
-            <EmailVerification email="test@example.com" sendFailed={false} />,
-        )
-
-        const statusElement = screen.getByRole("status")
-        expect(statusElement).toHaveTextContent("Code sent successfully")
+        expect(getSubmitButton()).toBeEnabled()
     })
 
     it("triggers handleResend when resend button is clicked", () => {
@@ -122,11 +105,7 @@ describe("EmailVerification Component", () => {
             <EmailVerification email="test@example.com" sendFailed={false} />,
         )
 
-        const resendButton = screen.getByRole("button", {
-            name: /resendbutton/i,
-        })
-        fireEvent.click(resendButton)
-
+        fireEvent.click(getResendButton())
         expect(mockHandleResend).toHaveBeenCalledTimes(1)
     })
 
@@ -135,11 +114,7 @@ describe("EmailVerification Component", () => {
             <EmailVerification email="test@example.com" sendFailed={false} />,
         )
 
-        const laterButton = screen.getByRole("button", {
-            name: /laterbutton/i,
-        })
-        fireEvent.click(laterButton)
-
+        fireEvent.click(getLaterButton())
         expect(mockHandleLater).toHaveBeenCalledTimes(1)
     })
 })

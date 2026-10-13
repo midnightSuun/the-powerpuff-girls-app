@@ -8,10 +8,6 @@ import {
 } from "../../api/verification"
 import { useEmailVerification } from "../use-email-verification"
 
-vi.mock("next/navigation", () => ({
-    useRouter: vi.fn(),
-}))
-
 vi.mock("../../api/verification", () => ({
     sendVerificationAction: vi.fn(),
     verifyMailAction: vi.fn(),

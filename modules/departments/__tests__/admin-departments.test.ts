@@ -56,12 +56,12 @@ describe("Admin Departments Actions", () => {
                 },
             })
 
-            const result = await getAdminDepartments()
+            const result = await getAdminDepartments("")
 
             expect(requireAdmin).toHaveBeenCalledTimes(1)
             expect(mockGqlClient.request).toHaveBeenCalledWith(
                 GetDepartmentsDocument,
-                { params: { limit: 100 } },
+                { params: { limit: 100, search: "" } },
             )
             expect(result).toEqual([
                 { id: "dept-1", name: "Engineering" },
@@ -74,8 +74,12 @@ describe("Admin Departments Actions", () => {
                 departments: { items: null },
             })
 
-            const result = await getAdminDepartments()
+            const result = await getAdminDepartments("test")
 
+            expect(mockGqlClient.request).toHaveBeenCalledWith(
+                GetDepartmentsDocument,
+                { params: { limit: 100, search: "test" } },
+            )
             expect(result).toEqual([])
         })
     })
@@ -150,7 +154,7 @@ describe("Admin Departments Actions", () => {
             const input: Parameters<typeof deleteAdminDepartment>[0] = {
                 departmentId: "dept-1",
             }
-            const mockResponse = { success: true }
+            const mockResponse = { affected: 1 }
 
             mockGqlClient.request.mockResolvedValueOnce({
                 deleteDepartment: mockResponse,

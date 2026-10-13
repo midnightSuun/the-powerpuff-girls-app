@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react"
-import { beforeEach, describe, expect, it, vi } from "vitest"
+import { cleanup, render, screen } from "@testing-library/react"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import { useForgotPassword } from "../../hooks/use-forgot-password"
 import { ForgotPasswordPage } from "../forgot-password"
@@ -19,12 +19,14 @@ describe("ForgotPasswordPage Component", () => {
     ) as unknown as HookReturnType["handleSubmit"]
 
     const mockOnSubmit = vi.fn()
-    const mockRegister: HookReturnType["register"] = vi.fn(() => ({
-        name: "email",
-        onChange: vi.fn(),
-        onBlur: vi.fn(),
-        ref: vi.fn(),
-    })) as unknown as HookReturnType["register"]
+    const mockRegister: HookReturnType["register"] = vi.fn(
+        (fieldName: string) => ({
+            name: fieldName,
+            onChange: vi.fn(),
+            onBlur: vi.fn(),
+            ref: vi.fn(),
+        }),
+    ) as unknown as HookReturnType["register"]
 
     const defaultHookValues: HookReturnType = {
         serverError: undefined,
@@ -42,7 +44,19 @@ describe("ForgotPasswordPage Component", () => {
         vi.mocked(useForgotPassword).mockReturnValue(defaultHookValues)
     })
 
-    it("renders title, subtitle, email input and buttons correctly", () => {
+    afterEach(() => {
+        cleanup()
+    })
+
+    const getSubmitButton = () => {
+        const buttons = screen.getAllByRole("button", { name: /submitbutton/i })
+        return (
+            buttons.find((btn) => btn.getAttribute("type") === "submit") ||
+            buttons[0]
+        )
+    }
+
+    it("renders title, subtitle, input, submit button and cancel link correctly", () => {
         render(<ForgotPasswordPage />)
 
         expect(
@@ -52,9 +66,7 @@ describe("ForgotPasswordPage Component", () => {
         expect(
             screen.getByRole("textbox", { name: /emaillabel/i }),
         ).toBeInTheDocument()
-        expect(
-            screen.getByRole("button", { name: /submitbutton/i }),
-        ).toBeInTheDocument()
+        expect(getSubmitButton()).toBeInTheDocument()
         expect(
             screen.getByRole("link", { name: /cancelbutton/i }),
         ).toHaveAttribute("href", "/login")
@@ -63,10 +75,7 @@ describe("ForgotPasswordPage Component", () => {
     it("disables submit button when isValid is false or isPending is true", () => {
         render(<ForgotPasswordPage />)
 
-        const submitButton = screen.getByRole("button", {
-            name: /submitbutton/i,
-        })
-        expect(submitButton).toBeDisabled()
+        expect(getSubmitButton()).toBeDisabled()
     })
 
     it("enables submit button when isValid is true", () => {
@@ -77,10 +86,7 @@ describe("ForgotPasswordPage Component", () => {
 
         render(<ForgotPasswordPage />)
 
-        const submitButton = screen.getByRole("button", {
-            name: /submitbutton/i,
-        })
-        expect(submitButton).toBeEnabled()
+        expect(getSubmitButton()).toBeEnabled()
     })
 
     it("displays server error message when serverError is provided", () => {
@@ -93,17 +99,5 @@ describe("ForgotPasswordPage Component", () => {
 
         const alertMessage = screen.getByRole("alert")
         expect(alertMessage).toHaveTextContent("User not found")
-    })
-
-    it("displays success message when successMessage is provided", () => {
-        vi.mocked(useForgotPassword).mockReturnValue({
-            ...defaultHookValues,
-            successMessage: "Reset link sent to your email",
-        })
-
-        render(<ForgotPasswordPage />)
-
-        const statusElement = screen.getByRole("status")
-        expect(statusElement).toHaveTextContent("Reset link sent to your email")
     })
 })

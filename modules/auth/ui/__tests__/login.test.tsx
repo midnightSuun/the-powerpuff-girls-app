@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react"
-import { beforeEach, describe, expect, it, vi } from "vitest"
+import { cleanup, render, screen } from "@testing-library/react"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import { useLogin } from "../../hooks/use-login"
 import { Login } from "../login"
@@ -43,6 +43,18 @@ describe("Login Component", () => {
         vi.mocked(useLogin).mockReturnValue(defaultHookValues)
     })
 
+    afterEach(() => {
+        cleanup()
+    })
+
+    const getSubmitButton = () => {
+        const buttons = screen.getAllByRole("button", { name: /submitbutton/i })
+        return (
+            buttons.find((btn) => btn.getAttribute("type") === "submit") ||
+            buttons[0]
+        )
+    }
+
     it("renders title, subtitle, inputs, buttons and links correctly", () => {
         render(<Login />)
 
@@ -53,9 +65,7 @@ describe("Login Component", () => {
         expect(
             screen.getByRole("textbox", { name: /emailplaceholder/i }),
         ).toBeInTheDocument()
-        expect(
-            screen.getByRole("button", { name: /submitbutton/i }),
-        ).toBeInTheDocument()
+        expect(getSubmitButton()).toBeInTheDocument()
         expect(
             screen.getByRole("link", { name: /forgotpassword/i }),
         ).toHaveAttribute("href", "/forgot-password")
@@ -64,10 +74,7 @@ describe("Login Component", () => {
     it("disables submit button when isValid is false or isPending is true", () => {
         render(<Login />)
 
-        const submitButton = screen.getByRole("button", {
-            name: /submitbutton/i,
-        })
-        expect(submitButton).toBeDisabled()
+        expect(getSubmitButton()).toBeDisabled()
     })
 
     it("enables submit button when isValid is true", () => {
@@ -78,10 +85,7 @@ describe("Login Component", () => {
 
         render(<Login />)
 
-        const submitButton = screen.getByRole("button", {
-            name: /submitbutton/i,
-        })
-        expect(submitButton).toBeEnabled()
+        expect(getSubmitButton()).toBeEnabled()
     })
 
     it("displays server error message when serverError is provided", () => {

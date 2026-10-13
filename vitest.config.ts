@@ -11,7 +11,7 @@ export default defineConfig({
         isolate: false,
         server: {
             deps: {
-                inline: [/@swc\/helpers/],
+                inline: [/@swc\/helpers/, "next-intl"],
             },
         },
     },

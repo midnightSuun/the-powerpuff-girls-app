@@ -47,6 +47,14 @@ describe("Signup Component", () => {
         vi.mocked(useSignup).mockReturnValue(defaultHookValues)
     })
 
+    const getSubmitButton = () => {
+        const buttons = screen.getAllByRole("button", { name: /submitbutton/i })
+        return (
+            buttons.find((btn) => btn.getAttribute("type") === "submit") ||
+            buttons[0]
+        )
+    }
+
     it("renders title, subtitle, inputs, submit button and link correctly", () => {
         render(<Signup />)
 
@@ -57,9 +65,7 @@ describe("Signup Component", () => {
         expect(
             screen.getByRole("textbox", { name: /emailplaceholder/i }),
         ).toBeInTheDocument()
-        expect(
-            screen.getByRole("button", { name: /submitbutton/i }),
-        ).toBeInTheDocument()
+        expect(getSubmitButton()).toBeInTheDocument()
         expect(
             screen.getByRole("link", { name: /haveaccount/i }),
         ).toHaveAttribute("href", "/login")
@@ -68,10 +74,7 @@ describe("Signup Component", () => {
     it("disables submit button when isValid is false or isPending is true", () => {
         render(<Signup />)
 
-        const submitButton = screen.getByRole("button", {
-            name: /submitbutton/i,
-        })
-        expect(submitButton).toBeDisabled()
+        expect(getSubmitButton()).toBeDisabled()
     })
 
     it("enables submit button when isValid is true", () => {
@@ -82,10 +85,7 @@ describe("Signup Component", () => {
 
         render(<Signup />)
 
-        const submitButton = screen.getByRole("button", {
-            name: /submitbutton/i,
-        })
-        expect(submitButton).toBeEnabled()
+        expect(getSubmitButton()).toBeEnabled()
     })
 
     it("displays server error message when serverError is provided", () => {

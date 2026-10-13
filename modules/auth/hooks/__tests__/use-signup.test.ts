@@ -6,10 +6,6 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 import { signup } from "../../api/signup"
 import { useSignup } from "../use-signup"
 
-vi.mock("next/navigation", () => ({
-    useRouter: vi.fn(),
-}))
-
 vi.mock("../../api/signup", () => ({
     signup: vi.fn(),
 }))

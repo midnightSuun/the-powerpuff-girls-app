@@ -109,6 +109,7 @@ describe("CvDetailsForm", () => {
         setDescription: mockSetDescription,
         isSubmitting: false,
         error: null,
+        fieldErrors: {},
         isDirty: false,
         handleSubmit: mockHandleSubmit,
     }

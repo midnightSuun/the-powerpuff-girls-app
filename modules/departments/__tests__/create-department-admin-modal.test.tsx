@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import { useCreateDepartmentModal } from "@/modules/departments/hooks/use-create-department-modal"
 
-import { CreateDepartmentModal } from "../ui/components/create-department-admin-modal"
+import { CreateDepartmentModal } from "../ui/create-department-admin-modal"
 
 vi.mock("@/modules/departments/hooks/use-create-department-modal", () => ({
     useCreateDepartmentModal: vi.fn(),

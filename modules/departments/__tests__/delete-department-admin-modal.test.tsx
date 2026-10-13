@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import { useDeleteDepartmentModal } from "@/modules/departments/hooks/use-delete-department-modal"
 
-import { DeleteDepartmentModal } from "../ui/components/delete-department-admin-modal"
+import { DeleteDepartmentModal } from "../ui/delete-department-admin-modal"
 
 vi.mock("@/modules/departments/hooks/use-delete-department-modal", () => ({
     useDeleteDepartmentModal: vi.fn(),

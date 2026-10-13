@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import { useAdminDepartmentsView } from "@/modules/departments/hooks/use-admin-departments-view"
 
-import { AdminDepartmentsView } from "../ui/components/admin-departments-view"
+import { AdminDepartmentsView } from "../ui/admin-departments-view"
 
 vi.mock("@/modules/departments/hooks/use-admin-departments-view", () => ({
     useAdminDepartmentsView: vi.fn(),
@@ -55,17 +55,18 @@ vi.mock("@/components/ui/admin-name-crud-page", () => ({
         </div>
     ),
 }))
-vi.mock("../ui/components/create-department-admin-modal", () => ({
+
+vi.mock("../ui/create-department-admin-modal", () => ({
     CreateDepartmentModal: ({ isOpen }: { isOpen: boolean }) =>
         isOpen ? <div data-testid="create-modal" /> : null,
 }))
 
-vi.mock("../ui/components/edit-department-admin-modal", () => ({
+vi.mock("../ui/edit-department-admin-modal", () => ({
     EditDepartmentModal: ({ isOpen }: { isOpen: boolean }) =>
         isOpen ? <div data-testid="edit-modal" /> : null,
 }))
 
-vi.mock("../ui/components/delete-department-admin-modal", () => ({
+vi.mock("../ui/delete-department-admin-modal", () => ({
     DeleteDepartmentModal: ({ isOpen }: { isOpen: boolean }) =>
         isOpen ? <div data-testid="delete-modal" /> : null,
 }))
