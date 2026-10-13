@@ -25,6 +25,9 @@ interface CvProjectFormModalProps {
     existingProjectIds: string[]
 }
 
+const clsx = (...classes: (string | undefined | false | null)[]) =>
+    classes.filter(Boolean).join(" ")
+
 const fieldClassName =
     "h-9 rounded-none border-[#cccccc] bg-background px-2.5 text-xs text-foreground shadow-none dark:border-border"
 const disabledFieldClassName =
@@ -86,16 +89,46 @@ export function CvProjectFormModal(props: CvProjectFormModalProps) {
                         disabled={Boolean(project)}
                     >
                         <SelectTrigger
-                            className={`${fieldClassName} ${disabledFieldClassName} w-full pr-8`}
+                            className={`${fieldClassName} ${disabledFieldClassName} w-full pr-8 outline-none transition-colors focus:ring-0`}
                         >
-                            <SelectValue placeholder={t("selectProject")} />
+                            <SelectValue placeholder={t("selectProject")}>
+                                {selectedProject?.name ??
+                                    availableProjects.find(
+                                        (item) => item.id === projectId,
+                                    )?.name}
+                            </SelectValue>
                         </SelectTrigger>
-                        <SelectContent align="start" className="rounded-none">
-                            {availableProjects.map((item) => (
-                                <SelectItem key={item.id} value={item.id}>
-                                    {item.name}
-                                </SelectItem>
-                            ))}
+                        <SelectContent
+                            side="bottom"
+                            align="start"
+                            sideOffset={0}
+                            alignItemWithTrigger={false}
+                            className={clsx(
+                                "w-[var(--anchor-width)] max-h-60 overflow-y-auto p-0 shadow-xl rounded-none",
+                                "border border-[#D1D1D1] bg-[#F5F5F7]",
+                                "dark:border-auth-card-border dark:bg-[#454545]",
+                            )}
+                        >
+                            {availableProjects.map((item) => {
+                                const isSelected = projectId === item.id
+                                return (
+                                    <SelectItem
+                                        key={item.id}
+                                        value={item.id}
+                                        className={clsx(
+                                            "relative flex w-full cursor-pointer items-center px-4 py-3 text-sm outline-none transition-colors rounded-none",
+                                            "[&_svg]:hidden pr-4",
+                                            isSelected
+                                                ? "bg-[#626262] !text-[#F5F5F7] [&_*]:!text-[#F5F5F7] focus:bg-[#626262] dark:bg-[#F5F5F7] dark:!text-[#2E2E2E] dark:[&_*]:!text-[#2E2E2E]"
+                                                : "text-gray-900 focus:bg-[#AEAEAE] hover:bg-[#AEAEAE] dark:text-foreground dark:focus:bg-[#626262] dark:hover:bg-[#626262]",
+                                        )}
+                                    >
+                                        <span className="font-sans font-normal">
+                                            {item.name}
+                                        </span>
+                                    </SelectItem>
+                                )
+                            })}
                         </SelectContent>
                     </Select>
                 </div>
