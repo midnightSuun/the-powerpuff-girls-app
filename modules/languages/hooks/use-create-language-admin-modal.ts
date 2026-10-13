@@ -3,7 +3,7 @@ import { useState } from "react"
 
 import { isNameDuplicate, normalizeName } from "@/lib/validate-unique-name"
 
-interface UseCreateLanguageModalProps {
+interface UseCreateLanguageAdminModalProps {
     isOpen: boolean
     onClose: () => void
     existingLanguageNames?: string[]
@@ -14,12 +14,12 @@ interface UseCreateLanguageModalProps {
     }) => Promise<void>
 }
 
-export function useCreateLanguageModal({
+export function useCreateLanguageAdminModal({
     isOpen,
     onClose,
     existingLanguageNames = [],
     onCreate,
-}: UseCreateLanguageModalProps) {
+}: UseCreateLanguageAdminModalProps) {
     const t = useTranslations("Languages.admin")
     const [name, setName] = useState("")
     const [iso2, setIso2] = useState("")

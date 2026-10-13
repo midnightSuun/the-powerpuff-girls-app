@@ -50,7 +50,7 @@ export function EnvironmentMultiselect({
         if (containerRef.current) {
             const rect = containerRef.current.getBoundingClientRect()
             setCoords({
-                top: rect.bottom + 4,
+                top: rect.bottom,
                 left: rect.left,
                 width: rect.width,
             })
@@ -108,8 +108,8 @@ export function EnvironmentMultiselect({
             <div
                 onClick={() => setIsOpen(!isOpen)}
                 className={cn(
-                    "flex min-h-9 w-full cursor-pointer items-center justify-between gap-1.5 border bg-background px-2.5 py-1.5 text-xs transition-colors",
-                    "border-[#2E2E2E] text-[#2E2E2E] dark:border-[#F5F5F7] dark:text-[#F5F5F7]",
+                    "flex min-h-9 w-full cursor-pointer items-center justify-between gap-1.5 border border-border bg-background px-2.5 py-1.5 text-xs text-foreground transition-colors",
+                    isOpen && "ring-1 ring-ring",
                     error && "border-red-500 dark:border-red-500",
                     className,
                 )}
@@ -120,8 +120,7 @@ export function EnvironmentMultiselect({
                             <span
                                 key={item}
                                 className={cn(
-                                    "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-normal transition-colors",
-                                    "border-[#2E2E2E] text-[#2E2E2E] dark:border-[#F5F5F7] dark:text-[#F5F5F7]",
+                                    "inline-flex items-center gap-1 rounded-full border border-border px-2 py-0.5 text-[11px] font-normal text-foreground transition-colors",
                                 )}
                             >
                                 <span>{item}</span>
@@ -143,9 +142,9 @@ export function EnvironmentMultiselect({
 
                 <div className="flex shrink-0 items-center justify-center">
                     {isOpen ? (
-                        <ChevronUp className="h-4 w-4 text-[#2E2E2E] dark:text-[#F5F5F7]" />
+                        <ChevronUp className="h-4 w-4 text-muted-foreground" />
                     ) : (
-                        <ChevronDown className="h-4 w-4 text-[#2E2E2E] dark:text-[#F5F5F7]" />
+                        <ChevronDown className="h-4 w-4 text-muted-foreground" />
                     )}
                 </div>
             </div>
@@ -162,8 +161,8 @@ export function EnvironmentMultiselect({
                             width: `${coords.width}px`,
                         }}
                         className={cn(
-                            "z-[9999] max-h-56 overflow-y-auto border bg-background shadow-xl",
-                            "border-[#2E2E2E] dark:border-[#F5F5F7]",
+                            "z-[9999] max-h-56 overflow-y-auto border shadow-xl rounded-none",
+                            "border-[#D1D1D1] bg-[#F5F5F7] dark:border-auth-card-border dark:bg-[#454545]",
                         )}
                     >
                         {options.map((option) => {
@@ -175,10 +174,10 @@ export function EnvironmentMultiselect({
                                     onClick={() => handleToggleOption(option)}
                                     className={cn(
                                         "flex cursor-pointer items-center gap-2.5 px-3 py-2 text-xs transition-colors",
-                                        "text-[#2E2E2E] dark:text-[#F5F5F7]",
+                                        "text-gray-900 dark:text-foreground",
                                         "hover:bg-[#AEAEAE] dark:hover:bg-[#626262]",
                                         isSelected &&
-                                            "bg-[#626262] text-[#F5F5F7] dark:bg-[#F5F5F7] dark:text-[#2E2E2E]",
+                                            "bg-[#626262] !text-[#F5F5F7] dark:bg-[#F5F5F7] dark:!text-[#2E2E2E]",
                                     )}
                                 >
                                     <div
@@ -186,7 +185,7 @@ export function EnvironmentMultiselect({
                                             "flex h-4 w-4 shrink-0 items-center justify-center border transition-colors",
                                             isSelected
                                                 ? "border-[#F5F5F7] bg-transparent dark:border-[#2E2E2E]"
-                                                : "border-[#2E2E2E] dark:border-[#F5F5F7]",
+                                                : "border-border",
                                         )}
                                     >
                                         {isSelected && (

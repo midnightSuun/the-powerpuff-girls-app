@@ -1,69 +1,38 @@
+import { useTranslations } from "next-intl"
 import { useState } from "react"
 
-interface UseCreateLanguageModalProps {
-    isOpen: boolean
+interface UseDeleteLanguageModalProps {
     onClose: () => void
-    existingLanguageNames?: string[]
-    onCreate: (data: { name: string; iso2: string }) => Promise<void>
+    onConfirm: () => Promise<void>
 }
 
-export function useCreateLanguageModal({
-    isOpen,
+export function useDeleteLanguageModal({
     onClose,
-    existingLanguageNames = [],
-    onCreate,
-}: UseCreateLanguageModalProps) {
-    const [name, setName] = useState("")
-    const [iso2, setIso2] = useState("")
+    onConfirm,
+}: UseDeleteLanguageModalProps) {
+    const t = useTranslations("Languages.delete")
+    const [isDeleting, setIsDeleting] = useState(false)
     const [error, setError] = useState<string | null>(null)
-    const [isSubmitting, setIsSubmitting] = useState(false)
 
-    const [prevIsOpen, setPrevIsOpen] = useState(isOpen)
-    if (prevIsOpen !== isOpen) {
-        setPrevIsOpen(isOpen)
-        if (!isOpen) {
-            setName("")
-            setIso2("")
-            setError(null)
-        }
-    }
-
-    const isDuplicate = existingLanguageNames.some(
-        (l) => l.toLowerCase() === name.trim().toLowerCase(),
-    )
-
-    const inlineError =
-        isDuplicate && name.trim() ? "Language already exists" : null
-    const isValid = Boolean(name.trim() && iso2.trim() && !isDuplicate)
-
-    const handleSubmit = async (e: React.SyntheticEvent) => {
-        e.preventDefault()
-        if (!isValid || isSubmitting) return
-
-        setIsSubmitting(true)
+    const handleConfirm = async () => {
+        setIsDeleting(true)
         setError(null)
 
         try {
-            await onCreate({ name: name.trim(), iso2: iso2.trim() })
+            await onConfirm()
             onClose()
         } catch (err: unknown) {
             const message =
-                err instanceof Error ? err.message : "Failed to create language"
+                err instanceof Error ? err.message : t("errors.failed")
             setError(message)
         } finally {
-            setIsSubmitting(false)
+            setIsDeleting(false)
         }
     }
 
     return {
-        name,
-        setName,
-        iso2,
-        setIso2,
-        inlineError,
+        isDeleting,
         error,
-        isSubmitting,
-        isValid,
-        handleSubmit,
+        handleConfirm,
     }
 }

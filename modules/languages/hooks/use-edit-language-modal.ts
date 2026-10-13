@@ -5,17 +5,17 @@ import { useState } from "react"
 
 import type { Proficiency } from "@/gql/generated/graphql"
 
-interface UseEditLanguageProps {
+interface UseEditLanguageModalProps {
     currentProficiency: Proficiency
     onSave: (proficiency: Proficiency) => Promise<void>
     onClose: () => void
 }
 
-export function useEditLanguage({
+export function useEditLanguageModal({
     currentProficiency,
     onSave,
     onClose,
-}: UseEditLanguageProps) {
+}: UseEditLanguageModalProps) {
     const t = useTranslations("Languages.edit")
     const [proficiency, setProficiency] =
         useState<Proficiency>(currentProficiency)
