@@ -1,9 +1,9 @@
 import { act, renderHook } from "@testing-library/react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
-import { useAddLanguage } from "../hooks/use-add-language"
+import { useAddLanguageModal } from "../hooks/use-add-language-modal"
 
-describe("useAddLanguage", () => {
+describe("useAddLanguageModal", () => {
     const mockOnAdd = vi.fn()
     const mockOnClose = vi.fn()
 
@@ -25,7 +25,7 @@ describe("useAddLanguage", () => {
 
     it("filters out existing languages correctly", () => {
         const { result } = renderHook(() =>
-            useAddLanguage({
+            useAddLanguageModal({
                 onAdd: mockOnAdd,
                 availableLanguages,
                 existingLanguages,
@@ -41,7 +41,7 @@ describe("useAddLanguage", () => {
 
     it("validates form correctness via isValid", () => {
         const { result } = renderHook(() =>
-            useAddLanguage({
+            useAddLanguageModal({
                 onAdd: mockOnAdd,
                 availableLanguages,
                 existingLanguages,
@@ -66,7 +66,7 @@ describe("useAddLanguage", () => {
         mockOnAdd.mockResolvedValueOnce(undefined)
 
         const { result } = renderHook(() =>
-            useAddLanguage({
+            useAddLanguageModal({
                 onAdd: mockOnAdd,
                 availableLanguages,
                 existingLanguages,
@@ -100,7 +100,7 @@ describe("useAddLanguage", () => {
         mockOnAdd.mockRejectedValueOnce(customError)
 
         const { result } = renderHook(() =>
-            useAddLanguage({
+            useAddLanguageModal({
                 onAdd: mockOnAdd,
                 availableLanguages,
                 existingLanguages,
@@ -128,7 +128,7 @@ describe("useAddLanguage", () => {
 
     it("resets state when handleClose is invoked", () => {
         const { result } = renderHook(() =>
-            useAddLanguage({
+            useAddLanguageModal({
                 onAdd: mockOnAdd,
                 availableLanguages,
                 existingLanguages,

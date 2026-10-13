@@ -1,8 +1,7 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
-import { useDeleteLanguageModal } from "@/modules/languages/hooks/use-delete-languages"
-
+import { useDeleteLanguageModal } from "../hooks/use-delete-language-modal"
 import { DeleteLanguagesModal } from "../ui/components/user/delete-languages-modal"
 
 vi.mock("next-intl", () => {
@@ -16,7 +15,7 @@ vi.mock("next-intl", () => {
     }
 })
 
-vi.mock("@/modules/languages/hooks/use-delete-languages", () => ({
+vi.mock("@/modules/languages/hooks/use-delete-language-modal", () => ({
     useDeleteLanguageModal: vi.fn(),
 }))
 

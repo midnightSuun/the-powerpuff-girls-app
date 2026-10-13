@@ -1,11 +1,11 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
-import { useDeleteLanguageModal } from "@/modules/languages/hooks/use-delete-languages"
+import { useDeleteLanguageModal } from "@/modules/languages/hooks/use-delete-language-modal"
 
 import { DeleteLanguageModal } from "../ui/components/admin/delete-language-admin-modal"
 
-vi.mock("@/modules/languages/hooks/use-delete-languages", () => ({
+vi.mock("@/modules/languages/hooks/use-delete-language-modal", () => ({
     useDeleteLanguageModal: vi.fn(),
 }))
 

@@ -1,9 +1,9 @@
 import { act, renderHook } from "@testing-library/react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
-import { useEditLanguage } from "../hooks/use-edit-language"
+import { useEditLanguageModal } from "../hooks/use-edit-language-modal"
 
-describe("useEditLanguage", () => {
+describe("useEditLanguageModal", () => {
     const mockOnSave = vi.fn()
     const mockOnClose = vi.fn()
     const initialProficiency = "B2" as const
@@ -18,7 +18,7 @@ describe("useEditLanguage", () => {
 
     it("initializes with currentProficiency correctly", () => {
         const { result } = renderHook(() =>
-            useEditLanguage({
+            useEditLanguageModal({
                 currentProficiency: initialProficiency,
                 onSave: mockOnSave,
                 onClose: mockOnClose,
@@ -32,7 +32,7 @@ describe("useEditLanguage", () => {
 
     it("allows updating proficiency state", () => {
         const { result } = renderHook(() =>
-            useEditLanguage({
+            useEditLanguageModal({
                 currentProficiency: initialProficiency,
                 onSave: mockOnSave,
                 onClose: mockOnClose,
@@ -50,7 +50,7 @@ describe("useEditLanguage", () => {
         mockOnSave.mockResolvedValueOnce(undefined)
 
         const { result } = renderHook(() =>
-            useEditLanguage({
+            useEditLanguageModal({
                 currentProficiency: initialProficiency,
                 onSave: mockOnSave,
                 onClose: mockOnClose,
@@ -81,7 +81,7 @@ describe("useEditLanguage", () => {
         mockOnSave.mockRejectedValueOnce(customError)
 
         const { result } = renderHook(() =>
-            useEditLanguage({
+            useEditLanguageModal({
                 currentProficiency: initialProficiency,
                 onSave: mockOnSave,
                 onClose: mockOnClose,
@@ -105,7 +105,7 @@ describe("useEditLanguage", () => {
         mockOnSave.mockRejectedValueOnce("Unknown error string")
 
         const { result } = renderHook(() =>
-            useEditLanguage({
+            useEditLanguageModal({
                 currentProficiency: initialProficiency,
                 onSave: mockOnSave,
                 onClose: mockOnClose,

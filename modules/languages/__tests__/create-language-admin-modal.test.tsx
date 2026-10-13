@@ -1,12 +1,12 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
-import { useCreateLanguageModal } from "@/modules/languages/hooks/use-create-language-modal"
+import { useCreateLanguageAdminModal } from "@/modules/languages/hooks/use-create-language-admin-modal"
 
 import { CreateLanguageModal } from "../ui/components/admin/create-language-admin-modal"
 
-vi.mock("@/modules/languages/hooks/use-create-language-modal", () => ({
-    useCreateLanguageModal: vi.fn(),
+vi.mock("@/modules/languages/hooks/use-create-language-admin-modal", () => ({
+    useCreateLanguageAdminModal: vi.fn(),
 }))
 
 vi.mock("@/components/ui/base-modal", () => ({
@@ -67,7 +67,9 @@ describe("CreateLanguageModal", () => {
 
     beforeEach(() => {
         vi.clearAllMocks()
-        vi.mocked(useCreateLanguageModal).mockReturnValue(defaultHookValues)
+        vi.mocked(useCreateLanguageAdminModal).mockReturnValue(
+            defaultHookValues,
+        )
     })
 
     afterEach(() => {
@@ -126,7 +128,7 @@ describe("CreateLanguageModal", () => {
     })
 
     it("displays inline error and modal error when provided", () => {
-        vi.mocked(useCreateLanguageModal).mockReturnValue({
+        vi.mocked(useCreateLanguageAdminModal).mockReturnValue({
             ...defaultHookValues,
             inlineError: "Name is required",
             error: "Server creation failed",
@@ -147,7 +149,7 @@ describe("CreateLanguageModal", () => {
     })
 
     it("triggers handleSubmit when submit button is clicked and form is valid", () => {
-        vi.mocked(useCreateLanguageModal).mockReturnValue({
+        vi.mocked(useCreateLanguageAdminModal).mockReturnValue({
             ...defaultHookValues,
             isValid: true,
         })

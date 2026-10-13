@@ -1,7 +1,7 @@
 import { act, renderHook } from "@testing-library/react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
-import { useCreateLanguageModal } from "../hooks/use-create-language-modal"
+import { useCreateLanguageAdminModal } from "../hooks/use-create-language-admin-modal"
 
 vi.mock("@/lib/validate-unique-name", () => ({
     normalizeName: vi.fn((val: string) => val.trim()),
@@ -14,7 +14,7 @@ vi.mock("next-intl", () => ({
     useTranslations: () => (key: string) => key,
 }))
 
-describe("useCreateLanguageModal", () => {
+describe("useCreateLanguageAdminModal", () => {
     const mockOnClose = vi.fn()
     const mockOnCreate = vi.fn()
     const existingLanguageNames = ["English", "Spanish"]
@@ -29,7 +29,7 @@ describe("useCreateLanguageModal", () => {
 
     it("initializes with default empty values and correct derived states", () => {
         const { result } = renderHook(() =>
-            useCreateLanguageModal({
+            useCreateLanguageAdminModal({
                 isOpen: true,
                 onClose: mockOnClose,
                 existingLanguageNames,
@@ -49,7 +49,7 @@ describe("useCreateLanguageModal", () => {
     it("resets form fields when isOpen changes to false", () => {
         const { result, rerender } = renderHook(
             ({ isOpen }) =>
-                useCreateLanguageModal({
+                useCreateLanguageAdminModal({
                     isOpen,
                     onClose: mockOnClose,
                     existingLanguageNames,
@@ -76,7 +76,7 @@ describe("useCreateLanguageModal", () => {
 
     it("validates form correctness via isValid and handles duplicates", () => {
         const { result } = renderHook(() =>
-            useCreateLanguageModal({
+            useCreateLanguageAdminModal({
                 isOpen: true,
                 onClose: mockOnClose,
                 existingLanguageNames,
@@ -104,7 +104,7 @@ describe("useCreateLanguageModal", () => {
         mockOnCreate.mockResolvedValueOnce(undefined)
 
         const { result } = renderHook(() =>
-            useCreateLanguageModal({
+            useCreateLanguageAdminModal({
                 isOpen: true,
                 onClose: mockOnClose,
                 existingLanguageNames,
@@ -141,7 +141,7 @@ describe("useCreateLanguageModal", () => {
         mockOnCreate.mockRejectedValueOnce(customError)
 
         const { result } = renderHook(() =>
-            useCreateLanguageModal({
+            useCreateLanguageAdminModal({
                 isOpen: true,
                 onClose: mockOnClose,
                 existingLanguageNames,

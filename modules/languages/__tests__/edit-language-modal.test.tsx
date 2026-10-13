@@ -2,12 +2,12 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import { Proficiency } from "@/gql/generated/graphql"
-import { useEditLanguage } from "@/modules/languages/hooks/use-edit-language"
+import { useEditLanguageModal } from "@/modules/languages/hooks/use-edit-language-modal"
 
 import { EditLanguageModal } from "../ui/components/user/edit-language-modal"
 
-vi.mock("@/modules/languages/hooks/use-edit-language", () => ({
-    useEditLanguage: vi.fn(),
+vi.mock("@/modules/languages/hooks/use-edit-language-modal", () => ({
+    useEditLanguageModal: vi.fn(),
 }))
 
 vi.mock(
@@ -73,7 +73,7 @@ vi.mock("@/components/ui/edit-item-modal", () => ({
         ) : null,
 }))
 
-type HookReturnType = ReturnType<typeof useEditLanguage>
+type HookReturnType = ReturnType<typeof useEditLanguageModal>
 
 describe("EditLanguageModal", () => {
     const mockOnClose = vi.fn()
@@ -91,7 +91,7 @@ describe("EditLanguageModal", () => {
 
     beforeEach(() => {
         vi.clearAllMocks()
-        vi.mocked(useEditLanguage).mockReturnValue(defaultHookValues)
+        vi.mocked(useEditLanguageModal).mockReturnValue(defaultHookValues)
     })
 
     afterEach(() => {
@@ -153,7 +153,7 @@ describe("EditLanguageModal", () => {
     })
 
     it("displays error message when provided", () => {
-        vi.mocked(useEditLanguage).mockReturnValue({
+        vi.mocked(useEditLanguageModal).mockReturnValue({
             ...defaultHookValues,
             error: "Failed to update language",
         })

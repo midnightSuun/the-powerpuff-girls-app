@@ -1,12 +1,12 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
-import { useAddLanguage } from "@/modules/languages/hooks/use-add-language"
+import { useAddLanguageModal } from "@/modules/languages/hooks/use-add-language-modal"
 
 import { AddLanguageModal } from "../ui/components/user/add-language-modal"
 
-vi.mock("@/modules/languages/hooks/use-add-language", () => ({
-    useAddLanguage: vi.fn(),
+vi.mock("@/modules/languages/hooks/use-add-language-modal", () => ({
+    useAddLanguageModal: vi.fn(),
 }))
 
 vi.mock(
@@ -79,7 +79,7 @@ vi.mock("@/components/ui/add-item-modal", () => ({
         ) : null,
 }))
 
-type HookReturnType = ReturnType<typeof useAddLanguage>
+type HookReturnType = ReturnType<typeof useAddLanguageModal>
 
 describe("AddLanguageModal", () => {
     const mockOnClose = vi.fn()
@@ -107,7 +107,7 @@ describe("AddLanguageModal", () => {
 
     beforeEach(() => {
         vi.clearAllMocks()
-        vi.mocked(useAddLanguage).mockReturnValue(defaultHookValues)
+        vi.mocked(useAddLanguageModal).mockReturnValue(defaultHookValues)
     })
 
     afterEach(() => {
@@ -164,7 +164,7 @@ describe("AddLanguageModal", () => {
     })
 
     it("displays error message when provided", () => {
-        vi.mocked(useAddLanguage).mockReturnValue({
+        vi.mocked(useAddLanguageModal).mockReturnValue({
             ...defaultHookValues,
             error: "Failed to add language",
         })
