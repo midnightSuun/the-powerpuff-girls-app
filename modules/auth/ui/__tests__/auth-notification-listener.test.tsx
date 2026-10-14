@@ -1,14 +1,10 @@
 import { render } from "@testing-library/react"
+import { usePathname } from "next/navigation"
 import { toast } from "sonner"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import { AUTH_NOTIFICATION_STORAGE_KEY } from "../../consts"
 import { AuthNotificationListener } from "../auth-notification-listener"
-
-const mockUsePathname = vi.fn()
-vi.mock("next/navigation", () => ({
-    usePathname: () => mockUsePathname(),
-}))
 
 vi.mock("sonner", () => ({
     toast: {
@@ -27,7 +23,7 @@ describe("AuthNotificationListener Component", () => {
     })
 
     it("does nothing when sessionStorage is empty", () => {
-        mockUsePathname.mockReturnValue("/dashboard")
+        vi.mocked(usePathname).mockReturnValue("/dashboard")
         render(<AuthNotificationListener />)
 
         expect(toast.success).not.toHaveBeenCalled()
@@ -35,7 +31,7 @@ describe("AuthNotificationListener Component", () => {
 
     it("shows login toast when notification is 'login' and path is not /login", () => {
         sessionStorage.setItem(AUTH_NOTIFICATION_STORAGE_KEY, "login")
-        mockUsePathname.mockReturnValue("/dashboard")
+        vi.mocked(usePathname).mockReturnValue("/dashboard")
 
         render(<AuthNotificationListener />)
 
@@ -48,7 +44,7 @@ describe("AuthNotificationListener Component", () => {
 
     it("skips showing login toast if notification is 'login' but path ends with /login", () => {
         sessionStorage.setItem(AUTH_NOTIFICATION_STORAGE_KEY, "login")
-        mockUsePathname.mockReturnValue("/auth/login")
+        vi.mocked(usePathname).mockReturnValue("/auth/login")
 
         render(<AuthNotificationListener />)
 
@@ -60,7 +56,7 @@ describe("AuthNotificationListener Component", () => {
 
     it("shows logout toast when notification is 'logout'", () => {
         sessionStorage.setItem(AUTH_NOTIFICATION_STORAGE_KEY, "logout")
-        mockUsePathname.mockReturnValue("/home")
+        vi.mocked(usePathname).mockReturnValue("/home")
 
         render(<AuthNotificationListener />)
 
