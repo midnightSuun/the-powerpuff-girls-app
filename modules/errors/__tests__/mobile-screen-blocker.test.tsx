@@ -1,5 +1,5 @@
-import { act, cleanup, render, screen } from "@testing-library/react"
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import { cleanup, render, screen } from "@testing-library/react"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import { MobileScreenBlocker } from "../ui/mobile-screen-blocker"
 
@@ -19,35 +19,12 @@ vi.mock("@/modules/errors/ui/error-template", () => ({
 }))
 
 describe("MobileScreenBlocker", () => {
-    const originalInnerWidth = window.innerWidth
-
     beforeEach(() => {
         cleanup()
         vi.clearAllMocks()
     })
 
-    afterEach(() => {
-        Object.defineProperty(window, "innerWidth", {
-            writable: true,
-            configurable: true,
-            value: originalInnerWidth,
-        })
-    })
-
-    const setWindowWidth = (width: number) => {
-        Object.defineProperty(window, "innerWidth", {
-            writable: true,
-            configurable: true,
-            value: width,
-        })
-        act(() => {
-            window.dispatchEvent(new Event("resize"))
-        })
-    }
-
-    it("renders children when screen width is desktop size (>= 768px)", () => {
-        setWindowWidth(1024)
-
+    it("renders both desktop content and error template with correct CSS visibility classes", () => {
         render(
             <MobileScreenBlocker>
                 <div data-testid="desktop-content">Protected Content</div>
@@ -55,40 +32,14 @@ describe("MobileScreenBlocker", () => {
         )
 
         expect(screen.getByTestId("desktop-content")).toBeInTheDocument()
-        expect(screen.queryByTestId("error-template")).not.toBeInTheDocument()
-    })
-
-    it("renders ErrorTemplate when screen width is mobile size (< 768px)", () => {
-        setWindowWidth(500)
-
-        render(
-            <MobileScreenBlocker>
-                <div data-testid="desktop-content">Protected Content</div>
-            </MobileScreenBlocker>,
-        )
-
         expect(screen.getByTestId("error-template")).toBeInTheDocument()
-        expect(
-            screen.getByRole("heading", { name: "title" }),
-        ).toBeInTheDocument()
-        expect(screen.getByText("description")).toBeInTheDocument()
-        expect(screen.queryByTestId("desktop-content")).not.toBeInTheDocument()
-    })
 
-    it("updates view dynamically when window is resized from desktop to mobile", () => {
-        setWindowWidth(1024)
+        const desktopWrapper =
+            screen.getByTestId("desktop-content").parentElement
+        expect(desktopWrapper).toHaveClass("max-md:hidden")
 
-        render(
-            <MobileScreenBlocker>
-                <div data-testid="desktop-content">Protected Content</div>
-            </MobileScreenBlocker>,
-        )
-
-        expect(screen.getByTestId("desktop-content")).toBeInTheDocument()
-
-        setWindowWidth(600)
-
-        expect(screen.queryByTestId("desktop-content")).not.toBeInTheDocument()
-        expect(screen.getByTestId("error-template")).toBeInTheDocument()
+        const errorWrapper = screen.getByTestId("error-template").parentElement
+        expect(errorWrapper).toHaveClass("hidden")
+        expect(errorWrapper).toHaveClass("max-md:block")
     })
 })

@@ -27,11 +27,18 @@ export function useEditSkillAdminModal({
 }: UseEditSkillAdminModalProps) {
     const t = useTranslations("Skills.admin")
 
-    // Инициализируем стейт начальными значениями из props
     const [name, setName] = useState(skill?.name ?? "")
     const [categoryId, setCategoryId] = useState(skill?.categoryId ?? "")
     const [error, setError] = useState<string | null>(null)
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [prevSkillId, setPrevSkillId] = useState(skill?.id)
+
+    if (skill?.id !== prevSkillId) {
+        setPrevSkillId(skill?.id)
+        setName(skill?.name ?? "")
+        setCategoryId(skill?.categoryId ?? "")
+        setError(null)
+    }
 
     const isValid = Boolean(name.trim() && categoryId)
 
