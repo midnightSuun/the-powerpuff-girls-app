@@ -114,7 +114,10 @@ describe("SettingsPage", () => {
             isValid: true,
             setTheme: mockSetTheme,
             handleLanguageChange: mockHandleLanguageChange,
-            watch: vi.fn(() => ""),
+            watch: vi.fn((_fieldName: string) => {
+                // Возвращаем пустую строку для любого поля
+                return ""
+            }) as ReturnType<typeof useSettings>["watch"],
         })
     })
 
@@ -180,7 +183,10 @@ describe("SettingsPage", () => {
             isValid: false,
             setTheme: mockSetTheme,
             handleLanguageChange: mockHandleLanguageChange,
-            watch: vi.fn(() => ""),
+            watch: vi.fn((_fieldName: string) => {
+                // Возвращаем пустую строку для любого поля
+                return ""
+            }) as ReturnType<typeof useSettings>["watch"],
         })
 
         render(<SettingsPage />)
