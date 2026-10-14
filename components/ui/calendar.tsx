@@ -125,7 +125,7 @@ export function Calendar({ value, onChange, className }: CalendarProps) {
     return (
         <div
             className={cn(
-                "w-[260px] select-none rounded-2xl border border-[#cccccc] bg-white p-3.5 shadow-2xl dark:border-[#333333] dark:bg-[#222222]",
+                "w-65 select-none rounded-2xl border border-[#cccccc] bg-white p-3.5 shadow-2xl dark:border-[#333333] dark:bg-[#222222]",
                 className,
             )}
         >
@@ -210,7 +210,7 @@ export function Calendar({ value, onChange, className }: CalendarProps) {
                                                 !isSelected &&
                                                 "text-foreground hover:bg-[#E53935] hover:text-white dark:text-white",
                                             isSelected &&
-                                                "!bg-[#E53935] font-normal !text-white shadow-sm",
+                                                "bg-[#E53935]! font-normal text-white! shadow-sm",
                                         )}
                                     >
                                         {d.day}
@@ -232,9 +232,9 @@ export function Calendar({ value, onChange, className }: CalendarProps) {
                                 type="button"
                                 onClick={() => handleSelectMonth(idx)}
                                 className={cn(
-                                    "rounded-[4px] px-1 py-2 text-center text-xs font-normal transition-all",
+                                    "rounded-lg px-1 py-2 text-center text-xs font-normal transition-all",
                                     isSelected
-                                        ? "!bg-[#E53935] !text-white"
+                                        ? "bg-[#E53935]! text-white!"
                                         : "text-foreground hover:bg-[#E53935] hover:text-white dark:text-white",
                                 )}
                             >
@@ -258,9 +258,9 @@ export function Calendar({ value, onChange, className }: CalendarProps) {
                                 type="button"
                                 onClick={() => handleSelectYear(y)}
                                 className={cn(
-                                    "rounded-[4px] px-1 py-2 text-center text-xs font-normal transition-all",
+                                    "rounded-lg px-1 py-2 text-center text-xs font-normal transition-all",
                                     isSelected
-                                        ? "!bg-[#E53935] !text-white"
+                                        ? "bg-[#E53935]! text-white!"
                                         : "text-foreground hover:bg-[#E53935] hover:text-white dark:text-white",
                                 )}
                             >

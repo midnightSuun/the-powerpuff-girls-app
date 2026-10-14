@@ -96,7 +96,7 @@ function DropdownMenuItem({
             className={cn(
                 "group/dropdown-menu-item relative flex cursor-pointer items-center gap-2.5 px-3 py-2 text-xs outline-hidden select-none transition-colors",
                 "text-[#2E2E2E] dark:text-[#F5F5F7]",
-                "focus:bg-[#AEAEAE] dark:focus:bg-[#626262] focus:text-[#2E2E2E] dark:focus:text-[#F5F5F7]",
+                "focus:bg-[#AEAEAE] dark:focus:bg-button-secondary-defaultcondary-default focus:text-[#2E2E2E] dark:focus:text-[#F5F5F7]",
                 "data-inset:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
                 "data-disabled:pointer-events-none data-disabled:opacity-50 data-disabled:bg-[#D1D1D1] dark:data-disabled:bg-[#454545]",
                 "data-[variant=destructive]:text-red-500 data-[variant=destructive]:focus:bg-red-500/10 data-[variant=destructive]:*:[svg]:text-red-500",
@@ -128,8 +128,8 @@ function DropdownMenuSubTrigger({
             className={cn(
                 "flex cursor-pointer items-center gap-2.5 px-3 py-2 text-xs outline-hidden select-none transition-colors",
                 "text-[#2E2E2E] dark:text-[#F5F5F7]",
-                "focus:bg-[#AEAEAE] dark:focus:bg-[#626262]",
-                "data-popup-open:bg-[#AEAEAE] dark:data-popup-open:bg-[#626262]",
+                "focus:bg-[#AEAEAE] dark:focus:bg-button-secondary-default",
+                "data-popup-open:bg-[#AEAEAE] dark:data-popup-open:bg-button-secondary-defaultcondary-default",
                 "data-inset:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
                 className,
             )}
@@ -153,7 +153,7 @@ function DropdownMenuSubContent({
         <DropdownMenuContent
             data-slot="dropdown-menu-sub-content"
             className={cn(
-                "w-auto min-w-[120px] rounded-none bg-background shadow-xl border border-[#2E2E2E] dark:border-[#F5F5F7]",
+                "w-auto min-w-30ded-none bg-background shadow-xl border border-[#2E2E2E] dark:border-[#F5F5F7]",
                 className,
             )}
             align={align}
@@ -181,8 +181,8 @@ function DropdownMenuCheckboxItem({
             className={cn(
                 "relative flex cursor-pointer items-center gap-2.5 py-2 pr-8 pl-3 text-xs outline-hidden select-none transition-colors",
                 checked
-                    ? "bg-[#626262] text-[#F5F5F7] dark:bg-[#F5F5F7] dark:text-[#2E2E2E]"
-                    : "text-[#2E2E2E] dark:text-[#F5F5F7] focus:bg-[#AEAEAE] dark:focus:bg-[#626262]",
+                    ? "bg-button-secondary-defaultcondary-default text-[#F5F5F7] dark:bg-[#F5F5F7] dark:text-[#2E2E2E]"
+                    : "text-[#2E2E2E] dark:text-[#F5F5F7] focus:bg-[#AEAEAE] dark:focus:bg-button-secondary-default",
                 "data-inset:pl-8 data-disabled:pointer-events-none data-disabled:opacity-50",
                 "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
                 className,
@@ -231,7 +231,7 @@ function DropdownMenuRadioItem({
             data-inset={inset}
             className={cn(
                 "relative flex cursor-pointer items-center gap-2.5 py-2 pr-8 pl-3 text-xs outline-hidden select-none transition-colors",
-                "text-[#2E2E2E] dark:text-[#F5F5F7] focus:bg-[#AEAEAE] dark:focus:bg-[#626262]",
+                "text-[#2E2E2E] dark:text-[#F5F5F7] focus:bg-[#AEAEAE] dark:focus:bg-button-secondary-default",
                 "data-inset:pl-8 data-disabled:pointer-events-none data-disabled:opacity-50",
                 "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
                 className,
