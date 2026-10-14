@@ -33,7 +33,7 @@ describe("SkillMasterySelect", () => {
         render(<SkillMasterySelect {...defaultProps} value="Advanced" />)
 
         const trigger = document.querySelector('[data-slot="select-trigger"]')
-        expect(trigger).toHaveTextContent("Advanced")
+        expect(trigger).toHaveTextContent("masteryLevels.advanced")
     })
 
     it("renders placeholder when value is empty", () => {
@@ -41,8 +41,7 @@ describe("SkillMasterySelect", () => {
 
         const trigger = document.querySelector('[data-slot="select-trigger"]')
         expect(trigger).toBeInTheDocument()
-        const valueSlot = document.querySelector('[data-slot="select-value"]')
-        expect(valueSlot).toHaveTextContent("masteryPlaceholder")
+        expect(trigger).toHaveTextContent("masteryPlaceholder")
     })
 
     it("triggers onValueChange with correct mastery when handleValueChange is called", () => {
@@ -56,6 +55,6 @@ describe("SkillMasterySelect", () => {
         )
 
         const trigger = document.querySelector('[data-slot="select-trigger"]')
-        expect(trigger).toHaveTextContent("Expert")
+        expect(trigger).toHaveTextContent("masteryLevels.expert")
     })
 })

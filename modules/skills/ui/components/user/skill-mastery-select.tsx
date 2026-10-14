@@ -42,6 +42,16 @@ export function SkillMasterySelect({
 
     const hasValue = Boolean(value)
 
+    const getSelectedLabel = () => {
+        if (!value) return ""
+        const selectedOption = MASTERY_OPTIONS.find(
+            (option) => option.value === value,
+        )
+        return selectedOption
+            ? t(`masteryLevels.${selectedOption.label}`)
+            : value
+    }
+
     return (
         <div className="relative w-full pt-6">
             {hasValue && (
@@ -60,7 +70,9 @@ export function SkillMasterySelect({
                     )}
                 >
                     <div className="truncate">
-                        <SelectValue placeholder={t("masteryPlaceholder")} />
+                        {hasValue
+                            ? getSelectedLabel()
+                            : t("masteryPlaceholder")}
                     </div>
                 </SelectTrigger>
 

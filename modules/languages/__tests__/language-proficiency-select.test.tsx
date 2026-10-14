@@ -32,9 +32,6 @@ vi.mock("@/components/ui/select", () => ({
     SelectTrigger: ({ children }: { children: React.ReactNode }) => (
         <div data-testid="select-trigger">{children}</div>
     ),
-    SelectValue: ({ placeholder }: { placeholder: string }) => (
-        <span data-testid="select-value">{placeholder}</span>
-    ),
     SelectContent: ({ children }: { children: React.ReactNode }) => (
         <div data-testid="select-content">{children}</div>
     ),
@@ -90,7 +87,7 @@ describe("LanguageProficiencySelect", () => {
 
         expect(screen.getAllByTestId("select-root")[0]).toBeInTheDocument()
         expect(screen.getAllByTestId("select-trigger")[0]).toBeInTheDocument()
-        expect(screen.getAllByTestId("select-value")[0]).toHaveTextContent(
+        expect(screen.getAllByTestId("select-trigger")[0]).toHaveTextContent(
             "proficiencyPlaceholder",
         )
 
