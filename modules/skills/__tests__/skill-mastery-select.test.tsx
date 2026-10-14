@@ -1,5 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react"
-import { beforeEach, describe, expect, it, vi } from "vitest"
+import { cleanup, fireEvent, render, screen } from "@testing-library/react"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import type { Mastery } from "@/gql/generated/graphql"
 
@@ -72,11 +72,16 @@ describe("SkillMasterySelect", () => {
         vi.clearAllMocks()
     })
 
+    afterEach(() => {
+        cleanup()
+        vi.restoreAllMocks()
+    })
+
     it("renders the select trigger and all mastery options", () => {
         render(<SkillMasterySelect {...defaultProps} />)
 
-        expect(screen.getByTestId("select-trigger")).toBeInTheDocument()
-        expect(screen.getByTestId("select-content")).toBeInTheDocument()
+        expect(screen.getAllByTestId("select-trigger")[0]).toBeInTheDocument()
+        expect(screen.getAllByTestId("select-content")[0]).toBeInTheDocument()
 
         expect(screen.getByTestId("select-item-Novice")).toBeInTheDocument()
         expect(screen.getByTestId("select-item-Advanced")).toBeInTheDocument()
@@ -88,14 +93,14 @@ describe("SkillMasterySelect", () => {
     it("triggers onValueChange with correct mastery option when selection changes", () => {
         render(<SkillMasterySelect {...defaultProps} />)
 
-        fireEvent.click(screen.getByTestId("simulate-change-expert"))
+        fireEvent.click(screen.getAllByTestId("simulate-change-expert")[0])
         expect(mockOnValueChange).toHaveBeenCalledWith("Expert")
     })
 
     it("renders placeholder when value is empty", () => {
         render(<SkillMasterySelect {...defaultProps} value="" />)
 
-        const valueSpan = screen.getByTestId("select-value")
+        const valueSpan = screen.getAllByTestId("select-value")[0]
         expect(valueSpan).toHaveTextContent("masteryPlaceholder")
     })
 })
