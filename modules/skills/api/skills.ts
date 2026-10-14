@@ -33,6 +33,7 @@ export async function getUserSkills(userId: string) {
                 cv: {
                     name: "Main CV",
                     description: "Auto-generated primary CV",
+                    education: "Not specified",
                     userId: userId,
                 },
             })
