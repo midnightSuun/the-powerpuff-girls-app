@@ -113,7 +113,7 @@ export const NavUserMenu = ({ user }: Props) => {
                                 ? "w-36 min-w-0 p-0"
                                 : isTabletCollapsed
                                   ? "w-12 min-w-0 p-1"
-                                  : "min-w-56",
+                                  : "min-w-56"
                         )}
                         side={isMobile ? "bottom" : isTablet ? "top" : "right"}
                         align={isTabletCollapsed ? "center" : "end"}
