@@ -132,7 +132,7 @@ export const TableComponent = <T,>(props: Props<T>) => {
                     <TableRow className="hover:bg-transparent">
                         <TableCell
                             colSpan={props.columns.length}
-                            className="h-14 text-center text-[#626262] dark:text-[#aeaeae]"
+                            className="h-14 text-center text-button-secondary-default dark:text-[#aeaeae]"
                         >
                             {props.emptyMessage}
                         </TableCell>

@@ -115,7 +115,6 @@ describe("SettingsPage", () => {
             setTheme: mockSetTheme,
             handleLanguageChange: mockHandleLanguageChange,
             watch: vi.fn((_fieldName: string) => {
-                // Возвращаем пустую строку для любого поля
                 return ""
             }) as unknown as ReturnType<typeof useSettings>["watch"],
         })
@@ -125,7 +124,7 @@ describe("SettingsPage", () => {
         render(<SettingsPage />)
 
         expect(screen.getByText("theme.label")).toBeInTheDocument()
-        expect(screen.getAllByText("language.label")).toHaveLength(2) // One in floating label, one in placeholder
+        expect(screen.getAllByText("language.label")).toHaveLength(2)
         expect(screen.getByText("passwordSection.title")).toBeInTheDocument()
         expect(
             screen.getAllByRole("button", {
@@ -184,7 +183,6 @@ describe("SettingsPage", () => {
             setTheme: mockSetTheme,
             handleLanguageChange: mockHandleLanguageChange,
             watch: vi.fn((_fieldName: string) => {
-                // Возвращаем пустую строку для любого поля
                 return ""
             }) as unknown as ReturnType<typeof useSettings>["watch"],
         })
