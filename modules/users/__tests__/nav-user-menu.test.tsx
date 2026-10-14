@@ -69,6 +69,15 @@ describe("NavUserMenu Component", () => {
         avatar: "avatar.jpg",
     }
 
+    const mockSessionStorage = {
+        setItem: vi.fn(),
+        getItem: vi.fn(),
+        removeItem: vi.fn(),
+        clear: vi.fn(),
+    }
+
+    const originalSessionStorage = window.sessionStorage
+
     beforeEach(() => {
         vi.clearAllMocks()
         vi.mocked(useSidebar).mockReturnValue({
@@ -79,18 +88,19 @@ describe("NavUserMenu Component", () => {
         } as unknown as ReturnType<typeof useSidebar>)
 
         Object.defineProperty(window, "sessionStorage", {
-            value: {
-                setItem: vi.fn(),
-                getItem: vi.fn(),
-                removeItem: vi.fn(),
-                clear: vi.fn(),
-            },
+            value: mockSessionStorage,
             writable: true,
+            configurable: true,
         })
     })
 
     afterEach(() => {
         vi.resetAllMocks()
+        Object.defineProperty(window, "sessionStorage", {
+            value: originalSessionStorage,
+            writable: true,
+            configurable: true,
+        })
     })
 
     it("renders user full name and profile menu items correctly", () => {

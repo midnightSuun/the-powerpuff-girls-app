@@ -26,7 +26,7 @@ vi.mock("@/i18n/navigation", () => ({
     ),
 }))
 
-vi.mock("./update-user-dialog", () => ({
+vi.mock("../ui/update-user-dialog", () => ({
     UpdateUserDialog: vi.fn(({ open }: { open: boolean }) =>
         open ? <div data-testid="update-user-dialog" /> : null,
     ),

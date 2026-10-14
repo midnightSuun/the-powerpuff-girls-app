@@ -28,6 +28,36 @@ vi.mock("next-intl/server", () => ({
     }),
 }))
 
+vi.mock("../ui/components/user/skills-view", () => ({
+    SkillsView: ({
+        categories,
+        canManageSkills,
+    }: {
+        cvId: string
+        categories: { id: string; title: string; skills: { name: string }[] }[]
+        canManageSkills: boolean
+        typedSkills: unknown[]
+        availableSkills: unknown[]
+        compact?: boolean
+    }) => (
+        <div data-testid="skills-view">
+            {categories.map((category) => (
+                <div key={category.id}>
+                    <h2>{category.title}</h2>
+                    {category.skills.map((skill) => (
+                        <span key={skill.name}>{skill.name}</span>
+                    ))}
+                </div>
+            ))}
+            {canManageSkills && (
+                <button type="button" aria-label="add">
+                    add
+                </button>
+            )}
+        </div>
+    ),
+}))
+
 vi.mock("@/modules/skills/api/skills", () => ({
     getAvailableSkills: vi.fn(async () => [
         { id: "s-1", name: "Python", category: "Languages", categoryId: "1" },
