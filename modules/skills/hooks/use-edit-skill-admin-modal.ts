@@ -1,3 +1,5 @@
+"use client"
+
 import { useTranslations } from "next-intl"
 import { useState } from "react"
 
@@ -24,19 +26,18 @@ export function useEditSkillAdminModal({
     onUpdate,
 }: UseEditSkillAdminModalProps) {
     const t = useTranslations("Skills.admin")
-    const [name, setName] = useState("")
-    const [categoryId, setCategoryId] = useState("")
+
+    const [name, setName] = useState(skill?.name ?? "")
+    const [categoryId, setCategoryId] = useState(skill?.categoryId ?? "")
     const [error, setError] = useState<string | null>(null)
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [prevSkillId, setPrevSkillId] = useState(skill?.id)
 
-    const [prevSkill, setPrevSkill] = useState(skill)
-    if (prevSkill !== skill) {
-        setPrevSkill(skill)
-        if (skill) {
-            setName(skill.name)
-            setCategoryId(skill.categoryId)
-            setError(null)
-        }
+    if (skill?.id !== prevSkillId) {
+        setPrevSkillId(skill?.id)
+        setName(skill?.name ?? "")
+        setCategoryId(skill?.categoryId ?? "")
+        setError(null)
     }
 
     const isValid = Boolean(name.trim() && categoryId)

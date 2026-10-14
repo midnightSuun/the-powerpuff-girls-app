@@ -1,7 +1,5 @@
 "use client"
 
-import { cn } from "cn"
-
 import { Select, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 import { BaseModal } from "./base-modal"
@@ -31,7 +29,6 @@ export function EditItemModal({
     title,
     itemNameLabel,
     itemNameValue,
-    levelSelectLabel,
     cancelText,
     submitText,
     updatingText,

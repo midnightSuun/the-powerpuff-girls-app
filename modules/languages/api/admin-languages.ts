@@ -64,7 +64,7 @@ export async function updateAdminLanguage(data: {
     try {
         const gql = await getGql()
         const language: UpdateLanguageInput = {
-            languageId: data.id, // <--- Передаём id в поле languageId
+            languageId: data.id,
             name: data.name,
             iso2: data.iso2,
             native_name: data.nativeName,

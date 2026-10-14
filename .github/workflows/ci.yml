@@ -1,10 +1,14 @@
 name: CI
 
 on:
+    push:
+        branches:
+            - main
+            - master
     pull_request:
 
 concurrency:
-    group: ci-${{ github.workflow }}-${{ github.event.pull_request.number }}
+    group: ci-${{ github.workflow }}-${{ github.head_ref || github.ref }}
     cancel-in-progress: true
 
 permissions:
@@ -25,7 +29,7 @@ jobs:
                   cache: npm
 
             - name: Install dependencies
-              run: npm ci
+              run: npm install --legacy-peer-deps
               env:
                   HUSKY: "0"
 
@@ -46,12 +50,33 @@ jobs:
                   cache: npm
 
             - name: Install dependencies
-              run: npm ci
+              run: npm install --legacy-peer-deps
               env:
                   HUSKY: "0"
 
             - name: Run Prettier
               run: npx prettier --check .
+
+    test:
+        name: test
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v5
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v5
+              with:
+                  node-version: 22
+                  cache: npm
+
+            - name: Install dependencies
+              run: npm install --legacy-peer-deps
+              env:
+                  HUSKY: "0"
+
+            - name: Run Tests
+              run: npm test -- --run
 
     build:
         name: build
@@ -67,7 +92,7 @@ jobs:
                   cache: npm
 
             - name: Install dependencies
-              run: npm ci
+              run: npm install --legacy-peer-deps
               env:
                   HUSKY: "0"
 
