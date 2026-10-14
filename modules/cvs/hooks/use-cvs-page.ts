@@ -1,10 +1,9 @@
 import { useRouter } from "next/navigation"
-import { useLocale, useTranslations } from "next-intl"
+import { useTranslations } from "next-intl"
 import { useState } from "react"
 
 import { useActionNotifications } from "@/hooks/use-action-notifications"
 import { useAdminCrudState } from "@/hooks/use-admin-crud-state"
-import { sortByLocale, type SortOrder } from "@/lib/sort"
 
 import { createCvAction } from "../api/create-cv"
 import { deleteCvAction } from "../api/delete-cv"
@@ -18,7 +17,6 @@ interface UseCvsPageProps {
 
 export function useCvsPage({ initialCvs, targetUserId }: UseCvsPageProps) {
     const router = useRouter()
-    const locale = useLocale()
     const t = useTranslations("CV.list")
     const notifications = useActionNotifications()
     const {
@@ -33,17 +31,10 @@ export function useCvsPage({ initialCvs, targetUserId }: UseCvsPageProps) {
         removeItem,
     } = useAdminCrudState(initialCvs)
 
-    const [sortOrder, setSortOrder] = useState<SortOrder>("asc")
     const [activeMenuId, setActiveMenuId] = useState<string | null>(null)
 
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [error, setError] = useState<string | null>(null)
-
-    const sortedCvs = sortByLocale(cvs, (cv) => cv.name, sortOrder, locale)
-
-    const toggleSort = () => {
-        setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"))
-    }
 
     const handleCreate = async (data: {
         name: string
@@ -133,9 +124,7 @@ export function useCvsPage({ initialCvs, targetUserId }: UseCvsPageProps) {
     }
 
     return {
-        sortedCvs,
-        sortOrder,
-        toggleSort,
+        cvs,
         isCreateOpen,
         setIsCreateOpen,
         editingCv,

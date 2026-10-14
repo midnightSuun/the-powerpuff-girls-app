@@ -1,14 +1,19 @@
 "use client"
 
-import { ArrowUpDown, MoreVertical } from "lucide-react"
+import { MoreVertical } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
 import { memo, useCallback } from "react"
 
 import { useHeaderToolbarAction } from "@/components/header-toolbar-action"
 import { SearchInput } from "@/components/search-input"
+import { SortArrow } from "@/components/sort-arrow"
 import { Button } from "@/components/ui/button"
+import { Link, usePathname } from "@/i18n/navigation"
+import { buildListSearchParams } from "@/lib/list-search-params"
+import { nextSortOrder, type SortOrder } from "@/lib/sort"
 
+import { type CvSortField, defaultCvSortField } from "../cv-sort"
 import { useCvsPage } from "../hooks/use-cvs-page"
 import { CvItem } from "../types"
 import { CreateCvTriggerButton } from "./components/add-cv-button"
@@ -96,6 +101,8 @@ interface CvsPageViewProps {
     isAdmin: boolean
     search: string
     limit?: number
+    sortBy?: CvSortField
+    sortOrder?: SortOrder
     showSearch?: boolean
     targetUserId?: string
 }
@@ -104,16 +111,26 @@ export function CvsPageView({
     initialCvs,
     isAdmin,
     search,
-    limit,
+    limit = 10,
+    sortBy,
+    sortOrder = "asc",
     showSearch = true,
     targetUserId,
 }: CvsPageViewProps) {
     const router = useRouter()
+    const pathname = usePathname()
     const t = useTranslations("CV.list")
+    const isSorted = sortBy === defaultCvSortField
+    const sortHref = `${pathname}?${buildListSearchParams({
+        page: 1,
+        limit,
+        search,
+        sortBy: defaultCvSortField,
+        sortOrder: nextSortOrder(sortBy, sortOrder, defaultCvSortField),
+    })}`
 
     const {
-        sortedCvs,
-        toggleSort,
+        cvs,
         isCreateOpen,
         setIsCreateOpen,
         editingCv,
@@ -180,11 +197,25 @@ export function CvsPageView({
             <div className="w-full overflow-visible">
                 <div className="grid grid-cols-[1fr_1fr_auto] lg:grid-cols-[35%_35%_25%_auto] items-center px-2 py-4 border-b border-border text-sm font-semibold text-muted-foreground">
                     <div
-                        className="flex items-center gap-1.5 cursor-pointer hover:text-foreground select-none pr-2"
-                        onClick={toggleSort}
+                        className="pr-2"
+                        aria-sort={
+                            isSorted
+                                ? sortOrder === "desc"
+                                    ? "descending"
+                                    : "ascending"
+                                : "none"
+                        }
                     >
-                        {t("name")}
-                        <ArrowUpDown className="size-3 shrink-0" />
+                        <Link
+                            href={sortHref}
+                            scroll={false}
+                            className="inline-flex items-center gap-1.5 text-inherit no-underline hover:text-foreground"
+                        >
+                            {t("name")}
+                            {isSorted ? (
+                                <SortArrow descending={sortOrder === "desc"} />
+                            ) : null}
+                        </Link>
                     </div>
                     <div className="pr-2">{t("education")}</div>
                     <div className="hidden lg:block pr-2">{t("employee")}</div>
@@ -192,8 +223,8 @@ export function CvsPageView({
                 </div>
 
                 <div className="divide-y divide-border">
-                    {sortedCvs.length > 0 ? (
-                        sortedCvs.map((cv) => (
+                    {cvs.length > 0 ? (
+                        cvs.map((cv) => (
                             <CvListItem
                                 key={cv.id}
                                 cv={cv}

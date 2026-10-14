@@ -1,5 +1,13 @@
 export type SortOrder = "asc" | "desc"
 
+export const DEFAULT_SORT_ORDER: SortOrder = "asc"
+
+export const nextSortOrder = (
+    sortBy: string | undefined,
+    sortOrder: SortOrder | undefined,
+    sortKey: string,
+): SortOrder => (sortBy === sortKey && sortOrder === "asc" ? "desc" : "asc")
+
 export const sortByLocale = <T>(
     items: T[],
     getValue: (item: T) => string,

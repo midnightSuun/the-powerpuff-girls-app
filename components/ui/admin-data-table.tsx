@@ -15,7 +15,8 @@ import {
 import { useHeaderToolbarAction } from "@/components/header-toolbar-action"
 import { Button } from "@/components/ui/button"
 import { AddItemButton } from "@/components/ui/list-management-buttons"
-import { sortByLocale, type SortOrder } from "@/lib/sort"
+import { useColumnSort } from "@/hooks/use-column-sort"
+import { sortByLocale } from "@/lib/sort"
 
 import { SearchInput } from "../search-input"
 import { SortArrow } from "../sort-arrow"
@@ -160,13 +161,16 @@ function AdminDataTableInner<T extends { id: string | number }>({
     limit = 10,
     search = "",
     showSearchInput = true,
-    defaultSortKey = "type",
+    defaultSortKey = "name",
 }: AdminDataTableProps<T>) {
     const locale = useLocale()
     const tCommon = useTranslations("Admin.common")
 
-    const [sortColumnKey, setSortColumnKey] = useState<string>(defaultSortKey)
-    const [sortOrder, setSortOrder] = useState<SortOrder>("asc")
+    const {
+        sortBy: sortColumnKey,
+        sortOrder,
+        toggleSort,
+    } = useColumnSort(defaultSortKey)
     const [activeMenuId, setActiveMenuId] = useState<string | number | null>(
         null,
     )
@@ -216,19 +220,6 @@ function AdminDataTableInner<T extends { id: string | number }>({
             document.removeEventListener("mousedown", handleClickOutside)
             document.removeEventListener("keydown", handleKeyDown)
         }
-    }, [])
-
-    const handleSort = useCallback((key: string) => {
-        setSortColumnKey((prevKey) => {
-            if (prevKey === key) {
-                setSortOrder((prevOrder) =>
-                    prevOrder === "asc" ? "desc" : "asc",
-                )
-                return prevKey
-            }
-            setSortOrder("asc")
-            return key
-        })
     }, [])
 
     const handleToggleMenu = useCallback((id: string | number) => {
@@ -297,7 +288,7 @@ function AdminDataTableInner<T extends { id: string | number }>({
                                         } ${col.className ?? ""}`}
                                         onClick={
                                             col.sortable
-                                                ? () => handleSort(col.key)
+                                                ? () => toggleSort(col.key)
                                                 : undefined
                                         }
                                     >
