@@ -4,46 +4,6 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import { UserFormDialog } from "../ui/user-form-dialog"
 
-vi.mock("../ui/user-form-field", () => ({
-    UserFormTextField: vi.fn(({ label, value, onChange, disabled }) => (
-        <label>
-            {label}
-            <input
-                data-testid={`textfield-${label}`}
-                value={value}
-                disabled={disabled}
-                onChange={(e) => onChange(e.target.value)}
-            />
-        </label>
-    )),
-    UserFormSelectField: vi.fn(({ label, value, onChange }) => (
-        <label>
-            {label}
-            <select
-                data-testid={`select-${label}`}
-                value={value}
-                onChange={(e) => onChange(e.target.value)}
-            >
-                <option value={value}>{value}</option>
-            </select>
-        </label>
-    )),
-}))
-
-vi.mock("../ui/create-user-fields", () => ({
-    CreateUserPasswordInput: vi.fn(({ label, value, onChange, disabled }) => (
-        <label>
-            {label}
-            <input
-                data-testid="password-input"
-                value={value}
-                disabled={disabled}
-                onChange={(e) => onChange(e.target.value)}
-            />
-        </label>
-    )),
-}))
-
 vi.mock("@/components/ui/dialog", () => ({
     Dialog: vi.fn(({ children, open }) =>
         open ? <div data-testid="dialog">{children}</div> : null,
@@ -93,16 +53,17 @@ describe("UserFormDialog Component", () => {
 
         expect(screen.getByText("Create User")).toBeInTheDocument()
         expect(screen.getByText("Fill in the user details")).toBeInTheDocument()
-        expect(screen.getByTestId("password-input")).toHaveValue(
-            "secretpassword",
-        )
+        const passwordInput = document.querySelector('[aria-label="password"]')
+        expect(passwordInput).not.toBeNull()
+        expect(passwordInput).toHaveValue("secretpassword")
         expect(screen.getByRole("button", { name: "Save" })).toBeInTheDocument()
     })
 
     it("locks credentials and masks password when lockCredentials is true", () => {
         render(<UserFormDialog {...defaultProps} lockCredentials={true} />)
 
-        const passwordInput = screen.getByTestId("password-input")
+        const passwordInput = document.querySelector('[aria-label="password"]')
+        expect(passwordInput).not.toBeNull()
         expect(passwordInput).toHaveValue("••••••••")
         expect(passwordInput).toBeDisabled()
     })
@@ -110,9 +71,12 @@ describe("UserFormDialog Component", () => {
     it("triggers onFieldChange when text field value changes", async () => {
         render(<UserFormDialog {...defaultProps} />)
 
-        const firstNameInput = screen.getByTestId("textfield-firstName")
+        const firstNameInput = document.querySelector(
+            '[aria-label="firstName"]',
+        )
+        expect(firstNameInput).not.toBeNull()
 
-        fireEvent.change(firstNameInput, { target: { value: "Jane" } })
+        fireEvent.change(firstNameInput!, { target: { value: "Jane" } })
 
         expect(mockOnFieldChange).toHaveBeenCalledWith("firstName", "Jane")
     })
