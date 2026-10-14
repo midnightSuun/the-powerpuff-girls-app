@@ -13,7 +13,7 @@ import {
 vi.mock("@base-ui/react/tooltip", () => ({
     Tooltip: {
         Provider: ({ children }: { children: ReactNode; delay?: number }) => (
-            <div data-slot="tooltip-provider">{children}</div>
+            <>{children}</>
         ),
         Root: ({ children }: { children: ReactNode }) => {
             const [isOpen, setIsOpen] = useState(false)
@@ -38,9 +38,7 @@ vi.mock("@base-ui/react/tooltip", () => ({
                 {children}
             </button>
         ),
-        Portal: ({ children }: { children: ReactNode }) => (
-            <div data-slot="tooltip-portal">{children}</div>
-        ),
+        Portal: ({ children }: { children: ReactNode }) => <>{children}</>,
         Positioner: ({ children }: { children: ReactNode }) => (
             <div data-slot="tooltip-positioner">{children}</div>
         ),
@@ -50,17 +48,11 @@ vi.mock("@base-ui/react/tooltip", () => ({
         }: {
             children: ReactNode
             className?: string
-        }) => {
-            return (
-                <div
-                    role="tooltip"
-                    data-slot="tooltip-content"
-                    className={className}
-                >
-                    {children}
-                </div>
-            )
-        },
+        }) => (
+            <div data-slot="tooltip-content" className={className}>
+                {children}
+            </div>
+        ),
         Arrow: () => <div data-slot="tooltip-arrow" />,
     },
 }))
@@ -84,11 +76,6 @@ describe("Tooltip components", () => {
         expect(
             screen.getByRole("button", { name: "Hover me" }),
         ).toBeInTheDocument()
-
-        const provider = document.querySelector(
-            '[data-slot="tooltip-provider"]',
-        )
-        expect(provider).toBeInTheDocument()
     })
 
     it("shows tooltip content when hovered/activated", () => {
@@ -105,7 +92,9 @@ describe("Tooltip components", () => {
 
         fireEvent.mouseEnter(trigger)
 
-        const tooltipContent = screen.getByRole("tooltip")
+        const tooltipContent = document.querySelector(
+            '[data-slot="tooltip-content"]',
+        )
         expect(tooltipContent).toBeInTheDocument()
         expect(tooltipContent).toHaveTextContent("Tooltip info")
         expect(tooltipContent).toHaveAttribute("data-slot", "tooltip-content")

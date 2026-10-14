@@ -14,8 +14,7 @@ vi.mock("@base-ui/react/separator", () => ({
     } & React.ComponentProps<"div">) => (
         <div
             data-slot="separator"
-            data-horizontal={orientation === "horizontal" ? "true" : undefined}
-            data-vertical={orientation === "vertical" ? "true" : undefined}
+            data-orientation={orientation}
             className={className}
             {...props}
         />
@@ -34,7 +33,7 @@ describe("Separator component", () => {
         const separator = document.querySelector('[data-slot="separator"]')
         expect(separator).toBeInTheDocument()
         expect(separator).toHaveAttribute("data-slot", "separator")
-        expect(separator).toHaveAttribute("data-horizontal", "true")
+        expect(separator).toHaveAttribute("data-orientation", "horizontal")
     })
 
     it("renders vertical separator when orientation is vertical", () => {
@@ -42,7 +41,7 @@ describe("Separator component", () => {
 
         const separator = document.querySelector('[data-slot="separator"]')
         expect(separator).toBeInTheDocument()
-        expect(separator).toHaveAttribute("data-vertical", "true")
+        expect(separator).toHaveAttribute("data-orientation", "vertical")
     })
 
     it("applies custom className correctly", () => {
