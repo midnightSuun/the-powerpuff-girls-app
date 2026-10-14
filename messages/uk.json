@@ -673,7 +673,9 @@
         "delete": {
             "titleSingular": "Видалити мову",
             "titlePlural": "Видалити мови",
-            "confirmation": "Ви впевнені, що хочете видалити {count, plural, one {# мову?} few {# мови?} many {# мов?} other {# мови?}}",
+            "confirmationText": "Ви впевнені, що хочете видалити",
+            "countLanguages": "{count, plural, one {# мову} few {# мови} many {# мов} other {# мови}}",
+            "questionMark": "?",
             "cancel": "СКАСУВАТИ",
             "confirm": "ПІДТВЕРДИТИ",
             "removing": "ВИДАЛЕННЯ...",

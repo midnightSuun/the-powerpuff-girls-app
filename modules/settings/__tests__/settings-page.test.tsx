@@ -31,6 +31,45 @@ vi.mock("@/components/password-field", () => ({
     ),
 }))
 
+vi.mock("@/components/ui/select", () => ({
+    Select: ({
+        children,
+        onValueChange,
+        value,
+    }: {
+        children: React.ReactNode
+        onValueChange: (value: string) => void
+        value: string
+    }) => (
+        <div data-testid="select-container">
+            <select
+                role="combobox"
+                data-testid="select"
+                onChange={(e) => onValueChange(e.target.value)}
+                value={value}
+            >
+                {children}
+            </select>
+        </div>
+    ),
+    SelectTrigger: ({ children }: { children: React.ReactNode }) => (
+        <div>{children}</div>
+    ),
+    SelectValue: ({ placeholder }: { placeholder?: string }) => (
+        <span>{placeholder}</span>
+    ),
+    SelectContent: ({ children }: { children: React.ReactNode }) => (
+        <div>{children}</div>
+    ),
+    SelectItem: ({
+        children,
+        value,
+    }: {
+        children: React.ReactNode
+        value: string
+    }) => <option value={value}>{children}</option>,
+}))
+
 describe("SettingsPage", () => {
     const mockSetTheme = vi.fn()
     const mockHandleLanguageChange = vi.fn()
@@ -75,6 +114,10 @@ describe("SettingsPage", () => {
             isValid: true,
             setTheme: mockSetTheme,
             handleLanguageChange: mockHandleLanguageChange,
+            watch: vi.fn((_fieldName: string) => {
+                // Возвращаем пустую строку для любого поля
+                return ""
+            }) as ReturnType<typeof useSettings>["watch"],
         })
     })
 
@@ -82,7 +125,7 @@ describe("SettingsPage", () => {
         render(<SettingsPage />)
 
         expect(screen.getByText("theme.label")).toBeInTheDocument()
-        expect(screen.getByText("language.label")).toBeInTheDocument()
+        expect(screen.getAllByText("language.label")).toHaveLength(2) // One in floating label, one in placeholder
         expect(screen.getByText("passwordSection.title")).toBeInTheDocument()
         expect(
             screen.getAllByRole("button", {
@@ -94,7 +137,8 @@ describe("SettingsPage", () => {
     it("handles theme selection change correctly", () => {
         render(<SettingsPage />)
 
-        const themeSelect = screen.getAllByRole("combobox")[0]
+        const themeSelects = screen.getAllByTestId("select")
+        const themeSelect = themeSelects[0]
         fireEvent.change(themeSelect, { target: { value: "Light" } })
 
         expect(mockSetTheme).toHaveBeenCalledWith("light")
@@ -103,7 +147,7 @@ describe("SettingsPage", () => {
     it("handles language selection change correctly", () => {
         render(<SettingsPage />)
 
-        const selects = screen.getAllByRole("combobox")
+        const selects = screen.getAllByTestId("select")
         const languageSelect = selects[1]
 
         fireEvent.change(languageSelect, { target: { value: "fr" } })
@@ -139,6 +183,10 @@ describe("SettingsPage", () => {
             isValid: false,
             setTheme: mockSetTheme,
             handleLanguageChange: mockHandleLanguageChange,
+            watch: vi.fn((_fieldName: string) => {
+                // Возвращаем пустую строку для любого поля
+                return ""
+            }) as ReturnType<typeof useSettings>["watch"],
         })
 
         render(<SettingsPage />)

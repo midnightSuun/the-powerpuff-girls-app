@@ -27,15 +27,16 @@ export function DeleteLanguagesModal({
         onClose,
     })
 
-    const description = t.rich("confirmation", {
-        count: count,
-        b: (chunks) => (
-            <strong className="font-bold text-foreground">{chunks}</strong>
-        ),
-        bold: (chunks) => (
-            <strong className="font-bold text-foreground">{chunks}</strong>
-        ),
-    })
+    const description = (
+        <span className="font-normal text-foreground">
+            {t("confirmationText")}
+            <strong className="font-bold">
+                {" "}
+                {t("countLanguages", { count })}{" "}
+            </strong>
+            {t("questionMark")}
+        </span>
+    )
 
     return (
         <DeleteModal
