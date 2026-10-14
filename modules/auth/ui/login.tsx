@@ -55,7 +55,6 @@ export function Login() {
 
                     <div className="w-full">
                         <PasswordField
-                            type="password"
                             label={t("passwordPlaceholder")}
                             placeholder={t("passwordPlaceholder")}
                             error={errors.password?.message}

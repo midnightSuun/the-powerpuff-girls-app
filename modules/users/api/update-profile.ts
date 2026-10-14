@@ -1,6 +1,6 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
+import { revalidatePath, updateTag } from "next/cache"
 import { getTranslations } from "next-intl/server"
 
 import type { UpdateProfileInput as GqlUpdateProfileInput } from "@/gql"
@@ -20,7 +20,7 @@ export async function updateProfile(input: UpdateProfileInput) {
         return { success: false, error: t("sessionExpired") }
     }
 
-    if (session.userId !== String(input.userId)) {
+    if (session.userId !== String(input.userId) && session.role !== "Admin") {
         const t = await getTranslations("User.messages")
         return { success: false, error: t("updateForbidden") }
     }
@@ -53,6 +53,8 @@ export async function updateProfile(input: UpdateProfileInput) {
         })
 
         revalidatePath("/[locale]/users/[userId]/profile", "page")
+        updateTag(`user-${String(input.userId)}`)
+        updateTag("users")
 
         return {
             success: true,

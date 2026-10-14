@@ -1,5 +1,6 @@
 "use client"
 
+import { cn } from "cn"
 import { ChevronsUpDown, LogOut, Settings, User } from "lucide-react"
 import { useTranslations } from "next-intl"
 
@@ -7,7 +8,6 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuGroup,
-    DropdownMenuItem,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
@@ -17,10 +17,11 @@ import {
     SidebarMenuItem,
     useSidebar,
 } from "@/components/ui/sidebar"
-import { Link } from "@/i18n/navigation"
 import { logout } from "@/modules/auth/api/logout"
 import { AUTH_NOTIFICATION_STORAGE_KEY } from "@/modules/auth/consts"
 
+import { getUserDisplayName } from "../get-user-display-name"
+import { NavUserMenuItem } from "./nav-user-menu-item"
 import { UserAvatar } from "./user-avatar"
 
 export type NavUserData = {
@@ -40,8 +41,17 @@ export const NavUserMenu = ({ user }: Props) => {
     const t = useTranslations("User.nav")
     const isTabletExpanded = isTablet && state === "expanded"
     const isTabletCollapsed = isTablet && state === "collapsed"
-    const fullName =
-        [user.firstName, user.lastName].filter(Boolean).join(" ") || user.email
+    const fullName = getUserDisplayName(
+        user.firstName,
+        user.lastName,
+        user.email,
+    )
+    const itemClassName = isTabletExpanded
+        ? "rounded-none px-2.5 py-1.5"
+        : isTabletCollapsed
+          ? "justify-center px-0"
+          : undefined
+    const labelClassName = isTabletCollapsed ? "sr-only" : undefined
 
     const handleCloseMobileSidebar = () => {
         if (isMobile) {
@@ -91,94 +101,59 @@ export const NavUserMenu = ({ user }: Props) => {
                             aria-hidden
                         />
                     </DropdownMenuTrigger>
+
                     <DropdownMenuContent
-                        className={
+                        className={cn(
+                            "border border-[#AEAEAE] dark:border-[#626262]",
+                            "bg-[#E2E2E4] dark:bg-[#454545]",
+                            "text-[#2E2E2E] dark:text-[#F5F5F7]",
+                            "rounded-[8px]",
+
                             isTabletExpanded
-                                ? "w-36 min-w-0 rounded-md p-0"
+                                ? "w-36 min-w-0 p-0"
                                 : isTabletCollapsed
-                                  ? "w-12 min-w-0 rounded-md p-1"
-                                  : "min-w-56 rounded-lg"
-                        }
+                                  ? "w-12 min-w-0 p-1"
+                                  : "min-w-56"
+                        )}
                         side={isMobile ? "bottom" : isTablet ? "top" : "right"}
-                        align={
-                            isTabletCollapsed
-                                ? "center"
-                                : isTabletExpanded
-                                  ? "end"
-                                  : "end"
-                        }
+                        align={isTabletCollapsed ? "center" : "end"}
                         sideOffset={isTablet ? 0 : 4}
                     >
                         <DropdownMenuGroup>
-                            <DropdownMenuItem
-                                nativeButton={false}
-                                render={<Link href={`/users/${user.id}`} />}
+                            <NavUserMenuItem
+                                href={`/users/${user.id}`}
+                                label={t("profile")}
+                                icon={<User className="text-current" />}
+                                itemClassName={itemClassName}
+                                labelClassName={labelClassName}
                                 onClick={handleCloseMobileSidebar}
-                                className={
-                                    isTabletExpanded
-                                        ? "rounded-none px-2.5 py-1.5"
-                                        : isTabletCollapsed
-                                          ? "justify-center px-0"
-                                          : undefined
-                                }
-                            >
-                                <User />
-                                <span
-                                    className={
-                                        isTabletCollapsed
-                                            ? "sr-only"
-                                            : undefined
-                                    }
-                                >
-                                    {t("profile")}
-                                </span>
-                            </DropdownMenuItem>
-                            {isTablet ? <DropdownMenuSeparator /> : null}
-                            <DropdownMenuItem
-                                nativeButton={false}
-                                render={<Link href="/settings" />}
+                            />
+
+                            {isTablet ? (
+                                <DropdownMenuSeparator className="bg-[#AEAEAE] dark:bg-[#626262]" />
+                            ) : null}
+
+                            <NavUserMenuItem
+                                href="/settings"
+                                label={t("settings")}
+                                icon={<Settings className="text-current" />}
+                                itemClassName={itemClassName}
+                                labelClassName={labelClassName}
                                 onClick={handleCloseMobileSidebar}
-                                className={
-                                    isTabletExpanded
-                                        ? "rounded-none px-2.5 py-1.5"
-                                        : isTabletCollapsed
-                                          ? "justify-center px-0"
-                                          : undefined
-                                }
-                            >
-                                <Settings />
-                                <span
-                                    className={
-                                        isTabletCollapsed
-                                            ? "sr-only"
-                                            : undefined
-                                    }
-                                >
-                                    {t("settings")}
-                                </span>
-                            </DropdownMenuItem>
+                            />
                         </DropdownMenuGroup>
-                        {!isTablet ? <DropdownMenuSeparator /> : null}
-                        <DropdownMenuItem
-                            variant="destructive"
+
+                        {!isTablet ? (
+                            <DropdownMenuSeparator className="bg-[#AEAEAE] dark:bg-[#626262]" />
+                        ) : null}
+
+                        <NavUserMenuItem
+                            label={t("logout")}
+                            icon={<LogOut className="text-current" />}
+                            itemClassName={itemClassName}
+                            labelClassName={labelClassName}
                             onClick={handleLogout}
-                            className={
-                                isTabletExpanded
-                                    ? "rounded-none px-2.5 py-1.5"
-                                    : isTabletCollapsed
-                                      ? "justify-center px-0"
-                                      : undefined
-                            }
-                        >
-                            <LogOut />
-                            <span
-                                className={
-                                    isTabletCollapsed ? "sr-only" : undefined
-                                }
-                            >
-                                {t("logout")}
-                            </span>
-                        </DropdownMenuItem>
+                        />
                     </DropdownMenuContent>
                 </DropdownMenu>
             </SidebarMenuItem>

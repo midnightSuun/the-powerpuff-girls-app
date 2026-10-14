@@ -1,20 +1,15 @@
 "use client"
 
 import { useTranslations } from "next-intl"
-import { type SubmitEvent, useEffect, useRef, useState } from "react"
+import { type SubmitEvent, useRef, useState } from "react"
 
 import type { UserRole } from "@/gql"
 import { useActionNotifications } from "@/hooks/use-action-notifications"
 import { useRouter } from "@/i18n/navigation"
 
 import { createUser } from "../api/create-user"
-import { getProfileOptions } from "../api/get-profile-options"
 import { getUserRoleOptions } from "../user-role-options"
-
-type SelectOption = {
-    id: string
-    name: string
-}
+import { useProfileOptions } from "./use-profile-options"
 
 type FormState = {
     email: string
@@ -45,8 +40,7 @@ export const useCreateUserDialog = () => {
     const [isOpen, setIsOpen] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [form, setForm] = useState(emptyForm)
-    const [departments, setDepartments] = useState<SelectOption[]>([])
-    const [positions, setPositions] = useState<SelectOption[]>([])
+    const { departments, positions } = useProfileOptions(isOpen)
 
     const roleOptions = getUserRoleOptions(tDialog)
 
@@ -61,29 +55,6 @@ export const useCreateUserDialog = () => {
             [field]: field === "role" ? (value as UserRole) : value,
         }))
     }
-
-    useEffect(() => {
-        if (!isOpen) return
-
-        let isCancelled = false
-
-        const loadOptions = async () => {
-            try {
-                const data = await getProfileOptions()
-                if (isCancelled) return
-                setDepartments(data.departments)
-                setPositions(data.positions)
-            } catch (error) {
-                console.error("Failed to load create user options:", error)
-            }
-        }
-
-        void loadOptions()
-
-        return () => {
-            isCancelled = true
-        }
-    }, [isOpen])
 
     const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
         event.preventDefault()

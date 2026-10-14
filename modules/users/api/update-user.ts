@@ -65,6 +65,7 @@ export async function updateUser(input: UpdateUserFormInput) {
             },
         })
 
+        updateTag(`user-${userId}`)
         updateTag("users")
 
         return { success: true, data: data.updateUser }

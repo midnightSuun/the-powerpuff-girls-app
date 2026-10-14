@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
 
+import { useBreadcrumbRefresh } from "@/components/header-view/breadcrumb-refresh"
 import { useActionNotifications } from "@/hooks/use-action-notifications"
 import { useRouter } from "@/i18n/navigation"
 import { sendProfileVerificationAction } from "@/modules/auth/api/verification"
@@ -40,6 +41,7 @@ export function useUserProfile(
     currentUserRole?: string | null,
 ) {
     const notifications = useActionNotifications()
+    const { refreshBreadcrumb } = useBreadcrumbRefresh()
     const router = useRouter()
     const errors = useTranslations("User.errors")
     const messages = useTranslations("User.messages")
@@ -53,7 +55,6 @@ export function useUserProfile(
     const [lastName, setLastName] = useState(initialLastName)
     const [departmentId, setDepartmentId] = useState(user.department?.id ?? "")
     const [positionId, setPositionId] = useState(user.position?.id ?? "")
-    const [avatarFile, setAvatarFile] = useState<File | null>(null)
     const [avatarPreview, setAvatarPreview] = useState<string | null>(
         user.profile?.avatar ?? null,
     )
@@ -117,7 +118,6 @@ export function useUserProfile(
         }
 
         setAvatarError(null)
-        setAvatarFile(file)
         setIsAvatarDeleted(false)
 
         const tempPreview = URL.createObjectURL(file)
@@ -173,6 +173,12 @@ export function useUserProfile(
                     )
                     return
                 }
+
+                refreshBreadcrumb({
+                    pagePath: "/users/{userId}",
+                    id: String(user.id),
+                    value: `${firstName.trim()} ${lastName.trim()}`,
+                })
             }
 
             if (isAssignmentChanged) {
@@ -203,7 +209,6 @@ export function useUserProfile(
         if (!canEdit) return
         try {
             setAvatarError(null)
-            setAvatarFile(null)
             setAvatarPreview(null)
             setIsAvatarDeleted(true)
 
@@ -255,9 +260,7 @@ export function useUserProfile(
         setDepartmentId,
         positionId,
         setPositionId,
-        avatarFile,
         avatarPreview: isAvatarDeleted ? null : avatarPreview,
-        isAssignmentChanged,
         hasSubmitted,
         isSubmitting,
         isVerifyingEmail,

@@ -16,6 +16,7 @@ import { useActionNotifications } from "@/hooks/use-action-notifications"
 import { Link, useRouter } from "@/i18n/navigation"
 
 import { deleteUser } from "../api/delete-user"
+import { getUserDisplayName } from "../get-user-display-name"
 import type { EditableUser } from "../hooks/use-update-user-dialog"
 import { UpdateUserDialog } from "./update-user-dialog"
 
@@ -32,12 +33,12 @@ const cancelButtonClassName =
 const confirmButtonClassName =
     "h-10 w-40 rounded-[40px] border-transparent bg-[#c63031] px-6 py-0 text-sm leading-[24.5px] font-medium tracking-[0.4px] text-[#f5f5f7] uppercase shadow-none hover:border-transparent hover:bg-[#b02a2b] hover:text-[#f5f5f7] active:border-transparent active:bg-[#c63031] active:text-[#f5f5f7]"
 
-const getUserLabel = (user: EditableUser) => {
-    const name =
-        `${user.profile.first_name ?? ""} ${user.profile.last_name ?? ""}`.trim()
-
-    return name || user.email
-}
+const getUserLabel = (user: EditableUser) =>
+    getUserDisplayName(
+        user.profile.first_name,
+        user.profile.last_name,
+        user.email,
+    )
 
 export const UserRowMenu = ({ label, user }: Props) => {
     const tDialog = useTranslations("Users.dialog")
@@ -117,6 +118,7 @@ export const UserRowMenu = ({ label, user }: Props) => {
                 </DropdownMenuContent>
             </DropdownMenu>
             <UpdateUserDialog
+                key={user.id}
                 user={user}
                 open={isUpdateOpen}
                 onOpenChange={setIsUpdateOpen}
