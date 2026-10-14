@@ -277,7 +277,7 @@ describe("useUserProfile Hook", () => {
         ALLOWED_AVATAR_TYPES.add("image/jpeg")
         vi.mocked(uploadProfileAvatar).mockResolvedValueOnce({
             success: true,
-            data: "new-avatar.jpg", // Приведено в соответствие со строковым типом data
+            data: "new-avatar.jpg",
         } as unknown as Awaited<ReturnType<typeof uploadProfileAvatar>>)
 
         const { result } = renderHook(() =>

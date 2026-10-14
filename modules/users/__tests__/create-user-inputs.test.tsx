@@ -62,7 +62,6 @@ describe("CreateUserPasswordInput Component", () => {
         const input = screen.getByLabelText("Password")
         expect(input).toHaveAttribute("type", "password")
 
-        // Ищем кнопку по aria-label вместо роли и имени
         const toggleButton = screen.getByLabelText(/showpassword/i)
         expect(toggleButton).toHaveAttribute("aria-pressed", "false")
 
