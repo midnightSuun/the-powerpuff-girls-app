@@ -13,64 +13,61 @@ vi.mock("../ui/user-avatar", () => ({
     UserAvatar: vi.fn(() => <div data-testid="user-avatar" />),
 }))
 
-vi.mock("../ui/user-profile-field", () => ({
-    UserProfileTextField: vi.fn(
+vi.mock("@/components/ui/input", () => ({
+    Input: vi.fn(
         ({
-            label,
+            id,
             value,
             onChange,
             disabled,
-            error,
+            placeholder,
         }: {
-            label: string
+            id: string
             value: string
-            onChange: (val: string) => void
+            onChange: (e: { target: { value: string } }) => void
             disabled?: boolean
-            error?: string | null
+            placeholder: string
         }) => (
-            <label>
-                {label}
-                <input
-                    data-testid={`textfield-${label}`}
-                    value={value}
-                    disabled={disabled}
-                    onChange={(e) => onChange(e.target.value)}
-                />
-                {error && <span data-testid="error">{error}</span>}
-            </label>
+            <input
+                data-testid={`textfield-${placeholder}`}
+                id={id}
+                value={value}
+                disabled={disabled}
+                onChange={onChange}
+                placeholder={placeholder}
+            />
         ),
     ),
-    UserProfileSelect: vi.fn(
-        ({
-            label,
-            value,
-            onChange,
-            disabled,
-            options,
-        }: {
-            label: string
-            value: string
-            onChange: (val: string) => void
-            disabled?: boolean
-            options: Array<{ id: string; name: string }>
-        }) => (
-            <label>
-                {label}
-                <select
-                    data-testid={`select-${label}`}
-                    value={value}
-                    disabled={disabled}
-                    onChange={(e) => onChange(e.target.value)}
-                >
-                    {options.map((opt) => (
-                        <option key={opt.id} value={opt.id}>
-                            {opt.name}
-                        </option>
-                    ))}
-                </select>
-            </label>
-        ),
+}))
+
+vi.mock("@/components/ui/select", () => ({
+    Select: ({ children }: { children: React.ReactNode }) => (
+        <div data-testid="select-root">{children}</div>
     ),
+    SelectTrigger: ({
+        children,
+        disabled,
+    }: {
+        children: React.ReactNode
+        disabled?: boolean
+    }) => (
+        <button disabled={disabled} data-testid="select-trigger">
+            {children}
+        </button>
+    ),
+    SelectValue: ({ children }: { children: React.ReactNode }) => (
+        <span data-testid="select-value">{children}</span>
+    ),
+    SelectContent: ({ children }: { children: React.ReactNode }) => (
+        <div data-testid="select-content">{children}</div>
+    ),
+    SelectItem: ({
+        children,
+        value,
+    }: {
+        children: React.ReactNode
+        value: string
+    }) => <div data-testid={`select-item-${value}`}>{children}</div>,
 }))
 
 vi.mock("next-intl", () => ({

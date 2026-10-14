@@ -87,7 +87,7 @@ describe("EditSkillModal (User)", () => {
 
         expect(screen.getByTestId("edit-item-modal")).toBeInTheDocument()
         expect(screen.getByTestId("skill-name")).toHaveTextContent("TypeScript")
-        expect(screen.getByText("Advanced")).toBeInTheDocument()
+        expect(screen.getByText("masteryLevels.advanced")).toBeInTheDocument()
     })
 
     it("triggers handleSubmit when form is submitted", () => {
