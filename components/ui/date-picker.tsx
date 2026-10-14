@@ -3,7 +3,7 @@
 import { cn } from "cn"
 import { CalendarIcon } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl"
-import { useEffect, useRef, useState, useSyncExternalStore } from "react"
+import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react"
 import { createPortal } from "react-dom"
 
 import { Calendar } from "./calendar"
@@ -31,6 +31,7 @@ export function DatePicker({
 }: DatePickerProps) {
     const locale = useLocale()
     const t = useTranslations("Calendar")
+    const popupId = useId()
     const [isOpen, setIsOpen] = useState(false)
     const mounted = useSyncExternalStore(
         subscribe,
@@ -38,6 +39,8 @@ export function DatePicker({
         getServerSnapshot,
     )
     const containerRef = useRef<HTMLDivElement>(null)
+    const triggerRef = useRef<HTMLButtonElement>(null)
+    const popupRef = useRef<HTMLDivElement>(null)
     const [coords, setCoords] = useState<{ top: number; left: number }>({
         top: 0,
         left: 0,
@@ -66,25 +69,63 @@ export function DatePicker({
     }, [isOpen])
 
     useEffect(() => {
+        if (!isOpen) return
+
+        popupRef.current
+            ?.querySelector<HTMLElement>("button:not(:disabled)")
+            ?.focus()
+
         const handleClickOutside = (event: MouseEvent) => {
             const target = event.target as Node
-            if (
-                containerRef.current &&
-                !containerRef.current.contains(target)
-            ) {
-                const portalEl = document.getElementById(
-                    "datepicker-dropdown-portal",
-                )
-                if (portalEl && portalEl.contains(target)) {
-                    return
-                }
+            if (containerRef.current?.contains(target)) return
+            if (popupRef.current?.contains(target)) return
+            setIsOpen(false)
+        }
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (!popupRef.current?.contains(document.activeElement)) return
+
+            if (event.key === "Escape") {
+                event.preventDefault()
+                event.stopPropagation()
                 setIsOpen(false)
+                triggerRef.current?.focus()
+                return
+            }
+
+            if (event.key !== "Tab") return
+
+            const buttons = [
+                ...popupRef.current.querySelectorAll<HTMLElement>(
+                    "button:not(:disabled)",
+                ),
+            ]
+            const first = buttons[0]
+            const last = buttons[buttons.length - 1]
+            if (!first || !last) return
+
+            if (event.shiftKey && document.activeElement === first) {
+                event.preventDefault()
+                event.stopPropagation()
+                last.focus()
+            } else if (!event.shiftKey && document.activeElement === last) {
+                event.preventDefault()
+                event.stopPropagation()
+                first.focus()
             }
         }
+
         document.addEventListener("mousedown", handleClickOutside)
-        return () =>
+        document.addEventListener("keydown", handleKeyDown, true)
+        return () => {
             document.removeEventListener("mousedown", handleClickOutside)
-    }, [])
+            document.removeEventListener("keydown", handleKeyDown, true)
+        }
+    }, [isOpen])
+
+    const handleToggle = () => {
+        if (!isOpen) updateCoords()
+        setIsOpen((open) => !open)
+    }
 
     const displayValue = (() => {
         if (!value) return ""
@@ -100,14 +141,20 @@ export function DatePicker({
         if (maxDate && newDate > maxDate) return
         onChange(newDate)
         setIsOpen(false)
+        triggerRef.current?.focus()
     }
 
     return (
         <div ref={containerRef} className="relative w-full">
-            <div
-                onClick={() => setIsOpen(!isOpen)}
+            <button
+                ref={triggerRef}
+                type="button"
+                aria-haspopup="dialog"
+                aria-expanded={isOpen}
+                aria-controls={popupId}
+                onClick={handleToggle}
                 className={cn(
-                    "flex h-9 w-full cursor-pointer items-center justify-between border border-[#cccccc] bg-background px-2.5 text-xs text-foreground transition-colors dark:border-border dark:bg-transparent dark:text-[#E2E2E4]",
+                    "flex h-9 w-full cursor-pointer items-center justify-between border border-[#cccccc] bg-background px-2.5 text-left text-xs text-foreground transition-colors dark:border-border dark:bg-transparent dark:text-[#E2E2E4]",
                     isOpen && "border-[#E53935] dark:border-[#E53935]",
                     className,
                 )}
@@ -115,14 +162,18 @@ export function DatePicker({
                 <span className={cn(!displayValue && "text-muted-foreground")}>
                     {displayValue || placeholder || t("placeholder")}
                 </span>
-                <CalendarIcon className="h-4 w-4 text-muted-foreground dark:text-[#AEAEAE]" />
-            </div>
+                <CalendarIcon
+                    aria-hidden="true"
+                    className="h-4 w-4 text-muted-foreground dark:text-[#AEAEAE]"
+                />
+            </button>
 
             {isOpen &&
                 mounted &&
                 createPortal(
                     <div
-                        id="datepicker-dropdown-portal"
+                        ref={popupRef}
+                        id={popupId}
                         style={{
                             position: "fixed",
                             top: `${coords.top}px`,

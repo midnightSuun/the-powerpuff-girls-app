@@ -26,6 +26,7 @@ export function EnvironmentMultiselect({
     value = [],
     onChange,
     placeholder = "Position",
+    removeLabel,
     error,
     className,
 }: EnvironmentMultiselectProps) {
@@ -36,6 +37,7 @@ export function EnvironmentMultiselect({
         getServerSnapshot,
     )
     const containerRef = useRef<HTMLDivElement>(null)
+    const triggerRef = useRef<HTMLButtonElement>(null)
     const [coords, setCoords] = useState<{
         top: number
         left: number
@@ -70,6 +72,15 @@ export function EnvironmentMultiselect({
     }, [isOpen])
 
     useEffect(() => {
+        if (!isOpen) return
+
+        document
+            .getElementById("multiselect-dropdown-portal")
+            ?.querySelector<HTMLElement>("button")
+            ?.focus()
+    }, [isOpen])
+
+    useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             const target = event.target as Node
             if (
@@ -90,6 +101,11 @@ export function EnvironmentMultiselect({
             document.removeEventListener("mousedown", handleClickOutside)
     }, [])
 
+    const handleToggle = () => {
+        if (!isOpen) updateCoords()
+        setIsOpen((open) => !open)
+    }
+
     const handleToggleOption = (option: string) => {
         if (value.includes(option)) {
             onChange(value.filter((item) => item !== option))
@@ -98,15 +114,18 @@ export function EnvironmentMultiselect({
         }
     }
 
-    const handleRemoveTag = (e: React.MouseEvent, optionToRemove: string) => {
-        e.stopPropagation()
+    const handleRemoveTag = (
+        event: React.MouseEvent,
+        optionToRemove: string,
+    ) => {
+        event.stopPropagation()
         onChange(value.filter((item) => item !== optionToRemove))
     }
 
     return (
         <div ref={containerRef} className="relative w-full select-none">
             <div
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={handleToggle}
                 className={cn(
                     "flex min-h-9 w-full cursor-pointer items-center justify-between gap-1.5 border border-border bg-background px-2.5 py-1.5 text-xs text-foreground transition-colors",
                     isOpen && "ring-1 ring-ring",
@@ -114,30 +133,47 @@ export function EnvironmentMultiselect({
                     className,
                 )}
             >
-                <div className="flex flex-wrap items-center gap-1.5 pr-2">
-                    {value.length > 0 ? (
-                        value.map((item) => (
-                            <span
-                                key={item}
-                                className={cn(
-                                    "inline-flex items-center gap-1 rounded-full border border-border px-2 py-0.5 text-[11px] font-normal text-foreground transition-colors",
-                                )}
-                            >
-                                <span>{item}</span>
-                                <button
-                                    type="button"
-                                    onClick={(e) => handleRemoveTag(e, item)}
-                                    className="flex h-3 w-3 items-center justify-center rounded-full hover:opacity-70"
-                                >
-                                    <X className="h-2.5 w-2.5" />
-                                </button>
+                <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1.5 pr-2">
+                    {value.length > 0
+                        ? value.map((item) => (
+                              <span
+                                  key={item}
+                                  className="inline-flex items-center gap-1 rounded-full border border-border px-2 py-0.5 text-[11px] font-normal text-foreground transition-colors"
+                              >
+                                  <span>{item}</span>
+                                  <button
+                                      type="button"
+                                      aria-label={removeLabel?.(item) ?? item}
+                                      onClick={(event) =>
+                                          handleRemoveTag(event, item)
+                                      }
+                                      className="flex h-3 w-3 items-center justify-center rounded-full hover:opacity-70"
+                                  >
+                                      <X className="h-2.5 w-2.5" />
+                                  </button>
+                              </span>
+                          ))
+                        : null}
+                    <button
+                        ref={triggerRef}
+                        type="button"
+                        aria-expanded={isOpen}
+                        aria-haspopup="listbox"
+                        aria-controls="multiselect-dropdown-portal"
+                        onClick={(event) => {
+                            event.stopPropagation()
+                            handleToggle()
+                        }}
+                        className="flex min-h-6 min-w-0 flex-1 cursor-pointer items-center justify-between text-left outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                    >
+                        {value.length === 0 ? (
+                            <span className="text-muted-foreground">
+                                {placeholder}
                             </span>
-                        ))
-                    ) : (
-                        <span className="text-muted-foreground">
-                            {placeholder}
-                        </span>
-                    )}
+                        ) : (
+                            <span className="sr-only">{placeholder}</span>
+                        )}
+                    </button>
                 </div>
 
                 <div className="flex shrink-0 items-center justify-center">
@@ -154,6 +190,8 @@ export function EnvironmentMultiselect({
                 createPortal(
                     <div
                         id="multiselect-dropdown-portal"
+                        role="listbox"
+                        aria-multiselectable="true"
                         style={{
                             position: "fixed",
                             top: `${coords.top}px`,
@@ -169,13 +207,16 @@ export function EnvironmentMultiselect({
                             const isSelected = value.includes(option)
 
                             return (
-                                <div
+                                <button
                                     key={option}
+                                    type="button"
+                                    role="option"
+                                    aria-selected={isSelected}
                                     onClick={() => handleToggleOption(option)}
                                     className={cn(
-                                        "flex cursor-pointer items-center gap-2.5 px-3 py-2 text-xs transition-colors",
+                                        "flex w-full cursor-pointer items-center gap-2.5 px-3 py-2 text-left text-xs transition-colors outline-none",
                                         "text-gray-900 dark:text-foreground",
-                                        "hover:bg-[#AEAEAE] dark:hover:bg-button-secondary-default",
+                                        "hover:bg-[#AEAEAE] focus-visible:bg-[#AEAEAE] dark:hover:bg-button-secondary-default dark:focus-visible:bg-button-secondary-default",
                                         isSelected &&
                                             "bg-button-secondary-default text-[#F5F5F7]! dark:bg-[#F5F5F7] dark:text-[#2E2E2E]!",
                                     )}
@@ -196,7 +237,7 @@ export function EnvironmentMultiselect({
                                     <span className="font-normal font-sans">
                                         {option}
                                     </span>
-                                </div>
+                                </button>
                             )
                         })}
                     </div>,
