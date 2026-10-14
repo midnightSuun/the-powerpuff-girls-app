@@ -8,7 +8,6 @@ import {
     SelectContent,
     SelectItem,
     SelectTrigger,
-    SelectValue,
 } from "@/components/ui/select"
 import type { Proficiency } from "@/gql/generated/graphql"
 
@@ -32,6 +31,11 @@ export function LanguageProficiencySelect({
 
     const hasValue = Boolean(value)
 
+    const getSelectedLabel = () => {
+        if (!value) return ""
+        return t(`proficiencyLevels.${value}`)
+    }
+
     return (
         <div className="relative w-full pt-4">
             {hasValue && (
@@ -50,9 +54,9 @@ export function LanguageProficiencySelect({
                     )}
                 >
                     <div className="truncate">
-                        <SelectValue
-                            placeholder={t("proficiencyPlaceholder")}
-                        />
+                        {hasValue
+                            ? getSelectedLabel()
+                            : t("proficiencyPlaceholder")}
                     </div>
                 </SelectTrigger>
 
