@@ -40,6 +40,7 @@ export function useSettings() {
         handleSubmit,
         formState: { errors, isValid },
         reset,
+        watch,
     } = useForm<SettingsFormValues>({
         resolver: zodResolver(
             createSettingsSchema({
@@ -97,5 +98,6 @@ export function useSettings() {
         isValid,
         setTheme,
         handleLanguageChange,
+        watch,
     }
 }

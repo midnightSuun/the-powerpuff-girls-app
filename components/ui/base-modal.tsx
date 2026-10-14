@@ -3,6 +3,7 @@
 import { cn } from "cn"
 import { X } from "lucide-react"
 import type { ComponentProps } from "react"
+import { useEffect, useRef } from "react"
 
 import { Button } from "@/components/ui/button"
 import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock"
@@ -56,11 +57,60 @@ export function BaseModal({
     onConfirm,
 }: BaseModalProps) {
     useBodyScrollLock(isOpen)
+    const dialogRef = useRef<HTMLDivElement>(null)
+    const firstFocusableRef = useRef<HTMLButtonElement>(null)
+
+    useEffect(() => {
+        if (!isOpen) return
+
+        const handleEscape = (event: KeyboardEvent) => {
+            if (event.key === "Escape" && !isPending) {
+                onClose()
+            }
+        }
+
+        const handleTabTrap = (event: KeyboardEvent) => {
+            if (event.key !== "Tab" || !dialogRef.current) return
+
+            const focusableElements = dialogRef.current.querySelectorAll(
+                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+            )
+            const firstElement = focusableElements[0] as HTMLElement
+            const lastElement = focusableElements[
+                focusableElements.length - 1
+            ] as HTMLElement
+
+            if (!event.shiftKey && document.activeElement === lastElement) {
+                event.preventDefault()
+                firstElement?.focus()
+            }
+
+            if (event.shiftKey && document.activeElement === firstElement) {
+                event.preventDefault()
+                lastElement?.focus()
+            }
+        }
+
+        document.addEventListener("keydown", handleEscape)
+        document.addEventListener("keydown", handleTabTrap)
+        setTimeout(() => {
+            firstFocusableRef.current?.focus()
+        }, 50)
+
+        return () => {
+            document.removeEventListener("keydown", handleEscape)
+            document.removeEventListener("keydown", handleTabTrap)
+        }
+    }, [isOpen, onClose, isPending])
 
     if (!isOpen) return null
 
     const content = (
         <div
+            ref={dialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title"
             className={cn(
                 "relative w-full max-w-155 rounded-none border-none bg-background p-6 text-foreground shadow-2xl dark:bg-auth-bg md:p-8",
                 dialogClassName,
@@ -68,6 +118,7 @@ export function BaseModal({
         >
             <div className="mb-4 flex items-center justify-between md:mb-6">
                 <p
+                    id="modal-title"
                     className={cn(
                         "text-lg font-semibold text-foreground md:text-xl md:font-medium",
                         titleClassName,
@@ -76,10 +127,12 @@ export function BaseModal({
                     {title}
                 </p>
                 <button
+                    ref={firstFocusableRef}
                     type="button"
                     onClick={onClose}
                     disabled={isPending}
-                    className="cursor-pointer"
+                    aria-label="Close modal"
+                    className="cursor-pointer rounded p-1 hover:bg-gray-100 dark:hover:bg-gray-800"
                 >
                     <X className="h-5 w-5" />
                 </button>
@@ -131,6 +184,11 @@ export function BaseModal({
                 "fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4",
                 overlayClassName,
             )}
+            onClick={(e) => {
+                if (e.target === e.currentTarget && !isPending) {
+                    onClose()
+                }
+            }}
         >
             {onSubmit ? (
                 <form

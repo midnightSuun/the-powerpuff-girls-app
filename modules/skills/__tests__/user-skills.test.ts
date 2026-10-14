@@ -109,6 +109,7 @@ describe("User Skills Server Actions", () => {
                 cv: {
                     name: "Main CV",
                     description: "Auto-generated primary CV",
+                    education: "Not specified",
                     userId: "user-1",
                 },
             })

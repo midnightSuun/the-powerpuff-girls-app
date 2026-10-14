@@ -673,7 +673,9 @@
         "delete": {
             "titleSingular": "Remover idioma",
             "titlePlural": "Remover idiomas",
-            "confirmation": "Tem a certeza de que pretende remover {count, plural, one {# idioma?} other {# idiomas?}}",
+            "confirmationText": "Tem a certeza de que pretende remover",
+            "countLanguages": "{count, plural, one {# idioma} other {# idiomas}}",
+            "questionMark": "?",
             "cancel": "CANCELAR",
             "confirm": "CONFIRMAR",
             "removing": "A REMOVER...",

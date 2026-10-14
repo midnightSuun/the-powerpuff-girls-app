@@ -673,7 +673,9 @@
         "delete": {
             "titleSingular": "Удалить язык",
             "titlePlural": "Удалить языки",
-            "confirmation": "Вы уверены, что хотите удалить {count, plural, one {# язык?} few {# языка?} many {# языков?} other {# языка?}}",
+            "confirmationText": "Вы уверены, что хотите удалить",
+            "countLanguages": "{count, plural, one {# язык} few {# языка} many {# языков} other {# языков}}",
+            "questionMark": "?",
             "cancel": "ОТМЕНА",
             "confirm": "ПОДТВЕРДИТЬ",
             "removing": "УДАЛЕНИЕ...",
