@@ -7,6 +7,46 @@ import {
     CreateUserSelect,
 } from "../ui/create-user-fields"
 
+vi.mock("@/components/ui/input", () => ({
+    Input: vi.fn(
+        ({
+            label,
+            placeholder,
+            value,
+            disabled,
+            onChange,
+            type,
+            endAdornment,
+            "aria-label": ariaLabel,
+            ...props
+        }: {
+            label?: string
+            placeholder?: string
+            value?: string
+            disabled?: boolean
+            onChange?: React.ChangeEventHandler<HTMLInputElement>
+            type?: string
+            endAdornment?: React.ReactNode
+            "aria-label"?: string
+            [key: string]: unknown
+        }) => (
+            <div data-testid="input-wrapper">
+                {label && <label>{label}</label>}
+                <input
+                    type={type}
+                    aria-label={ariaLabel ?? label ?? placeholder}
+                    placeholder={placeholder}
+                    value={value}
+                    disabled={disabled}
+                    onChange={onChange}
+                    {...props}
+                />
+                {endAdornment}
+            </div>
+        ),
+    ),
+}))
+
 describe("CreateUserPasswordInput Component", () => {
     it("renders password input with correct placeholder and masked type by default", () => {
         render(<CreateUserPasswordInput label="Password" value="" />)
