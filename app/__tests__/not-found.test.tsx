@@ -1,4 +1,5 @@
 import { act, render, screen, waitFor } from "@testing-library/react"
+import React from "react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import NotFound from "../not-found"
@@ -50,10 +51,14 @@ describe("NotFound Page", () => {
     })
 
     it("renders with default locale when x-locale header is missing or unsupported", async () => {
-        mockGetHeader.mockReturnValueOnce(null)
+        mockGetHeader.mockReturnValue(null)
 
         await act(async () => {
-            render(<NotFound />)
+            render(
+                <React.Suspense fallback={null}>
+                    <NotFound />
+                </React.Suspense>,
+            )
         })
 
         await waitFor(() => {
@@ -63,10 +68,14 @@ describe("NotFound Page", () => {
     })
 
     it("renders with requested supported locale from x-locale header", async () => {
-        mockGetHeader.mockReturnValueOnce("ru")
+        mockGetHeader.mockReturnValue("ru")
 
         await act(async () => {
-            render(<NotFound />)
+            render(
+                <React.Suspense fallback={null}>
+                    <NotFound />
+                </React.Suspense>,
+            )
         })
 
         await waitFor(() => {
