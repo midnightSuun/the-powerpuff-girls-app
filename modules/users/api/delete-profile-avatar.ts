@@ -13,7 +13,6 @@ export async function deleteAvatar(input: { userId: string }) {
         return { success: false, error: t("sessionExpired") }
     }
 
-    // Исправление: разрешаем удаление либо владельцу, либо Администратору (как в uploadProfileAvatar)
     if (session.userId !== String(input.userId) && session.role !== "Admin") {
         const t = await getTranslations("User.messages")
         return { success: false, error: t("updateForbidden") }

@@ -104,8 +104,8 @@ export const NavUserMenu = ({ user }: Props) => {
 
                     <DropdownMenuContent
                         className={cn(
-                            "border border-[#AEAEAE] dark:border-[#626262]",
-                            "bg-[#E2E2E4] dark:bg-[#454545]",
+                            "border border-[#AEAEAE] dark:border-button-secondary-default",
+                            "bg-text-primary-disabled dark:bg-[#454545]",
                             "text-[#2E2E2E] dark:text-[#F5F5F7]",
                             "rounded-[8px]",
 
@@ -130,7 +130,7 @@ export const NavUserMenu = ({ user }: Props) => {
                             />
 
                             {isTablet ? (
-                                <DropdownMenuSeparator className="bg-[#AEAEAE] dark:bg-[#626262]" />
+                                <DropdownMenuSeparator className="bg-[#AEAEAE] dark:bg-button-secondary-default" />
                             ) : null}
 
                             <NavUserMenuItem
@@ -144,7 +144,7 @@ export const NavUserMenu = ({ user }: Props) => {
                         </DropdownMenuGroup>
 
                         {!isTablet ? (
-                            <DropdownMenuSeparator className="bg-[#AEAEAE] dark:bg-[#626262]" />
+                            <DropdownMenuSeparator className="bg-[#AEAEAE] dark:bg-button-secondary-default" />
                         ) : null}
 
                         <NavUserMenuItem
