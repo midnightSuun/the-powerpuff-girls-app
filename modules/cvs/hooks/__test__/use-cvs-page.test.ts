@@ -1,10 +1,9 @@
 import { act, renderHook } from "@testing-library/react"
 import { useRouter } from "next/navigation"
-import { useLocale, useTranslations } from "next-intl"
+import { useTranslations } from "next-intl"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import { useActionNotifications } from "@/hooks/use-action-notifications"
-import { sortByLocale } from "@/lib/sort"
 
 import { createCvAction } from "../../api/create-cv"
 import { deleteCvAction } from "../../api/delete-cv"
@@ -17,16 +16,11 @@ vi.mock("next/navigation", () => ({
 }))
 
 vi.mock("next-intl", () => ({
-    useLocale: vi.fn(),
     useTranslations: vi.fn(),
 }))
 
 vi.mock("@/hooks/use-action-notifications", () => ({
     useActionNotifications: vi.fn(),
-}))
-
-vi.mock("@/lib/sort", () => ({
-    sortByLocale: vi.fn((items) => items),
 }))
 
 vi.mock("../../api/create-cv", () => ({
@@ -72,7 +66,6 @@ describe("useCvsPage", () => {
         vi.mocked(useRouter).mockReturnValue({
             refresh: mockRefresh,
         } as unknown as ReturnType<typeof useRouter>)
-        vi.mocked(useLocale).mockReturnValue("en")
         vi.mocked(useTranslations).mockReturnValue(
             mockT as unknown as ReturnType<typeof useTranslations>,
         )
@@ -81,41 +74,18 @@ describe("useCvsPage", () => {
         } as unknown as ReturnType<typeof useActionNotifications>)
     })
 
-    it("initializes with default states and sorts CVs", () => {
+    it("initializes with the given CVs and closed dialogs", () => {
         const { result } = renderHook(() =>
             useCvsPage({ initialCvs: mockCvs, targetUserId: "user-1" }),
         )
 
-        expect(result.current.sortedCvs).toEqual(mockCvs)
-        expect(result.current.sortOrder).toBe("asc")
+        expect(result.current.cvs).toEqual(mockCvs)
         expect(result.current.isCreateOpen).toBe(false)
         expect(result.current.editingCv).toBeNull()
         expect(result.current.deletingCv).toBeNull()
         expect(result.current.activeMenuId).toBeNull()
         expect(result.current.isSubmitting).toBe(false)
         expect(result.current.error).toBeNull()
-        expect(sortByLocale).toHaveBeenCalledWith(
-            mockCvs,
-            expect.any(Function),
-            "asc",
-            "en",
-        )
-    })
-
-    it("toggles sort order between asc and desc", () => {
-        const { result } = renderHook(() => useCvsPage({ initialCvs: mockCvs }))
-
-        expect(result.current.sortOrder).toBe("asc")
-
-        act(() => {
-            result.current.toggleSort()
-        })
-        expect(result.current.sortOrder).toBe("desc")
-
-        act(() => {
-            result.current.toggleSort()
-        })
-        expect(result.current.sortOrder).toBe("asc")
     })
 
     it("successfully creates a CV and refreshes data", async () => {

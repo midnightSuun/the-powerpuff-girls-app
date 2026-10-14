@@ -1,5 +1,6 @@
 import { cleanup, render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
+import type { ReactNode } from "react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import { useCvsPage } from "../../hooks/use-cvs-page"
@@ -14,7 +15,13 @@ vi.mock("next/navigation", () => ({
         replace: vi.fn(),
         refresh: vi.fn(),
     }),
-    usePathname: () => "",
+}))
+
+vi.mock("@/i18n/navigation", () => ({
+    Link: ({ href, children }: { href: string; children: ReactNode }) => (
+        <a href={href}>{children}</a>
+    ),
+    usePathname: () => "/cv",
 }))
 
 vi.mock("../../hooks/use-cvs-page", () => ({
@@ -68,7 +75,6 @@ describe("CvsPageView", () => {
         },
     ]
 
-    const mockToggleSort = vi.fn()
     const mockSetIsCreateOpen = vi.fn()
     const mockSetEditingCv = vi.fn()
     const mockSetDeletingCv = vi.fn()
@@ -78,8 +84,7 @@ describe("CvsPageView", () => {
     const mockHandleDelete = vi.fn()
 
     const defaultHookReturn = {
-        sortedCvs: mockCvs,
-        toggleSort: mockToggleSort,
+        cvs: mockCvs,
         isCreateOpen: false,
         setIsCreateOpen: mockSetIsCreateOpen,
         editingCv: null,
@@ -123,8 +128,7 @@ describe("CvsPageView", () => {
         expect(screen.getByText("user1@test.com")).toBeInTheDocument()
     })
 
-    it("triggers toggleSort when name column header is clicked", async () => {
-        const user = userEvent.setup()
+    it("links the name column to ascending sort when that column is not active", () => {
         render(
             <CvsPageView
                 initialCvs={mockCvs}
@@ -134,10 +138,55 @@ describe("CvsPageView", () => {
             />,
         )
 
-        const sortHeader = screen.getByText("name")
-        await user.click(sortHeader)
+        const sortLink = screen.getByRole("link", { name: "name" })
+        expect(sortLink).toHaveAttribute(
+            "href",
+            "/cv?page=1&limit=10&sortBy=name&sortOrder=asc",
+        )
+        expect(sortLink.parentElement).toHaveAttribute("aria-sort", "none")
+    })
 
-        expect(mockToggleSort).toHaveBeenCalledTimes(1)
+    it("links the name column to descending sort when it is already sorted ascending", () => {
+        render(
+            <CvsPageView
+                initialCvs={mockCvs}
+                isAdmin={true}
+                search="react"
+                limit={10}
+                sortBy="name"
+                sortOrder="asc"
+            />,
+        )
+
+        const sortLink = screen.getByRole("link", { name: /^name/ })
+        expect(sortLink).toHaveAttribute(
+            "href",
+            "/cv?page=1&limit=10&search=react&sortBy=name&sortOrder=desc",
+        )
+        expect(sortLink.parentElement).toHaveAttribute("aria-sort", "ascending")
+    })
+
+    it("links the name column back to ascending sort when it is already sorted descending", () => {
+        render(
+            <CvsPageView
+                initialCvs={mockCvs}
+                isAdmin={true}
+                search=""
+                limit={10}
+                sortBy="name"
+                sortOrder="desc"
+            />,
+        )
+
+        const sortLink = screen.getByRole("link", { name: /^name/ })
+        expect(sortLink).toHaveAttribute(
+            "href",
+            "/cv?page=1&limit=10&sortBy=name&sortOrder=asc",
+        )
+        expect(sortLink.parentElement).toHaveAttribute(
+            "aria-sort",
+            "descending",
+        )
     })
 
     it("triggers setIsCreateOpen when create trigger button is clicked", async () => {
@@ -183,7 +232,7 @@ describe("CvsPageView", () => {
     it("renders empty message when no CVs are available", () => {
         vi.mocked(useCvsPage).mockReturnValue({
             ...defaultHookReturn,
-            sortedCvs: [],
+            cvs: [],
         } as unknown as ReturnType<typeof useCvsPage>)
 
         render(
