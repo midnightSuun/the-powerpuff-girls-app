@@ -1,12 +1,44 @@
 "use client"
 
-import { ChevronDown } from "lucide-react"
+import { cn } from "cn"
 import { useTranslations } from "next-intl"
+import { useState } from "react"
 
 import { PasswordField } from "@/components/password-field"
 import { Button } from "@/components/ui/button"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 
 import { useSettings } from "../hooks/use-settings"
+
+const SUPPORTED_LOCALES = [
+    "en",
+    "fr",
+    "de",
+    "it",
+    "pl",
+    "pt",
+    "ru",
+    "es",
+    "uk",
+] as const
+
+const LANG_MAP: Record<string, string> = {
+    en: "english",
+    fr: "french",
+    de: "german",
+    it: "italian",
+    pl: "polish",
+    pt: "portuguese",
+    ru: "russian",
+    es: "spanish",
+    uk: "ukrainian",
+}
 
 export function SettingsPage() {
     const t = useTranslations("Settings")
@@ -20,10 +52,43 @@ export function SettingsPage() {
         isValid,
         setTheme,
         handleLanguageChange,
+        watch,
     } = useSettings()
 
     const themeRegistration = register("theme")
     const languageRegistration = register("language")
+
+    const [selectedTheme, setSelectedTheme] = useState<string | null>(null)
+
+    const passwordValue = watch("password")
+    const newPasswordValue = watch("newPassword")
+    const confirmPasswordValue = watch("confirmPassword")
+
+    const hasPasswordValue = Boolean(passwordValue)
+    const hasNewPasswordValue = Boolean(newPasswordValue)
+    const hasConfirmPasswordValue = Boolean(confirmPasswordValue)
+
+    const hasThemeValue = Boolean(selectedTheme)
+    const hasLanguageValue = Boolean(locale)
+
+    const themes = [
+        { value: "Light", labelKey: "theme.light" },
+        { value: "Dark", labelKey: "theme.dark" },
+        { value: "Device settings", labelKey: "theme.deviceSettings" },
+    ] as const
+
+    const getThemeLabel = (val: string | null) => {
+        if (!val) return t("theme.label")
+        const item = themes.find((t) => t.value === val)
+        return item ? t(item.labelKey) : val
+    }
+
+    const getLanguageLabel = (code: string) => {
+        if (!code) return t("language.label")
+        const key = LANG_MAP[code] || code
+        const translationKey = `language.${key}` as const
+        return t(translationKey as Parameters<typeof t>[0])
+    }
 
     return (
         <main className="min-h-screen w-full bg-background text-foreground px-6 pt-4 pb-8 flex flex-col transition-colors duration-300">
@@ -33,128 +98,156 @@ export function SettingsPage() {
                     className="space-y-6"
                     noValidate
                 >
-                    <div className="space-y-1.5">
-                        <label className="text-xs text-muted-foreground block">
-                            {t("theme.label")}
-                        </label>
-                        <div className="relative">
-                            <select
-                                {...themeRegistration}
-                                onChange={(e) => {
-                                    themeRegistration.onChange(e)
-                                    const value = e.target.value
+                    <div className="relative w-full pt-4">
+                        {hasThemeValue && (
+                            <span className="pointer-events-none absolute left-0 top-0 text-[11px] text-gray-500 dark:text-gray-400 transition-opacity">
+                                {t("theme.label")}
+                            </span>
+                        )}
+                        <Select
+                            value={selectedTheme ?? ""}
+                            onValueChange={(value) => {
+                                setSelectedTheme(value)
+                                if (value) {
+                                    themeRegistration.onChange({
+                                        target: {
+                                            name: themeRegistration.name,
+                                            value,
+                                        },
+                                    })
                                     if (value === "Dark") setTheme("dark")
                                     else if (value === "Light")
                                         setTheme("light")
                                     else setTheme("system")
-                                }}
-                                className="w-full h-11 px-4 pr-10 text-sm bg-transparent border border-border rounded-lg appearance-none focus:outline-none focus:ring-1 focus:ring-ring cursor-pointer text-foreground"
+                                }
+                            }}
+                        >
+                            <SelectTrigger
+                                className={cn(
+                                    "w-full border px-4 py-6 text-sm shadow-none focus:ring-0 outline-none transition-colors",
+                                    "rounded-none bg-[#F5F5F7] text-gray-800 border-[#D1D1D1]",
+                                    "dark:bg-[#2E2E2E] dark:text-foreground dark:border-auth-card-border",
+                                    !hasThemeValue && "text-muted-foreground",
+                                )}
                             >
-                                <option
-                                    value="Light"
-                                    className="bg-background text-foreground"
-                                >
-                                    {t("theme.light")}
-                                </option>
-                                <option
-                                    value="Dark"
-                                    className="bg-background text-foreground"
-                                >
-                                    {t("theme.dark")}
-                                </option>
-                                <option
-                                    value="Device settings"
-                                    className="bg-background text-foreground"
-                                >
-                                    {t("theme.deviceSettings")}
-                                </option>
-                            </select>
-                            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
-                        </div>
+                                <div className="truncate">
+                                    <SelectValue placeholder={t("theme.label")}>
+                                        {selectedTheme
+                                            ? getThemeLabel(selectedTheme)
+                                            : undefined}
+                                    </SelectValue>
+                                </div>
+                            </SelectTrigger>
+
+                            <SelectContent
+                                side="bottom"
+                                align="start"
+                                sideOffset={0}
+                                alignItemWithTrigger={false}
+                                className={cn(
+                                    "max-h-60 overflow-y-auto p-0 shadow-xl",
+                                    "rounded-none border border-[#D1D1D1] bg-[#F5F5F7]",
+                                    "dark:border-auth-card-border dark:bg-[#2E2E2E]",
+                                )}
+                            >
+                                {themes.map((item) => {
+                                    const isSelected =
+                                        selectedTheme === item.value
+
+                                    return (
+                                        <SelectItem
+                                            key={item.value}
+                                            value={item.value}
+                                            className={cn(
+                                                "relative flex w-full cursor-pointer items-center px-4 py-3 text-sm outline-none transition-colors rounded-none",
+                                                "[&_svg]:hidden pr-4",
+                                                isSelected
+                                                    ? "bg-[#626262] !text-[#F5F5F7] [&_*]:!text-[#F5F5F7] focus:bg-[#626262] dark:bg-[#F5F5F7] dark:!text-[#2E2E2E] dark:[&_*]:!text-[#2E2E2E]"
+                                                    : "text-gray-900 focus:bg-[#AEAEAE] hover:bg-[#AEAEAE] dark:text-foreground dark:focus:bg-[#626262] dark:hover:bg-[#626262]",
+                                            )}
+                                        >
+                                            {t(item.labelKey)}
+                                        </SelectItem>
+                                    )
+                                })}
+                            </SelectContent>
+                        </Select>
                     </div>
 
-                    <div className="space-y-1.5">
-                        <label className="text-xs text-muted-foreground block">
-                            {t("language.label")}
-                        </label>
-                        <div className="relative">
-                            <select
-                                {...languageRegistration}
-                                value={locale}
-                                onChange={(e) => {
-                                    languageRegistration.onChange(e)
+                    <div className="relative w-full pt-4">
+                        {hasLanguageValue && (
+                            <span className="pointer-events-none absolute left-0 top-0 text-[11px] text-gray-500 dark:text-gray-400 transition-opacity">
+                                {t("language.label")}
+                            </span>
+                        )}
+                        <Select
+                            value={locale}
+                            onValueChange={(value) => {
+                                if (value) {
+                                    languageRegistration.onChange({
+                                        target: {
+                                            name: languageRegistration.name,
+                                            value,
+                                        },
+                                    })
                                     handleLanguageChange(
-                                        e.target.value as
-                                            | "en"
-                                            | "fr"
-                                            | "de"
-                                            | "it"
-                                            | "pl"
-                                            | "pt"
-                                            | "ru"
-                                            | "es"
-                                            | "uk",
+                                        value as (typeof SUPPORTED_LOCALES)[number],
                                     )
-                                }}
-                                className="w-full h-11 px-4 pr-10 text-sm bg-transparent border border-border rounded-lg appearance-none focus:outline-none focus:ring-1 focus:ring-ring cursor-pointer text-foreground"
+                                }
+                            }}
+                        >
+                            <SelectTrigger
+                                className={cn(
+                                    "w-full border px-4 py-6 text-sm shadow-none focus:ring-0 outline-none transition-colors",
+                                    "rounded-none bg-[#F5F5F7] text-gray-800 border-[#D1D1D1]",
+                                    "dark:bg-[#2E2E2E] dark:text-foreground dark:border-auth-card-border",
+                                    !hasLanguageValue &&
+                                        "text-muted-foreground",
+                                )}
                             >
-                                <option
-                                    value="en"
-                                    className="bg-background text-foreground"
-                                >
-                                    {t("language.english")}
-                                </option>
-                                <option
-                                    value="fr"
-                                    className="bg-background text-foreground"
-                                >
-                                    {t("language.french")}
-                                </option>
-                                <option
-                                    value="de"
-                                    className="bg-background text-foreground"
-                                >
-                                    {t("language.german")}
-                                </option>
-                                <option
-                                    value="it"
-                                    className="bg-background text-foreground"
-                                >
-                                    {t("language.italian")}
-                                </option>
-                                <option
-                                    value="pl"
-                                    className="bg-background text-foreground"
-                                >
-                                    {t("language.polish")}
-                                </option>
-                                <option
-                                    value="pt"
-                                    className="bg-background text-foreground"
-                                >
-                                    {t("language.portuguese")}
-                                </option>
-                                <option
-                                    value="ru"
-                                    className="bg-background text-foreground"
-                                >
-                                    {t("language.russian")}
-                                </option>
-                                <option
-                                    value="es"
-                                    className="bg-background text-foreground"
-                                >
-                                    {t("language.spanish")}
-                                </option>
-                                <option
-                                    value="uk"
-                                    className="bg-background text-foreground"
-                                >
-                                    {t("language.ukrainian")}
-                                </option>
-                            </select>
-                            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
-                        </div>
+                                <div className="truncate">
+                                    <SelectValue
+                                        placeholder={t("language.label")}
+                                    >
+                                        {locale
+                                            ? getLanguageLabel(locale)
+                                            : undefined}
+                                    </SelectValue>
+                                </div>
+                            </SelectTrigger>
+
+                            <SelectContent
+                                side="bottom"
+                                align="start"
+                                sideOffset={0}
+                                alignItemWithTrigger={false}
+                                className={cn(
+                                    "max-h-60 overflow-y-auto p-0 shadow-xl",
+                                    "rounded-none border border-[#D1D1D1] bg-[#F5F5F7]",
+                                    "dark:border-auth-card-border dark:bg-[#2E2E2E]",
+                                )}
+                            >
+                                {SUPPORTED_LOCALES.map((langCode) => {
+                                    const isSelected = locale === langCode
+
+                                    return (
+                                        <SelectItem
+                                            key={langCode}
+                                            value={langCode}
+                                            className={cn(
+                                                "relative flex w-full cursor-pointer items-center px-4 py-3 text-sm outline-none transition-colors rounded-none",
+                                                "[&_svg]:hidden pr-4",
+                                                isSelected
+                                                    ? "bg-[#626262] !text-[#F5F5F7] [&_*]:!text-[#F5F5F7] focus:bg-[#626262] dark:bg-[#F5F5F7] dark:!text-[#2E2E2E] dark:[&_*]:!text-[#2E2E2E]"
+                                                    : "text-gray-900 focus:bg-[#AEAEAE] hover:bg-[#AEAEAE] dark:text-foreground dark:focus:bg-[#626262] dark:hover:bg-[#626262]",
+                                            )}
+                                        >
+                                            {getLanguageLabel(langCode)}
+                                        </SelectItem>
+                                    )
+                                })}
+                            </SelectContent>
+                        </Select>
                     </div>
 
                     <div className="pt-4 space-y-4">
@@ -162,35 +255,63 @@ export function SettingsPage() {
                             {t("passwordSection.title")}
                         </p>
 
-                        <div className="space-y-1">
+                        <div className="relative pt-4">
+                            {hasPasswordValue && (
+                                <span className="pointer-events-none absolute left-0 top-0 text-[11px] text-gray-500 dark:text-gray-400 transition-opacity">
+                                    {t("passwordSection.currentPlaceholder")}
+                                </span>
+                            )}
                             <PasswordField
-                                label={t("passwordSection.currentPlaceholder")}
-                                placeholder={t(
-                                    "passwordSection.currentPlaceholder",
-                                )}
+                                label=""
+                                placeholder={
+                                    hasPasswordValue
+                                        ? " "
+                                        : t(
+                                              "passwordSection.currentPlaceholder",
+                                          )
+                                }
                                 error={errors.password?.message}
+                                className="rounded-none bg-[#F5F5F7] dark:bg-[#2E2E2E]"
                                 {...register("password")}
                             />
                         </div>
 
-                        <div className="space-y-1">
+                        <div className="relative pt-4">
+                            {hasNewPasswordValue && (
+                                <span className="pointer-events-none absolute left-0 top-0 text-[11px] text-gray-500 dark:text-gray-400 transition-opacity">
+                                    {t("passwordSection.newPlaceholder")}
+                                </span>
+                            )}
                             <PasswordField
-                                label={t("passwordSection.newPlaceholder")}
-                                placeholder={t(
-                                    "passwordSection.newPlaceholder",
-                                )}
+                                label=""
+                                placeholder={
+                                    hasNewPasswordValue
+                                        ? " "
+                                        : t("passwordSection.newPlaceholder")
+                                }
                                 error={errors.newPassword?.message}
+                                className="rounded-none bg-[#F5F5F7] dark:bg-[#2E2E2E]"
                                 {...register("newPassword")}
                             />
                         </div>
 
-                        <div className="space-y-1">
+                        <div className="relative pt-4">
+                            {hasConfirmPasswordValue && (
+                                <span className="pointer-events-none absolute left-0 top-0 text-[11px] text-gray-500 dark:text-gray-400 transition-opacity">
+                                    {t("passwordSection.confirmPlaceholder")}
+                                </span>
+                            )}
                             <PasswordField
-                                label={t("passwordSection.confirmPlaceholder")}
-                                placeholder={t(
-                                    "passwordSection.confirmPlaceholder",
-                                )}
+                                label=""
+                                placeholder={
+                                    hasConfirmPasswordValue
+                                        ? " "
+                                        : t(
+                                              "passwordSection.confirmPlaceholder",
+                                          )
+                                }
                                 error={errors.confirmPassword?.message}
+                                className="rounded-none bg-[#F5F5F7] dark:bg-[#2E2E2E]"
                                 {...register("confirmPassword")}
                             />
                         </div>
@@ -199,12 +320,8 @@ export function SettingsPage() {
                     <div className="pt-4 flex justify-end">
                         <Button
                             type="submit"
+                            variant="primary"
                             disabled={!isValid || isPending}
-                            className={`w-32 text-white font-medium text-xs tracking-wider uppercase transition-colors ${
-                                !isValid || isPending
-                                    ? "bg-button-primary-default/50 cursor-not-allowed"
-                                    : "bg-button-primary-default hover:bg-button-primary-default/90 cursor-pointer"
-                            }`}
                         >
                             {isPending
                                 ? t("passwordSection.submittingButton")
