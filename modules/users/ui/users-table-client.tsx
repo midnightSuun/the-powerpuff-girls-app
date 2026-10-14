@@ -5,7 +5,7 @@ import { useCallback } from "react"
 
 import { TableComponent } from "@/components/table"
 import { buildListSearchParams } from "@/lib/list-search-params"
-import { type SortOrder } from "@/lib/sort"
+import { nextSortOrder, type SortOrder } from "@/lib/sort"
 
 import { type getUsers } from "../api/get-users"
 import { getUsersColumns } from "./users-columns"
@@ -37,8 +37,7 @@ export function UsersTableClient({
 
     const getSortHref = useCallback(
         (sortKey: string) => {
-            const nextOrder =
-                sortBy === sortKey && sortOrder === "asc" ? "desc" : "asc"
+            const nextOrder = nextSortOrder(sortBy, sortOrder, sortKey)
 
             return `/users?${buildListSearchParams({
                 page: 1,

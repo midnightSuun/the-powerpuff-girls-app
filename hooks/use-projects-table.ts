@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react"
 
-import { sortByLocale, type SortOrder } from "@/lib/sort"
+import { useColumnSort } from "@/hooks/use-column-sort"
+import { sortByLocale } from "@/lib/sort"
 
 export type SortField = "name" | "start_date" | "end_date"
 
@@ -20,8 +21,11 @@ export function useProjectsTable<
         end_date?: string | null
     },
 >({ items, locale, search }: UseProjectsTableProps<T>) {
-    const [sortField, setSortField] = useState<SortField>("name")
-    const [sortDirection, setSortDirection] = useState<SortOrder>("desc")
+    const {
+        sortBy: sortField,
+        sortOrder: sortDirection,
+        toggleSort,
+    } = useColumnSort<SortField>("name")
     const [itemToRemove, setItemToRemove] = useState<T | null>(null)
 
     const visibleItems = useMemo(() => {
@@ -41,17 +45,6 @@ export function useProjectsTable<
             locale,
         )
     }, [items, locale, search, sortDirection, sortField])
-
-    const toggleSort = (field: SortField) => {
-        if (sortField === field) {
-            setSortDirection((direction) =>
-                direction === "asc" ? "desc" : "asc",
-            )
-        } else {
-            setSortField(field)
-            setSortDirection("desc")
-        }
-    }
 
     return {
         sortField,

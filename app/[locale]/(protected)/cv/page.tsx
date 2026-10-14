@@ -7,14 +7,15 @@ import { routing } from "@/i18n/routing"
 import { getCurrentSession } from "@/modules/auth/helpers/get-current-session"
 import { CvsListSkeleton, CvsPageView } from "@/modules/cvs"
 import { getAdminCvs, getUserCvs } from "@/modules/cvs/api/cvs"
+import { parseCvSort } from "@/modules/cvs/cv-sort"
 
 interface PageProps {
     searchParams: Promise<{
         search?: string
         limit?: string
         page?: string
-        sort_order?: string
-        sort_by?: string
+        sortBy?: string
+        sortOrder?: string
     }>
 }
 
@@ -33,8 +34,7 @@ async function CvsContent({
     const search = params.search || ""
     const limit = Number(params.limit) || 10
     const page = Number(params.page) || 1
-    const sort_order = params.sort_order
-    const sort_by = params.sort_by
+    const { sortBy, sortOrder } = parseCvSort(params)
 
     const isAdmin = session.role === "Admin"
 
@@ -42,8 +42,8 @@ async function CvsContent({
         search,
         limit,
         page,
-        sort_order,
-        sort_by,
+        sort_by: sortBy,
+        sort_order: sortBy ? sortOrder : undefined,
     }
 
     const paginatedResult = isAdmin
@@ -64,6 +64,9 @@ async function CvsContent({
                 initialCvs={initialCvs}
                 isAdmin={isAdmin}
                 search={search}
+                limit={limit}
+                sortBy={sortBy}
+                sortOrder={sortOrder}
                 showSearch={false}
             />
             <PaginationComponent
@@ -72,6 +75,8 @@ async function CvsContent({
                 limit={limit}
                 search={search}
                 path={cvPath}
+                sortBy={sortBy}
+                sortOrder={sortOrder}
             />
         </>
     )

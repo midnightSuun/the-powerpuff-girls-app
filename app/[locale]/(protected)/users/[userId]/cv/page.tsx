@@ -5,6 +5,7 @@ import { redirect } from "@/i18n/navigation"
 import { routing } from "@/i18n/routing"
 import { getCurrentSession } from "@/modules/auth/helpers/get-current-session"
 import { getUserCvs } from "@/modules/cvs/api/cvs"
+import { parseCvSort } from "@/modules/cvs/cv-sort"
 import { CvsListSkeleton } from "@/modules/cvs/ui/cvs-list-skeleton"
 import { CvsPageView } from "@/modules/cvs/ui/cvs-page-view"
 
@@ -14,8 +15,6 @@ interface PageProps {
         search?: string
         limit?: string
         page?: string
-        sort_order?: string
-        sort_by?: string
         sortOrder?: string
         sortBy?: string
     }>
@@ -44,15 +43,14 @@ async function UserCvsContent({ params, searchParams }: PageProps) {
     const limit =
         Number.isInteger(limitValue) && limitValue > 0 ? limitValue : 10
     const search = query.search ?? ""
-    const sortBy = query.sortBy ?? query.sort_by
-    const sortOrder = query.sortOrder ?? query.sort_order
+    const { sortBy, sortOrder } = parseCvSort(query)
 
     const paginatedResult = await getUserCvs(userId, {
         page,
         limit,
         search,
         sort_by: sortBy,
-        sort_order: sortOrder,
+        sort_order: sortBy ? sortOrder : undefined,
     })
 
     const initialCvs = (paginatedResult?.items ?? []).map((cv) => ({
@@ -72,6 +70,8 @@ async function UserCvsContent({ params, searchParams }: PageProps) {
                 isAdmin={session.role === "Admin"}
                 search={search}
                 limit={limit}
+                sortBy={sortBy}
+                sortOrder={sortOrder}
                 targetUserId={userId}
             />
             <PaginationComponent
@@ -81,7 +81,7 @@ async function UserCvsContent({ params, searchParams }: PageProps) {
                 search={search}
                 path={cvPath}
                 sortBy={sortBy}
-                sortOrder={sortOrder === "desc" ? "desc" : "asc"}
+                sortOrder={sortOrder}
             />
         </main>
     )
