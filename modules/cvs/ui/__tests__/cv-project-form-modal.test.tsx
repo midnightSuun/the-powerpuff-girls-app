@@ -117,7 +117,6 @@ vi.mock("@/components/ui/input", () => ({
     Input: ({
         value,
         onChange,
-        placeholder,
         readOnly,
     }: {
         value: string

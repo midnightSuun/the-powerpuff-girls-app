@@ -145,7 +145,8 @@ describe("DeleteSkillsButton", () => {
             />,
         )
 
-        fireEvent.click(screen.getByText("cancel"))
+        const cancelButton = screen.getByRole("button", { name: "cancel" })
+        fireEvent.click(cancelButton)
         expect(mockHandleCancel).toHaveBeenCalledTimes(1)
     })
 })

@@ -75,7 +75,6 @@ describe("Skills (Server Component)", () => {
         })
 
         const { container } = render(jsx)
-        // Используем getAllByRole, чтобы взять первую попавшуюся кнопку добавления во избежание конфликтов
         const addButtons = screen.getAllByRole("button", { name: /add/i })
         expect(addButtons.length).toBeGreaterThan(0)
         container.remove()

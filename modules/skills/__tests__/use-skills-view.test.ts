@@ -97,14 +97,12 @@ describe("useSkillsView", () => {
 
         const { result } = renderHook(() => useSkillsView({ cvId: "cv-1" }))
 
-        // Устанавливаем редактируемый навык
         act(() => {
             result.current.setEditingSkill(sampleSkill)
         })
 
         expect(result.current.editingSkill).toEqual(sampleSkill)
 
-        // Вызываем обновление
         await act(async () => {
             await result.current.handleUpdateSkill("Advanced" as Mastery)
         })

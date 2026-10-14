@@ -1,18 +1,21 @@
 import { act, renderHook } from "@testing-library/react"
-import { toast } from "sonner"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
-import { login } from "../../api/login"
 import { AUTH_NOTIFICATION_STORAGE_KEY } from "../../consts"
 import { useLogin } from "../use-login"
 
+const { mockLogin, mockToastError } = vi.hoisted(() => ({
+    mockLogin: vi.fn(),
+    mockToastError: vi.fn(),
+}))
+
 vi.mock("../../api/login", () => ({
-    login: vi.fn(),
+    login: mockLogin,
 }))
 
 vi.mock("sonner", () => ({
     toast: {
-        error: vi.fn(),
+        error: mockToastError,
     },
 }))
 
@@ -47,7 +50,7 @@ describe("useLogin hook", () => {
     })
 
     it("handles successful login submission", async () => {
-        vi.mocked(login).mockResolvedValue({})
+        mockLogin.mockResolvedValue({})
 
         const { result } = renderHook(() => useLogin())
 
@@ -61,20 +64,20 @@ describe("useLogin hook", () => {
         expect(sessionStorage.getItem(AUTH_NOTIFICATION_STORAGE_KEY)).toBe(
             "login",
         )
-        expect(login).toHaveBeenCalledTimes(1)
+        expect(mockLogin).toHaveBeenCalledTimes(1)
 
-        const [initialState, formData] = vi.mocked(login).mock.calls[0]
+        const [initialState, formData] = mockLogin.mock.calls[0]
         expect(initialState).toEqual({ error: undefined })
         expect(formData.get("email")).toBe("test@example.com")
         expect(formData.get("password")).toBe("password123")
 
         expect(result.current.serverError).toBeUndefined()
-        expect(toast.error).not.toHaveBeenCalled()
+        expect(mockToastError).not.toHaveBeenCalled()
     })
 
     it("handles server error during login", async () => {
         const errorMessage = "Invalid credentials"
-        vi.mocked(login).mockResolvedValue({ error: errorMessage })
+        mockLogin.mockResolvedValue({ error: errorMessage })
 
         const { result } = renderHook(() => useLogin())
 
@@ -87,7 +90,7 @@ describe("useLogin hook", () => {
 
         expect(sessionStorage.getItem(AUTH_NOTIFICATION_STORAGE_KEY)).toBeNull()
         expect(result.current.serverError).toBe(errorMessage)
-        expect(toast.error).toHaveBeenCalledWith("error", {
+        expect(mockToastError).toHaveBeenCalledWith("error", {
             description: errorMessage,
         })
     })

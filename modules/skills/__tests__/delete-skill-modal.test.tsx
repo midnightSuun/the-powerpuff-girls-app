@@ -1,12 +1,14 @@
 import { fireEvent, render, screen } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
-import { useDeleteSkillsModal } from "@/modules/skills/hooks/use-delete-skill-modal"
-
 import { DeleteSkillsModal } from "../ui/components/user/delete-skill-modal"
 
+const { mockUseDeleteSkillsModal } = vi.hoisted(() => ({
+    mockUseDeleteSkillsModal: vi.fn(),
+}))
+
 vi.mock("@/modules/skills/hooks/use-delete-skill-modal", () => ({
-    useDeleteSkillsModal: vi.fn(),
+    useDeleteSkillsModal: mockUseDeleteSkillsModal,
 }))
 
 vi.mock("@/components/ui/delete-item-modal", () => ({
@@ -62,11 +64,11 @@ describe("DeleteSkillsModal", () => {
     beforeEach(() => {
         vi.clearAllMocks()
 
-        vi.mocked(useDeleteSkillsModal).mockReturnValue({
+        mockUseDeleteSkillsModal.mockReturnValue({
             isDeleting: false,
             error: null,
             handleConfirm: mockHandleConfirm,
-        } as unknown as ReturnType<typeof useDeleteSkillsModal>)
+        })
     })
 
     it("renders singular title when count is 1", () => {
@@ -98,11 +100,11 @@ describe("DeleteSkillsModal", () => {
     })
 
     it("displays error message when error state is present", () => {
-        vi.mocked(useDeleteSkillsModal).mockReturnValue({
+        mockUseDeleteSkillsModal.mockReturnValue({
             isDeleting: false,
             error: "Failed to delete skills",
             handleConfirm: mockHandleConfirm,
-        } as unknown as ReturnType<typeof useDeleteSkillsModal>)
+        })
 
         render(<DeleteSkillsModal {...defaultProps} />)
 

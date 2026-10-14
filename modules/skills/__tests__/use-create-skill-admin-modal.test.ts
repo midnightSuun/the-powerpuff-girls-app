@@ -2,7 +2,7 @@ import { act, renderHook } from "@testing-library/react"
 import { useTranslations } from "next-intl"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
-import { isNameDuplicate, normalizeName } from "@/lib/validate-unique-name"
+import { isNameDuplicate } from "@/lib/validate-unique-name"
 
 import { useCreateSkillAdminModal } from "../hooks/use-create-skill-admin-modal"
 
@@ -70,7 +70,6 @@ describe("useCreateSkillAdminModal", () => {
         expect(result.current.name).toBe("React")
         expect(result.current.categoryId).toBe("c1")
 
-        // Закрываем модальное окно
         rerender({ isOpen: false })
 
         expect(result.current.name).toBe("")
@@ -201,7 +200,6 @@ describe("useCreateSkillAdminModal", () => {
             }),
         )
 
-        // Без имени и категории (isValid = false)
         await act(async () => {
             await result.current.handleSubmit({
                 preventDefault: vi.fn(),

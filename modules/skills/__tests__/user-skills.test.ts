@@ -10,7 +10,6 @@ import {
     DeleteCvSkillInput,
     GetSkillsDocument,
     GetUserSkillsDocument,
-    Mastery,
     UpdateCvSkillInput,
     UpdateSkillDocument,
 } from "@/gql/generated/graphql"

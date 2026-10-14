@@ -1,18 +1,21 @@
 import { act, renderHook } from "@testing-library/react"
-import { useTranslations } from "next-intl"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import type { Mastery } from "@/gql/generated/graphql"
-import { useBodyScrollLock } from "@/hooks/use-body-scroll-lock"
 
 import { useEditSkillModal } from "../hooks/use-edit-skill-modal"
 
+const { mockUseTranslations, mockUseBodyScrollLock } = vi.hoisted(() => ({
+    mockUseTranslations: vi.fn(),
+    mockUseBodyScrollLock: vi.fn(),
+}))
+
 vi.mock("next-intl", () => ({
-    useTranslations: vi.fn(),
+    useTranslations: mockUseTranslations,
 }))
 
 vi.mock("@/hooks/use-body-scroll-lock", () => ({
-    useBodyScrollLock: vi.fn(),
+    useBodyScrollLock: mockUseBodyScrollLock,
 }))
 
 describe("useEditSkillModal", () => {
@@ -29,12 +32,7 @@ describe("useEditSkillModal", () => {
 
     beforeEach(() => {
         vi.clearAllMocks()
-
-        vi.mocked(useTranslations).mockReturnValue(
-            ((key: string) => key) as unknown as ReturnType<
-                typeof useTranslations
-            >,
-        )
+        mockUseTranslations.mockReturnValue((key: string) => key)
     })
 
     it("initializes with current mastery value and activates body scroll lock", () => {
@@ -44,7 +42,7 @@ describe("useEditSkillModal", () => {
         expect(result.current.isValid).toBe(true)
         expect(result.current.error).toBeNull()
         expect(result.current.isSubmitting).toBe(false)
-        expect(useBodyScrollLock).toHaveBeenCalledWith(true)
+        expect(mockUseBodyScrollLock).toHaveBeenCalledWith(true)
     })
 
     it("updates mastery and clears error correctly", () => {
@@ -58,7 +56,7 @@ describe("useEditSkillModal", () => {
         expect(result.current.isValid).toBe(true)
 
         act(() => {
-            result.current.setMastery("")
+            result.current.setMastery("" as Mastery)
         })
 
         expect(result.current.mastery).toBe("")

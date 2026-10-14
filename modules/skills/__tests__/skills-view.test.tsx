@@ -2,12 +2,15 @@ import { render, screen } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import type { Mastery } from "@/gql/generated/graphql"
-import { useSkillsView } from "@/modules/skills/hooks/use-skills-view"
 
 import { SkillsView } from "../ui/components/user/skills-view"
 
+const { mockUseSkillsView } = vi.hoisted(() => ({
+    mockUseSkillsView: vi.fn(),
+}))
+
 vi.mock("@/modules/skills/hooks/use-skills-view", () => ({
-    useSkillsView: vi.fn(),
+    useSkillsView: mockUseSkillsView,
 }))
 
 vi.mock("../ui/components/user/add-skill-button", () => ({
@@ -80,7 +83,7 @@ describe("SkillsView (User)", () => {
     beforeEach(() => {
         vi.clearAllMocks()
 
-        vi.mocked(useSkillsView).mockReturnValue({
+        mockUseSkillsView.mockReturnValue({
             isSelectionMode: false,
             setIsSelectionMode: mockSetIsSelectionMode,
             selectedSkills: [],
@@ -120,7 +123,7 @@ describe("SkillsView (User)", () => {
     })
 
     it("opens edit skill modal when editingSkill state is present", () => {
-        vi.mocked(useSkillsView).mockReturnValue({
+        mockUseSkillsView.mockReturnValue({
             isSelectionMode: false,
             setIsSelectionMode: mockSetIsSelectionMode,
             selectedSkills: [],

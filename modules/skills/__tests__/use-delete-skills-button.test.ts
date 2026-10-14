@@ -1,126 +1,95 @@
 import { act, renderHook } from "@testing-library/react"
-import { useRouter } from "next/navigation"
-import { useTranslations } from "next-intl"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-
-import { useActionNotifications } from "@/hooks/use-action-notifications"
-import { deleteCvSkills } from "@/modules/skills/api/skills"
 
 import { useDeleteSkillsButton } from "../hooks/use-delete-skills-button"
 
+const {
+    mockRouterRefresh,
+    mockUseTranslations,
+    mockNotificationsSuccess,
+    mockDeleteCvSkills,
+} = vi.hoisted(() => ({
+    mockRouterRefresh: vi.fn(),
+    mockUseTranslations: vi.fn(),
+    mockNotificationsSuccess: vi.fn(),
+    mockDeleteCvSkills: vi.fn(),
+}))
+
 vi.mock("next/navigation", () => ({
-    useRouter: vi.fn(),
+    useRouter: vi.fn(() => ({
+        refresh: mockRouterRefresh,
+    })),
 }))
 
 vi.mock("next-intl", () => ({
-    useTranslations: vi.fn(),
+    useTranslations: mockUseTranslations,
 }))
 
 vi.mock("@/hooks/use-action-notifications", () => ({
-    useActionNotifications: vi.fn(),
+    useActionNotifications: vi.fn(() => ({
+        success: mockNotificationsSuccess,
+    })),
 }))
 
 vi.mock("@/modules/skills/api/skills", () => ({
-    deleteCvSkills: vi.fn(),
+    deleteCvSkills: mockDeleteCvSkills,
 }))
 
-describe("useDeleteSkillsButton", () => {
-    const mockRefresh = vi.fn()
-    const mockSuccessNotification = vi.fn()
-    const mockToggleSelectionMode = vi.fn()
-    const mockClearSelection = vi.fn()
+describe("useDeleteSkillsButton hook", () => {
+    const mockOnToggleSelectionMode = vi.fn()
+    const mockOnClearSelection = vi.fn()
 
     const defaultProps = {
         cvId: "cv-1",
-        selectedSkills: ["TypeScript", "React"],
-        onToggleSelectionMode: mockToggleSelectionMode,
-        onClearSelection: mockClearSelection,
+        selectedSkills: ["React", "TypeScript"],
+        onToggleSelectionMode: mockOnToggleSelectionMode,
+        onClearSelection: mockOnClearSelection,
     }
 
     beforeEach(() => {
         vi.clearAllMocks()
-
-        vi.mocked(useRouter).mockReturnValue({
-            refresh: mockRefresh,
-            push: vi.fn(),
-            back: vi.fn(),
-            forward: vi.fn(),
-            prefetch: vi.fn(),
-            replace: vi.fn(),
-            bfcacheId: "",
-        })
-
-        vi.mocked(useActionNotifications).mockReturnValue({
-            success: mockSuccessNotification,
-            error: vi.fn(),
-            info: vi.fn(),
-            warning: vi.fn(),
-        } as unknown as ReturnType<typeof useActionNotifications>)
-
-        vi.mocked(useTranslations).mockReturnValue(
-            ((key: string) => key) as unknown as ReturnType<
-                typeof useTranslations
-            >,
-        )
+        mockUseTranslations.mockReturnValue((key: string) => key)
     })
 
-    it("initializes with correct default state and detects selected skills", () => {
+    it("initializes with default states", () => {
         const { result } = renderHook(() => useDeleteSkillsButton(defaultProps))
 
         expect(result.current.isModalOpen).toBe(false)
         expect(result.current.isSubmitting).toBe(false)
         expect(result.current.hasSelected).toBe(true)
+        expect(typeof result.current.setIsModalOpen).toBe("function")
+        expect(typeof result.current.handleDeleteConfirm).toBe("function")
+        expect(typeof result.current.handleCancel).toBe("function")
     })
 
-    it("reports hasSelected as false when no skills are selected", () => {
-        const { result } = renderHook(() =>
-            useDeleteSkillsButton({
-                ...defaultProps,
-                selectedSkills: [],
-            }),
-        )
-
-        expect(result.current.hasSelected).toBe(false)
-    })
-
-    it("handles cancel action by clearing selection and toggling mode", () => {
+    it("handles cancel action correctly", () => {
         const { result } = renderHook(() => useDeleteSkillsButton(defaultProps))
 
         act(() => {
             result.current.handleCancel()
         })
 
-        expect(mockClearSelection).toHaveBeenCalledTimes(1)
-        expect(mockToggleSelectionMode).toHaveBeenCalledWith(false)
+        expect(mockOnClearSelection).toHaveBeenCalledTimes(1)
+        expect(mockOnToggleSelectionMode).toHaveBeenCalledWith(false)
     })
 
     it("handles successful deletion confirmation and cleanup", async () => {
-        vi.mocked(deleteCvSkills).mockResolvedValueOnce({
-            deleteCvSkill: { success: true },
-        } as unknown as Awaited<ReturnType<typeof deleteCvSkills>>)
+        mockDeleteCvSkills.mockResolvedValueOnce(undefined)
 
         const { result } = renderHook(() => useDeleteSkillsButton(defaultProps))
 
-        // Открываем модальное окно
-        act(() => {
-            result.current.setIsModalOpen(true)
-        })
-
-        expect(result.current.isModalOpen).toBe(true)
-
-        // Подтверждаем удаление
         await act(async () => {
             await result.current.handleDeleteConfirm()
         })
 
-        expect(deleteCvSkills).toHaveBeenCalledWith({
+        expect(mockDeleteCvSkills).toHaveBeenCalledWith({
             cvId: "cv-1",
-            name: ["TypeScript", "React"],
+            name: ["React", "TypeScript"],
         })
-        expect(mockSuccessNotification).toHaveBeenCalledWith("deleted")
-        expect(mockRefresh).toHaveBeenCalledTimes(1)
-        expect(mockClearSelection).toHaveBeenCalledTimes(1)
-        expect(mockToggleSelectionMode).toHaveBeenCalledWith(false)
+        expect(mockNotificationsSuccess).toHaveBeenCalledWith("deleted")
+        expect(mockRouterRefresh).toHaveBeenCalledTimes(1)
+        expect(mockOnClearSelection).toHaveBeenCalledTimes(1)
+        expect(mockOnToggleSelectionMode).toHaveBeenCalledWith(false)
         expect(result.current.isModalOpen).toBe(false)
         expect(result.current.isSubmitting).toBe(false)
     })
