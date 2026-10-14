@@ -18,7 +18,7 @@ interface ProfileOption {
     name: string
 }
 
-interface UserData {
+export interface UserData {
     id: string | number
     email: string
     is_verified?: boolean

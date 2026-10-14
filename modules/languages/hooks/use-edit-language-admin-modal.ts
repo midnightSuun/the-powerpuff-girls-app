@@ -23,21 +23,19 @@ export function useEditLanguageAdminModal({
     onUpdate,
 }: UseEditLanguageAdminModalProps) {
     const t = useTranslations("Languages.admin")
-    const [name, setName] = useState("")
-    const [iso2, setIso2] = useState("")
-    const [nativeName, setNativeName] = useState("")
+    const [name, setName] = useState(language?.name ?? "")
+    const [iso2, setIso2] = useState(language?.iso2 ?? "")
+    const [nativeName, setNativeName] = useState(language?.nativeName ?? "")
     const [error, setError] = useState<string | null>(null)
     const [isSubmitting, setIsSubmitting] = useState(false)
 
     const [prevLanguage, setPrevLanguage] = useState(language)
     if (prevLanguage !== language) {
         setPrevLanguage(language)
-        if (language) {
-            setName(language.name)
-            setIso2(language.iso2)
-            setNativeName(language.nativeName || "")
-            setError(null)
-        }
+        setName(language?.name ?? "")
+        setIso2(language?.iso2 ?? "")
+        setNativeName(language?.nativeName ?? "")
+        setError(null)
     }
 
     const trimmedIso2 = iso2.trim().toUpperCase()
