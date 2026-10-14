@@ -117,7 +117,7 @@ describe("SettingsPage", () => {
             watch: vi.fn((_fieldName: string) => {
                 // Возвращаем пустую строку для любого поля
                 return ""
-            }) as ReturnType<typeof useSettings>["watch"],
+            }) as unknown as ReturnType<typeof useSettings>["watch"],
         })
     })
 
@@ -186,7 +186,7 @@ describe("SettingsPage", () => {
             watch: vi.fn((_fieldName: string) => {
                 // Возвращаем пустую строку для любого поля
                 return ""
-            }) as ReturnType<typeof useSettings>["watch"],
+            }) as unknown as ReturnType<typeof useSettings>["watch"],
         })
 
         render(<SettingsPage />)

@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
+import React from "react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import { useHeaderToolbarAction } from "@/components/header-toolbar-action"
@@ -13,6 +14,46 @@ vi.mock("@/components/header-toolbar-action", () => ({
 
 vi.mock("../hooks/use-create-user-dialog", () => ({
     useCreateUserDialog: vi.fn(),
+}))
+
+vi.mock("@/components/ui/dialog", () => ({
+    Dialog: vi.fn(
+        ({ children, open }: { children: React.ReactNode; open: boolean }) =>
+            open ? (
+                <div role="dialog" data-testid="dialog">
+                    {children}
+                </div>
+            ) : null,
+    ),
+    DialogContent: vi.fn(({ children }: { children: React.ReactNode }) => (
+        <div>{children}</div>
+    )),
+    DialogHeader: vi.fn(({ children }: { children: React.ReactNode }) => (
+        <div>{children}</div>
+    )),
+    DialogTitle: vi.fn(({ children }: { children: React.ReactNode }) => (
+        <h1>{children}</h1>
+    )),
+    DialogDescription: vi.fn(({ children }: { children: React.ReactNode }) => (
+        <p>{children}</p>
+    )),
+    DialogClose: vi.fn(
+        ({
+            children,
+            render: renderProp,
+        }: {
+            children?: React.ReactNode
+            render?: React.ReactElement
+        }) =>
+            renderProp ? (
+                React.cloneElement(renderProp, {}, children)
+            ) : (
+                <button type="button">{children}</button>
+            ),
+    ),
+    DialogFooter: vi.fn(({ children }: { children: React.ReactNode }) => (
+        <div>{children}</div>
+    )),
 }))
 
 describe("CreateUserDialog Component", () => {
