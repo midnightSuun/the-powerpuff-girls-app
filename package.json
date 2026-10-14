@@ -70,7 +70,8 @@
     "lint-staged": {
         "*.{js,jsx,mjs,ts,tsx}": [
             "eslint . --fix",
-            "prettier --write"
+            "prettier --write",
+            "bash -c 'npx vitest related --run || true'"
         ],
         "*.{json,css,md,html,yml,yaml}": [
             "prettier --write"
