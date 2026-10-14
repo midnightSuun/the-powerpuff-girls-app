@@ -25,10 +25,39 @@ export function ProgressListItem({
         }
     }
 
+    const handleKeyDown = (event: React.KeyboardEvent) => {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault()
+            handleClick()
+        }
+    }
+
+    const isInteractive = isSelectionMode || onEdit
+
+    if (!isInteractive) {
+        return (
+            <div className="flex items-center justify-between rounded px-2 py-1.5">
+                <ProgressItem
+                    name={name}
+                    mastery={mastery}
+                    isSelected={isSelected}
+                />
+            </div>
+        )
+    }
+
     return (
-        <div
+        <button
+            type="button"
             onClick={handleClick}
-            className={`flex items-center justify-between rounded px-2 py-1.5 transition-colors ${
+            onKeyDown={handleKeyDown}
+            aria-pressed={isSelectionMode ? isSelected : undefined}
+            aria-label={
+                isSelectionMode
+                    ? `${isSelected ? "Deselect" : "Select"} ${name}`
+                    : `Edit ${name}`
+            }
+            className={`w-full flex items-center justify-between rounded px-2 py-1.5 text-left transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 ${
                 isSelectionMode || onEdit ? "cursor-pointer" : ""
             } ${
                 isSelectionMode
@@ -45,6 +74,6 @@ export function ProgressListItem({
                 mastery={mastery}
                 isSelected={isSelected}
             />
-        </div>
+        </button>
     )
 }
