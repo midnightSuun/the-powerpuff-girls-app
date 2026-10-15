@@ -16,44 +16,41 @@ vi.mock("../hooks/use-create-user-dialog", () => ({
     useCreateUserDialog: vi.fn(),
 }))
 
-vi.mock("@/components/ui/dialog", () => ({
-    Dialog: vi.fn(
-        ({ children, open }: { children: React.ReactNode; open: boolean }) =>
+vi.mock("../ui/user-form-dialog", () => ({
+    UserFormDialog: vi.fn(
+        ({
+            open,
+            title,
+            description,
+            onSubmit,
+            onOpenChange,
+            submitLabel,
+        }: {
+            open: boolean
+            title: string
+            description: string
+            submitLabel: string
+            onSubmit: (e: React.FormEvent) => void
+            onOpenChange: (open: boolean) => void
+        }) =>
             open ? (
                 <div role="dialog" data-testid="dialog">
-                    {children}
+                    <h1>{title}</h1>
+                    <p>{description}</p>
+                    <form onSubmit={onSubmit}>
+                        <button
+                            type="button"
+                            onClick={() => onOpenChange(false)}
+                        >
+                            cancel
+                        </button>
+                        <button type="submit" data-testid="submit-btn">
+                            {submitLabel}
+                        </button>
+                    </form>
                 </div>
             ) : null,
     ),
-    DialogContent: vi.fn(({ children }: { children: React.ReactNode }) => (
-        <div>{children}</div>
-    )),
-    DialogHeader: vi.fn(({ children }: { children: React.ReactNode }) => (
-        <div>{children}</div>
-    )),
-    DialogTitle: vi.fn(({ children }: { children: React.ReactNode }) => (
-        <h1>{children}</h1>
-    )),
-    DialogDescription: vi.fn(({ children }: { children: React.ReactNode }) => (
-        <p>{children}</p>
-    )),
-    DialogClose: vi.fn(
-        ({
-            children,
-            render: renderProp,
-        }: {
-            children?: React.ReactNode
-            render?: React.ReactElement
-        }) =>
-            renderProp ? (
-                React.cloneElement(renderProp, {}, children)
-            ) : (
-                <button type="button">{children}</button>
-            ),
-    ),
-    DialogFooter: vi.fn(({ children }: { children: React.ReactNode }) => (
-        <div>{children}</div>
-    )),
 }))
 
 describe("CreateUserDialog Component", () => {

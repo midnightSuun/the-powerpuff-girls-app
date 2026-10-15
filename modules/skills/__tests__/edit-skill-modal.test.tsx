@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react"
+import { fireEvent, render, screen, within } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import type { Mastery } from "@/gql/generated/graphql"
@@ -87,7 +87,10 @@ describe("EditSkillModal (User)", () => {
 
         expect(screen.getByTestId("edit-item-modal")).toBeInTheDocument()
         expect(screen.getByTestId("skill-name")).toHaveTextContent("TypeScript")
-        expect(screen.getByText("masteryLevels.advanced")).toBeInTheDocument()
+        const masteryTrigger = screen.getByRole("combobox")
+        expect(
+            within(masteryTrigger).getByText("masteryLevels.advanced"),
+        ).toBeInTheDocument()
     })
 
     it("triggers handleSubmit when form is submitted", () => {

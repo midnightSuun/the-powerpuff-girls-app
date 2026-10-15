@@ -14,7 +14,6 @@ const eslintConfig = defineConfig([
         files: ["**/*.{js,jsx,mjs,ts,tsx}"],
         plugins: {
             prettier,
-            import: importPlugin,
             "simple-import-sort": simpleImportSort,
         },
         settings: {

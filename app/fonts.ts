@@ -2,8 +2,6 @@ import { GeistMono } from "geist/font/mono"
 import { GeistSans } from "geist/font/sans"
 import localFont from "next/font/local"
 
-// Google Fonts sometimes returns extensionless URLs that Turbopack cannot parse.
-// These files are bundled, so the build never calls fonts.googleapis.com.
 export const geistSans = GeistSans
 export const geistMono = GeistMono
 
