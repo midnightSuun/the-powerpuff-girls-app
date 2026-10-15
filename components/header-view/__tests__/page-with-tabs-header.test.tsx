@@ -4,8 +4,17 @@ import { PageWithTabsHeader } from "../page-with-tabs-header"
 import type { HeaderCopy, HeaderTab, HeaderTabsPage, PathMatch } from "../types"
 
 vi.mock("@/i18n/navigation", () => ({
-    Link: (props: any) => (
-        <a href={props.href} className={props.className} aria-current={props["aria-current"]}>
+    Link: (props: {
+        href: string
+        className?: string
+        "aria-current"?: string
+        children: ReactNode
+    }) => (
+        <a
+            href={props.href}
+            className={props.className}
+            aria-current={props["aria-current"]}
+        >
             {props.children}
         </a>
     ),
@@ -148,7 +157,7 @@ describe("PageWithTabsHeader", () => {
 
         const allProfileTexts = screen.getAllByText("Profile")
         const allCvsTexts = screen.getAllByText("CVs")
-        
+
         expect(allProfileTexts.length).toBeGreaterThan(0)
         expect(allCvsTexts.length).toBeGreaterThan(0)
     })
@@ -171,7 +180,9 @@ describe("PageWithTabsHeader", () => {
         )
 
         const allCvsTexts = screen.getAllByText("CVs")
-        const cvsLink = allCvsTexts.find((el) => el.closest("a[aria-current='page']"))?.closest("a")
+        const cvsLink = allCvsTexts
+            .find((el) => el.closest("a[aria-current='page']"))
+            ?.closest("a")
         expect(cvsLink).toHaveAttribute("aria-current", "page")
     })
 
@@ -211,7 +222,9 @@ describe("PageWithTabsHeader", () => {
         )
 
         // Two chevrons: one between first and second breadcrumb
-        expect(screen.getAllByTestId("chevron-icon").length).toBeGreaterThanOrEqual(1)
+        expect(
+            screen.getAllByTestId("chevron-icon").length,
+        ).toBeGreaterThanOrEqual(1)
     })
 
     it("renders two chevrons when active tab is shown in breadcrumb", () => {
@@ -319,7 +332,9 @@ describe("PageWithTabsHeader", () => {
         const profileLink = allLinks.find((link) =>
             link.textContent?.includes("Profile"),
         )
-        const cvsLink = allLinks.find((link) => link.textContent?.includes("CVs"))
+        const cvsLink = allLinks.find((link) =>
+            link.textContent?.includes("CVs"),
+        )
 
         expect(profileLink).toHaveAttribute("href", "/profile/user-1/")
         expect(cvsLink).toHaveAttribute("href", "/profile/user-1/cvs")
@@ -344,7 +359,10 @@ describe("PageWithTabsHeader", () => {
 
         const links = screen.getAllByText("CVs")
         const cvsLink = links.find((el) => el.closest("a"))?.closest("a")
-        expect(cvsLink).toHaveClass("font-semibold", "text-button-primary-default")
+        expect(cvsLink).toHaveClass(
+            "font-semibold",
+            "text-button-primary-default",
+        )
     })
 
     it("applies correct styling to inactive tab", () => {
@@ -503,8 +521,8 @@ describe("PageWithTabsHeader", () => {
         )
 
         const allLinks = screen.getAllByRole("link")
-        const tabLinks = allLinks.filter(
-            (link) => link.classList.contains("uppercase"),
+        const tabLinks = allLinks.filter((link) =>
+            link.classList.contains("uppercase"),
         )
         expect(tabLinks.length).toBeGreaterThan(0)
     })
@@ -579,7 +597,7 @@ describe("PageWithTabsHeader", () => {
             />,
         )
 
-        const chevronListItems = container.querySelectorAll('li[aria-hidden]')
+        const chevronListItems = container.querySelectorAll("li[aria-hidden]")
         expect(chevronListItems.length).toBeGreaterThan(0)
     })
 })

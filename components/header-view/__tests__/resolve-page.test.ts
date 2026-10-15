@@ -363,7 +363,9 @@ describe("resolvePage", () => {
 
         expect(result).not.toBeNull()
         expect(result?.page.type).toBe("default")
-        expect((result?.page as any).title).toBe("users")
+        expect((result?.page as { type: string; title: string }).title).toBe(
+            "users",
+        )
     })
 
     it("resolves tabs page with base path", () => {

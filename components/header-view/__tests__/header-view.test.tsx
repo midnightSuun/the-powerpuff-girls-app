@@ -8,7 +8,9 @@ const mockUseBreadcrumbRefresh = vi.fn()
 
 vi.mock("@/i18n/navigation", () => ({
     usePathname: () => mockUsePathname(),
-    Link: (props: any) => <a href={props.href}>{props.children}</a>,
+    Link: (props: { href: string; children: React.ReactNode }) => (
+        <a href={props.href}>{props.children}</a>
+    ),
 }))
 
 vi.mock("../breadcrumb-refresh", () => ({
@@ -330,7 +332,9 @@ describe("HeaderView", () => {
     it("handles empty pages array", () => {
         mockUsePathname.mockReturnValue("/any-path")
 
-        const { container } = render(<HeaderView {...defaultProps} pages={[]} />)
+        const { container } = render(
+            <HeaderView {...defaultProps} pages={[]} />,
+        )
 
         expect(container).toBeEmptyDOMElement()
     })
