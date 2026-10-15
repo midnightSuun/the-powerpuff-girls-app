@@ -154,7 +154,7 @@ export function DatePicker({
                 aria-controls={popupId}
                 onClick={handleToggle}
                 className={cn(
-                    "flex h-9 w-full cursor-pointer items-center justify-between border border-[#cccccc] bg-background px-2.5 text-left text-xs text-foreground transition-colors dark:border-border dark:bg-transparent dark:text-[#E2E2E4]",
+                    "flex h-9 w-full cursor-pointer items-center justify-between border border-[#cccccc] bg-background px-2.5 text-left text-xs text-foreground transition-colors dark:border-border dark:bg-transparent dark:text-text-primary-disabled",
                     isOpen && "border-[#E53935] dark:border-[#E53935]",
                     className,
                 )}
@@ -179,7 +179,7 @@ export function DatePicker({
                             top: `${coords.top}px`,
                             left: `${coords.left}px`,
                         }}
-                        className="z-[9999]"
+                        className="z-9999"
                     >
                         <Calendar value={value} onChange={handleDateSelect} />
                     </div>,
