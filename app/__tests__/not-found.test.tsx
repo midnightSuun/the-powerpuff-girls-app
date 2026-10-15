@@ -4,11 +4,13 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import NotFound from "../not-found"
 
-const mockGetHeader = vi.fn()
+const { mockHeadersFn, mockGetHeader } = vi.hoisted(() => ({
+    mockHeadersFn: vi.fn(),
+    mockGetHeader: vi.fn(),
+}))
+
 vi.mock("next/headers", () => ({
-    headers: vi.fn(async () => ({
-        get: mockGetHeader,
-    })),
+    headers: mockHeadersFn,
 }))
 
 vi.mock("@/i18n/routing", () => ({
@@ -48,6 +50,7 @@ vi.mock("../../messages/ru.json", () => ({
 describe("NotFound Page", () => {
     beforeEach(() => {
         vi.clearAllMocks()
+        mockHeadersFn.mockResolvedValue({ get: mockGetHeader })
     })
 
     it("renders with default locale when x-locale header is missing or unsupported", async () => {
