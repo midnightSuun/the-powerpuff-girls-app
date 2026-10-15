@@ -1,5 +1,8 @@
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+
+import { BaseModal } from "@/components/ui/base-modal"
 
 import { EnvironmentMultiselect } from "../ui/environment-multiselect"
 
@@ -50,11 +53,8 @@ describe("EnvironmentMultiselect", () => {
             />,
         )
 
-        const container = screen.getByText("Position").closest("div")
-        expect(container).not.toBeNull()
-
         act(() => {
-            fireEvent.click(container!)
+            fireEvent.click(screen.getByRole("button", { name: "Position" }))
         })
 
         options.forEach((option) => {
@@ -71,9 +71,8 @@ describe("EnvironmentMultiselect", () => {
             />,
         )
 
-        const container = screen.getByText("React").closest("div")
         act(() => {
-            fireEvent.click(container!)
+            fireEvent.click(screen.getByRole("button", { name: "Position" }))
         })
 
         const portal = document.getElementById("multiselect-dropdown-portal")
@@ -100,9 +99,8 @@ describe("EnvironmentMultiselect", () => {
             />,
         )
 
-        const container = screen.getByText("React").closest("div")
         act(() => {
-            fireEvent.click(container!)
+            fireEvent.click(screen.getByRole("button", { name: "Position" }))
         })
 
         const portal = document.getElementById("multiselect-dropdown-portal")
@@ -143,6 +141,49 @@ describe("EnvironmentMultiselect", () => {
 
         expect(mockOnChange).toHaveBeenCalledTimes(1)
         expect(mockOnChange).toHaveBeenCalledWith(["Node.js"])
+    })
+
+    it("closes the dropdown on Escape and leaves the parent dialog open", async () => {
+        const user = userEvent.setup()
+        const onClose = vi.fn()
+
+        render(
+            <BaseModal
+                isOpen
+                onClose={onClose}
+                title="Project"
+                isPending={false}
+                cancelText="Cancel"
+                confirmText="Save"
+                pendingText="Saving"
+            >
+                <EnvironmentMultiselect
+                    options={options}
+                    value={[]}
+                    onChange={mockOnChange}
+                    placeholder="Select environment"
+                />
+            </BaseModal>,
+        )
+
+        const trigger = screen.getByRole("button", {
+            name: "Select environment",
+        })
+        await new Promise((resolve) => setTimeout(resolve, 60))
+        await user.click(trigger)
+
+        expect(
+            document.getElementById("multiselect-dropdown-portal"),
+        ).not.toBeNull()
+
+        await user.keyboard("{Escape}")
+
+        expect(
+            document.getElementById("multiselect-dropdown-portal"),
+        ).toBeNull()
+        expect(onClose).not.toHaveBeenCalled()
+        expect(screen.getByRole("dialog")).toBeInTheDocument()
+        expect(trigger).toHaveFocus()
     })
 
     it("renders error message when error prop is provided", () => {

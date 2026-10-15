@@ -78,6 +78,19 @@ export function EnvironmentMultiselect({
             .getElementById("multiselect-dropdown-portal")
             ?.querySelector<HTMLElement>("button")
             ?.focus()
+
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key !== "Escape") return
+
+            event.preventDefault()
+            event.stopPropagation()
+            setIsOpen(false)
+            triggerRef.current?.focus()
+        }
+
+        document.addEventListener("keydown", handleKeyDown, true)
+        return () =>
+            document.removeEventListener("keydown", handleKeyDown, true)
     }, [isOpen])
 
     useEffect(() => {
