@@ -107,6 +107,74 @@ describe("useEditSkillModal", () => {
         expect(result.current.isSubmitting).toBe(false)
     })
 
+    it("resets mastery and error when skillName changes while open", () => {
+        const { result, rerender } = renderHook(
+            (props) => useEditSkillModal(props),
+            { initialProps: defaultProps },
+        )
+
+        // Сначала устанавливаем ошибку
+        act(() => {
+            result.current.setMastery("" as Mastery)
+        })
+
+        // Меняем skillName → триггерим блок на строках 43-45
+        rerender({
+            ...defaultProps,
+            skillName: "Python",
+            currentMastery: "Novice" as Mastery,
+        })
+
+        expect(result.current.mastery).toBe("Novice")
+        expect(result.current.error).toBeNull()
+    })
+
+    it("resets mastery when currentMastery changes while open", () => {
+        const { result, rerender } = renderHook(
+            (props) => useEditSkillModal(props),
+            { initialProps: defaultProps },
+        )
+
+        rerender({
+            ...defaultProps,
+            currentMastery: "Expert" as Mastery,
+        })
+
+        expect(result.current.mastery).toBe("Expert")
+    })
+
+    it("resets mastery when modal reopens (isOpen false → true)", () => {
+        const { result, rerender } = renderHook(
+            (props) => useEditSkillModal(props),
+            { initialProps: { ...defaultProps, isOpen: false } },
+        )
+
+        // isOpen=false — блок не выполняется
+        expect(result.current.mastery).toBe("Intermediate")
+
+        // Открываем модал → !prevSkill.isOpen → блок выполняется
+        rerender({ ...defaultProps, isOpen: true })
+
+        expect(result.current.mastery).toBe("Intermediate")
+        expect(result.current.error).toBeNull()
+    })
+
+    it("does not reset mastery when props unchanged and modal stays open", () => {
+        const { result, rerender } = renderHook(
+            (props) => useEditSkillModal(props),
+            { initialProps: defaultProps },
+        )
+
+        act(() => {
+            result.current.setMastery("Advanced" as Mastery)
+        })
+
+        // Те же пропсы → условие false → mastery не сбрасывается
+        rerender({ ...defaultProps })
+
+        expect(result.current.mastery).toBe("Advanced")
+    })
+
     it("handles update error gracefully and sets error state", async () => {
         const consoleErrorSpy = vi
             .spyOn(console, "error")

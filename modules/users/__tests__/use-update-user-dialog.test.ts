@@ -228,4 +228,173 @@ describe("useUpdateUserDialog Hook", () => {
         expect(result.current.isSubmitting).toBe(false)
         expect(successResult).toBe(false)
     })
+
+    it("prevents concurrent submissions using ref flag during ongoing submission", async () => {
+        let resolveUpdate: (value: unknown) => void = () => {}
+        const updatePromise = new Promise((resolve) => {
+            resolveUpdate = resolve
+        })
+
+        vi.mocked(updateUser).mockReturnValueOnce(
+            updatePromise as unknown as ReturnType<typeof updateUser>,
+        )
+
+        const { result } = renderHook(() =>
+            useUpdateUserDialog(sampleUser, true),
+        )
+
+        const mockEvent = new SubmitEvent("submit", { cancelable: true })
+
+        // Start first submission but don't await it
+        const firstSubmission = result.current.handleSubmit(
+            mockEvent as unknown as Parameters<
+                typeof result.current.handleSubmit
+            >[0],
+        )
+
+        // Try second submission immediately (should be blocked)
+        const secondResult = await result.current.handleSubmit(
+            mockEvent as unknown as Parameters<
+                typeof result.current.handleSubmit
+            >[0],
+        )
+
+        expect(secondResult).toBeUndefined()
+        expect(updateUser).toHaveBeenCalledTimes(1)
+
+        // Now resolve the first submission
+        resolveUpdate({ success: true, data: { id: "user-1" } })
+        await firstSubmission
+    })
+
+    it("uses fallback error message when no error provided from updateUser", async () => {
+        vi.mocked(updateUser).mockResolvedValueOnce({
+            success: false,
+        } as Awaited<ReturnType<typeof updateUser>>)
+
+        const { result } = renderHook(() =>
+            useUpdateUserDialog(sampleUser, true),
+        )
+
+        const mockEvent = new SubmitEvent("submit", { cancelable: true })
+
+        let successResult = false
+        await act(async () => {
+            const res = await result.current.handleSubmit(
+                mockEvent as unknown as Parameters<
+                    typeof result.current.handleSubmit
+                >[0],
+            )
+            successResult = res ?? false
+        })
+
+        expect(mockNotifyError).toHaveBeenCalledWith("updateFailed")
+        expect(successResult).toBe(false)
+    })
+
+    it("handles user with missing profile fields", () => {
+        const userWithMissingFields: EditableUser = {
+            ...sampleUser,
+            profile: {
+                first_name: null,
+                last_name: null,
+                avatar: null,
+            },
+            department: null,
+            position: null,
+        }
+
+        const { result } = renderHook(() =>
+            useUpdateUserDialog(userWithMissingFields, true),
+        )
+
+        expect(result.current.form).toEqual({
+            firstName: "",
+            lastName: "",
+            departmentId: "",
+            positionId: "",
+            role: "Employee",
+        })
+    })
+
+    it("handles null department and position", () => {
+        const userWithNullAssignments: EditableUser = {
+            ...sampleUser,
+            department: null,
+            position: null,
+        }
+
+        const { result } = renderHook(() =>
+            useUpdateUserDialog(userWithNullAssignments, true),
+        )
+
+        expect(result.current.form.departmentId).toBe("")
+        expect(result.current.form.positionId).toBe("")
+    })
+
+    it("returns roleOptions from getUserRoleOptions", () => {
+        const { result } = renderHook(() =>
+            useUpdateUserDialog(sampleUser, true),
+        )
+
+        expect(result.current.roleOptions).toEqual([
+            { value: "Employee", label: "Employee" },
+        ])
+    })
+
+    it("calls useProfileOptions with correct parameters", () => {
+        const { rerender } = renderHook(
+            ({ isOpen }: { isOpen: boolean }) =>
+                useUpdateUserDialog(sampleUser, isOpen),
+            {
+                initialProps: { isOpen: false },
+            },
+        )
+
+        expect(useProfileOptions).toHaveBeenCalledWith(
+            false,
+            sampleUser.department,
+            sampleUser.position,
+        )
+
+        rerender({ isOpen: true })
+
+        expect(useProfileOptions).toHaveBeenCalledWith(
+            true,
+            sampleUser.department,
+            sampleUser.position,
+        )
+    })
+
+    it("preserves form state when isOpen changes", () => {
+        const { result, rerender } = renderHook(
+            ({ isOpen }: { isOpen: boolean }) =>
+                useUpdateUserDialog(sampleUser, isOpen),
+            {
+                initialProps: { isOpen: true },
+            },
+        )
+
+        act(() => {
+            result.current.handleChange("firstName", "Modified")
+        })
+
+        expect(result.current.form.firstName).toBe("Modified")
+
+        rerender({ isOpen: false })
+
+        expect(result.current.form.firstName).toBe("Modified")
+    })
+
+    it("correctly casts string to UserRole when changing role field", () => {
+        const { result } = renderHook(() =>
+            useUpdateUserDialog(sampleUser, true),
+        )
+
+        act(() => {
+            result.current.handleChange("role", "Admin")
+        })
+
+        expect(result.current.form.role).toBe("Admin")
+    })
 })

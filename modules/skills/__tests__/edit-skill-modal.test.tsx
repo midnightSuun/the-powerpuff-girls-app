@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from "@testing-library/react"
+import { fireEvent, render, screen } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import type { Mastery } from "@/gql/generated/graphql"
@@ -50,6 +50,27 @@ vi.mock("@/components/ui/edit-item-modal", () => ({
         ) : null,
 }))
 
+// Мок SkillMasterySelect с кнопкой для вызова onValueChange
+vi.mock("../ui/components/user/skill-mastery-select", () => ({
+    SkillMasterySelect: ({
+        value,
+        onValueChange,
+    }: {
+        value: string
+        onValueChange: (value: Mastery) => void
+    }) => (
+        <div data-testid="skill-mastery-select">
+            <span role="combobox">{value}</span>
+            <button
+                data-testid="change-mastery-btn"
+                onClick={() => onValueChange("Novice" as Mastery)}
+            >
+                Change
+            </button>
+        </div>
+    ),
+}))
+
 describe("EditSkillModal (User)", () => {
     const mockHandleClose = vi.fn()
     const mockHandleSubmit = vi.fn(async (e: React.SyntheticEvent) => {
@@ -87,10 +108,14 @@ describe("EditSkillModal (User)", () => {
 
         expect(screen.getByTestId("edit-item-modal")).toBeInTheDocument()
         expect(screen.getByTestId("skill-name")).toHaveTextContent("TypeScript")
-        const masteryTrigger = screen.getByRole("combobox")
-        expect(
-            within(masteryTrigger).getByText("masteryLevels.advanced"),
-        ).toBeInTheDocument()
+        expect(screen.getByTestId("skill-mastery-select")).toBeInTheDocument()
+    })
+
+    it("calls setMastery when mastery select value changes", () => {
+        render(<EditSkillModal {...defaultProps} />)
+
+        fireEvent.click(screen.getByTestId("change-mastery-btn"))
+        expect(mockSetMastery).toHaveBeenCalledWith("Novice")
     })
 
     it("triggers handleSubmit when form is submitted", () => {

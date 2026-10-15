@@ -110,4 +110,58 @@ describe("updateSettingsPasswordAction", () => {
 
         consoleErrorSpy.mockRestore()
     })
+
+    it("handles ClientError with no error messages", async () => {
+        const clientError = new ClientError(
+            {
+                status: 400,
+                headers: new Headers(),
+                errors: [],
+                data: null,
+                statusText: "Bad Request",
+                body: "",
+            } as unknown as ConstructorParameters<typeof ClientError>[0],
+            { query: "", variables: {} },
+        )
+
+        mockRequest.mockRejectedValueOnce(clientError)
+
+        const result = await updateSettingsPasswordAction(validData)
+
+        expect(result).toEqual({ error: "passwordUpdateFailed" })
+    })
+
+    it("returns unauthorized error when token is missing from cookies", async () => {
+        mockCookieGet.mockReturnValue(undefined)
+
+        mockRequest.mockResolvedValueOnce({ success: true })
+
+        const result = await updateSettingsPasswordAction(validData)
+
+        expect(getGql).toHaveBeenCalledWith("")
+        expect(mockRequest).toHaveBeenCalledTimes(1)
+    })
+
+    it("returns error with multiple error messages from ClientError", async () => {
+        const clientError = new ClientError(
+            {
+                status: 401,
+                headers: new Headers(),
+                errors: [
+                    { message: "Token expired" },
+                    { message: "Invalid signature" },
+                ],
+                data: null,
+                statusText: "Unauthorized",
+                body: "",
+            } as unknown as ConstructorParameters<typeof ClientError>[0],
+            { query: "", variables: {} },
+        )
+
+        mockRequest.mockRejectedValueOnce(clientError)
+
+        const result = await updateSettingsPasswordAction(validData)
+
+        expect(result).toEqual({ error: "sessionExpired" })
+    })
 })

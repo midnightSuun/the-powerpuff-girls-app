@@ -194,4 +194,63 @@ describe("SettingsPage", () => {
         })[0]
         expect(submitButton).toBeDisabled()
     })
+
+    it("handles theme Dark selection and sets theme correctly", () => {
+        render(<SettingsPage />)
+
+        const themeSelects = screen.getAllByTestId("select")
+        const themeSelect = themeSelects[0]
+        fireEvent.change(themeSelect, { target: { value: "Dark" } })
+
+        expect(mockSetTheme).toHaveBeenCalledWith("dark")
+    })
+
+    it("handles theme Device settings selection and sets theme to system", () => {
+        render(<SettingsPage />)
+
+        const themeSelects = screen.getAllByTestId("select")
+        const themeSelect = themeSelects[0]
+        fireEvent.change(themeSelect, { target: { value: "Device settings" } })
+
+        expect(mockSetTheme).toHaveBeenCalledWith("system")
+    })
+
+    it("displays labels when theme or language values are present", () => {
+        const mockWatchWithValues = vi.fn((fieldName: string) => {
+            const fields: Record<string, string> = {
+                password: "test123",
+                newPassword: "newtest123",
+                confirmPassword: "newtest123",
+            }
+            return fields[fieldName] || ""
+        })
+
+        vi.mocked(useSettings).mockReturnValueOnce({
+            locale: "en",
+            isPending: false,
+            register: mockRegister,
+            handleSubmit: mockHandleSubmit,
+            onSubmit: mockOnSubmit,
+            errors: {},
+            isValid: true,
+            setTheme: mockSetTheme,
+            handleLanguageChange: mockHandleLanguageChange,
+            watch: mockWatchWithValues as unknown as ReturnType<
+                typeof useSettings
+            >["watch"],
+        })
+
+        render(<SettingsPage />)
+
+        // Check that password labels are shown when values exist
+        expect(
+            screen.getByText("passwordSection.currentPlaceholder"),
+        ).toBeInTheDocument()
+        expect(
+            screen.getByText("passwordSection.newPlaceholder"),
+        ).toBeInTheDocument()
+        expect(
+            screen.getByText("passwordSection.confirmPlaceholder"),
+        ).toBeInTheDocument()
+    })
 })

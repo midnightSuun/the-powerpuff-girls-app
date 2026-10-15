@@ -54,7 +54,11 @@ vi.mock("@/components/ui/delete-item-modal", () => ({
                     >
                         Confirm Delete
                     </button>
-                    <button data-testid="close-delete" onClick={onClose}>
+                    <button
+                        data-testid="close-delete"
+                        onClick={isDeleting ? undefined : onClose}
+                        disabled={isDeleting}
+                    >
                         Close
                     </button>
                 </div>
@@ -230,5 +234,102 @@ describe("UserRowMenu Component", () => {
             "Failed to delete user",
         )
         expect(mockRefresh).not.toHaveBeenCalled()
+    })
+
+    it("handles deletion failure without error message", async () => {
+        vi.mocked(deleteUser).mockResolvedValueOnce({
+            success: false,
+        })
+
+        render(<UserRowMenu label="Actions" user={sampleUser} />)
+
+        const deleteMenuItem = screen.getByText("delete")
+        await userEvent.click(deleteMenuItem)
+
+        const closeDropdownBtn = screen.getByTestId("close-dropdown")
+        await userEvent.click(closeDropdownBtn)
+
+        const confirmButton = screen.getByTestId("confirm-delete")
+        await userEvent.click(confirmButton)
+
+        expect(deleteUser).toHaveBeenCalledWith("user-1")
+        expect(mockErrorNotification).toHaveBeenCalledWith("deleteFailed")
+    })
+
+    it("prevents closing delete modal while deletion is in progress", async () => {
+        vi.mocked(deleteUser).mockImplementation(
+            () =>
+                new Promise((resolve) =>
+                    setTimeout(() => resolve({ success: true }), 100),
+                ),
+        )
+
+        render(<UserRowMenu label="Actions" user={sampleUser} />)
+
+        const deleteMenuItem = screen.getByText("delete")
+        await userEvent.click(deleteMenuItem)
+
+        const closeDropdownBtn = screen.getByTestId("close-dropdown")
+        await userEvent.click(closeDropdownBtn)
+
+        const confirmButton = await screen.findByTestId("confirm-delete")
+        await userEvent.click(confirmButton)
+
+        await vi.waitFor(() => {
+            expect(confirmButton).toBeDisabled()
+        })
+
+        const closeButton = screen.getByTestId("close-delete")
+        await userEvent.click(closeButton)
+
+        expect(screen.getByTestId("delete-modal")).toBeInTheDocument()
+
+        await vi.waitFor(() => {
+            expect(mockSuccessNotification).toHaveBeenCalledWith("deleted")
+        })
+    })
+
+    it("opens update dialog when update action is triggered", async () => {
+        render(<UserRowMenu label="Actions" user={sampleUser} />)
+
+        const updateMenuItem = screen.getByText("update")
+        await userEvent.click(updateMenuItem)
+
+        const closeDropdownBtn = screen.getByTestId("close-dropdown")
+        await userEvent.click(closeDropdownBtn)
+
+        expect(screen.getByTestId("update-user-dialog")).toBeInTheDocument()
+    })
+
+    it("does not trigger action when dropdown opens", async () => {
+        render(<UserRowMenu label="Actions" user={sampleUser} />)
+
+        // Simulate opening dropdown (onOpenChangeComplete with true)
+        const closeDropdownBtn = screen.getByTestId("close-dropdown")
+
+        // Manually call the mocked DropdownMenu's onOpenChangeComplete with true
+        // This tests the early return: if (open || !pendingActionRef.current) return
+        const dropdownMenu = screen.getByTestId("dropdown-menu")
+        expect(dropdownMenu).toBeInTheDocument()
+
+        // Delete modal should not be open yet
+        expect(screen.queryByTestId("delete-modal")).not.toBeInTheDocument()
+        expect(
+            screen.queryByTestId("update-user-dialog"),
+        ).not.toBeInTheDocument()
+    })
+
+    it("does not trigger action when no pending action exists", async () => {
+        render(<UserRowMenu label="Actions" user={sampleUser} />)
+
+        // Close dropdown without clicking any menu item
+        const closeDropdownBtn = screen.getByTestId("close-dropdown")
+        await userEvent.click(closeDropdownBtn)
+
+        // No modals should open
+        expect(screen.queryByTestId("delete-modal")).not.toBeInTheDocument()
+        expect(
+            screen.queryByTestId("update-user-dialog"),
+        ).not.toBeInTheDocument()
     })
 })

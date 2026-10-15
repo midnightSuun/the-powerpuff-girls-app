@@ -65,4 +65,116 @@ describe("UsersTableFrame Component", () => {
         expect(placeholder).toBeInTheDocument()
         expect(placeholder).toHaveTextContent("Custom Loading...")
     })
+
+    it("renders fallback showing previous content when it exists", async () => {
+        // This test verifies the conditional branch: if (previous) { ... }
+        // We'll test the component behavior by checking state changes
+
+        const FirstChild = () => (
+            <div data-testid="first-child">First Content</div>
+        )
+
+        const SecondChild = () => (
+            <div data-testid="second-child">Second Content</div>
+        )
+
+        const { rerender } = render(
+            <UsersTableFrame>
+                <FirstChild />
+            </UsersTableFrame>,
+        )
+
+        // Wait for first child to render (previous state is set)
+        await screen.findByTestId("first-child")
+
+        // Rerender with second child
+        rerender(
+            <UsersTableFrame>
+                <SecondChild />
+            </UsersTableFrame>,
+        )
+
+        // Second child should render
+        const secondChild = await screen.findByTestId("second-child")
+        expect(secondChild).toBeInTheDocument()
+        expect(secondChild).toHaveTextContent("Second Content")
+
+        // First child should no longer be in document
+        expect(screen.queryByTestId("first-child")).not.toBeInTheDocument()
+    })
+
+    it("does not render placeholder when previous content exists", async () => {
+        const Child = () => <div data-testid="child-content">Content</div>
+
+        render(
+            <UsersTableFrame
+                placeholder={
+                    <div data-testid="should-not-appear">Placeholder</div>
+                }
+            >
+                <Child />
+            </UsersTableFrame>,
+        )
+
+        // Wait for child to render
+        await screen.findByTestId("child-content")
+
+        // Placeholder should never have appeared
+        expect(
+            screen.queryByTestId("should-not-appear"),
+        ).not.toBeInTheDocument()
+    })
+
+    it("updates previous state when children change and resolve", async () => {
+        const FirstChild = () => (
+            <div data-testid="first-child">First Content</div>
+        )
+        const SecondChild = () => (
+            <div data-testid="second-child">Second Content</div>
+        )
+
+        const { rerender } = render(
+            <UsersTableFrame>
+                <FirstChild />
+            </UsersTableFrame>,
+        )
+
+        const firstContent = await screen.findByTestId("first-child")
+        expect(firstContent).toBeInTheDocument()
+
+        rerender(
+            <UsersTableFrame>
+                <SecondChild />
+            </UsersTableFrame>,
+        )
+
+        const secondContent = await screen.findByTestId("second-child")
+        expect(secondContent).toBeInTheDocument()
+        expect(secondContent).toHaveTextContent("Second Content")
+    })
+
+    it("does not update state when children remain the same", async () => {
+        const Child = () => <div data-testid="child-content">Same Content</div>
+
+        const { rerender } = render(
+            <UsersTableFrame>
+                <Child />
+            </UsersTableFrame>,
+        )
+
+        // Wait for initial render
+        const firstRender = await screen.findByTestId("child-content")
+        expect(firstRender).toHaveTextContent("Same Content")
+
+        // Rerender with the same children (tests current === children path)
+        rerender(
+            <UsersTableFrame>
+                <Child />
+            </UsersTableFrame>,
+        )
+
+        // Content should still be there
+        const afterRerender = screen.getByTestId("child-content")
+        expect(afterRerender).toHaveTextContent("Same Content")
+    })
 })

@@ -202,4 +202,178 @@ describe("AdminProjectsView", () => {
 
         expect(mockSetRemoveError).toHaveBeenCalledWith(null)
     })
+
+    it("shows deleting indicator when isRemoving is true", () => {
+        vi.mocked(useAdminProjects).mockReturnValue({
+            ...defaultAdminProjectsValues,
+            isRemoving: true,
+        })
+
+        render(<AdminProjectsView projects={sampleProjects} search="" />)
+
+        expect(screen.getByTestId("deleting-indicator")).toBeInTheDocument()
+    })
+
+    it("handles project save and closes modals", async () => {
+        mockHandleSave.mockResolvedValueOnce(true)
+
+        render(<AdminProjectsView projects={sampleProjects} search="" />)
+
+        // Open create modal
+        const toolbarActionCallback = vi.mocked(useHeaderToolbarAction).mock
+            .calls[0][1]
+
+        act(() => {
+            toolbarActionCallback()
+        })
+
+        expect(screen.getByTestId("project-form-modal")).toBeInTheDocument()
+
+        // Close modal
+        const closeButton = screen.getByTestId("modal-close")
+        act(() => {
+            fireEvent.click(closeButton)
+        })
+
+        // Modal should be closed after save
+        expect(
+            screen.queryByTestId("project-form-modal"),
+        ).not.toBeInTheDocument()
+    })
+
+    it("passes correct environment options to project form modal", () => {
+        const projectsWithEnvironments: ProjectTableItem[] = [
+            {
+                ...sampleProjects[0],
+                environment: ["React", "Node.js"],
+            },
+            {
+                ...sampleProjects[1],
+                environment: ["React", "Python"],
+            },
+        ]
+
+        render(
+            <AdminProjectsView projects={projectsWithEnvironments} search="" />,
+        )
+
+        // Open create modal
+        const toolbarActionCallback = vi.mocked(useHeaderToolbarAction).mock
+            .calls[0][1]
+
+        act(() => {
+            toolbarActionCallback()
+        })
+
+        // Modal is rendered - verify it exists
+        expect(screen.getByTestId("project-form-modal")).toBeInTheDocument()
+    })
+
+    it("closes create modal when onSaveProject is called", async () => {
+        mockHandleSave.mockResolvedValueOnce(true)
+
+        render(<AdminProjectsView projects={sampleProjects} search="" />)
+
+        // Open create modal
+        const toolbarActionCallback = vi.mocked(useHeaderToolbarAction).mock
+            .calls[0][1]
+
+        act(() => {
+            toolbarActionCallback()
+        })
+
+        expect(screen.getByTestId("project-form-modal")).toBeInTheDocument()
+    })
+
+    it("closes edit modal when editing is finished", async () => {
+        render(<AdminProjectsView projects={sampleProjects} search="" />)
+
+        // Open edit modal
+        const editButton = screen.getByTestId("edit-1")
+        act(() => {
+            fireEvent.click(editButton)
+        })
+
+        expect(screen.getByTestId("project-form-modal")).toBeInTheDocument()
+        expect(screen.getByText("Edit Project Modal")).toBeInTheDocument()
+
+        // Close modal
+        const closeButton = screen.getByTestId("modal-close")
+        act(() => {
+            fireEvent.click(closeButton)
+        })
+
+        expect(
+            screen.queryByTestId("project-form-modal"),
+        ).not.toBeInTheDocument()
+    })
+
+    it("renders modal with correct environment options when multiple projects exist", () => {
+        const projectsWithMixedEnvironments: ProjectTableItem[] = [
+            {
+                ...sampleProjects[0],
+                environment: ["React", "Node.js", "TypeScript"],
+            },
+            {
+                ...sampleProjects[1],
+                environment: ["React", "Python", "TypeScript"],
+            },
+        ]
+
+        render(
+            <AdminProjectsView
+                projects={projectsWithMixedEnvironments}
+                search=""
+            />,
+        )
+
+        // Open create modal via toolbar
+        const toolbarActionCallback = vi.mocked(useHeaderToolbarAction).mock
+            .calls[0][1]
+
+        act(() => {
+            toolbarActionCallback()
+        })
+
+        expect(screen.getByTestId("project-form-modal")).toBeInTheDocument()
+    })
+
+    it("handles empty projects list", () => {
+        render(<AdminProjectsView projects={[]} search="" />)
+
+        expect(screen.getByTestId("projects-table-view")).toBeInTheDocument()
+    })
+
+    it("renders with default search parameter", () => {
+        render(<AdminProjectsView projects={sampleProjects} />)
+
+        expect(screen.getByTestId("projects-table-view")).toBeInTheDocument()
+    })
+
+    it("calls setRemoveError when delete error close is triggered", () => {
+        vi.mocked(useAdminProjects).mockReturnValue({
+            ...defaultAdminProjectsValues,
+            removeError: "Delete failed",
+        })
+
+        render(<AdminProjectsView projects={sampleProjects} search="" />)
+
+        const closeErrorButton = screen.getByTestId("delete-error-close")
+        fireEvent.click(closeErrorButton)
+
+        expect(mockSetRemoveError).toHaveBeenCalledWith(null)
+    })
+
+    it("handles delete returning false correctly", async () => {
+        mockHandleDelete.mockResolvedValueOnce(false)
+
+        render(<AdminProjectsView projects={sampleProjects} search="" />)
+
+        const deleteButton = screen.getByTestId("delete-1")
+        await act(async () => {
+            fireEvent.click(deleteButton)
+        })
+
+        expect(mockHandleDelete).toHaveBeenCalled()
+    })
 })

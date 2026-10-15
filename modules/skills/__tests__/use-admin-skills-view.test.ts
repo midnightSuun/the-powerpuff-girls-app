@@ -198,4 +198,127 @@ describe("useAdminSkillsView", () => {
         expect(mockSuccessNotification).toHaveBeenCalledWith("deleted")
         expect(mockRemoveItem).toHaveBeenCalledWith("1")
     })
+
+    it("handles skill creation when response is null", async () => {
+        vi.mocked(createAdminSkill).mockResolvedValueOnce(
+            null as unknown as Awaited<ReturnType<typeof createAdminSkill>>,
+        )
+
+        const { result } = renderHook(() =>
+            useAdminSkillsView({ initialSkills }),
+        )
+
+        await act(async () => {
+            await result.current.handleCreate({
+                name: "React",
+                categoryId: "c1",
+            })
+        })
+
+        expect(createAdminSkill).toHaveBeenCalledWith({
+            name: "React",
+            categoryId: "c1",
+        })
+        expect(mockSuccessNotification).toHaveBeenCalledWith("created")
+        expect(mockAddItem).not.toHaveBeenCalled()
+    })
+
+    it("handles skill update when response is null", async () => {
+        vi.mocked(updateAdminSkill).mockResolvedValueOnce(
+            null as unknown as Awaited<ReturnType<typeof updateAdminSkill>>,
+        )
+
+        const { result } = renderHook(() =>
+            useAdminSkillsView({ initialSkills }),
+        )
+
+        await act(async () => {
+            await result.current.handleUpdate("1", {
+                name: "TypeScript.js",
+                categoryId: "c1",
+            })
+        })
+
+        expect(updateAdminSkill).toHaveBeenCalledWith({
+            skillId: "1",
+            name: "TypeScript.js",
+            categoryId: "c1",
+        })
+        expect(mockSuccessNotification).toHaveBeenCalledWith("updated")
+        expect(mockUpdateItem).not.toHaveBeenCalled()
+    })
+
+    it("handles skill creation when category is null", async () => {
+        const createdSkillResponse = {
+            id: "2",
+            name: "React",
+            category: null,
+        }
+
+        vi.mocked(createAdminSkill).mockResolvedValueOnce(
+            createdSkillResponse as unknown as Awaited<
+                ReturnType<typeof createAdminSkill>
+            >,
+        )
+
+        const { result } = renderHook(() =>
+            useAdminSkillsView({ initialSkills }),
+        )
+
+        await act(async () => {
+            await result.current.handleCreate({
+                name: "React",
+                categoryId: "c1",
+            })
+        })
+
+        expect(createAdminSkill).toHaveBeenCalledWith({
+            name: "React",
+            categoryId: "c1",
+        })
+        expect(mockSuccessNotification).toHaveBeenCalledWith("created")
+        expect(mockAddItem).toHaveBeenCalledWith({
+            id: "2",
+            name: "React",
+            category: "",
+            categoryId: "",
+        })
+    })
+
+    it("handles skill update when category is null", async () => {
+        const updatedSkillResponse = {
+            id: "1",
+            name: "TypeScript.js",
+            category: null,
+        }
+
+        vi.mocked(updateAdminSkill).mockResolvedValueOnce(
+            updatedSkillResponse as unknown as Awaited<
+                ReturnType<typeof updateAdminSkill>
+            >,
+        )
+
+        const { result } = renderHook(() =>
+            useAdminSkillsView({ initialSkills }),
+        )
+
+        await act(async () => {
+            await result.current.handleUpdate("1", {
+                name: "TypeScript.js",
+                categoryId: "c1",
+            })
+        })
+
+        expect(updateAdminSkill).toHaveBeenCalledWith({
+            skillId: "1",
+            name: "TypeScript.js",
+            categoryId: "c1",
+        })
+        expect(mockSuccessNotification).toHaveBeenCalledWith("updated")
+        expect(mockUpdateItem).toHaveBeenCalledWith("1", {
+            name: "TypeScript.js",
+            category: "",
+            categoryId: "",
+        })
+    })
 })

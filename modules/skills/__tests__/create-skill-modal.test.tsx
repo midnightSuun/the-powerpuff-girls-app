@@ -16,6 +16,7 @@ vi.mock("@/components/ui/base-modal", () => ({
         error,
         children,
         onSubmit,
+        onClose,
         cancelText,
         confirmText,
     }: {
@@ -24,6 +25,7 @@ vi.mock("@/components/ui/base-modal", () => ({
         error?: string | null
         children: React.ReactNode
         onSubmit: (e: React.FormEvent) => void
+        onClose: () => void
         cancelText: string
         confirmText: string
     }) =>
@@ -36,12 +38,71 @@ vi.mock("@/components/ui/base-modal", () => ({
                     <button type="submit" data-testid="confirm-btn">
                         {confirmText}
                     </button>
-                    <button type="button" data-testid="cancel-btn">
+                    <button
+                        type="button"
+                        data-testid="cancel-btn"
+                        onClick={onClose}
+                    >
                         {cancelText}
                     </button>
                 </form>
             </div>
         ) : null,
+}))
+
+vi.mock("@/components/ui/select", () => ({
+    Select: ({
+        children,
+        onValueChange,
+        value,
+    }: {
+        children: React.ReactNode
+        onValueChange?: (val: string) => void
+        value?: string
+    }) => (
+        <div data-testid="select-root" data-value={value}>
+            <button
+                role="combobox"
+                data-testid="select-trigger"
+                onClick={() => onValueChange?.("prog")}
+            >
+                {value || "placeholder"}
+            </button>
+            <button
+                data-testid="select-trigger-null"
+                onClick={() =>
+                    (onValueChange as (val: string | undefined) => void)?.(
+                        undefined,
+                    )
+                }
+            >
+                clear
+            </button>
+            {children}
+        </div>
+    ),
+    SelectTrigger: ({ children }: { children: React.ReactNode }) => (
+        <>{children}</>
+    ),
+    SelectValue: ({ children }: { children?: React.ReactNode }) => (
+        <span>{children}</span>
+    ),
+    SelectContent: ({ children }: { children: React.ReactNode }) => (
+        <div data-testid="select-content">{children}</div>
+    ),
+    SelectItem: ({
+        children,
+        value,
+        onClick,
+    }: {
+        children: React.ReactNode
+        value: string
+        onClick?: () => void
+    }) => (
+        <div data-testid={`select-item-${value}`} onClick={onClick}>
+            {children}
+        </div>
+    ),
 }))
 
 describe("CreateSkillModal", () => {
@@ -154,5 +215,166 @@ describe("CreateSkillModal", () => {
         )
 
         expect(screen.queryByTestId("base-modal")).not.toBeInTheDocument()
+    })
+
+    it("renders with empty categoryId showing placeholder in SelectValue", () => {
+        vi.mocked(useCreateSkillAdminModal).mockReturnValue({
+            name: "",
+            setName: mockSetters.setName,
+            categoryId: "",
+            setCategoryId: mockSetters.setCategoryId,
+            inlineError: null,
+            error: null,
+            isSubmitting: false,
+            isValid: false,
+            handleSubmit: mockSetters.handleSubmit,
+        })
+
+        render(
+            <CreateSkillModal
+                isOpen={true}
+                onClose={mockOnClose}
+                categories={categories}
+                onCreate={mockOnCreate}
+            />,
+        )
+
+        expect(screen.getByTestId("base-modal")).toBeInTheDocument()
+    })
+
+    it("filters out duplicate category names (same id → same translation key)", () => {
+        const duplicateCategories = [
+            { id: "prog", name: "Programming" },
+            { id: "prog", name: "Programming Duplicate" },
+        ]
+
+        render(
+            <CreateSkillModal
+                isOpen={true}
+                onClose={mockOnClose}
+                categories={duplicateCategories}
+                onCreate={mockOnCreate}
+            />,
+        )
+
+        expect(screen.getAllByTestId("select-item-prog")).toHaveLength(1)
+    })
+
+    it("calls setCategoryId when Select value changes", () => {
+        render(
+            <CreateSkillModal
+                isOpen={true}
+                onClose={mockOnClose}
+                categories={categories}
+                onCreate={mockOnCreate}
+            />,
+        )
+
+        fireEvent.click(screen.getByTestId("select-trigger"))
+        expect(mockSetters.setCategoryId).toHaveBeenCalledWith("prog")
+    })
+
+    it("calls setCategoryId with empty string when onValueChange receives undefined (val ?? '')", () => {
+        render(
+            <CreateSkillModal
+                isOpen={true}
+                onClose={mockOnClose}
+                categories={categories}
+                onCreate={mockOnCreate}
+            />,
+        )
+
+        // select-trigger-null вызывает onValueChange(undefined) → val ?? "" → ""
+        fireEvent.click(screen.getByTestId("select-trigger-null"))
+        expect(mockSetters.setCategoryId).toHaveBeenCalledWith("")
+    })
+
+    it("handles CategoryOption with empty id", () => {
+        const emptyIdCategories = [
+            { id: "", name: "Unknown" },
+            { id: "prog", name: "Programming" },
+        ]
+
+        render(
+            <CreateSkillModal
+                isOpen={true}
+                onClose={mockOnClose}
+                categories={emptyIdCategories}
+                onCreate={mockOnCreate}
+            />,
+        )
+
+        expect(screen.getByTestId("base-modal")).toBeInTheDocument()
+    })
+
+    it("displays modal error when error state is present", () => {
+        vi.mocked(useCreateSkillAdminModal).mockReturnValue({
+            name: "TestSkill",
+            setName: mockSetters.setName,
+            categoryId: "prog",
+            setCategoryId: mockSetters.setCategoryId,
+            inlineError: null,
+            error: "Failed to create skill",
+            isSubmitting: false,
+            isValid: true,
+            handleSubmit: mockSetters.handleSubmit,
+        })
+
+        render(
+            <CreateSkillModal
+                isOpen={true}
+                onClose={mockOnClose}
+                categories={categories}
+                onCreate={mockOnCreate}
+            />,
+        )
+
+        expect(screen.getByTestId("modal-error")).toHaveTextContent(
+            "Failed to create skill",
+        )
+    })
+
+    it("disables input when isSubmitting is true", () => {
+        vi.mocked(useCreateSkillAdminModal).mockReturnValue({
+            name: "",
+            setName: mockSetters.setName,
+            categoryId: "",
+            setCategoryId: mockSetters.setCategoryId,
+            inlineError: null,
+            error: null,
+            isSubmitting: true,
+            isValid: false,
+            handleSubmit: mockSetters.handleSubmit,
+        })
+
+        render(
+            <CreateSkillModal
+                isOpen={true}
+                onClose={mockOnClose}
+                categories={categories}
+                onCreate={mockOnCreate}
+            />,
+        )
+
+        const inputs = screen.getAllByPlaceholderText("skill")
+        inputs.forEach((input) => {
+            expect(input).toBeDisabled()
+        })
+    })
+
+    it("passes existingSkillNames to the hook", () => {
+        const existingNames = ["TypeScript", "Python"]
+
+        render(
+            <CreateSkillModal
+                isOpen={true}
+                onClose={mockOnClose}
+                categories={categories}
+                existingSkillNames={existingNames}
+                onCreate={mockOnCreate}
+            />,
+        )
+
+        expect(screen.getByTestId("base-modal")).toBeInTheDocument()
     })
 })

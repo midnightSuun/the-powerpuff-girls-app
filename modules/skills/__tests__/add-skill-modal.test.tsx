@@ -61,6 +61,13 @@ vi.mock("@/components/ui/add-item-modal", () => ({
                         Cancel
                     </button>
                 </form>
+                {/* Add a button to test onSelectChange with null value */}
+                <button
+                    data-testid="test-null-select"
+                    onClick={() => onSelectChange(null)}
+                >
+                    Test Null Select
+                </button>
             </div>
         ) : null,
 }))
@@ -200,5 +207,15 @@ describe("AddSkillModal", () => {
         render(<AddSkillModal {...defaultProps} />)
 
         expect(screen.queryByTestId("add-item-modal")).not.toBeInTheDocument()
+    })
+
+    it("calls setSelectedSkillId with empty string when onSelectChange receives null", async () => {
+        const user = (await import("@testing-library/user-event")).default
+        render(<AddSkillModal {...defaultProps} />)
+
+        const nullButton = screen.getByTestId("test-null-select")
+        await user.setup().click(nullButton)
+
+        expect(mockSetSelectedSkillId).toHaveBeenCalledWith("")
     })
 })

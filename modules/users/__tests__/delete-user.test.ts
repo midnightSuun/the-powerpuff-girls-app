@@ -1,3 +1,4 @@
+import { ClientError } from "graphql-request"
 import { updateTag } from "next/cache"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
@@ -125,6 +126,68 @@ describe("deleteUser Server Action", () => {
         const mockRequest = vi
             .fn()
             .mockRejectedValueOnce(new Error("Database connection error"))
+        vi.mocked(getGql).mockResolvedValueOnce({
+            request: mockRequest,
+        } as unknown as Awaited<ReturnType<typeof getGql>>)
+
+        const result = await deleteUser(targetUserId)
+
+        expect(result).toEqual({
+            success: false,
+            error: "deleteFailed",
+        })
+    })
+
+    it("handles ClientError with error messages", async () => {
+        vi.mocked(getCurrentSession).mockResolvedValueOnce({
+            userId: adminUserId,
+            role: "Admin",
+            email: "admin@example.com",
+        } as unknown as Awaited<ReturnType<typeof getCurrentSession>>)
+
+        const clientError = Object.create(ClientError.prototype, {
+            response: {
+                value: {
+                    errors: [{ message: "User not found in database" }],
+                    data: null,
+                },
+                enumerable: true,
+            },
+            status: { value: 404, enumerable: true },
+        })
+
+        const mockRequest = vi.fn().mockRejectedValueOnce(clientError)
+        vi.mocked(getGql).mockResolvedValueOnce({
+            request: mockRequest,
+        } as unknown as Awaited<ReturnType<typeof getGql>>)
+
+        const result = await deleteUser(targetUserId)
+
+        expect(result).toEqual({
+            success: false,
+            error: "deleteFailed",
+        })
+    })
+
+    it("handles ClientError without error messages", async () => {
+        vi.mocked(getCurrentSession).mockResolvedValueOnce({
+            userId: adminUserId,
+            role: "Admin",
+            email: "admin@example.com",
+        } as unknown as Awaited<ReturnType<typeof getCurrentSession>>)
+
+        const clientError = Object.create(ClientError.prototype, {
+            response: {
+                value: {
+                    errors: undefined,
+                    data: null,
+                },
+                enumerable: true,
+            },
+            status: { value: 500, enumerable: true },
+        })
+
+        const mockRequest = vi.fn().mockRejectedValueOnce(clientError)
         vi.mocked(getGql).mockResolvedValueOnce({
             request: mockRequest,
         } as unknown as Awaited<ReturnType<typeof getGql>>)

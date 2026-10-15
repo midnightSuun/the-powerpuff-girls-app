@@ -214,9 +214,9 @@ describe("normalizePathname", () => {
     })
 
     it("does not remove unsupported locale prefix", () => {
-        const result = normalizePathname("/fr/users")
+        const result = normalizePathname("/jp/users")
 
-        expect(result).toBe("/fr/users")
+        expect(result).toBe("/jp/users")
     })
 
     it("removes query string", () => {
