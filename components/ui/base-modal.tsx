@@ -59,14 +59,21 @@ export function BaseModal({
     useBodyScrollLock(isOpen)
     const dialogRef = useRef<HTMLDivElement>(null)
     const firstFocusableRef = useRef<HTMLButtonElement>(null)
+    const onCloseRef = useRef(onClose)
+
+    useEffect(() => {
+        onCloseRef.current = onClose
+    }, [onClose])
 
     useEffect(() => {
         if (!isOpen) return
 
         const handleEscape = (event: KeyboardEvent) => {
-            if (event.key === "Escape" && !isPending) {
-                onClose()
+            if (event.key !== "Escape" || isPending || event.defaultPrevented) {
+                return
             }
+
+            onCloseRef.current()
         }
 
         const handleTabTrap = (event: KeyboardEvent) => {
@@ -93,15 +100,16 @@ export function BaseModal({
 
         document.addEventListener("keydown", handleEscape)
         document.addEventListener("keydown", handleTabTrap)
-        setTimeout(() => {
+        const focusTimer = window.setTimeout(() => {
             firstFocusableRef.current?.focus()
         }, 50)
 
         return () => {
+            window.clearTimeout(focusTimer)
             document.removeEventListener("keydown", handleEscape)
             document.removeEventListener("keydown", handleTabTrap)
         }
-    }, [isOpen, onClose, isPending])
+    }, [isOpen, isPending])
 
     if (!isOpen) return null
 

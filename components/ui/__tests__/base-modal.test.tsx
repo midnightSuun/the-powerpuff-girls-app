@@ -138,6 +138,20 @@ describe("BaseModal", () => {
         expect(onClose).toHaveBeenCalledTimes(1)
     })
 
+    it("does not close on Escape when a nested control already handled it", () => {
+        const onClose = vi.fn()
+        render(<BaseModal {...defaultProps} onClose={onClose} />)
+
+        const event = new KeyboardEvent("keydown", {
+            key: "Escape",
+            bubbles: true,
+            cancelable: true,
+        })
+        event.preventDefault()
+        document.dispatchEvent(event)
+        expect(onClose).not.toHaveBeenCalled()
+    })
+
     it("does not close on Escape key press when pending", () => {
         const onClose = vi.fn()
         render(

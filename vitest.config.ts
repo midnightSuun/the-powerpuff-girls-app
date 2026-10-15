@@ -8,7 +8,7 @@ export default defineConfig({
     test: {
         environment: "happy-dom",
         globals: true,
-        isolate: false,
+        isolate: true,
         setupFiles: "./vitest.setup.ts",
         pool: "threads",
         server: {

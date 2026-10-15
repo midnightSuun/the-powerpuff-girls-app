@@ -6,7 +6,7 @@ import {
 } from "../pagination-search-params"
 
 vi.mock("@/lib/user-sort", () => ({
-    userSortFields: ["name", "email", "createdAt"] as const,
+    userSortFields: ["first_name", "email", "department"] as const,
 }))
 
 describe("Pagination Search Params Schema & Parser", () => {
@@ -74,7 +74,7 @@ describe("Pagination Search Params Schema & Parser", () => {
                 limit: "50",
                 page: "2",
                 search: "test",
-                sortBy: "name",
+                sortBy: "first_name",
             }
 
             const result = parsePaginationSearchParams(rawParams)
@@ -83,7 +83,7 @@ describe("Pagination Search Params Schema & Parser", () => {
                 limit: 50,
                 page: 2,
                 search: "test",
-                sortBy: "name",
+                sortBy: "first_name",
                 sortOrder: "asc",
             })
         })
