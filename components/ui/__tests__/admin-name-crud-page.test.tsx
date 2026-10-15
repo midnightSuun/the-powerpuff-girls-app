@@ -110,4 +110,36 @@ describe("AdminNameCrudPage", () => {
         rerender(<AdminNameCrudPage {...defaultProps} />)
         expect(screen.getByTestId("admin-data-table")).toBeInTheDocument()
     })
+    it("re-renders when memoized props like createButtonLabel or data change", () => {
+        const { rerender } = render(
+            <AdminNameCrudPage
+                {...defaultProps}
+                createButtonLabel="Old Label"
+            />,
+        )
+
+        expect(screen.getByTestId("table-create-label")).toHaveTextContent(
+            "Old Label",
+        )
+
+        rerender(
+            <AdminNameCrudPage
+                {...defaultProps}
+                createButtonLabel="New Label"
+            />,
+        )
+        expect(screen.getByTestId("table-create-label")).toHaveTextContent(
+            "New Label",
+        )
+
+        const updatedData = [...mockData, { id: 3, name: "Department C" }]
+        rerender(
+            <AdminNameCrudPage
+                {...defaultProps}
+                data={updatedData}
+                createButtonLabel="New Label"
+            />,
+        )
+        expect(screen.getByTestId("table-data-count")).toHaveTextContent("3")
+    })
 })

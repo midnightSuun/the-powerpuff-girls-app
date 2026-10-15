@@ -1,11 +1,14 @@
 import { act, render, screen, waitFor } from "@testing-library/react"
+import { Suspense } from "react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
+
+import Page from "../[locale]/(protected)/languages/page"
 
 const mockRedirect = vi.fn()
 vi.mock("next/navigation", () => ({
     redirect: (url: string) => {
         mockRedirect(url)
-        return new Error(`NEXT_REDIRECT:${url}`)
+        throw new Error(`NEXT_REDIRECT:${url}`)
     },
 }))
 
@@ -26,7 +29,7 @@ const mockGetUserLanguages = vi.fn()
 const mockGetAvailableLanguages = vi.fn()
 
 vi.mock("@/modules/languages/api/admin-languages", () => ({
-    getAdminLanguages: () => mockGetAdminLanguages(),
+    getAdminLanguages: (params: unknown) => mockGetAdminLanguages(params),
 }))
 
 vi.mock("@/modules/languages/api/languages", () => ({
@@ -72,13 +75,10 @@ vi.mock("@/components/progress-list-skeleton", () => ({
     ProgressListSkeleton: () => <div data-testid="progress-list-skeleton" />,
 }))
 
-import Page from "../[locale]/(protected)/languages/page"
-
 describe("Languages Page Server Component", () => {
     beforeEach(() => {
         vi.clearAllMocks()
     })
-
     it("redirects to /login when user session is missing", async () => {
         mockGetCurrentSession.mockResolvedValue(null)
         mockGetUserRole.mockResolvedValue("Admin")
@@ -104,13 +104,24 @@ describe("Languages Page Server Component", () => {
 
         const searchParams = Promise.resolve({ search: "eng" })
 
-        let resolvedContent: React.ReactNode
         await act(async () => {
-            resolvedContent = await Page({ searchParams })
+            render(
+                <Suspense fallback={null}>
+                    <Page searchParams={searchParams} />
+                </Suspense>,
+            )
         })
 
+        await waitFor(() => {
+            expect(
+                screen.getByTestId("admin-languages-view"),
+            ).toBeInTheDocument()
+        })
+
+        expect(mockGetAdminLanguages).toHaveBeenCalled()
+        expect(screen.getByTestId("lang-count")).toHaveTextContent("2")
+        expect(screen.getByTestId("search-param")).toHaveTextContent("eng")
         expect(mockRedirect).not.toHaveBeenCalled()
-        expect(resolvedContent).toBeDefined()
     })
 
     it("fetches and renders LanguagesPage successfully when user is a regular User", async () => {
@@ -126,12 +137,23 @@ describe("Languages Page Server Component", () => {
 
         const searchParams = Promise.resolve({})
 
-        let resolvedContent: React.ReactNode
         await act(async () => {
-            resolvedContent = await Page({ searchParams })
+            render(
+                <Suspense fallback={null}>
+                    <Page searchParams={searchParams} />
+                </Suspense>,
+            )
         })
 
+        await waitFor(() => {
+            expect(
+                screen.getByTestId("user-languages-page"),
+            ).toBeInTheDocument()
+        })
+
+        expect(mockGetUserLanguages).toHaveBeenCalledWith("user-123")
+        expect(mockGetAvailableLanguages).toHaveBeenCalled()
+        expect(screen.getByTestId("user-id")).toHaveTextContent("user-123")
         expect(mockRedirect).not.toHaveBeenCalled()
-        expect(resolvedContent).toBeDefined()
     })
 })

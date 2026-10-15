@@ -222,7 +222,6 @@ describe("PageWithTabsHeader", () => {
             />,
         )
 
-        // Two chevrons: one between first and second breadcrumb
         expect(
             screen.getAllByTestId("chevron-icon").length,
         ).toBeGreaterThanOrEqual(1)

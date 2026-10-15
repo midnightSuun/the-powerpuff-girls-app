@@ -159,5 +159,22 @@ describe("Verification Server Actions", () => {
 
             expect(result).toEqual({ error: "verificationInvalid" })
         })
+
+        it("handles ClientError without errors array gracefully in verifyMailAction", async () => {
+            const clientError = new ClientError(
+                {
+                    status: 500,
+                    headers: new Headers(),
+                    errors: undefined,
+                } as unknown as ConstructorParameters<typeof ClientError>[0],
+                { query: "", variables: {} },
+            )
+
+            mockRequest.mockRejectedValueOnce(clientError)
+
+            const result = await verifyMailAction("123456")
+
+            expect(result).toEqual({ error: "verificationInvalid" })
+        })
     })
 })

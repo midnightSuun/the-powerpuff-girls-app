@@ -10,15 +10,34 @@ vi.mock("@/i18n/navigation", () => ({
     useRouter: vi.fn(),
 }))
 
+vi.mock("next-intl", () => ({
+    useTranslations: () => (key: string) => {
+        if (key === "description") {
+            return "Line 1\nLine 2"
+        }
+        return key
+    },
+}))
+
 describe("NotFoundPage", () => {
     const mockPush = vi.fn()
+
+    type AppRouter = ReturnType<typeof useRouter>
+
+    const mockRouter: AppRouter = {
+        push: mockPush,
+        replace: vi.fn(),
+        prefetch: vi.fn(),
+        back: vi.fn(),
+        forward: vi.fn(),
+        refresh: vi.fn(),
+        bfcacheId: "",
+    }
 
     beforeEach(() => {
         cleanup()
         vi.clearAllMocks()
-        vi.mocked(useRouter).mockReturnValue({
-            push: mockPush,
-        } as unknown as ReturnType<typeof useRouter>)
+        vi.mocked(useRouter).mockReturnValue(mockRouter)
     })
 
     afterEach(() => {
@@ -35,7 +54,8 @@ describe("NotFoundPage", () => {
         expect(
             screen.getByRole("heading", { name: "title" }),
         ).toBeInTheDocument()
-        expect(screen.getByText("description")).toBeInTheDocument()
+        expect(screen.getByText("Line 1")).toBeInTheDocument()
+        expect(screen.getByText("Line 2")).toBeInTheDocument()
         expect(
             screen.getByRole("button", { name: "actionText" }),
         ).toBeInTheDocument()

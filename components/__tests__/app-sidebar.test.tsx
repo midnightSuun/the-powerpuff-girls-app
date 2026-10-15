@@ -1,4 +1,5 @@
-import { act, render, screen } from "@testing-library/react"
+import { act, render, screen, waitFor } from "@testing-library/react"
+import { Suspense } from "react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import { AppSidebar } from "../app-sidebar"
@@ -55,30 +56,38 @@ vi.mock("@/components/cv-builder-logo", () => ({
     CvBuilderLogo: () => <div data-testid="cv-builder-logo" />,
 }))
 
+vi.mock("@/components/ui/skeleton", () => ({
+    Skeleton: ({ className }: { className?: string }) => (
+        <div data-slot="skeleton" data-classname={className} />
+    ),
+}))
+
 vi.mock("@/components/sidebar-toggle", () => ({
     SidebarToggle: () => <button data-testid="sidebar-toggle">Toggle</button>,
 }))
 
 vi.mock("@/components/sidebar-nav", () => ({
-    SidebarNav: ({
-        isAdmin,
-        viewerId,
-    }: {
-        isAdmin: boolean
-        viewerId: string | null
-    }) => (
-        <div
-            data-testid="sidebar-nav"
-            data-is-admin={String(isAdmin)}
-            data-viewer-id={viewerId ?? "null"}
-        >
-            SidebarNav
-        </div>
+    SidebarNav: vi.fn(
+        ({
+            isAdmin,
+            viewerId,
+        }: {
+            isAdmin: boolean
+            viewerId: string | null
+        }) => (
+            <div
+                data-testid="sidebar-nav"
+                data-is-admin={String(isAdmin)}
+                data-viewer-id={viewerId ?? "null"}
+            >
+                SidebarNav
+            </div>
+        ),
     ),
 }))
 
 vi.mock("@/modules/users", () => ({
-    NavUser: () => <div data-testid="nav-user">NavUser</div>,
+    NavUser: vi.fn(() => <div data-testid="nav-user">NavUser</div>),
 }))
 
 describe("AppSidebar", () => {
@@ -93,7 +102,15 @@ describe("AppSidebar", () => {
         })
 
         await act(async () => {
-            render(<AppSidebar />)
+            render(
+                <Suspense fallback={null}>
+                    <AppSidebar />
+                </Suspense>,
+            )
+        })
+
+        await waitFor(() => {
+            expect(screen.getByTestId("sidebar-nav")).toBeInTheDocument()
         })
 
         expect(screen.getByTestId("sidebar")).toBeInTheDocument()
@@ -101,8 +118,6 @@ describe("AppSidebar", () => {
         expect(screen.getByTestId("cv-builder-logo")).toBeInTheDocument()
         expect(screen.getByText("CV Builder")).toBeInTheDocument()
         expect(screen.getByTestId("sidebar-toggle")).toBeInTheDocument()
-
-        expect(screen.getByTestId("sidebar-nav")).toBeInTheDocument()
         expect(screen.getByTestId("nav-user")).toBeInTheDocument()
     })
 
@@ -113,23 +128,76 @@ describe("AppSidebar", () => {
         })
 
         await act(async () => {
-            render(<AppSidebar />)
+            render(
+                <Suspense fallback={null}>
+                    <AppSidebar />
+                </Suspense>,
+            )
         })
 
-        const nav = screen.getByTestId("sidebar-nav")
-        expect(nav).toHaveAttribute("data-is-admin", "true")
-        expect(nav).toHaveAttribute("data-viewer-id", "admin-999")
+        await waitFor(() => {
+            const nav = screen.getByTestId("sidebar-nav")
+            expect(nav).toHaveAttribute("data-is-admin", "true")
+            expect(nav).toHaveAttribute("data-viewer-id", "admin-999")
+        })
     })
 
     it("passes isAdmin=false and viewerId=null when session is missing", async () => {
         mockGetCurrentSession.mockResolvedValue(null)
 
         await act(async () => {
-            render(<AppSidebar />)
+            render(
+                <Suspense fallback={null}>
+                    <AppSidebar />
+                </Suspense>,
+            )
         })
 
-        const nav = screen.getByTestId("sidebar-nav")
-        expect(nav).toHaveAttribute("data-is-admin", "false")
-        expect(nav).toHaveAttribute("data-viewer-id", "null")
+        await waitFor(() => {
+            const nav = screen.getByTestId("sidebar-nav")
+            expect(nav).toHaveAttribute("data-is-admin", "false")
+            expect(nav).toHaveAttribute("data-viewer-id", "null")
+        })
+    })
+
+    it("passes isAdmin=false when user has a non-admin role", async () => {
+        mockGetCurrentSession.mockResolvedValue({
+            userId: "user-456",
+            role: "User",
+        })
+
+        await act(async () => {
+            render(
+                <Suspense fallback={null}>
+                    <AppSidebar />
+                </Suspense>,
+            )
+        })
+
+        await waitFor(() => {
+            const nav = screen.getByTestId("sidebar-nav")
+            expect(nav).toHaveAttribute("data-is-admin", "false")
+            expect(nav).toHaveAttribute("data-viewer-id", "user-456")
+        })
+    })
+
+    it("handles session without role gracefully and sets isAdmin=false", async () => {
+        mockGetCurrentSession.mockResolvedValue({
+            userId: "user-no-role",
+        })
+
+        await act(async () => {
+            render(
+                <Suspense fallback={null}>
+                    <AppSidebar />
+                </Suspense>,
+            )
+        })
+
+        await waitFor(() => {
+            const nav = screen.getByTestId("sidebar-nav")
+            expect(nav).toHaveAttribute("data-is-admin", "false")
+            expect(nav).toHaveAttribute("data-viewer-id", "user-no-role")
+        })
     })
 })

@@ -4,6 +4,15 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import { NoInternetPage } from "../ui/no-internet-page"
 
+vi.mock("next-intl", () => ({
+    useTranslations: () => (key: string) => {
+        if (key === "description") {
+            return "Line 1\nLine 2"
+        }
+        return key
+    },
+}))
+
 describe("NoInternetPage", () => {
     beforeEach(() => {
         cleanup()
@@ -24,7 +33,8 @@ describe("NoInternetPage", () => {
         expect(
             screen.getByRole("heading", { name: "title" }),
         ).toBeInTheDocument()
-        expect(screen.getByText("description")).toBeInTheDocument()
+        expect(screen.getByText("Line 1")).toBeInTheDocument()
+        expect(screen.getByText("Line 2")).toBeInTheDocument()
         expect(
             screen.getByRole("button", { name: "actionText" }),
         ).toBeInTheDocument()

@@ -31,10 +31,21 @@ describe("login Server Action", () => {
         })
     })
 
-    it("returns error when email or password is missing", async () => {
+    it("returns error when email is missing", async () => {
         const formData = new FormData()
         formData.append("email", "")
         formData.append("password", "password123")
+
+        const result = await login({}, formData)
+
+        expect(result).toEqual({ error: "loginRequired" })
+        expect(getGql).not.toHaveBeenCalled()
+    })
+
+    it("returns error when password is missing", async () => {
+        const formData = new FormData()
+        formData.append("email", "test@example.com")
+        formData.append("password", "")
 
         const result = await login({}, formData)
 

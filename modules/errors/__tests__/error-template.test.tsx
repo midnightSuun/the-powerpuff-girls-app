@@ -20,7 +20,7 @@ describe("ErrorTemplate", () => {
         cleanup()
     })
 
-    it("renders core elements (icon, title, description, default action button) correctly", () => {
+    it("renders core elements with default retry text when actionText is omitted", () => {
         render(
             <ErrorTemplate
                 iconSrc="/error-icon.svg"
@@ -45,7 +45,7 @@ describe("ErrorTemplate", () => {
         ).toBeInTheDocument()
     })
 
-    it("renders custom action text when provided", () => {
+    it("renders custom action text when provided as a string", () => {
         render(
             <ErrorTemplate
                 iconSrc="/error-icon.svg"
@@ -57,6 +57,21 @@ describe("ErrorTemplate", () => {
 
         expect(
             screen.getByRole("button", { name: "Go Back" }),
+        ).toBeInTheDocument()
+    })
+
+    it("renders default retry text when actionText is explicitly undefined", () => {
+        render(
+            <ErrorTemplate
+                iconSrc="/error-icon.svg"
+                title="Error"
+                description="Description text"
+                actionText={undefined}
+            />,
+        )
+
+        expect(
+            screen.getByRole("button", { name: "retry" }),
         ).toBeInTheDocument()
     })
 

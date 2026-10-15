@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from "@testing-library/react"
+import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import type { SyntheticEvent } from "react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
@@ -117,6 +117,7 @@ vi.mock("@/components/ui/input", () => ({
     Input: ({
         value,
         onChange,
+        placeholder,
         readOnly,
     }: {
         value: string
@@ -128,6 +129,7 @@ vi.mock("@/components/ui/input", () => ({
             type="text"
             value={value}
             onChange={onChange}
+            placeholder={placeholder}
             readOnly={readOnly}
             data-testid={readOnly ? "input-domain" : "input-roles"}
         />
@@ -228,19 +230,34 @@ describe("CvProjectFormModal", () => {
     })
 
     it("renders modal with edit title when project is provided", () => {
+        const existingProjectItem = {
+            id: "proj-item-1",
+            project: { id: "p-1", name: "Project Alpha" },
+            name: "Project Alpha",
+            internal_name: "Alpha",
+            description: "Desc",
+            domain: "Fintech",
+            start_date: "2026-01-01",
+            end_date: null,
+            roles: ["Developer"],
+            responsibilities: ["Coding"],
+            environment: ["React"],
+        }
+
         render(
             <CvProjectFormModal
                 isOpen={true}
                 onClose={mockOnClose}
                 onSaved={mockOnSaved}
                 cvId="cv-1"
-                project={null}
+                project={existingProjectItem}
                 projects={mockProjects}
                 existingProjectIds={[]}
             />,
         )
 
-        expect(screen.getByText("addTitle")).toBeInTheDocument()
+        expect(screen.getByText("editTitle")).toBeInTheDocument()
+        expect(screen.getByTestId("modal-submit")).toHaveTextContent("update")
     })
 
     it("does not render modal when isOpen is false", () => {
@@ -301,6 +318,47 @@ describe("CvProjectFormModal", () => {
         expect(mockSetRoles).toHaveBeenCalled()
     })
 
+    it("handles project selection change from the select component", async () => {
+        const user = userEvent.setup()
+
+        render(
+            <CvProjectFormModal
+                isOpen={true}
+                onClose={mockOnClose}
+                onSaved={mockOnSaved}
+                cvId="cv-1"
+                projects={mockProjects}
+                existingProjectIds={[]}
+            />,
+        )
+
+        const nativeSelect = screen.getByTestId("native-select")
+        await user.selectOptions(nativeSelect, "p-1")
+
+        expect(mockSetProjectId).toHaveBeenCalledWith("p-1")
+    })
+
+    it("triggers date change setters for start and end dates", () => {
+        render(
+            <CvProjectFormModal
+                isOpen={true}
+                onClose={mockOnClose}
+                onSaved={mockOnSaved}
+                cvId="cv-1"
+                projects={mockProjects}
+                existingProjectIds={[]}
+            />,
+        )
+
+        const startDatePicker = screen.getByTestId("datepicker-startDate")
+        fireEvent.change(startDatePicker, { target: { value: "2026-02-01" } })
+        expect(mockSetStartDate).toHaveBeenCalledWith("2026-02-01")
+
+        const endDatePicker = screen.getByTestId("datepicker-endDate")
+        fireEvent.change(endDatePicker, { target: { value: "2026-05-01" } })
+        expect(mockSetEndDate).toHaveBeenCalledWith("2026-05-01")
+    })
+
     it("triggers handleSubmit when submit button is clicked", async () => {
         const user = userEvent.setup()
 
@@ -319,5 +377,115 @@ describe("CvProjectFormModal", () => {
         await user.click(submitButton)
 
         expect(mockHandleSubmit).toHaveBeenCalledTimes(1)
+    })
+
+    it("resets end date when start date is set to a value later than end date", () => {
+        render(
+            <CvProjectFormModal
+                isOpen={true}
+                onClose={mockOnClose}
+                onSaved={mockOnSaved}
+                cvId="cv-1"
+                projects={mockProjects}
+                existingProjectIds={[]}
+            />,
+        )
+
+        const startDatePicker = screen.getByTestId("datepicker-startDate")
+        fireEvent.change(startDatePicker, { target: { value: "2026-08-01" } })
+
+        expect(mockSetStartDate).toHaveBeenCalledWith("2026-08-01")
+        expect(mockSetEndDate).toHaveBeenCalledWith("")
+    })
+
+    it("does not reset end date when start date is earlier than end date or when end date is empty", () => {
+        vi.mocked(useCvProjectForm).mockReturnValue({
+            ...defaultHookReturn,
+            endDate: "",
+        } as unknown as ReturnType<typeof useCvProjectForm>)
+
+        render(
+            <CvProjectFormModal
+                isOpen={true}
+                onClose={mockOnClose}
+                onSaved={mockOnSaved}
+                cvId="cv-1"
+                projects={mockProjects}
+                existingProjectIds={[]}
+            />,
+        )
+
+        const startDatePicker = screen.getByTestId("datepicker-startDate")
+        fireEvent.change(startDatePicker, { target: { value: "2026-02-01" } })
+
+        expect(mockSetStartDate).toHaveBeenCalledWith("2026-02-01")
+    })
+
+    it("renders correctly when selected project has no description", () => {
+        const projectWithoutDesc: ProjectOption = {
+            id: "p-2",
+            name: "Project Beta",
+            internal_name: "Beta",
+            description: "",
+            domain: "",
+            environment: [],
+        }
+
+        vi.mocked(useCvProjectForm).mockReturnValue({
+            ...defaultHookReturn,
+            selectedProject: projectWithoutDesc,
+        } as unknown as ReturnType<typeof useCvProjectForm>)
+
+        render(
+            <CvProjectFormModal
+                isOpen={true}
+                onClose={mockOnClose}
+                onSaved={mockOnSaved}
+                cvId="cv-1"
+                projects={[projectWithoutDesc]}
+                existingProjectIds={[]}
+            />,
+        )
+
+        expect(screen.getByTestId("textarea-project-desc")).toHaveValue("")
+    })
+
+    it("renders floating label and placeholder correctly based on roles input value", () => {
+        vi.mocked(useCvProjectForm).mockReturnValue({
+            ...defaultHookReturn,
+            roles: "Frontend Engineer",
+        } as unknown as ReturnType<typeof useCvProjectForm>)
+
+        const { rerender } = render(
+            <CvProjectFormModal
+                isOpen={true}
+                onClose={mockOnClose}
+                onSaved={mockOnSaved}
+                cvId="cv-1"
+                projects={mockProjects}
+                existingProjectIds={[]}
+            />,
+        )
+
+        expect(screen.getByText("roles")).toBeInTheDocument()
+
+        vi.mocked(useCvProjectForm).mockReturnValue({
+            ...defaultHookReturn,
+            roles: "",
+        } as unknown as ReturnType<typeof useCvProjectForm>)
+
+        rerender(
+            <CvProjectFormModal
+                isOpen={true}
+                onClose={mockOnClose}
+                onSaved={mockOnSaved}
+                cvId="cv-1"
+                projects={mockProjects}
+                existingProjectIds={[]}
+            />,
+        )
+
+        const rolesInput = screen.getByTestId("input-roles")
+        expect(rolesInput).toHaveAttribute("placeholder", "roles")
     })
 })

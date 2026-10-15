@@ -42,12 +42,19 @@ vi.mock("@/components/ui/progress-list-item", () => ({
     ProgressListItem: ({
         name,
         onSelect,
+        onEdit,
     }: {
         name: string
         onSelect: () => void
+        onEdit: () => void
     }) => (
-        <div data-testid={`progress-item-${name}`} onClick={onSelect}>
-            <span>{name}</span>
+        <div data-testid={`progress-item-${name}`}>
+            <span data-testid={`select-${name}`} onClick={onSelect}>
+                {name}
+            </span>
+            <button data-testid={`edit-${name}`} onClick={onEdit}>
+                Edit
+            </button>
         </div>
     ),
 }))
@@ -120,6 +127,19 @@ describe("LanguagesPage", () => {
         expect(screen.getAllByText("actions.remove")[0]).toBeInTheDocument()
     })
 
+    it("renders empty message when visibleLanguages is empty", () => {
+        render(
+            <LanguagesPage
+                initialUserLanguages={[]}
+                allSystemLanguages={allSystemLanguages}
+                userId="user-1"
+                canManageLanguages={true}
+            />,
+        )
+
+        expect(screen.getByText("empty")).toBeInTheDocument()
+    })
+
     it("filters languages based on search prop", () => {
         render(
             <LanguagesPage
@@ -135,6 +155,23 @@ describe("LanguagesPage", () => {
             screen.queryByTestId("progress-item-English"),
         ).not.toBeInTheDocument()
         expect(screen.getByTestId("progress-item-Spanish")).toBeInTheDocument()
+    })
+
+    it("triggers toggleSelectLanguage on select and edit actions when canManageLanguages is true", () => {
+        render(
+            <LanguagesPage
+                initialUserLanguages={initialUserLanguages}
+                allSystemLanguages={allSystemLanguages}
+                userId="user-1"
+                canManageLanguages={true}
+            />,
+        )
+
+        fireEvent.click(screen.getByTestId("select-English"))
+        expect(mockToggleSelectLanguage).toHaveBeenCalledWith("English")
+
+        fireEvent.click(screen.getByTestId("edit-English"))
+        expect(mockToggleSelectLanguage).toHaveBeenCalledWith("English")
     })
 
     it("opens add language modal when add button is clicked", () => {
@@ -167,7 +204,7 @@ describe("LanguagesPage", () => {
         expect(mockSetIsRemovalMode).toHaveBeenCalledWith(true)
     })
 
-    it("renders removal action buttons and handles cancellation", () => {
+    it("renders removal action buttons, handles cancellation, and opens delete confirmation", () => {
         vi.mocked(useLanguagesPage).mockReturnValue({
             ...defaultHookValues,
             isRemovalMode: true,
@@ -184,11 +221,16 @@ describe("LanguagesPage", () => {
         )
 
         expect(screen.getAllByText("actions.cancel")[0]).toBeInTheDocument()
-        expect(screen.getByText(/deleteSelected/i)).toBeInTheDocument()
 
         fireEvent.click(screen.getAllByText("actions.cancel")[0])
         expect(mockSetIsRemovalMode).toHaveBeenCalledWith(false)
         expect(mockSetSelectedLanguages).toHaveBeenCalledWith([])
+
+        const deleteButton = screen.getByRole("button", {
+            name: /deleteSelected/i,
+        })
+        fireEvent.click(deleteButton)
+        expect(mockSetIsRemoveConfirmOpen).toHaveBeenCalledWith(true)
     })
 
     it("renders edit language modal when editingLang is set", () => {

@@ -218,6 +218,28 @@ describe("CreateCvModal", () => {
         expect(mockSetName).toHaveBeenCalled()
     })
 
+    it("calls setEducation and setDescription when user types into respective fields", async () => {
+        const user = userEvent.setup()
+
+        render(
+            <CreateCvModal
+                isOpen={true}
+                onClose={mockOnClose}
+                onCreate={mockOnCreate}
+                error={null}
+                isSubmitting={false}
+            />,
+        )
+
+        const educationInput = screen.getByTestId("input-education")
+        await user.type(educationInput, "e")
+        expect(mockSetEducation).toHaveBeenCalled()
+
+        const descriptionTextarea = screen.getByTestId("textarea-description")
+        await user.type(descriptionTextarea, "d")
+        expect(mockSetDescription).toHaveBeenCalled()
+    })
+
     it("triggers handleSubmit when form submit action is called", async () => {
         const user = userEvent.setup()
 

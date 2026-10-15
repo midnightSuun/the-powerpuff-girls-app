@@ -94,6 +94,23 @@ describe("useAdminLanguagesView", () => {
         })
     })
 
+    it("handles creation when created result is falsy", async () => {
+        const newLangInput = { name: "Spanish", iso2: "es" }
+        vi.mocked(createAdminLanguage).mockResolvedValueOnce(null as never)
+
+        const { result } = renderHook(() =>
+            useAdminLanguagesView({ initialLanguages: mockInitialLanguages }),
+        )
+
+        await act(async () => {
+            await result.current.handleCreate(newLangInput)
+        })
+
+        expect(createAdminLanguage).toHaveBeenCalledWith(newLangInput)
+        expect(mockSuccess).toHaveBeenCalledWith("created")
+        expect(mockAddItem).not.toHaveBeenCalled()
+    })
+
     it("handles update successfully", async () => {
         const updateInput = { name: "Updated English", iso2: "en" }
         const updatedResponse = { id: "lang-1", ...updateInput }
@@ -117,6 +134,27 @@ describe("useAdminLanguagesView", () => {
             name: "Updated English",
             iso2: "en",
         })
+    })
+
+    it("handles update when updated result is falsy", async () => {
+        const updateInput = { name: "Updated English", iso2: "en" }
+        vi.mocked(updateAdminLanguage).mockResolvedValueOnce(null as never)
+
+        const { result } = renderHook(() =>
+            useAdminLanguagesView({ initialLanguages: mockInitialLanguages }),
+        )
+
+        await act(async () => {
+            await result.current.handleUpdate("lang-1", updateInput)
+        })
+
+        expect(updateAdminLanguage).toHaveBeenCalledWith({
+            id: "lang-1",
+            name: "Updated English",
+            iso2: "en",
+        })
+        expect(mockSuccess).toHaveBeenCalledWith("updated")
+        expect(mockUpdateItem).not.toHaveBeenCalled()
     })
 
     it("handles delete confirmation successfully when deletingItem is present", async () => {

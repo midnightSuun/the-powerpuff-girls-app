@@ -79,6 +79,16 @@ describe("EmailVerification Component", () => {
         expect(getLaterButton()).toBeInTheDocument()
     })
 
+    it("populates inputRefs correctly for all digit inputs", () => {
+        render(
+            <EmailVerification email="test@example.com" sendFailed={false} />,
+        )
+
+        const inputs = screen.getAllByRole("textbox")
+        expect(inputs).toHaveLength(6)
+        expect(defaultHookValues.inputRefs.current).toHaveLength(6)
+    })
+
     it("disables submit button when isValid is false or isPending is true", () => {
         render(
             <EmailVerification email="test@example.com" sendFailed={false} />,

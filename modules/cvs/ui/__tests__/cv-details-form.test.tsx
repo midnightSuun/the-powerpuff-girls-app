@@ -112,6 +112,7 @@ describe("CvDetailsForm", () => {
         fieldErrors: {},
         isDirty: false,
         handleSubmit: mockHandleSubmit,
+        hasValidationErrors: false,
     }
 
     beforeEach(() => {
@@ -149,6 +150,28 @@ describe("CvDetailsForm", () => {
         expect(screen.getByText("Update failed")).toBeInTheDocument()
     })
 
+    it("displays field error messages and character length counters for all fields correctly", () => {
+        vi.mocked(useCvDetailsForm).mockReturnValue({
+            ...defaultHookReturn,
+            name: "Short Name",
+            education: "Short Edu",
+            description: "",
+            fieldErrors: {
+                name: "Name error",
+                education: "Education error",
+                description: "Description error",
+            },
+        } as unknown as ReturnType<typeof useCvDetailsForm>)
+
+        render(<CvDetailsForm cv={mockCv} onUpdate={mockOnUpdate} />)
+
+        expect(screen.getByText("Name error")).toBeInTheDocument()
+        expect(screen.getByText("Education error")).toBeInTheDocument()
+        expect(screen.getByText("Description error")).toBeInTheDocument()
+        expect(screen.getByText("10/255")).toBeInTheDocument()
+        expect(screen.getByText("9/255")).toBeInTheDocument()
+    })
+
     it("enables submit button when form is dirty and not submitting", () => {
         vi.mocked(useCvDetailsForm).mockReturnValue({
             ...defaultHookReturn,
@@ -158,6 +181,18 @@ describe("CvDetailsForm", () => {
         render(<CvDetailsForm cv={mockCv} onUpdate={mockOnUpdate} />)
 
         expect(screen.getByTestId("submit-button")).not.toBeDisabled()
+    })
+
+    it("disables submit button when hasValidationErrors is true", () => {
+        vi.mocked(useCvDetailsForm).mockReturnValue({
+            ...defaultHookReturn,
+            isDirty: true,
+            hasValidationErrors: true,
+        } as unknown as ReturnType<typeof useCvDetailsForm>)
+
+        render(<CvDetailsForm cv={mockCv} onUpdate={mockOnUpdate} />)
+
+        expect(screen.getByTestId("submit-button")).toBeDisabled()
     })
 
     it("shows updating state text and disables submit when isSubmitting is true", () => {
@@ -183,8 +218,19 @@ describe("CvDetailsForm", () => {
         const nameInput = screen.getByTestId("input-cv-name")
         await user.clear(nameInput)
         await user.type(nameInput, "Jane")
-
         expect(mockSetName).toHaveBeenCalled()
+
+        const educationInput = screen.getByTestId("input-cv-education")
+        await user.clear(educationInput)
+        await user.type(educationInput, "Harvard")
+        expect(mockSetEducation).toHaveBeenCalled()
+
+        const descriptionTextarea = screen.getByTestId(
+            "textarea-cv-description",
+        )
+        await user.clear(descriptionTextarea)
+        await user.type(descriptionTextarea, "Lead Engineer")
+        expect(mockSetDescription).toHaveBeenCalled()
     })
 
     it("calls handleSubmit when the form is submitted", async () => {

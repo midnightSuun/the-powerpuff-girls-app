@@ -116,4 +116,102 @@ describe("useCvDetailsForm", () => {
         expect(result.current.isSubmitting).toBe(false)
         expect(result.current.error).toBe(updateErrorText)
     })
+
+    it("fails validation when name is empty or too long", () => {
+        const onUpdate = vi.fn()
+        const { result } = renderHook(() =>
+            useCvDetailsForm({
+                cv: mockCv,
+                onUpdate,
+                updateErrorText,
+            }),
+        )
+
+        const mockEvent = {
+            preventDefault: vi.fn(),
+        } as unknown as React.FormEvent
+
+        act(() => {
+            result.current.setName("")
+        })
+        act(() => {
+            result.current.handleSubmit(mockEvent)
+        })
+
+        expect(result.current.fieldErrors.name).toBe("Name is required")
+        expect(onUpdate).not.toHaveBeenCalled()
+
+        act(() => {
+            result.current.setName("a".repeat(256))
+        })
+        act(() => {
+            result.current.handleSubmit(mockEvent)
+        })
+
+        expect(result.current.fieldErrors.name).toBe(
+            "Name must be 255 characters or less",
+        )
+    })
+
+    it("fails validation when education is empty or too long", () => {
+        const onUpdate = vi.fn()
+        const { result } = renderHook(() =>
+            useCvDetailsForm({
+                cv: mockCv,
+                onUpdate,
+                updateErrorText,
+            }),
+        )
+
+        const mockEvent = {
+            preventDefault: vi.fn(),
+        } as unknown as React.FormEvent
+
+        act(() => {
+            result.current.setEducation("")
+        })
+        act(() => {
+            result.current.handleSubmit(mockEvent)
+        })
+        expect(result.current.fieldErrors.education).toBe(
+            "Education is required",
+        )
+
+        act(() => {
+            result.current.setEducation("a".repeat(256))
+        })
+        act(() => {
+            result.current.handleSubmit(mockEvent)
+        })
+        expect(result.current.fieldErrors.education).toBe(
+            "Education must be 255 characters or less",
+        )
+    })
+
+    it("fails validation when description is empty", () => {
+        const onUpdate = vi.fn()
+        const { result } = renderHook(() =>
+            useCvDetailsForm({
+                cv: mockCv,
+                onUpdate,
+                updateErrorText,
+            }),
+        )
+
+        const mockEvent = {
+            preventDefault: vi.fn(),
+        } as unknown as React.FormEvent
+
+        act(() => {
+            result.current.setDescription("")
+        })
+        act(() => {
+            result.current.handleSubmit(mockEvent)
+        })
+
+        expect(result.current.fieldErrors.description).toBe(
+            "Description is required",
+        )
+        expect(onUpdate).not.toHaveBeenCalled()
+    })
 })
