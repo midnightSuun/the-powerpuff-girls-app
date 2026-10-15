@@ -103,7 +103,50 @@ describe("UserCvsPage Server Component", () => {
         })
     })
 
-    it("fetches and renders CvsPageView successfully when authorized", async () => {
+    it("allows regular user to view their own cvs successfully", async () => {
+        mockGetCurrentSession.mockResolvedValue({
+            userId: "user-1",
+            role: "User",
+        })
+        mockGetUserCvs.mockResolvedValue({
+            items: [{ id: "cv-my", title: "My CV" }],
+            total_pages: 1,
+        })
+
+        const params = Promise.resolve({ locale: "ru", userId: "user-1" })
+        const searchParams = Promise.resolve({
+            page: "1",
+            limit: "10",
+            search: "react",
+        })
+
+        await act(async () => {
+            render(
+                <Suspense fallback={null}>
+                    <UserCvsPage params={params} searchParams={searchParams} />
+                </Suspense>,
+            )
+        })
+
+        await waitFor(() => {
+            expect(screen.getByTestId("cvs-page-view")).toBeInTheDocument()
+            expect(
+                screen.getByTestId("pagination-component"),
+            ).toBeInTheDocument()
+        })
+
+        expect(mockGetUserCvs).toHaveBeenCalledWith(
+            "user-1",
+            expect.objectContaining({
+                search: "react",
+                page: 1,
+                limit: 10,
+            }),
+        )
+        expect(mockRedirect).not.toHaveBeenCalled()
+    })
+
+    it("fetches and renders CvsPageView successfully when authorized as Admin", async () => {
         mockGetCurrentSession.mockResolvedValue({
             userId: "admin-1",
             role: "Admin",
@@ -136,5 +179,43 @@ describe("UserCvsPage Server Component", () => {
             expect.any(Object),
         )
         expect(mockRedirect).not.toHaveBeenCalled()
+    })
+    it("handles empty or partial searchParams correctly for fallback branches", async () => {
+        mockGetCurrentSession.mockResolvedValue({
+            userId: "admin-1",
+            role: "Admin",
+        })
+        mockGetUserCvs.mockResolvedValue({
+            items: [],
+            total_pages: 0,
+        })
+
+        const params = Promise.resolve({ locale: "en", userId: "user-1" })
+        const searchParams = Promise.resolve({
+            search: undefined,
+            limit: undefined,
+            page: undefined,
+        })
+
+        await act(async () => {
+            render(
+                <Suspense fallback={null}>
+                    <UserCvsPage params={params} searchParams={searchParams} />
+                </Suspense>,
+            )
+        })
+
+        await waitFor(() => {
+            expect(screen.getByTestId("cvs-page-view")).toBeInTheDocument()
+        })
+
+        expect(mockGetUserCvs).toHaveBeenCalledWith(
+            "user-1",
+            expect.objectContaining({
+                search: "",
+                page: 1,
+                limit: 10,
+            }),
+        )
     })
 })

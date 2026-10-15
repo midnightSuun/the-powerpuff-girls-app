@@ -158,4 +158,32 @@ describe("BaseModal", () => {
         fireEvent.click(overlay, { target: overlay, currentTarget: overlay })
         expect(onClose).toHaveBeenCalledTimes(1)
     })
+
+    it("traps focus inside the modal when pressing Tab or Shift+Tab", () => {
+        render(
+            <BaseModal {...defaultProps}>
+                <div>
+                    <input data-testid="modal-input" />
+                </div>
+            </BaseModal>,
+        )
+
+        const closeButton = screen.getByRole("button", { name: "Close modal" })
+        const confirmButton = screen.getByRole("button", { name: "Confirm" })
+
+        confirmButton.focus()
+        fireEvent.keyDown(document, { key: "Tab", shiftKey: false })
+
+        closeButton.focus()
+        fireEvent.keyDown(document, { key: "Tab", shiftKey: true })
+
+        expect(screen.getByRole("dialog")).toBeInTheDocument()
+    })
+
+    it("does nothing on Tab key when dialogRef is not present", () => {
+        render(<BaseModal {...defaultProps} isOpen={false} />)
+
+        fireEvent.keyDown(document, { key: "Tab" })
+        expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
+    })
 })

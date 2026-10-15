@@ -110,4 +110,37 @@ describe("Input component", () => {
         const input = screen.getByPlaceholderText("Disabled input")
         expect(input).toBeDisabled()
     })
+
+    it("handles focus and blur events correctly", () => {
+        const handleFocus = vi.fn()
+        const handleBlur = vi.fn()
+        render(
+            <Input
+                placeholder="Focus test"
+                label="Field"
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+            />,
+        )
+
+        const input = screen.getByPlaceholderText("Focus test")
+
+        fireEvent.focus(input)
+        expect(handleFocus).toHaveBeenCalledTimes(1)
+
+        fireEvent.blur(input)
+        expect(handleBlur).toHaveBeenCalledTimes(1)
+    })
+
+    it("handles uncontrolled input with defaultValue and internal state changes", () => {
+        const handleChange = vi.fn()
+        render(<Input defaultValue="Initial" onChange={handleChange} />)
+
+        const input = screen.getByRole("textbox")
+        expect(input).toHaveValue("Initial")
+
+        fireEvent.change(input, { target: { value: "Updated" } })
+        expect(input).toHaveValue("Updated")
+        expect(handleChange).toHaveBeenCalledTimes(1)
+    })
 })

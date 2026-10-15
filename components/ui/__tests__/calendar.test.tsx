@@ -92,4 +92,81 @@ describe("Calendar component", () => {
             ).toBeInTheDocument()
         }
     })
+
+    it("handles invalid or missing ISO date gracefully in parseIsoDate", () => {
+        render(<Calendar value="invalid-date" onChange={vi.fn()} />)
+        render(<Calendar value="2026-13-45" onChange={vi.fn()} />)
+        render(<Calendar value="" onChange={vi.fn()} />)
+
+        const yearButtons = screen.getAllByRole("button", { name: "2026" })
+        expect(yearButtons.length).toBeGreaterThan(0)
+    })
+
+    it("navigates previous and next correctly in months view", () => {
+        render(<Calendar {...defaultProps} />)
+
+        fireEvent.click(screen.getByRole("button", { name: /june/i }))
+        expect(
+            screen.getByRole("button", { name: "January" }),
+        ).toBeInTheDocument()
+
+        const prevButton = document
+            .querySelector("svg.lucide-chevron-left")
+            ?.closest("button")
+        if (prevButton) {
+            fireEvent.click(prevButton)
+        }
+        expect(screen.getByRole("button", { name: "2025" })).toBeInTheDocument()
+
+        const nextButton = document
+            .querySelector("svg.lucide-chevron-right")
+            ?.closest("button")
+        if (nextButton) {
+            fireEvent.click(nextButton)
+        }
+        expect(screen.getByRole("button", { name: "2026" })).toBeInTheDocument()
+    })
+
+    it("navigates previous and next correctly in years view", () => {
+        render(<Calendar {...defaultProps} />)
+
+        fireEvent.click(screen.getAllByRole("button", { name: "2026" })[0])
+        expect(screen.getByRole("button", { name: "2025" })).toBeInTheDocument()
+
+        const prevButton = document
+            .querySelector("svg.lucide-chevron-left")
+            ?.closest("button")
+        const nextButton = document
+            .querySelector("svg.lucide-chevron-right")
+            ?.closest("button")
+
+        if (prevButton) fireEvent.click(prevButton)
+        if (nextButton) fireEvent.click(nextButton)
+
+        expect(screen.getByRole("button", { name: "2025" })).toBeInTheDocument()
+    })
+
+    it("selects a month and year successfully", () => {
+        const onChange = vi.fn()
+        render(<Calendar {...defaultProps} onChange={onChange} />)
+
+        fireEvent.click(screen.getByRole("button", { name: /june/i }))
+
+        const januaryButtons = screen.getAllByRole("button", {
+            name: "January",
+        })
+        fireEvent.click(januaryButtons[januaryButtons.length - 1])
+
+        expect(
+            screen.getByRole("button", { name: /january/i }),
+        ).toBeInTheDocument()
+
+        fireEvent.click(screen.getAllByRole("button", { name: "2026" })[0])
+        fireEvent.click(screen.getByRole("button", { name: "2025" }))
+
+        const updatedJanuaryButtons = screen.getAllByRole("button", {
+            name: "January",
+        })
+        expect(updatedJanuaryButtons.length).toBeGreaterThan(0)
+    })
 })

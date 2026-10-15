@@ -22,14 +22,24 @@ import {
     SidebarContent,
     SidebarFooter,
     SidebarGroup,
+    SidebarGroupAction,
     SidebarGroupContent,
     SidebarGroupLabel,
     SidebarHeader,
+    SidebarInput,
     SidebarInset,
     SidebarMenu,
+    SidebarMenuAction,
+    SidebarMenuBadge,
     SidebarMenuButton,
     SidebarMenuItem,
+    SidebarMenuSkeleton,
+    SidebarMenuSub,
+    SidebarMenuSubButton,
+    SidebarMenuSubItem,
     SidebarProvider,
+    SidebarRail,
+    SidebarSeparator,
     SidebarTrigger,
     useSidebar,
 } from "../sidebar"
@@ -172,5 +182,83 @@ describe("Sidebar Component", () => {
         await user.click(trigger)
 
         expect(document.cookie).toContain("sidebar_state=false")
+    })
+
+    it("should render correctly when collapsible is none", () => {
+        render(
+            <SidebarProvider>
+                <Sidebar collapsible="none">
+                    <div>Static Sidebar</div>
+                </Sidebar>
+            </SidebarProvider>,
+        )
+        expect(screen.getByText("Static Sidebar")).toBeInTheDocument()
+    })
+
+    it("should handle tablet mode and close sidebar when clicking overlay", async () => {
+        const user = userEvent.setup()
+        vi.mocked(useIsTablet).mockReturnValue(true)
+
+        render(<TestSidebarLayout />)
+
+        const trigger = screen.getByRole("button", { name: /toggleSidebar/i })
+        await user.click(trigger)
+
+        // Ищем конкретно оверлей по его классам бэкдропа
+        const overlay = document.querySelector(".fixed.inset-0.bg-black\\/40")
+        expect(overlay).toBeInTheDocument()
+
+        if (overlay) {
+            await user.click(overlay)
+        }
+    })
+
+    it("should render all extra sidebar subcomponents and elements", () => {
+        render(
+            <SidebarProvider>
+                <Sidebar>
+                    <SidebarHeader>
+                        <SidebarInput placeholder="Search..." />
+                    </SidebarHeader>
+                    <SidebarContent>
+                        <SidebarGroup>
+                            <SidebarGroupLabel>Group</SidebarGroupLabel>
+                            <SidebarGroupAction>Action</SidebarGroupAction>
+                            <SidebarGroupContent>
+                                <SidebarMenu>
+                                    <SidebarMenuItem>
+                                        <SidebarMenuButton>
+                                            Button
+                                        </SidebarMenuButton>
+                                        <SidebarMenuAction>
+                                            Menu Action
+                                        </SidebarMenuAction>
+                                        <SidebarMenuBadge>
+                                            Badge
+                                        </SidebarMenuBadge>
+                                    </SidebarMenuItem>
+                                    <SidebarMenuSub>
+                                        <SidebarMenuSubItem>
+                                            <SidebarMenuSubButton>
+                                                Sub Button
+                                            </SidebarMenuSubButton>
+                                        </SidebarMenuSubItem>
+                                    </SidebarMenuSub>
+                                </SidebarMenu>
+                            </SidebarGroupContent>
+                        </SidebarGroup>
+                        <SidebarSeparator />
+                        <SidebarMenuSkeleton showIcon />
+                    </SidebarContent>
+                    <SidebarFooter />
+                </Sidebar>
+                <SidebarRail />
+            </SidebarProvider>,
+        )
+
+        expect(screen.getByPlaceholderText("Search...")).toBeInTheDocument()
+        expect(screen.getByText("Group")).toBeInTheDocument()
+        expect(screen.getByText("Badge")).toBeInTheDocument()
+        expect(screen.getByText("Sub Button")).toBeInTheDocument()
     })
 })

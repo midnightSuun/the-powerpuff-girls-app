@@ -197,4 +197,120 @@ describe("AdminDataTable", () => {
         fireEvent.click(createButton)
         expect(onCreateClick).toHaveBeenCalledTimes(1)
     })
+
+    it("closes action menu on outside click or Escape key press", () => {
+        render(
+            <AdminDataTable
+                data={mockData}
+                columns={mockColumns}
+                onEditClick={() => {}}
+            />,
+        )
+
+        const menuButtons = screen.getAllByRole("button", { name: "" })
+        fireEvent.click(menuButtons[0])
+
+        expect(screen.getByText("Edit")).toBeInTheDocument()
+
+        fireEvent.keyDown(document, { key: "Escape" })
+        expect(screen.queryByText("Edit")).not.toBeInTheDocument()
+
+        fireEvent.click(menuButtons[0])
+        expect(screen.getByText("Edit")).toBeInTheDocument()
+
+        fireEvent.mouseDown(document.body)
+        expect(screen.queryByText("Edit")).not.toBeInTheDocument()
+    })
+
+    it("renders custom column content using col.render function", () => {
+        const customColumns: Column<TestItem>[] = [
+            {
+                key: "name",
+                label: "Name",
+                render: (item) => (
+                    <span data-testid={`custom-${item.id}`}>
+                        {item.name.toUpperCase()}
+                    </span>
+                ),
+            },
+        ]
+
+        render(<AdminDataTable data={mockData} columns={customColumns} />)
+
+        expect(screen.getByTestId("custom-1")).toHaveTextContent("ALICE")
+        expect(screen.getByTestId("custom-2")).toHaveTextContent("BOB")
+    })
+
+    it("triggers re-render when memoized props change in areTablePropsEqual", () => {
+        const { rerender } = render(
+            <AdminDataTable
+                data={mockData}
+                columns={mockColumns}
+                emptyMessage="Initial empty"
+            />,
+        )
+
+        expect(screen.getByText("Alice")).toBeInTheDocument()
+
+        rerender(
+            <AdminDataTable
+                data={mockData}
+                columns={mockColumns}
+                emptyMessage="Updated empty"
+            />,
+        )
+
+        expect(screen.getByText("Alice")).toBeInTheDocument()
+    })
+
+    it("returns false in areTablePropsEqual when columns keys change", () => {
+        const { rerender } = render(
+            <AdminDataTable
+                data={mockData}
+                columns={[{ key: "name", label: "Name" }]}
+            />,
+        )
+
+        expect(screen.getByText("Name")).toBeInTheDocument()
+
+        rerender(
+            <AdminDataTable
+                data={mockData}
+                columns={[{ key: "role", label: "Role" }]}
+            />,
+        )
+
+        expect(screen.getByText("Role")).toBeInTheDocument()
+        expect(screen.queryByText("Name")).not.toBeInTheDocument()
+    })
+
+    it("returns false in areTablePropsEqual when createButtonLabel changes", () => {
+        const { rerender } = render(
+            <AdminDataTable
+                data={mockData}
+                columns={mockColumns}
+                showSearchInput={true} // Обязательно true (или не передавать, т.к. это дефолт)
+                createButtonLabel="Old Label"
+                onCreateClick={() => {}}
+            />,
+        )
+
+        expect(screen.getByTestId("create-button")).toHaveTextContent(
+            "Old Label",
+        )
+
+        rerender(
+            <AdminDataTable
+                data={mockData}
+                columns={mockColumns}
+                showSearchInput={true}
+                createButtonLabel="New Label"
+                onCreateClick={() => {}}
+            />,
+        )
+
+        expect(screen.getByTestId("create-button")).toHaveTextContent(
+            "New Label",
+        )
+    })
 })

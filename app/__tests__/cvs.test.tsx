@@ -11,8 +11,9 @@ vi.mock("next/navigation", () => ({
     },
 }))
 
+const mockGetLocale = vi.fn(async () => "en")
 vi.mock("next-intl/server", () => ({
-    getLocale: vi.fn(async () => "en"),
+    getLocale: () => mockGetLocale(),
 }))
 
 vi.mock("@/i18n/routing", () => ({
@@ -61,13 +62,16 @@ vi.mock("@/components/pagination", () => ({
     PaginationComponent: ({
         totalPages,
         page,
+        path,
     }: {
         totalPages: number
         page: number
+        path: string
     }) => (
         <div data-testid="pagination">
             <span data-testid="total-pages">{totalPages}</span>
             <span data-testid="current-page">{page}</span>
+            <span data-testid="pagination-path">{path}</span>
         </div>
     ),
 }))
@@ -97,6 +101,7 @@ describe("CvsPage Server Component", () => {
             items: [{ id: "cv-1", title: "Admin CV", education: null }],
             total_pages: 3,
         })
+        mockGetLocale.mockResolvedValueOnce("en")
 
         const searchParams = Promise.resolve({
             page: "2",
@@ -125,9 +130,10 @@ describe("CvsPage Server Component", () => {
         expect(screen.getByTestId("cvs-count")).toHaveTextContent("1")
         expect(screen.getByTestId("total-pages")).toHaveTextContent("3")
         expect(screen.getByTestId("current-page")).toHaveTextContent("2")
+        expect(screen.getByTestId("pagination-path")).toHaveTextContent("cv")
     })
 
-    it("fetches and renders user cvs correctly when user is a regular User", async () => {
+    it("fetches and renders user cvs correctly when user is a regular User with non-default locale", async () => {
         mockGetCurrentSession.mockResolvedValue({
             userId: "user-123",
             role: "User",
@@ -136,6 +142,7 @@ describe("CvsPage Server Component", () => {
             items: [{ id: "cv-2", title: "My CV", education: "BSUIR" }],
             total_pages: 1,
         })
+        mockGetLocale.mockResolvedValue("ru")
 
         const searchParams = Promise.resolve({})
         const ResolvedPage = Page({ searchParams })
@@ -159,5 +166,6 @@ describe("CvsPage Server Component", () => {
 
         expect(screen.getByTestId("is-admin")).toHaveTextContent("false")
         expect(screen.getByTestId("cvs-count")).toHaveTextContent("1")
+        expect(screen.getByTestId("pagination-path")).toHaveTextContent("ru/cv")
     })
 })

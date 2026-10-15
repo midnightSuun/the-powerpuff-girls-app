@@ -22,7 +22,7 @@ describe("requestPasswordReset Server Action", () => {
     it("successfully requests password reset with trimmed email", async () => {
         mockRequest.mockResolvedValueOnce({})
 
-        const result = await requestPasswordReset("  test@example.com  ")
+        const result = await requestPasswordReset("   test@example.com   ")
 
         expect(getGql).toHaveBeenCalledTimes(1)
         expect(mockRequest).toHaveBeenCalledWith(ForgotPasswordDocument, {
@@ -49,9 +49,68 @@ describe("requestPasswordReset Server Action", () => {
         expect(result).toEqual({ error: "forgotAccountNotFound" })
     })
 
-    it("returns localized server error when network error occurs", async () => {
+    it("returns localized account not found error when GraphQL returns NOT_FOUND code", async () => {
+        const graphqlError = {
+            response: {
+                errors: [
+                    {
+                        message: "Resource missing",
+                        extensions: { code: "NOT_FOUND" },
+                    },
+                ],
+            },
+        }
+        mockRequest.mockRejectedValueOnce(graphqlError)
+
+        const result = await requestPasswordReset("unknown@example.com")
+
+        expect(result).toEqual({ error: "forgotAccountNotFound" })
+    })
+
+    it("returns localized account not found error when error message contains alternative phrasing", async () => {
+        const errorsList = [
+            "No account found with this email",
+            "No user registered",
+            "User does not exist",
+            "Account does not exist",
+        ]
+
+        for (const msg of errorsList) {
+            mockRequest.mockRejectedValueOnce({
+                response: { errors: [{ message: msg }] },
+            })
+            const result = await requestPasswordReset("test@example.com")
+            expect(result).toEqual({ error: "forgotAccountNotFound" })
+        }
+    })
+
+    it("returns localized server error when network error occurs via code property", async () => {
         const networkError = {
             code: "NETWORK_ERROR",
+        }
+        mockRequest.mockRejectedValueOnce(networkError)
+
+        const result = await requestPasswordReset("test@example.com")
+
+        expect(result).toEqual({ error: "forgotServerError" })
+    })
+
+    it("returns localized server error when network error occurs via name property", async () => {
+        const networkError = {
+            name: "NetworkError",
+        }
+        mockRequest.mockRejectedValueOnce(networkError)
+
+        const result = await requestPasswordReset("test@example.com")
+
+        expect(result).toEqual({ error: "forgotServerError" })
+    })
+
+    it("returns localized server error when network error occurs inside request property", async () => {
+        const networkError = {
+            request: {
+                errors: [{ extensions: { code: "NETWORK_ERROR" } }],
+            },
         }
         mockRequest.mockRejectedValueOnce(networkError)
 

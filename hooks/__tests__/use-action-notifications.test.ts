@@ -18,15 +18,16 @@ describe("useActionNotifications", () => {
         vi.clearAllMocks()
     })
 
-    it("triggers toast.success with correct mapped action message using global next-intl mock", () => {
+    it("triggers toast.success with correct mapped action messages", () => {
         const { result } = renderHook(() => useActionNotifications())
 
-        result.current.success("created")
-
-        expect(toast.success).toHaveBeenCalledTimes(1)
-        expect(toast.success).toHaveBeenCalledWith("success", {
-            description: "actions.created",
-            closeButton: true,
+        const actions = ["created", "updated", "deleted"] as const
+        actions.forEach((action) => {
+            result.current.success(action)
+            expect(toast.success).toHaveBeenCalledWith("success", {
+                description: `actions.${action}`,
+                closeButton: true,
+            })
         })
     })
 
@@ -41,14 +42,24 @@ describe("useActionNotifications", () => {
         })
     })
 
-    it("triggers toast.error with correct mapped action message", () => {
+    it("triggers toast.error with correct mapped action messages including verifyEmail and emailVerified/update", () => {
         const { result } = renderHook(() => useActionNotifications())
 
-        result.current.error("deleted")
-
-        expect(toast.error).toHaveBeenCalledTimes(1)
+        result.current.error("verifyEmail")
         expect(toast.error).toHaveBeenCalledWith("error", {
-            description: "actions.deleted",
+            description: "messages.verificationFailed",
+            closeButton: true,
+        })
+
+        result.current.error("emailVerified")
+        expect(toast.error).toHaveBeenCalledWith("error", {
+            description: "messages.verificationSent",
+            closeButton: true,
+        })
+
+        result.current.error("update")
+        expect(toast.error).toHaveBeenCalledWith("error", {
+            description: "messages.profileUpdated",
             closeButton: true,
         })
     })

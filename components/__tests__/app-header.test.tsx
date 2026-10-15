@@ -9,7 +9,9 @@ vi.mock("@/components/ui/sidebar", () => ({
 }))
 
 vi.mock("@/components/cv-builder-logo", () => ({
-    CvBuilderLogo: () => <div data-testid="cv-builder-logo" />,
+    CvBuilderLogo: ({ className }: { className?: string }) => (
+        <div data-testid="cv-builder-logo" data-classname={className} />
+    ),
 }))
 
 vi.mock("@/components/sidebar-toggle", () => ({
@@ -52,5 +54,29 @@ describe("AppHeader", () => {
         expect(screen.getByText("CV Builder")).toBeInTheDocument()
         expect(screen.getByTestId("cv-builder-logo")).toBeInTheDocument()
         expect(screen.getByTestId("sidebar-toggle")).toBeInTheDocument()
+    })
+
+    it("passes className prop to CvBuilderLogo when header is rendered", () => {
+        mockUseSidebar.mockReturnValue({
+            isMobile: true,
+            openMobile: false,
+        })
+
+        render(<AppHeader />)
+
+        const logo = screen.getByTestId("cv-builder-logo")
+        expect(logo).toHaveAttribute("data-classname", "size-6 shrink-0")
+    })
+
+    it("renders header element with correct class", () => {
+        mockUseSidebar.mockReturnValue({
+            isMobile: true,
+            openMobile: false,
+        })
+
+        render(<AppHeader />)
+
+        const header = screen.getByRole("banner")
+        expect(header).toHaveClass("flex", "h-14", "shrink-0")
     })
 })

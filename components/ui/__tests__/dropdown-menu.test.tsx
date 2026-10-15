@@ -1,6 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react"
-import type { ReactNode } from "react"
-import { useState } from "react"
+import React, { type ReactNode, useState } from "react"
 import { describe, expect, it, vi } from "vitest"
 
 import {
@@ -9,8 +8,13 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
     DropdownMenuSeparator,
     DropdownMenuShortcut,
+    DropdownMenuSub,
+    DropdownMenuSubContent,
+    DropdownMenuSubTrigger,
     DropdownMenuTrigger,
 } from "../dropdown-menu"
 
@@ -172,7 +176,6 @@ vi.mock("@base-ui/react/menu", () => ({
         ),
         RadioGroup: ({
             children,
-            value,
             onValueChange,
             ...props
         }: {
@@ -181,23 +184,42 @@ vi.mock("@base-ui/react/menu", () => ({
             onValueChange?: (val: string) => void
         } & React.ComponentProps<"div">) => (
             <div data-slot="dropdown-menu-radio-group" {...props}>
-                {children}
+                {React.Children.map(children, (child) =>
+                    React.isValidElement(child)
+                        ? React.cloneElement(
+                              child as React.ReactElement<{
+                                  onSelectValue?: (val: string) => void
+                              }>,
+                              {
+                                  onSelectValue: onValueChange,
+                              },
+                          )
+                        : child,
+                )}
             </div>
         ),
         RadioItem: ({
             children,
             value,
             className,
+            onSelectValue,
             ...props
         }: {
             children: ReactNode
             value?: string
             className?: string
+            onSelectValue?: (val: string) => void
         } & React.ComponentProps<"div">) => (
             <div
                 role="menuitemradio"
+                aria-checked={false}
                 data-slot="dropdown-menu-radio-item"
                 className={className}
+                onClick={() => {
+                    if (value && onSelectValue) {
+                        onSelectValue(value)
+                    }
+                }}
                 {...props}
             >
                 {children}
@@ -304,5 +326,85 @@ describe("DropdownMenu components", () => {
 
         fireEvent.click(checkboxItem)
         expect(checkboxItem).toHaveAttribute("aria-checked", "true")
+    })
+
+    it("renders label and items with inset property", () => {
+        render(
+            <DropdownMenu>
+                <DropdownMenuTrigger>Open Inset</DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <DropdownMenuLabel inset>Inset Label</DropdownMenuLabel>
+                    <DropdownMenuItem inset>Inset Item</DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>,
+        )
+
+        fireEvent.click(screen.getByRole("button", { name: "Open Inset" }))
+
+        expect(screen.getByText("Inset Label")).toHaveAttribute(
+            "data-inset",
+            "true",
+        )
+        expect(screen.getByText("Inset Item")).toHaveAttribute(
+            "data-inset",
+            "true",
+        )
+    })
+
+    it("handles radio group selection correctly", () => {
+        const handleRadioChange = vi.fn()
+        render(
+            <DropdownMenu>
+                <DropdownMenuTrigger>Open Radio</DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <DropdownMenuRadioGroup
+                        value="item-1"
+                        onValueChange={handleRadioChange}
+                    >
+                        <DropdownMenuRadioItem value="item-1">
+                            Option 1
+                        </DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="item-2">
+                            Option 2
+                        </DropdownMenuRadioItem>
+                    </DropdownMenuRadioGroup>
+                </DropdownMenuContent>
+            </DropdownMenu>,
+        )
+
+        fireEvent.click(screen.getByRole("button", { name: "Open Radio" }))
+
+        const radioItem = screen.getByText("Option 2")
+        expect(radioItem).toBeInTheDocument()
+
+        fireEvent.click(radioItem)
+        expect(handleRadioChange).toHaveBeenCalledWith("item-2")
+    })
+
+    it("renders submenus and subcontent properly", () => {
+        render(
+            <DropdownMenu>
+                <DropdownMenuTrigger>Open Sub</DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <DropdownMenuSub>
+                        <DropdownMenuSubTrigger inset>
+                            More Options
+                        </DropdownMenuSubTrigger>
+                        <DropdownMenuSubContent>
+                            <DropdownMenuItem>Sub Item 1</DropdownMenuItem>
+                        </DropdownMenuSubContent>
+                    </DropdownMenuSub>
+                </DropdownMenuContent>
+            </DropdownMenu>,
+        )
+
+        fireEvent.click(screen.getByRole("button", { name: "Open Sub" }))
+
+        const subTrigger = screen.getByText("More Options")
+        expect(subTrigger).toBeInTheDocument()
+        expect(subTrigger).toHaveAttribute("data-inset", "true")
+
+        fireEvent.click(subTrigger)
+        expect(screen.getByText("Sub Item 1")).toBeInTheDocument()
     })
 })

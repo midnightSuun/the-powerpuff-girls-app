@@ -49,7 +49,9 @@ describe("ForgotPasswordPage Component", () => {
     })
 
     const getSubmitButton = () => {
-        const buttons = screen.getAllByRole("button", { name: /submitbutton/i })
+        const buttons = screen.getAllByRole("button", {
+            name: /submit(ting)?button/i,
+        })
         return (
             buttons.find((btn) => btn.getAttribute("type") === "submit") ||
             buttons[0]
@@ -99,5 +101,31 @@ describe("ForgotPasswordPage Component", () => {
 
         const alertMessage = screen.getByRole("alert")
         expect(alertMessage).toHaveTextContent("User not found")
+    })
+
+    it("displays success message when successMessage is provided", () => {
+        vi.mocked(useForgotPassword).mockReturnValue({
+            ...defaultHookValues,
+            successMessage: "Reset link sent successfully",
+        })
+
+        render(<ForgotPasswordPage />)
+
+        const statusMessage = screen.getByRole("status")
+        expect(statusMessage).toHaveTextContent("Reset link sent successfully")
+    })
+
+    it("displays submitting button text when isPending is true", () => {
+        vi.mocked(useForgotPassword).mockReturnValue({
+            ...defaultHookValues,
+            isPending: true,
+            isValid: true,
+        })
+
+        render(<ForgotPasswordPage />)
+
+        const submitButton = getSubmitButton()
+        expect(submitButton).toHaveTextContent(/submittingbutton/i)
+        expect(submitButton).toBeDisabled()
     })
 })

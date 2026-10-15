@@ -146,4 +146,56 @@ describe("signup Server Action", () => {
             confirmationEmailSent: false,
         })
     })
+
+    it("returns signupEmailFailed error when email sending fails and subsequent automatic login also fails", async () => {
+        const formData = new FormData()
+        formData.append("email", "test@example.com")
+        formData.append("password", "Password123!")
+        formData.append("confirmPassword", "Password123!")
+
+        const emailError = new ClientError(
+            {
+                status: 400,
+                headers: new Headers(),
+                errors: [{ message: "failedToSendEmail" }],
+            } as unknown as ConstructorParameters<typeof ClientError>[0],
+            { query: "", variables: {} },
+        )
+
+        mockRequest
+            .mockRejectedValueOnce(emailError)
+            .mockRejectedValueOnce(new Error("Login failed"))
+
+        const result = await signup({}, formData)
+
+        expect(mockRequest).toHaveBeenCalledTimes(2)
+        expect(setTokens).not.toHaveBeenCalled()
+        expect(result).toEqual({ error: "signupEmailFailed" })
+    })
+
+    it("returns signupEmailFailed error when email sending fails and subsequent automatic login also fails", async () => {
+        const formData = new FormData()
+        formData.append("email", "test@example.com")
+        formData.append("password", "Password123!")
+        formData.append("confirmPassword", "Password123!")
+
+        const emailError = new ClientError(
+            {
+                status: 400,
+                headers: new Headers(),
+                errors: [{ message: "failedToSendEmail" }],
+            } as unknown as ConstructorParameters<typeof ClientError>[0],
+            { query: "", variables: {} },
+        )
+
+        mockRequest
+            .mockRejectedValueOnce(emailError)
+            .mockRejectedValueOnce(new Error("Login failed"))
+
+        const result = await signup({}, formData)
+
+        expect(mockRequest).toHaveBeenCalledTimes(2)
+        expect(setTokens).not.toHaveBeenCalled()
+        expect(result).toEqual({ error: "signupEmailFailed" })
+    })
 })
