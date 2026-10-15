@@ -1,6 +1,17 @@
 import { fireEvent, render, screen } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
+vi.mock("react", async (importOriginal) => {
+    const actual = await importOriginal<typeof import("react")>()
+    return {
+        ...actual,
+        useSyncExternalStore: (
+            _subscribe: () => () => void,
+            getSnapshot: () => unknown,
+        ) => getSnapshot(),
+    }
+})
+
 import { DatePicker } from "../date-picker"
 
 vi.mock("../calendar", () => ({
