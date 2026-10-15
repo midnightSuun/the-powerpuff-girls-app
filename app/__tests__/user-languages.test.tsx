@@ -1,5 +1,6 @@
-import { act, render, screen, waitFor } from "@testing-library/react"
-import { Suspense } from "react"
+import { render, screen } from "@testing-library/react"
+import type { ReactNode } from "react"
+import { prerender } from "react-dom/static"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import UserLanguagesTab from "../[locale]/(protected)/users/[userId]/languages/page"
@@ -39,6 +40,13 @@ vi.mock("@/components/progress-list-skeleton", () => ({
     ),
 }))
 
+const mount = async (node: ReactNode) => {
+    const { prelude } = await prerender(node)
+    const html = await new Response(prelude).text()
+
+    return render(<div dangerouslySetInnerHTML={{ __html: html }} />)
+}
+
 describe("UserLanguagesTab Server Component", () => {
     beforeEach(() => {
         vi.clearAllMocks()
@@ -57,19 +65,11 @@ describe("UserLanguagesTab Server Component", () => {
             { id: "lang-2", name: "Spanish" },
         ])
 
-        const params = Promise.resolve({ userId: "user-2", locale: "en" })
-
-        await act(async () => {
-            render(
-                <Suspense fallback={null}>
-                    <UserLanguagesTab params={params} />
-                </Suspense>,
-            )
-        })
-
-        await waitFor(() => {
-            expect(screen.getByTestId("languages-page")).toBeInTheDocument()
-        })
+        await mount(
+            <UserLanguagesTab
+                params={Promise.resolve({ userId: "user-2", locale: "en" })}
+            />,
+        )
 
         expect(mockGetUserLanguages).toHaveBeenCalledWith("user-2")
         expect(mockGetAvailableLanguages).toHaveBeenCalled()
@@ -85,19 +85,11 @@ describe("UserLanguagesTab Server Component", () => {
         mockGetUserLanguages.mockResolvedValue({ languages: [] })
         mockGetAvailableLanguages.mockResolvedValue([])
 
-        const params = Promise.resolve({ userId: "user-2", locale: "en" })
-
-        await act(async () => {
-            render(
-                <Suspense fallback={null}>
-                    <UserLanguagesTab params={params} />
-                </Suspense>,
-            )
-        })
-
-        await waitFor(() => {
-            expect(screen.getByTestId("languages-page")).toBeInTheDocument()
-        })
+        await mount(
+            <UserLanguagesTab
+                params={Promise.resolve({ userId: "user-2", locale: "en" })}
+            />,
+        )
 
         expect(screen.getByTestId("can-manage")).toHaveTextContent("false")
         expect(screen.getByTestId("languages-count")).toHaveTextContent("0")
