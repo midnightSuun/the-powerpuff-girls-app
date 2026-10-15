@@ -278,23 +278,21 @@ function AdminDataTableInner<T extends { id: string | number }>({
                         <tr className="h-12 border-b border-[#AEAEAE] dark:border-[#383838]">
                             {columns.map((col) => {
                                 const isSorted = sortColumnKey === col.key
+
                                 return (
                                     <th
                                         key={col.key}
-                                        className={`px-4 font-medium text-foreground align-middle ${
-                                            col.sortable
-                                                ? "cursor-pointer select-none"
-                                                : ""
-                                        } ${col.className ?? ""}`}
-                                        onClick={
-                                            col.sortable
-                                                ? () => toggleSort(col.key)
-                                                : undefined
-                                        }
+                                        className={`px-4 font-medium text-foreground align-middle ${col.className ?? ""}`}
                                     >
-                                        <div className="flex items-center gap-1.5">
-                                            {col.label}
-                                            {col.sortable && (
+                                        {col.sortable ? (
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    toggleSort(col.key)
+                                                }
+                                                className="inline-flex w-fit items-center gap-1.5 bg-transparent p-0"
+                                            >
+                                                {col.label}
                                                 <span
                                                     className={
                                                         isSorted
@@ -311,8 +309,10 @@ function AdminDataTableInner<T extends { id: string | number }>({
                                                         }
                                                     />
                                                 </span>
-                                            )}
-                                        </div>
+                                            </button>
+                                        ) : (
+                                            col.label
+                                        )}
                                     </th>
                                 )
                             })}
