@@ -256,8 +256,17 @@ describe("UpdateCvModal", () => {
         const nameInput = screen.getByTestId("input-name")
         await user.clear(nameInput)
         await user.type(nameInput, "New Name")
-
         expect(mockSetName).toHaveBeenCalled()
+
+        const educationInput = screen.getByTestId("input-education")
+        await user.clear(educationInput)
+        await user.type(educationInput, "New University")
+        expect(mockSetEducation).toHaveBeenCalled()
+
+        const descriptionTextarea = screen.getByTestId("textarea-description")
+        await user.clear(descriptionTextarea)
+        await user.type(descriptionTextarea, "New Description")
+        expect(mockSetDescription).toHaveBeenCalled()
     })
 
     it("triggers handleSubmit when submit button is clicked", async () => {

@@ -245,6 +245,34 @@ describe("CvProjectsView", () => {
         expect(screen.getByTestId("cv-project-form-modal")).toBeInTheDocument()
     })
 
+    it("renders CvProjectFormModal when editingProject is provided and handles close/save", async () => {
+        const user = userEvent.setup()
+        vi.mocked(useCvProjects).mockReturnValue({
+            ...defaultHookReturn,
+            editingProject: mockProjects[0],
+        } as unknown as ReturnType<typeof useCvProjects>)
+
+        render(
+            <CvProjectsView
+                cvId="cv-1"
+                projects={mockProjects}
+                availableProjects={mockAvailableProjects}
+                canManageProjects={true}
+            />,
+        )
+
+        expect(screen.getByTestId("cv-project-form-modal")).toBeInTheDocument()
+
+        const saveButton = screen.getByTestId("modal-save")
+        await user.click(saveButton)
+        expect(mockRefresh).toHaveBeenCalledTimes(1)
+
+        const closeButton = screen.getByTestId("modal-close")
+        await user.click(closeButton)
+        expect(mockSetIsAddOpen).toHaveBeenCalledWith(false)
+        expect(mockSetEditingProject).toHaveBeenCalledWith(null)
+    })
+
     it("does not render CvProjectFormModal when canManageProjects is false", () => {
         vi.mocked(useCvProjects).mockReturnValue({
             ...defaultHookReturn,

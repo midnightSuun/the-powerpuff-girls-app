@@ -289,7 +289,7 @@ describe("AdminDataTable", () => {
             <AdminDataTable
                 data={mockData}
                 columns={mockColumns}
-                showSearchInput={true} // Обязательно true (или не передавать, т.к. это дефолт)
+                showSearchInput={true}
                 createButtonLabel="Old Label"
                 onCreateClick={() => {}}
             />,

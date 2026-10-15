@@ -103,7 +103,6 @@ describe("DefaultPageHeader", () => {
 
         render(<DefaultPageHeader page={page} copy={mockCopy} />)
 
-        // Toolbar should be rendered when action is provided
         const button = screen.queryByTestId("add-item-button")
         if (button) {
             expect(button).toBeInTheDocument()
@@ -144,7 +143,6 @@ describe("DefaultPageHeader", () => {
         render(<DefaultPageHeader page={page} copy={mockCopy} />)
 
         expect(screen.getByTestId("search-input")).toBeInTheDocument()
-        // Toolbar button existence checked - may vary by test environment
         screen.queryByTestId("add-item-button")
     })
 
@@ -201,7 +199,6 @@ describe("DefaultPageHeader", () => {
 
         render(<DefaultPageHeader page={page} copy={mockCopy} />)
 
-        // Suspense boundary should show search input
         expect(screen.getByTestId("search-input")).toBeInTheDocument()
     })
 

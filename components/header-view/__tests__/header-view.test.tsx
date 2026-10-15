@@ -149,7 +149,6 @@ describe("HeaderView", () => {
             )
         })
 
-        // Should render without throwing
         expect(screen.getByText("Users")).toBeInTheDocument()
     })
 
@@ -190,10 +189,8 @@ describe("HeaderView", () => {
             <HeaderView {...defaultProps} initialBreadcrumb={null} />,
         )
 
-        // Unmount before promise resolves
         unmount()
 
-        // Wait to ensure no state updates after unmount
         await new Promise((resolve) => setTimeout(resolve, 100))
 
         expect(mockLoadSecondBreadcrumb).toHaveBeenCalled()
@@ -258,7 +255,6 @@ describe("HeaderView", () => {
             )
         })
 
-        // Change to different user
         mockUsePathname.mockReturnValue("/profile/user-456")
         mockLoadSecondBreadcrumb.mockResolvedValue("Second User")
 
@@ -381,10 +377,8 @@ describe("HeaderView", () => {
 
         render(<HeaderView {...defaultProps} initialBreadcrumb={null} />)
 
-        // Initially loading
         expect(screen.getByText("Users")).toBeInTheDocument()
 
-        // Resolve the promise
         resolvePromise!("Loaded User")
 
         await waitFor(() => {

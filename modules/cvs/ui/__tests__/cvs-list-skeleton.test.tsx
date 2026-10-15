@@ -42,4 +42,15 @@ describe("CvsListSkeleton", () => {
         const skeletons = screen.getAllByTestId("skeleton")
         expect(skeletons.length).toBe(36)
     })
+
+    it("does not render search filter skeleton when showSearch is false", () => {
+        render(<CvsListSkeleton showSearch={false} />)
+
+        const container = screen.getByText(
+            (_, element) => element?.getAttribute("aria-busy") === "true",
+        )
+        expect(container).toBeInTheDocument()
+        const skeletons = screen.getAllByTestId("skeleton")
+        expect(skeletons.length).toBe(35)
+    })
 })

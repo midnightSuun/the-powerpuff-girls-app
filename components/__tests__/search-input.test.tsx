@@ -75,7 +75,6 @@ describe("SearchInput", () => {
         const input = screen.getByPlaceholderText("search")
         expect(input).toHaveValue("alice")
 
-        // Simulate external URL change (e.g., browser back button)
         mockSearchParamsGet.mockReturnValue("bob")
 
         rerender(<SearchInput limit={10} search="" />)
@@ -91,16 +90,13 @@ describe("SearchInput", () => {
         const input = screen.getByPlaceholderText("search")
         expect(input).toHaveValue("initial")
 
-        // User types something different
         fireEvent.change(input, { target: { value: "user-typed" } })
         expect(input).toHaveValue("user-typed")
 
-        // External search param changes to something else
         mockSearchParamsGet.mockReturnValue("external-change")
 
         rerender(<SearchInput limit={10} search="" />)
 
-        // Input should keep user's typed value, not sync to external change
         expect(input).toHaveValue("user-typed")
     })
 
@@ -112,7 +108,6 @@ describe("SearchInput", () => {
         let input = screen.getByPlaceholderText("search")
         expect(input).toHaveValue("first")
 
-        // External param changes and user hasn't typed anything different
         mockSearchParamsGet.mockReturnValue("second")
 
         rerender(<SearchInput limit={10} search="" />)

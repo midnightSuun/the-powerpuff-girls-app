@@ -82,7 +82,6 @@ describe("CvPreview", () => {
         vi.mocked(useCvPreview).mockReturnValue(
             defaultHookReturn as unknown as ReturnType<typeof useCvPreview>,
         )
-        // happy-dom does not define window.print by default
         if (typeof window.print !== "function") {
             Object.defineProperty(window, "print", {
                 configurable: true,
@@ -172,5 +171,58 @@ describe("CvPreview", () => {
 
         expect(screen.getByText("noDescription")).toBeInTheDocument()
         expect(screen.getByText("noSkills")).toBeInTheDocument()
+    })
+
+    it("renders correctly when education is missing and category has multiple skills", () => {
+        const multipleSkills = [
+            { name: "React", mastery: "Advanced" },
+            { name: "TypeScript", mastery: "Advanced" },
+        ]
+
+        vi.mocked(useCvPreview).mockReturnValue({
+            ...defaultHookReturn,
+            categories: new Map([["Frontend", multipleSkills]]),
+        } as unknown as ReturnType<typeof useCvPreview>)
+
+        const cvWithoutEdu: CvDetailsItem = {
+            ...mockCv,
+            education: "",
+        }
+
+        render(<CvPreview cv={cvWithoutEdu} />)
+
+        expect(screen.queryByText("BSUIR")).not.toBeInTheDocument()
+        expect(screen.getByText("React")).toBeInTheDocument()
+        expect(screen.getByText("TypeScript")).toBeInTheDocument()
+    })
+
+    it("renders projects without domain, description, roles, responsibilities, or environment", () => {
+        const minimalProject = [
+            {
+                id: "proj-2",
+                name: "Minimal Project",
+                internal_name: "MinProj",
+                description: "",
+                domain: "",
+                start_date: "2026-01-01T00:00:00.000Z",
+                end_date: null,
+                roles: [],
+                responsibilities: [],
+                environment: [],
+                project: { id: "p-2" },
+            },
+        ]
+
+        vi.mocked(useCvPreview).mockReturnValue({
+            ...defaultHookReturn,
+            projects: minimalProject,
+        } as unknown as ReturnType<typeof useCvPreview>)
+
+        render(<CvPreview cv={mockCv} />)
+
+        expect(screen.getByText("Minimal Project")).toBeInTheDocument()
+        expect(
+            screen.queryByText("Healthcare CRM system"),
+        ).not.toBeInTheDocument()
     })
 })

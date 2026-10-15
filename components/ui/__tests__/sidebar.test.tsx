@@ -204,7 +204,6 @@ describe("Sidebar Component", () => {
         const trigger = screen.getByRole("button", { name: /toggleSidebar/i })
         await user.click(trigger)
 
-        // Ищем конкретно оверлей по его классам бэкдропа
         const overlay = document.querySelector(".fixed.inset-0.bg-black\\/40")
         expect(overlay).toBeInTheDocument()
 

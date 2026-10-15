@@ -83,7 +83,7 @@ describe("CvsPageView", () => {
     const mockHandleUpdate = vi.fn()
     const mockHandleDelete = vi.fn()
 
-    const defaultHookReturn = {
+    const defaultHookReturn: ReturnType<typeof useCvsPage> = {
         cvs: mockCvs,
         isCreateOpen: false,
         setIsCreateOpen: mockSetIsCreateOpen,
@@ -103,9 +103,7 @@ describe("CvsPageView", () => {
     beforeEach(() => {
         cleanup()
         vi.clearAllMocks()
-        vi.mocked(useCvsPage).mockReturnValue(
-            defaultHookReturn as unknown as ReturnType<typeof useCvsPage>,
-        )
+        vi.mocked(useCvsPage).mockReturnValue(defaultHookReturn)
     })
 
     afterEach(() => {
@@ -211,7 +209,7 @@ describe("CvsPageView", () => {
         vi.mocked(useCvsPage).mockReturnValue({
             ...defaultHookReturn,
             activeMenuId: "cv-1",
-        } as unknown as ReturnType<typeof useCvsPage>)
+        })
 
         render(
             <CvsPageView
@@ -229,11 +227,57 @@ describe("CvsPageView", () => {
         expect(mockPush).toHaveBeenCalledWith("/cv/cv-1")
     })
 
+    it("opens edit modal and handles edit click", async () => {
+        const user = userEvent.setup()
+        vi.mocked(useCvsPage).mockReturnValue({
+            ...defaultHookReturn,
+            activeMenuId: "cv-1",
+        })
+
+        render(
+            <CvsPageView
+                initialCvs={mockCvs}
+                isAdmin={true}
+                search=""
+                limit={10}
+            />,
+        )
+
+        const editButton = screen.getByText("edit")
+        await user.click(editButton)
+
+        expect(mockSetActiveMenuId).toHaveBeenCalledWith(null)
+        expect(mockSetEditingCv).toHaveBeenCalledWith(mockCvs[0])
+    })
+
+    it("opens delete modal and handles delete click", async () => {
+        const user = userEvent.setup()
+        vi.mocked(useCvsPage).mockReturnValue({
+            ...defaultHookReturn,
+            activeMenuId: "cv-1",
+        })
+
+        render(
+            <CvsPageView
+                initialCvs={mockCvs}
+                isAdmin={true}
+                search=""
+                limit={10}
+            />,
+        )
+
+        const deleteButton = screen.getByText("delete")
+        await user.click(deleteButton)
+
+        expect(mockSetActiveMenuId).toHaveBeenCalledWith(null)
+        expect(mockSetDeletingCv).toHaveBeenCalledWith(mockCvs[0])
+    })
+
     it("renders empty message when no CVs are available", () => {
         vi.mocked(useCvsPage).mockReturnValue({
             ...defaultHookReturn,
             cvs: [],
-        } as unknown as ReturnType<typeof useCvsPage>)
+        })
 
         render(
             <CvsPageView
@@ -245,5 +289,125 @@ describe("CvsPageView", () => {
         )
 
         expect(screen.getByText("empty")).toBeInTheDocument()
+    })
+
+    it("renders noResults message when cvs list is empty and search or isAdmin is true", () => {
+        vi.mocked(useCvsPage).mockReturnValue({
+            ...defaultHookReturn,
+            cvs: [],
+        })
+
+        render(
+            <CvsPageView
+                initialCvs={[]}
+                isAdmin={true}
+                search="react"
+                limit={10}
+            />,
+        )
+
+        expect(screen.getByText("noResults")).toBeInTheDocument()
+    })
+
+    it("renders create, update and delete modals when their respective states are active", () => {
+        vi.mocked(useCvsPage).mockReturnValue({
+            ...defaultHookReturn,
+            isCreateOpen: true,
+            editingCv: mockCvs[0],
+            deletingCv: mockCvs[0],
+        })
+
+        render(
+            <CvsPageView
+                initialCvs={mockCvs}
+                isAdmin={true}
+                search=""
+                limit={10}
+            />,
+        )
+
+        expect(screen.getByTestId("create-cv-modal")).toBeInTheDocument()
+        expect(screen.getByTestId("update-cv-modal")).toBeInTheDocument()
+        expect(screen.getByTestId("delete-cv-modal")).toBeInTheDocument()
+    })
+
+    it("renders fallback dash when cv user email is missing", () => {
+        const cvWithoutUser: CvItem = {
+            id: "cv-3",
+            name: "No User CV",
+            education: "BSUIR",
+            description: "No user description",
+        }
+
+        vi.mocked(useCvsPage).mockReturnValue({
+            ...defaultHookReturn,
+            cvs: [cvWithoutUser],
+        })
+
+        render(
+            <CvsPageView
+                initialCvs={[cvWithoutUser]}
+                isAdmin={true}
+                search=""
+                limit={10}
+            />,
+        )
+
+        expect(screen.getByText("—")).toBeInTheDocument()
+    })
+
+    it("handles sort link correctly when sorted by a different field", () => {
+        render(
+            <CvsPageView
+                initialCvs={mockCvs}
+                isAdmin={true}
+                search=""
+                limit={10}
+                sortBy="name"
+                sortOrder="asc"
+            />,
+        )
+
+        const sortLink = screen.getByRole("link", { name: "name" })
+        expect(sortLink).toHaveAttribute(
+            "href",
+            "/cv?page=1&limit=10&sortBy=name&sortOrder=asc",
+        )
+        expect(sortLink.parentElement).toHaveAttribute("aria-sort", "ascending")
+    })
+
+    it("interacts with create, update and delete modals correctly", async () => {
+        const handleCreate = vi.fn()
+        const handleUpdate = vi.fn()
+        const handleDelete = vi.fn()
+        const setIsCreateOpen = vi.fn()
+        const setEditingCv = vi.fn()
+        const setDeletingCv = vi.fn()
+
+        vi.mocked(useCvsPage).mockReturnValue({
+            ...defaultHookReturn,
+            isCreateOpen: true,
+            editingCv: mockCvs[0],
+            deletingCv: mockCvs[0],
+            handleCreate,
+            handleUpdate,
+            handleDelete,
+            setIsCreateOpen,
+            setEditingCv,
+            setDeletingCv,
+        })
+
+        render(
+            <CvsPageView
+                initialCvs={mockCvs}
+                isAdmin={true}
+                search=""
+                limit={10}
+            />,
+        )
+
+        expect(screen.getByTestId("create-cv-modal")).toBeInTheDocument()
+        expect(screen.getByTestId("update-cv-modal")).toBeInTheDocument()
+        expect(screen.getByTestId("delete-cv-modal")).toBeInTheDocument()
     })
 })

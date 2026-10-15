@@ -312,8 +312,6 @@ describe("ProjectsTableView", () => {
             <ProjectsTableView projects={sampleProjects} canManage={false} />,
         )
 
-        // The aria-label will be "sortByName" with a direction parameter
-        // Since translation mock is simple, we just verify the button exists
         const sortButton = screen.getByRole("button", { name: /sortByName/ })
         expect(sortButton).toBeInTheDocument()
     })
