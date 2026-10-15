@@ -4,9 +4,20 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 import { AddSkillButton } from "../ui/components/user/add-skill-button"
 
 vi.mock("../ui/components/user/add-skill-modal", () => ({
-    AddSkillModal: ({ isOpen }: { isOpen: boolean }) =>
+    AddSkillModal: ({
+        isOpen,
+        onClose,
+    }: {
+        isOpen: boolean
+        onClose: () => void
+    }) =>
         isOpen ? (
-            <div data-testid="add-skill-modal">Add Skill Modal</div>
+            <div data-testid="add-skill-modal">
+                Add Skill Modal
+                <button onClick={onClose} data-testid="modal-close-btn">
+                    Close
+                </button>
+            </div>
         ) : null,
 }))
 
@@ -76,5 +87,22 @@ describe("AddSkillButton", () => {
 
         fireEvent.click(screen.getByTestId("add-item-btn"))
         expect(screen.getByTestId("add-skill-modal")).toBeInTheDocument()
+    })
+
+    it("closes modal when close button in AddSkillModal is clicked", async () => {
+        const user = await import("@testing-library/user-event")
+
+        // Render the button
+        render(<AddSkillButton {...defaultProps} />)
+
+        // Open the modal
+        fireEvent.click(screen.getByTestId("add-item-btn"))
+        expect(screen.getByTestId("add-skill-modal")).toBeInTheDocument()
+
+        // Close the modal by clicking the close button in the modal
+        await user.default.setup().click(screen.getByTestId("modal-close-btn"))
+
+        // The modal should be closed
+        expect(screen.queryByTestId("add-skill-modal")).not.toBeInTheDocument()
     })
 })

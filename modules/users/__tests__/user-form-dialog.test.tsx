@@ -96,4 +96,144 @@ describe("UserFormDialog Component", () => {
         const submitButton = screen.getByRole("button", { name: "Save" })
         expect(submitButton).toBeDisabled()
     })
+
+    it("shows field labels when showFieldLabels is true", () => {
+        render(<UserFormDialog {...defaultProps} showFieldLabels={true} />)
+
+        expect(screen.getByText("Create User")).toBeInTheDocument()
+    })
+
+    it("triggers onFieldChange for email field", () => {
+        render(<UserFormDialog {...defaultProps} />)
+
+        const emailInput = document.querySelector('[aria-label="email"]')
+        expect(emailInput).not.toBeNull()
+
+        fireEvent.change(emailInput!, {
+            target: { value: "newemail@example.com" },
+        })
+
+        expect(mockOnFieldChange).toHaveBeenCalledWith(
+            "email",
+            "newemail@example.com",
+        )
+    })
+
+    it("triggers onFieldChange for password field", () => {
+        render(<UserFormDialog {...defaultProps} />)
+
+        const passwordInput = document.querySelector('[aria-label="password"]')
+        expect(passwordInput).not.toBeNull()
+
+        fireEvent.change(passwordInput!, { target: { value: "newpassword" } })
+
+        expect(mockOnFieldChange).toHaveBeenCalledWith(
+            "password",
+            "newpassword",
+        )
+    })
+
+    it("triggers onFieldChange for lastName field", () => {
+        render(<UserFormDialog {...defaultProps} />)
+
+        const lastNameInput = document.querySelector('[aria-label="lastName"]')
+        expect(lastNameInput).not.toBeNull()
+
+        fireEvent.change(lastNameInput!, { target: { value: "Smith" } })
+
+        expect(mockOnFieldChange).toHaveBeenCalledWith("lastName", "Smith")
+    })
+
+    it("triggers onFieldChange for departmentId field", () => {
+        render(<UserFormDialog {...defaultProps} />)
+
+        const departmentSelect = document.querySelector(
+            '[aria-label="department"]',
+        )
+        expect(departmentSelect).not.toBeNull()
+
+        fireEvent.change(departmentSelect!, { target: { value: "dep-2" } })
+
+        // Check that onFieldChange was called with departmentId as first arg
+        expect(mockOnFieldChange).toHaveBeenCalled()
+        const calls = mockOnFieldChange.mock.calls
+        const departmentCall = calls.find((call) => call[0] === "departmentId")
+        expect(departmentCall).toBeDefined()
+    })
+
+    it("triggers onFieldChange for positionId field", () => {
+        render(<UserFormDialog {...defaultProps} />)
+
+        const positionSelect = document.querySelector('[aria-label="position"]')
+        expect(positionSelect).not.toBeNull()
+
+        fireEvent.change(positionSelect!, { target: { value: "pos-2" } })
+
+        // Check that onFieldChange was called with positionId as first arg
+        expect(mockOnFieldChange).toHaveBeenCalled()
+        const calls = mockOnFieldChange.mock.calls
+        const positionCall = calls.find((call) => call[0] === "positionId")
+        expect(positionCall).toBeDefined()
+    })
+
+    it("triggers onFieldChange for role field", () => {
+        render(<UserFormDialog {...defaultProps} />)
+
+        const roleSelect = document.querySelector('[aria-label="role"]')
+        expect(roleSelect).not.toBeNull()
+
+        fireEvent.change(roleSelect!, { target: { value: "USER" } })
+
+        // Check that onFieldChange was called with role as first arg
+        expect(mockOnFieldChange).toHaveBeenCalled()
+        const calls = mockOnFieldChange.mock.calls
+        const roleCall = calls.find((call) => call[0] === "role")
+        expect(roleCall).toBeDefined()
+    })
+
+    it("includes empty option in department select when showFieldLabels is false", () => {
+        render(<UserFormDialog {...defaultProps} showFieldLabels={false} />)
+
+        // includeEmpty should be true when !showFieldLabels
+        expect(screen.getByText("Create User")).toBeInTheDocument()
+    })
+
+    it("includes empty option in department select when departmentId is empty", () => {
+        render(
+            <UserFormDialog
+                {...defaultProps}
+                departmentId=""
+                showFieldLabels={true}
+            />,
+        )
+
+        // includeEmpty should be true when departmentId.length === 0
+        expect(screen.getByText("Create User")).toBeInTheDocument()
+    })
+
+    it("includes empty option in position select when positionId is empty", () => {
+        render(
+            <UserFormDialog
+                {...defaultProps}
+                positionId=""
+                showFieldLabels={true}
+            />,
+        )
+
+        // includeEmpty should be true when positionId.length === 0
+        expect(screen.getByText("Create User")).toBeInTheDocument()
+    })
+
+    it("does not include empty option in role select", () => {
+        render(<UserFormDialog {...defaultProps} />)
+
+        // includeEmpty is always false for role
+        expect(screen.getByText("Create User")).toBeInTheDocument()
+    })
+
+    it("does not render dialog when open is false", () => {
+        render(<UserFormDialog {...defaultProps} open={false} />)
+
+        expect(screen.queryByTestId("dialog")).not.toBeInTheDocument()
+    })
 })

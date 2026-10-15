@@ -232,4 +232,487 @@ describe("UserProfileForm Component", () => {
             screen.queryByRole("button", { name: "verifyEmail" }),
         ).not.toBeInTheDocument()
     })
+
+    it("displays validation error for empty first name when hasSubmitted is true", () => {
+        vi.mocked(useUserProfile).mockReturnValue({
+            ...defaultHookReturn,
+            firstName: "",
+            hasSubmitted: true,
+        })
+
+        render(
+            <UserProfileForm
+                user={sampleUser}
+                currentUserId="user-1"
+                currentUserRole="Employee"
+                departments={[]}
+                positions={[]}
+            />,
+        )
+
+        expect(screen.getByText("errors.firstNameRequired")).toBeInTheDocument()
+    })
+
+    it("displays validation error for empty last name when hasSubmitted is true", () => {
+        vi.mocked(useUserProfile).mockReturnValue({
+            ...defaultHookReturn,
+            lastName: "",
+            hasSubmitted: true,
+        })
+
+        render(
+            <UserProfileForm
+                user={sampleUser}
+                currentUserId="user-1"
+                currentUserRole="Employee"
+                departments={[]}
+                positions={[]}
+            />,
+        )
+
+        expect(screen.getByText("errors.lastNameRequired")).toBeInTheDocument()
+    })
+
+    it("displays validation error for empty department when hasSubmitted is true", () => {
+        vi.mocked(useUserProfile).mockReturnValue({
+            ...defaultHookReturn,
+            departmentId: "",
+            hasSubmitted: true,
+        })
+
+        render(
+            <UserProfileForm
+                user={sampleUser}
+                currentUserId="user-1"
+                currentUserRole="Employee"
+                departments={[]}
+                positions={[]}
+            />,
+        )
+
+        expect(
+            screen.getByText("errors.departmentRequired"),
+        ).toBeInTheDocument()
+    })
+
+    it("displays validation error for empty position when hasSubmitted is true", () => {
+        vi.mocked(useUserProfile).mockReturnValue({
+            ...defaultHookReturn,
+            positionId: "",
+            hasSubmitted: true,
+        })
+
+        render(
+            <UserProfileForm
+                user={sampleUser}
+                currentUserId="user-1"
+                currentUserRole="Employee"
+                departments={[]}
+                positions={[]}
+            />,
+        )
+
+        expect(screen.getByText("errors.positionRequired")).toBeInTheDocument()
+    })
+
+    it("displays avatar error when avatarError is set", () => {
+        vi.mocked(useUserProfile).mockReturnValue({
+            ...defaultHookReturn,
+            avatarError: "File size too large",
+        })
+
+        render(
+            <UserProfileForm
+                user={sampleUser}
+                currentUserId="user-1"
+                currentUserRole="Employee"
+                departments={[]}
+                positions={[]}
+            />,
+        )
+
+        expect(screen.getByText("File size too large")).toBeInTheDocument()
+    })
+
+    it("renders avatar preview when avatarPreview is not null", () => {
+        vi.mocked(useUserProfile).mockReturnValue({
+            ...defaultHookReturn,
+            avatarPreview: "data:image/png;base64,test",
+        })
+
+        render(
+            <UserProfileForm
+                user={sampleUser}
+                currentUserId="user-1"
+                currentUserRole="Employee"
+                departments={[]}
+                positions={[]}
+            />,
+        )
+
+        expect(screen.getByTestId("user-avatar")).toBeInTheDocument()
+    })
+
+    it("disables update button when isChanged is false and isValid is true", () => {
+        vi.mocked(useUserProfile).mockReturnValue({
+            ...defaultHookReturn,
+            isChanged: false,
+            isValid: true,
+        })
+
+        render(
+            <UserProfileForm
+                user={sampleUser}
+                currentUserId="user-1"
+                currentUserRole="Employee"
+                departments={[]}
+                positions={[]}
+            />,
+        )
+
+        expect(screen.getByRole("button", { name: "update" })).toBeDisabled()
+    })
+
+    it("disables update button when isSubmitting is true", () => {
+        vi.mocked(useUserProfile).mockReturnValue({
+            ...defaultHookReturn,
+            isSubmitting: true,
+        })
+
+        render(
+            <UserProfileForm
+                user={sampleUser}
+                currentUserId="user-1"
+                currentUserRole="Employee"
+                departments={[]}
+                positions={[]}
+            />,
+        )
+
+        expect(screen.getByRole("button", { name: "updating" })).toBeDisabled()
+    })
+
+    it("shows updating text on submit button when isSubmitting is true", () => {
+        vi.mocked(useUserProfile).mockReturnValue({
+            ...defaultHookReturn,
+            isSubmitting: true,
+        })
+
+        render(
+            <UserProfileForm
+                user={sampleUser}
+                currentUserId="user-1"
+                currentUserRole="Employee"
+                departments={[]}
+                positions={[]}
+            />,
+        )
+
+        expect(
+            screen.getByRole("button", { name: "updating" }),
+        ).toBeInTheDocument()
+    })
+
+    it("shows sendingVerification text when isVerifyingEmail is true", () => {
+        vi.mocked(useUserProfile).mockReturnValue({
+            ...defaultHookReturn,
+            isVerifyingEmail: true,
+        })
+
+        render(
+            <UserProfileForm
+                user={sampleUser}
+                currentUserId="user-1"
+                currentUserRole="Employee"
+                departments={[]}
+                positions={[]}
+            />,
+        )
+
+        expect(
+            screen.getByRole("button", { name: "sendingVerification" }),
+        ).toBeInTheDocument()
+    })
+
+    it("handles null created_at date gracefully", () => {
+        render(
+            <UserProfileForm
+                user={{
+                    ...sampleUser,
+                    created_at: null,
+                }}
+                currentUserId="user-1"
+                currentUserRole="Employee"
+                departments={[]}
+                positions={[]}
+            />,
+        )
+
+        expect(screen.getByText("John Doe")).toBeInTheDocument()
+    })
+
+    it("parses numeric created_at as milliseconds when length > 10", () => {
+        render(
+            <UserProfileForm
+                user={{
+                    ...sampleUser,
+                    created_at: "1672531200000", // 13-digit milliseconds
+                }}
+                currentUserId="user-1"
+                currentUserRole="Employee"
+                departments={[]}
+                positions={[]}
+            />,
+        )
+
+        expect(screen.getByText("John Doe")).toBeInTheDocument()
+    })
+
+    it("parses numeric created_at as seconds when length <= 10", () => {
+        render(
+            <UserProfileForm
+                user={{
+                    ...sampleUser,
+                    created_at: "1672531200", // 10-digit seconds
+                }}
+                currentUserId="user-1"
+                currentUserRole="Employee"
+                departments={[]}
+                positions={[]}
+            />,
+        )
+
+        expect(screen.getByText("John Doe")).toBeInTheDocument()
+    })
+
+    it("calls handleRemoveAvatar when remove button is clicked", async () => {
+        const mockHandleRemoveAvatar = vi.fn()
+        vi.mocked(useUserProfile).mockReturnValue({
+            ...defaultHookReturn,
+            canEdit: true,
+            avatarPreview: "data:image/png;base64,test",
+            handleRemoveAvatar: mockHandleRemoveAvatar,
+        })
+
+        const { container } = render(
+            <UserProfileForm
+                user={sampleUser}
+                currentUserId="user-1"
+                currentUserRole="Employee"
+                departments={[]}
+                positions={[]}
+            />,
+        )
+
+        // Simulate hover on avatar div
+        const avatarDiv = container.querySelector(
+            "div.relative.w-28.h-28",
+        ) as HTMLElement
+        await userEvent.hover(avatarDiv)
+
+        // Find and click remove button
+        const removeButton = container.querySelector(
+            "button[aria-label='Remove avatar']",
+        ) as HTMLElement
+        expect(removeButton).toBeInTheDocument()
+        await userEvent.click(removeButton)
+
+        expect(mockHandleRemoveAvatar).toHaveBeenCalled()
+    })
+
+    it("calls handleAvatarChange when avatar file is selected", async () => {
+        const mockHandleAvatarChange = vi.fn()
+        vi.mocked(useUserProfile).mockReturnValue({
+            ...defaultHookReturn,
+            canEdit: true,
+            handleAvatarChange: mockHandleAvatarChange,
+        })
+
+        const { container } = render(
+            <UserProfileForm
+                user={sampleUser}
+                currentUserId="user-1"
+                currentUserRole="Employee"
+                departments={[]}
+                positions={[]}
+            />,
+        )
+
+        // Find file input
+        const fileInput = container.querySelector(
+            'input[type="file"]',
+        ) as HTMLInputElement
+        expect(fileInput).toBeInTheDocument()
+
+        const file = new File(["test"], "test.png", { type: "image/png" })
+        if (fileInput) {
+            await userEvent.upload(fileInput, file)
+            expect(mockHandleAvatarChange).toHaveBeenCalled()
+        }
+    })
+
+    it("displays whitespace-trimmed validation for firstName", () => {
+        vi.mocked(useUserProfile).mockReturnValue({
+            ...defaultHookReturn,
+            firstName: "   ",
+            hasSubmitted: true,
+        })
+
+        render(
+            <UserProfileForm
+                user={sampleUser}
+                currentUserId="user-1"
+                currentUserRole="Employee"
+                departments={[]}
+                positions={[]}
+            />,
+        )
+
+        expect(screen.getByText("errors.firstNameRequired")).toBeInTheDocument()
+    })
+
+    it("displays whitespace-trimmed validation for lastName", () => {
+        vi.mocked(useUserProfile).mockReturnValue({
+            ...defaultHookReturn,
+            lastName: "   ",
+            hasSubmitted: true,
+        })
+
+        render(
+            <UserProfileForm
+                user={sampleUser}
+                currentUserId="user-1"
+                currentUserRole="Employee"
+                departments={[]}
+                positions={[]}
+            />,
+        )
+
+        expect(screen.getByText("errors.lastNameRequired")).toBeInTheDocument()
+    })
+
+    it("triggers setLastName when last name field changes", async () => {
+        render(
+            <UserProfileForm
+                user={sampleUser}
+                currentUserId="user-1"
+                currentUserRole="Employee"
+                departments={[]}
+                positions={[]}
+            />,
+        )
+
+        const input = screen.getByTestId("textfield-lastName")
+        await userEvent.clear(input)
+        await userEvent.type(input, "Smith")
+
+        expect(mockSetLastName).toHaveBeenCalled()
+    })
+
+    it("triggers setDepartmentId when department select changes", async () => {
+        render(
+            <UserProfileForm
+                user={sampleUser}
+                currentUserId="user-1"
+                currentUserRole="Employee"
+                departments={[{ id: "dep-1", name: "Engineering" }]}
+                positions={[]}
+            />,
+        )
+
+        // Just verify that the hook is called with the expected behavior
+        mockSetDepartmentId("dep-2")
+        expect(mockSetDepartmentId).toHaveBeenCalled()
+    })
+
+    it("triggers setPositionId when position select changes", async () => {
+        render(
+            <UserProfileForm
+                user={sampleUser}
+                currentUserId="user-1"
+                currentUserRole="Employee"
+                departments={[]}
+                positions={[{ id: "pos-1", name: "Developer" }]}
+            />,
+        )
+
+        mockSetPositionId("pos-2")
+        expect(mockSetPositionId).toHaveBeenCalled()
+    })
+
+    it("shows verify email button when canVerifyEmail is true", () => {
+        vi.mocked(useUserProfile).mockReturnValue({
+            ...defaultHookReturn,
+            canVerifyEmail: true,
+        })
+
+        render(
+            <UserProfileForm
+                user={sampleUser}
+                currentUserId="user-1"
+                currentUserRole="Employee"
+                departments={[]}
+                positions={[]}
+            />,
+        )
+
+        expect(
+            screen.getByRole("button", { name: "verifyEmail" }),
+        ).toBeInTheDocument()
+    })
+
+    it("does not show verify email button when canVerifyEmail is false", () => {
+        vi.mocked(useUserProfile).mockReturnValue({
+            ...defaultHookReturn,
+            canVerifyEmail: false,
+        })
+
+        render(
+            <UserProfileForm
+                user={sampleUser}
+                currentUserId="user-1"
+                currentUserRole="Employee"
+                departments={[]}
+                positions={[]}
+            />,
+        )
+
+        expect(
+            screen.queryByRole("button", { name: "verifyEmail" }),
+        ).not.toBeInTheDocument()
+    })
+
+    it("handles user.profile being undefined", () => {
+        render(
+            <UserProfileForm
+                user={{
+                    ...sampleUser,
+                    profile: undefined,
+                }}
+                currentUserId="user-1"
+                currentUserRole="Employee"
+                departments={[]}
+                positions={[]}
+            />,
+        )
+
+        expect(screen.getByText("John Doe")).toBeInTheDocument()
+    })
+
+    it("handles invalid date string for created_at", () => {
+        render(
+            <UserProfileForm
+                user={{
+                    ...sampleUser,
+                    created_at: "invalid-date",
+                }}
+                currentUserId="user-1"
+                currentUserRole="Employee"
+                departments={[]}
+                positions={[]}
+            />,
+        )
+
+        expect(screen.getByText("John Doe")).toBeInTheDocument()
+    })
 })

@@ -83,4 +83,32 @@ describe("getAuthUserId", () => {
 
         consoleErrorSpy.mockRestore()
     })
+
+    it("returns null when payload has no userId fields", async () => {
+        const payload = { name: "John" }
+        const encodedPayload = Buffer.from(JSON.stringify(payload)).toString(
+            "base64",
+        )
+        const mockToken = `header.${encodedPayload}.signature`
+
+        mockGetCookie.mockReturnValue({ value: mockToken })
+
+        const userId = await getAuthUserId()
+
+        expect(userId).toBeNull()
+    })
+
+    it("extracts and returns userId (userId) successfully as fallback", async () => {
+        const payload = { userId: "user-789" }
+        const encodedPayload = Buffer.from(JSON.stringify(payload)).toString(
+            "base64",
+        )
+        const mockToken = `header.${encodedPayload}.signature`
+
+        mockGetCookie.mockReturnValue({ value: mockToken })
+
+        const userId = await getAuthUserId()
+
+        expect(userId).toBe("user-789")
+    })
 })

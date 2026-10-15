@@ -140,4 +140,93 @@ describe("NavUserMenu Component", () => {
         )
         expect(logout).toHaveBeenCalledTimes(1)
     })
+
+    it("does not close sidebar on logout when not mobile", async () => {
+        render(<NavUserMenu user={sampleUser} />)
+
+        const logoutItem = screen.getByTestId("menu-item-logout")
+        await userEvent.click(logoutItem)
+
+        expect(mockSetOpenMobile).not.toHaveBeenCalled()
+        expect(logout).toHaveBeenCalledTimes(1)
+    })
+
+    it("renders correctly in tablet expanded state", () => {
+        vi.mocked(useSidebar).mockReturnValue({
+            isMobile: false,
+            isTablet: true,
+            state: "expanded",
+            setOpenMobile: mockSetOpenMobile,
+        } as unknown as ReturnType<typeof useSidebar>)
+
+        render(<NavUserMenu user={sampleUser} />)
+
+        expect(screen.getByTestId("dropdown-content")).toBeInTheDocument()
+        expect(screen.getByTestId("menu-item-profile")).toBeInTheDocument()
+        expect(screen.getByTestId("menu-item-settings")).toBeInTheDocument()
+        expect(screen.getByTestId("menu-item-logout")).toBeInTheDocument()
+    })
+
+    it("renders correctly in tablet collapsed state", () => {
+        vi.mocked(useSidebar).mockReturnValue({
+            isMobile: false,
+            isTablet: true,
+            state: "collapsed",
+            setOpenMobile: mockSetOpenMobile,
+        } as unknown as ReturnType<typeof useSidebar>)
+
+        render(<NavUserMenu user={sampleUser} />)
+
+        expect(screen.getByTestId("dropdown-content")).toBeInTheDocument()
+        expect(screen.getByTestId("menu-item-profile")).toBeInTheDocument()
+    })
+
+    it("shows viewProfile text when not on tablet", () => {
+        render(<NavUserMenu user={sampleUser} />)
+
+        expect(screen.getByText("viewProfile")).toBeInTheDocument()
+    })
+
+    it("does not show viewProfile text when on tablet", () => {
+        vi.mocked(useSidebar).mockReturnValue({
+            isMobile: false,
+            isTablet: true,
+            state: "expanded",
+            setOpenMobile: mockSetOpenMobile,
+        } as unknown as ReturnType<typeof useSidebar>)
+
+        render(<NavUserMenu user={sampleUser} />)
+
+        expect(screen.queryByText("viewProfile")).not.toBeInTheDocument()
+    })
+
+    it("closes mobile sidebar when clicking settings on mobile", async () => {
+        vi.mocked(useSidebar).mockReturnValue({
+            isMobile: true,
+            isTablet: false,
+            state: "expanded",
+            setOpenMobile: mockSetOpenMobile,
+        } as unknown as ReturnType<typeof useSidebar>)
+
+        render(<NavUserMenu user={sampleUser} />)
+
+        const settingsItem = screen.getByTestId("menu-item-settings")
+        await userEvent.click(settingsItem)
+
+        expect(mockSetOpenMobile).toHaveBeenCalledWith(false)
+    })
+
+    it("handles user with no name — shows email", () => {
+        const userNoName: NavUserData = {
+            id: "user-2",
+            email: "noname@example.com",
+            firstName: null,
+            lastName: null,
+            avatar: null,
+        }
+
+        render(<NavUserMenu user={userNoName} />)
+
+        expect(screen.getByText("noname@example.com")).toBeInTheDocument()
+    })
 })

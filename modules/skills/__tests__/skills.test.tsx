@@ -143,4 +143,106 @@ describe("Skills (Server Component)", () => {
         expect(screen.queryByText("Backend")).not.toBeInTheDocument()
         container.remove()
     })
+
+    it("includes whole category when search matches category title", async () => {
+        // Строка 108: matchesSearch(category.title, search) → вся категория включается
+        const jsx = await Skills({
+            userSkills: mockUserSkills,
+            role: "Employee",
+            search: "frontend",
+        })
+
+        const { container } = render(jsx)
+
+        // Категория "Frontend" совпадает по названию → все скиллы внутри видны
+        expect(screen.getByText("Frontend")).toBeInTheDocument()
+        expect(screen.getByText("React")).toBeInTheDocument()
+        container.remove()
+    })
+
+    it("excludes categories with no matches in search", async () => {
+        // Строка 108: категория не совпадает, скиллы не совпадают → не рендерится
+        const jsx = await Skills({
+            userSkills: mockUserSkills,
+            role: "Employee",
+            search: "python",
+        })
+
+        const { container } = render(jsx)
+
+        expect(screen.queryByText("Frontend")).not.toBeInTheDocument()
+        expect(screen.queryByText("Backend")).not.toBeInTheDocument()
+        expect(
+            screen.queryByText("Programming Languages"),
+        ).not.toBeInTheDocument()
+        container.remove()
+    })
+
+    it("resolves categoryId from skill.categoryId when present and not 'other'", async () => {
+        const skillsWithCategoryId = {
+            cvId: "cv-2",
+            skills: [
+                {
+                    name: "CustomSkill",
+                    mastery: "Advanced" as Mastery,
+                    categoryId: "5",
+                    category: "custom",
+                },
+            ],
+        }
+
+        const jsx = await Skills({
+            userSkills: skillsWithCategoryId,
+            role: "Employee",
+        })
+
+        const { container } = render(jsx)
+        expect(screen.getByText("CustomSkill")).toBeInTheDocument()
+        container.remove()
+    })
+
+    it("resolves categoryId from skill.category when categoryId is 'other'", async () => {
+        const skillsWithOtherCategoryId = {
+            cvId: "cv-3",
+            skills: [
+                {
+                    name: "AnotherSkill",
+                    mastery: "Novice" as Mastery,
+                    categoryId: "other",
+                    category: "design",
+                },
+            ],
+        }
+
+        const jsx = await Skills({
+            userSkills: skillsWithOtherCategoryId,
+            role: "Employee",
+        })
+
+        const { container } = render(jsx)
+        expect(screen.getByText("AnotherSkill")).toBeInTheDocument()
+        container.remove()
+    })
+
+    it("falls back to 'other' when skill name does not match any known set", async () => {
+        const unknownSkills = {
+            cvId: "cv-4",
+            skills: [
+                {
+                    name: "Figma",
+                    mastery: "Competent" as Mastery,
+                },
+            ],
+        }
+
+        const jsx = await Skills({
+            userSkills: unknownSkills,
+            role: "Employee",
+        })
+
+        const { container } = render(jsx)
+        expect(screen.getByText("Other")).toBeInTheDocument()
+        expect(screen.getByText("Figma")).toBeInTheDocument()
+        container.remove()
+    })
 })

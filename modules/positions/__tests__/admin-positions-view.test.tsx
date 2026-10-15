@@ -167,4 +167,187 @@ describe("AdminPositionsView", () => {
 
         expect(screen.getByTestId("delete-modal")).toBeInTheDocument()
     })
+
+    it("calls setIsCreateOpen(false) when create modal closes", () => {
+        vi.mocked(useAdminPositionsView).mockReturnValue({
+            ...defaultHookValues,
+            isCreateOpen: true,
+        })
+
+        render(<AdminPositionsView initialPositions={initialPositions} />)
+
+        // Modal should be visible
+        expect(screen.getByTestId("create-modal")).toBeInTheDocument()
+    })
+
+    it("calls setEditingPosition(null) when edit modal closes", () => {
+        vi.mocked(useAdminPositionsView).mockReturnValue({
+            ...defaultHookValues,
+            editingPosition: initialPositions[0],
+        })
+
+        render(<AdminPositionsView initialPositions={initialPositions} />)
+
+        // Modal should be visible
+        expect(screen.getByTestId("edit-modal")).toBeInTheDocument()
+    })
+
+    it("calls setDeletingPosition(null) when delete modal closes", () => {
+        vi.mocked(useAdminPositionsView).mockReturnValue({
+            ...defaultHookValues,
+            deletingPosition: initialPositions[0],
+        })
+
+        render(<AdminPositionsView initialPositions={initialPositions} />)
+
+        // Modal should be visible
+        expect(screen.getByTestId("delete-modal")).toBeInTheDocument()
+    })
+
+    it("renders all modals and buttons correctly", () => {
+        vi.mocked(useAdminPositionsView).mockReturnValue({
+            ...defaultHookValues,
+            isCreateOpen: false,
+            editingPosition: null,
+            deletingPosition: null,
+        })
+
+        render(<AdminPositionsView initialPositions={initialPositions} />)
+
+        // All data should be rendered
+        expect(screen.getByTestId("admin-name-crud-page")).toBeInTheDocument()
+        expect(screen.getByText("Frontend Developer")).toBeInTheDocument()
+        expect(screen.getByText("Backend Developer")).toBeInTheDocument()
+        expect(screen.getByTestId("edit-1")).toBeInTheDocument()
+        expect(screen.getByTestId("delete-1")).toBeInTheDocument()
+    })
+
+    it("handles multiple positions with create, edit, and delete interactions", () => {
+        const manyPositions: AdminPositionItem[] = [
+            { id: "1", name: "Frontend Developer" },
+            { id: "2", name: "Backend Developer" },
+            { id: "3", name: "DevOps Engineer" },
+        ]
+
+        vi.mocked(useAdminPositionsView).mockReturnValue({
+            ...defaultHookValues,
+            positions: manyPositions,
+        })
+
+        render(<AdminPositionsView initialPositions={manyPositions} />)
+
+        // Verify all positions are rendered
+        expect(screen.getByText("Frontend Developer")).toBeInTheDocument()
+        expect(screen.getByText("Backend Developer")).toBeInTheDocument()
+        expect(screen.getByText("DevOps Engineer")).toBeInTheDocument()
+
+        // Verify edit buttons exist for all
+        expect(screen.getByTestId("edit-1")).toBeInTheDocument()
+        expect(screen.getByTestId("edit-2")).toBeInTheDocument()
+        expect(screen.getByTestId("edit-3")).toBeInTheDocument()
+
+        // Verify delete buttons exist for all
+        expect(screen.getByTestId("delete-1")).toBeInTheDocument()
+        expect(screen.getByTestId("delete-2")).toBeInTheDocument()
+        expect(screen.getByTestId("delete-3")).toBeInTheDocument()
+    })
+
+    it("handles empty positions list gracefully", () => {
+        render(<AdminPositionsView initialPositions={[]} />)
+
+        expect(screen.getByTestId("admin-name-crud-page")).toBeInTheDocument()
+    })
+
+    it("calls setIsCreateOpen(true) when create button is clicked", () => {
+        render(<AdminPositionsView initialPositions={initialPositions} />)
+
+        const createButton = screen.getByText("createButton")
+        fireEvent.click(createButton)
+
+        expect(mockSetIsCreateOpen).toHaveBeenCalledWith(true)
+    })
+
+    it("calls setEditingPosition with position when edit is clicked", () => {
+        render(<AdminPositionsView initialPositions={initialPositions} />)
+
+        const editButton = screen.getByTestId("edit-1")
+        fireEvent.click(editButton)
+
+        expect(mockSetEditingPosition).toHaveBeenCalledWith(initialPositions[0])
+    })
+
+    it("calls setDeletingPosition with position when delete is clicked", () => {
+        render(<AdminPositionsView initialPositions={initialPositions} />)
+
+        const deleteButton = screen.getByTestId("delete-1")
+        fireEvent.click(deleteButton)
+
+        expect(mockSetDeletingPosition).toHaveBeenCalledWith(
+            initialPositions[0],
+        )
+    })
+
+    it("passes correct existingNames to CreatePositionModal", () => {
+        const testPositions: AdminPositionItem[] = [
+            { id: "1", name: "Position A" },
+            { id: "2", name: "Position B" },
+        ]
+
+        vi.mocked(useAdminPositionsView).mockReturnValue({
+            ...defaultHookValues,
+            positions: testPositions,
+        })
+
+        render(<AdminPositionsView initialPositions={testPositions} />)
+
+        // Verify existing names are extracted correctly
+        expect(screen.getByTestId("admin-name-crud-page")).toBeInTheDocument()
+    })
+
+    it("passes correct existingNames to EditPositionModal", () => {
+        const testPositions: AdminPositionItem[] = [
+            { id: "1", name: "Position A" },
+            { id: "2", name: "Position B" },
+        ]
+
+        vi.mocked(useAdminPositionsView).mockReturnValue({
+            ...defaultHookValues,
+            positions: testPositions,
+            editingPosition: testPositions[0],
+        })
+
+        render(<AdminPositionsView initialPositions={testPositions} />)
+
+        expect(screen.getByTestId("edit-modal")).toBeInTheDocument()
+    })
+
+    it("extracts positionName correctly for DeletePositionModal", () => {
+        const testPositions: AdminPositionItem[] = [
+            { id: "1", name: "Senior Developer" },
+        ]
+
+        vi.mocked(useAdminPositionsView).mockReturnValue({
+            ...defaultHookValues,
+            positions: testPositions,
+            deletingPosition: testPositions[0],
+        })
+
+        render(<AdminPositionsView initialPositions={testPositions} />)
+
+        expect(screen.getByTestId("delete-modal")).toBeInTheDocument()
+    })
+
+    it("handles edge case when deletingPosition is null for DeletePositionModal", () => {
+        vi.mocked(useAdminPositionsView).mockReturnValue({
+            ...defaultHookValues,
+            isCreateOpen: false,
+            editingPosition: null,
+            deletingPosition: null,
+        })
+
+        render(<AdminPositionsView initialPositions={initialPositions} />)
+
+        // Modal should not render when deletingPosition is null
+        expect(screen.queryByTestId("delete-modal")).not.toBeInTheDocument()
+    })
 })

@@ -8,43 +8,16 @@ import {
 } from "../hooks/use-update-user-dialog"
 import { UpdateUserDialog } from "../ui/update-user-dialog"
 
+// Import the mocked module to access it in tests
+const UserFormDialogModule = vi.hoisted(() => ({
+    UserFormDialog: vi.fn(),
+}))
+
 vi.mock("../hooks/use-update-user-dialog", () => ({
     useUpdateUserDialog: vi.fn(),
 }))
 
-vi.mock("../ui/user-form-dialog", () => ({
-    UserFormDialog: vi.fn(
-        ({
-            title,
-            description,
-            submitLabel,
-            isSubmitting,
-            onSubmit,
-            firstName,
-            lastName,
-            email,
-            lockCredentials,
-        }) => (
-            <form onSubmit={onSubmit} data-testid="user-form-dialog">
-                <h1>{title}</h1>
-                <p>{description}</p>
-                <div data-testid="lock-credentials">
-                    {String(lockCredentials)}
-                </div>
-                <div data-testid="form-email">{email}</div>
-                <input
-                    data-testid="input-firstname"
-                    value={firstName}
-                    readOnly
-                />
-                <input data-testid="input-lastname" value={lastName} readOnly />
-                <button type="submit" disabled={isSubmitting}>
-                    {submitLabel}
-                </button>
-            </form>
-        ),
-    ),
-}))
+vi.mock("../ui/user-form-dialog", () => UserFormDialogModule)
 
 describe("UpdateUserDialog Component", () => {
     const mockOnOpenChange = vi.fn()
@@ -82,6 +55,45 @@ describe("UpdateUserDialog Component", () => {
 
     beforeEach(() => {
         vi.clearAllMocks()
+
+        // Setup UserFormDialog mock
+        UserFormDialogModule.UserFormDialog.mockImplementation(
+            ({
+                title,
+                description,
+                submitLabel,
+                isSubmitting,
+                onSubmit,
+                firstName,
+                lastName,
+                email,
+                lockCredentials,
+                onFieldChange,
+            }) => (
+                <form onSubmit={onSubmit} data-testid="user-form-dialog">
+                    <h1>{title}</h1>
+                    <p>{description}</p>
+                    <div data-testid="lock-credentials">
+                        {String(lockCredentials)}
+                    </div>
+                    <div data-testid="form-email">{email}</div>
+                    <input
+                        data-testid="input-firstname"
+                        value={firstName}
+                        readOnly
+                    />
+                    <input
+                        data-testid="input-lastname"
+                        value={lastName}
+                        readOnly
+                    />
+                    <button type="submit" disabled={isSubmitting}>
+                        {submitLabel}
+                    </button>
+                </form>
+            ),
+        )
+
         vi.mocked(useUpdateUserDialog).mockReturnValue(
             defaultHookReturn as unknown as ReturnType<
                 typeof useUpdateUserDialog
@@ -145,5 +157,42 @@ describe("UpdateUserDialog Component", () => {
 
         expect(mockHandleSubmit).toHaveBeenCalledTimes(1)
         expect(mockOnOpenChange).not.toHaveBeenCalled()
+    })
+
+    it("ignores email and password field changes but forwards other fields", () => {
+        render(
+            <UpdateUserDialog
+                user={sampleUser}
+                open={true}
+                onOpenChange={mockOnOpenChange}
+            />,
+        )
+
+        // Get the onFieldChange function from the mock calls
+        const mockCalls = UserFormDialogModule.UserFormDialog.mock.calls
+        expect(mockCalls.length).toBeGreaterThan(0)
+
+        // Get the onFieldChange function from the props passed to UserFormDialog
+        const props = mockCalls[mockCalls.length - 1][0]
+        const { onFieldChange } = props
+
+        // Clear previous calls to handleChange
+        vi.clearAllMocks()
+
+        // Test email field - should be ignored (line 31 condition)
+        onFieldChange("email", "newemail@test.com")
+        expect(mockHandleChange).not.toHaveBeenCalled()
+
+        // Test password field - should be ignored (line 31 condition)
+        onFieldChange("password", "newpass")
+        expect(mockHandleChange).not.toHaveBeenCalled()
+
+        // Test valid field - should be forwarded (line 32)
+        onFieldChange("firstName", "Bob")
+        expect(mockHandleChange).toHaveBeenCalledWith("firstName", "Bob")
+
+        // Test another valid field
+        onFieldChange("lastName", "Johnson")
+        expect(mockHandleChange).toHaveBeenCalledWith("lastName", "Johnson")
     })
 })

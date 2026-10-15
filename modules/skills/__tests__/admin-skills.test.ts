@@ -117,6 +117,20 @@ describe("Admin Skills Server Actions", () => {
                 { id: "c2", name: "Design" },
             ])
         })
+
+        it("returns empty array when skillCategories is null", async () => {
+            const mockResponse = {
+                skillCategories: null,
+            }
+
+            mockRequest.mockResolvedValueOnce(mockResponse)
+
+            const result = await getSkillCategories()
+
+            expect(requireAdmin).toHaveBeenCalledTimes(1)
+            expect(mockRequest).toHaveBeenCalledWith(GetSkillCategoriesDocument)
+            expect(result).toEqual([])
+        })
     })
 
     describe("createAdminSkill", () => {

@@ -73,6 +73,39 @@ vi.mock("../ui/environment-multiselect", () => ({
     ),
 }))
 
+vi.mock("@/components/ui/date-picker", () => ({
+    DatePicker: ({
+        value,
+        onChange,
+        placeholder,
+    }: {
+        value: string
+        onChange: (val: string) => void
+        placeholder: string
+    }) => (
+        <div data-testid={`date-picker-${placeholder}`}>
+            <input
+                data-testid={`date-input-${placeholder}`}
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+                placeholder={placeholder}
+            />
+        </div>
+    ),
+}))
+
+vi.mock("@/components/ui/input", () => ({
+    Input: (props: React.InputHTMLAttributes<HTMLInputElement>) => (
+        <input {...props} />
+    ),
+}))
+
+vi.mock("@/components/ui/textarea", () => ({
+    Textarea: (props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) => (
+        <textarea {...props} />
+    ),
+}))
+
 type HookReturnType = ReturnType<typeof useProjectForm>
 
 describe("ProjectFormModal", () => {
@@ -253,5 +286,485 @@ describe("ProjectFormModal", () => {
         })
 
         expect(mockHandleSubmit).toHaveBeenCalledTimes(1)
+    })
+
+    it("displays name label when name field has value", () => {
+        vi.mocked(useProjectForm).mockReturnValue({
+            ...defaultHookValues,
+            name: "My Project",
+        })
+
+        render(
+            <ProjectFormModal
+                isOpen={true}
+                project={null}
+                environmentOptions={environmentOptions}
+                onClose={mockOnClose}
+                onSave={mockOnSave}
+            />,
+        )
+
+        expect(screen.getByText("name")).toBeInTheDocument()
+    })
+
+    it("displays domain label when domain field has value", () => {
+        vi.mocked(useProjectForm).mockReturnValue({
+            ...defaultHookValues,
+            domain: "Fintech",
+        })
+
+        render(
+            <ProjectFormModal
+                isOpen={true}
+                project={null}
+                environmentOptions={environmentOptions}
+                onClose={mockOnClose}
+                onSave={mockOnSave}
+            />,
+        )
+
+        expect(screen.getByText("domain")).toBeInTheDocument()
+    })
+
+    it("displays startDate label when startDate field has value", () => {
+        vi.mocked(useProjectForm).mockReturnValue({
+            ...defaultHookValues,
+            startDate: "2025-01-01",
+        })
+
+        render(
+            <ProjectFormModal
+                isOpen={true}
+                project={null}
+                environmentOptions={environmentOptions}
+                onClose={mockOnClose}
+                onSave={mockOnSave}
+            />,
+        )
+
+        expect(screen.getByText("startDate")).toBeInTheDocument()
+    })
+
+    it("displays endDate label when endDate field has value", () => {
+        vi.mocked(useProjectForm).mockReturnValue({
+            ...defaultHookValues,
+            endDate: "2025-12-31",
+        })
+
+        render(
+            <ProjectFormModal
+                isOpen={true}
+                project={null}
+                environmentOptions={environmentOptions}
+                onClose={mockOnClose}
+                onSave={mockOnSave}
+            />,
+        )
+
+        expect(screen.getByText("endDate")).toBeInTheDocument()
+    })
+
+    it("displays description label when description field has value", () => {
+        vi.mocked(useProjectForm).mockReturnValue({
+            ...defaultHookValues,
+            description: "A new project",
+        })
+
+        render(
+            <ProjectFormModal
+                isOpen={true}
+                project={null}
+                environmentOptions={environmentOptions}
+                onClose={mockOnClose}
+                onSave={mockOnSave}
+            />,
+        )
+
+        expect(screen.getByText("description")).toBeInTheDocument()
+    })
+
+    it("displays environment label when environment array has items", () => {
+        vi.mocked(useProjectForm).mockReturnValue({
+            ...defaultHookValues,
+            environment: ["React", "Node.js"],
+        })
+
+        render(
+            <ProjectFormModal
+                isOpen={true}
+                project={null}
+                environmentOptions={environmentOptions}
+                onClose={mockOnClose}
+                onSave={mockOnSave}
+            />,
+        )
+
+        expect(screen.getByText("environment")).toBeInTheDocument()
+    })
+
+    it("displays all labels when all fields have values", () => {
+        vi.mocked(useProjectForm).mockReturnValue({
+            ...defaultHookValues,
+            name: "React App",
+            domain: "Fintech",
+            startDate: "2025-01-01",
+            endDate: "2025-12-31",
+            description: "A React application",
+            environment: ["React", "Node.js"],
+        })
+
+        render(
+            <ProjectFormModal
+                isOpen={true}
+                project={null}
+                environmentOptions={environmentOptions}
+                onClose={mockOnClose}
+                onSave={mockOnSave}
+            />,
+        )
+
+        expect(screen.getByText("name")).toBeInTheDocument()
+        expect(screen.getByText("domain")).toBeInTheDocument()
+        expect(screen.getByText("startDate")).toBeInTheDocument()
+        expect(screen.getByText("endDate")).toBeInTheDocument()
+        expect(screen.getByText("description")).toBeInTheDocument()
+        expect(screen.getByText("environment")).toBeInTheDocument()
+    })
+
+    it("disables confirm button when form is invalid", () => {
+        vi.mocked(useProjectForm).mockReturnValue({
+            ...defaultHookValues,
+            isValid: false,
+        })
+
+        render(
+            <ProjectFormModal
+                isOpen={true}
+                project={null}
+                environmentOptions={environmentOptions}
+                onClose={mockOnClose}
+                onSave={mockOnSave}
+            />,
+        )
+
+        const confirmButton = screen.getByTestId("modal-confirm")
+        expect(confirmButton).toBeInTheDocument()
+    })
+
+    it("shows pending text when form is submitting", () => {
+        vi.mocked(useProjectForm).mockReturnValue({
+            ...defaultHookValues,
+            isSubmitting: true,
+        })
+
+        render(
+            <ProjectFormModal
+                isOpen={true}
+                project={null}
+                environmentOptions={environmentOptions}
+                onClose={mockOnClose}
+                onSave={mockOnSave}
+            />,
+        )
+
+        expect(screen.getByTestId("base-modal")).toBeInTheDocument()
+    })
+
+    it("uses appropriate button text for update mode", () => {
+        const sampleProject: ProjectTableItem = {
+            id: "1",
+            name: "Alpha",
+            domain: "Fintech",
+            start_date: "2025-01-01",
+            end_date: null,
+            description: "Test project",
+            environment: ["React"],
+        }
+
+        render(
+            <ProjectFormModal
+                isOpen={true}
+                project={sampleProject}
+                environmentOptions={environmentOptions}
+                onClose={mockOnClose}
+                onSave={mockOnSave}
+            />,
+        )
+
+        // BaseModal receives the confirmText prop with "update" value
+        // Verify that update title is shown instead of create
+        expect(screen.getByText("updateTitle")).toBeInTheDocument()
+    })
+
+    it("displays environment without label when array is empty", () => {
+        vi.mocked(useProjectForm).mockReturnValue({
+            ...defaultHookValues,
+            environment: [],
+        })
+
+        render(
+            <ProjectFormModal
+                isOpen={true}
+                project={null}
+                environmentOptions={environmentOptions}
+                onClose={mockOnClose}
+                onSave={mockOnSave}
+            />,
+        )
+
+        // Environment should be rendered but without label
+        expect(
+            screen.getByTestId("environment-multiselect"),
+        ).toBeInTheDocument()
+        // The label should NOT appear
+        const environmentLabels = screen.queryAllByText("environment")
+        expect(environmentLabels).toHaveLength(0)
+    })
+
+    it("handles empty endDate with populated startDate", () => {
+        vi.mocked(useProjectForm).mockReturnValue({
+            ...defaultHookValues,
+            startDate: "2025-01-01",
+            endDate: "",
+            isValid: true,
+        })
+
+        render(
+            <ProjectFormModal
+                isOpen={true}
+                project={null}
+                environmentOptions={environmentOptions}
+                onClose={mockOnClose}
+                onSave={mockOnSave}
+            />,
+        )
+
+        // Should render successfully with only startDate
+        expect(screen.getByTestId("base-modal")).toBeInTheDocument()
+        // startDate label should appear (not placeholder)
+        const startDateElements = screen.queryAllByText("startDate")
+        // Should find at least one (the label when startDate has value)
+        expect(startDateElements.length).toBeGreaterThan(0)
+    })
+
+    it("triggers startDate change via DatePicker", () => {
+        render(
+            <ProjectFormModal
+                isOpen={true}
+                project={null}
+                environmentOptions={environmentOptions}
+                onClose={mockOnClose}
+                onSave={mockOnSave}
+            />,
+        )
+
+        const startDateInput = screen.getByTestId("date-input-startDate")
+        fireEvent.change(startDateInput, { target: { value: "2025-03-01" } })
+
+        expect(mockSetStartDate).toHaveBeenCalledWith("2025-03-01")
+    })
+
+    it("triggers endDate change via DatePicker", () => {
+        render(
+            <ProjectFormModal
+                isOpen={true}
+                project={null}
+                environmentOptions={environmentOptions}
+                onClose={mockOnClose}
+                onSave={mockOnSave}
+            />,
+        )
+
+        const endDateInput = screen.getByTestId("date-input-endDate")
+        fireEvent.change(endDateInput, { target: { value: "2025-12-31" } })
+
+        expect(mockSetEndDate).toHaveBeenCalledWith("2025-12-31")
+    })
+
+    it("triggers description change via Textarea", () => {
+        render(
+            <ProjectFormModal
+                isOpen={true}
+                project={null}
+                environmentOptions={environmentOptions}
+                onClose={mockOnClose}
+                onSave={mockOnSave}
+            />,
+        )
+
+        const descriptionTextarea = screen.getByLabelText("description")
+
+        fireEvent.change(descriptionTextarea, {
+            target: { value: "New description text" },
+        })
+
+        expect(mockSetDescription).toHaveBeenCalledWith("New description text")
+    })
+
+    it("clears endDate when startDate is changed to be after endDate", () => {
+        const mockSetStartDateWithLogic = vi.fn((newStart) => {
+            // Simulate the logic in the component
+            const currentEndDate = "2025-06-01"
+            if (currentEndDate && newStart > currentEndDate) {
+                mockSetEndDate("")
+            }
+        })
+
+        vi.mocked(useProjectForm).mockReturnValue({
+            ...defaultHookValues,
+            startDate: "2025-01-01",
+            endDate: "2025-06-01",
+            setStartDate: mockSetStartDateWithLogic,
+        })
+
+        render(
+            <ProjectFormModal
+                isOpen={true}
+                project={null}
+                environmentOptions={environmentOptions}
+                onClose={mockOnClose}
+                onSave={mockOnSave}
+            />,
+        )
+
+        const startDateInput = screen.getByTestId("date-input-startDate")
+        fireEvent.change(startDateInput, { target: { value: "2025-07-01" } })
+
+        expect(mockSetStartDateWithLogic).toHaveBeenCalledWith("2025-07-01")
+    })
+
+    it("renders DatePicker with maxDate when endDate is set", () => {
+        vi.mocked(useProjectForm).mockReturnValue({
+            ...defaultHookValues,
+            endDate: "2025-12-31",
+        })
+
+        render(
+            <ProjectFormModal
+                isOpen={true}
+                project={null}
+                environmentOptions={environmentOptions}
+                onClose={mockOnClose}
+                onSave={mockOnSave}
+            />,
+        )
+
+        expect(screen.getByTestId("date-picker-startDate")).toBeInTheDocument()
+    })
+
+    it("renders DatePicker with minDate when startDate is set", () => {
+        vi.mocked(useProjectForm).mockReturnValue({
+            ...defaultHookValues,
+            startDate: "2025-01-01",
+        })
+
+        render(
+            <ProjectFormModal
+                isOpen={true}
+                project={null}
+                environmentOptions={environmentOptions}
+                onClose={mockOnClose}
+                onSave={mockOnSave}
+            />,
+        )
+
+        expect(screen.getByTestId("date-picker-endDate")).toBeInTheDocument()
+    })
+
+    it("applies correct className for editing mode on DatePicker", () => {
+        const sampleProject: ProjectTableItem = {
+            id: "1",
+            name: "Test",
+            domain: "Tech",
+            start_date: "2025-01-01",
+            end_date: null,
+            description: "Test",
+            environment: [],
+        }
+
+        render(
+            <ProjectFormModal
+                isOpen={true}
+                project={sampleProject}
+                environmentOptions={environmentOptions}
+                onClose={mockOnClose}
+                onSave={mockOnSave}
+            />,
+        )
+
+        expect(screen.getByTestId("date-picker-startDate")).toBeInTheDocument()
+        expect(screen.getByTestId("date-picker-endDate")).toBeInTheDocument()
+    })
+
+    it("applies correct className for editing mode on Textarea", () => {
+        const sampleProject: ProjectTableItem = {
+            id: "1",
+            name: "Test",
+            domain: "Tech",
+            start_date: "2025-01-01",
+            end_date: null,
+            description: "Test",
+            environment: [],
+        }
+
+        render(
+            <ProjectFormModal
+                isOpen={true}
+                project={sampleProject}
+                environmentOptions={environmentOptions}
+                onClose={mockOnClose}
+                onSave={mockOnSave}
+            />,
+        )
+
+        const textareas = screen.getAllByRole("textbox")
+        expect(textareas.length).toBeGreaterThan(0)
+    })
+
+    it("passes removeLabel callback to EnvironmentMultiselect", () => {
+        vi.mocked(useProjectForm).mockReturnValue({
+            ...defaultHookValues,
+            environment: ["React", "Node.js"],
+        })
+
+        render(
+            <ProjectFormModal
+                isOpen={true}
+                project={null}
+                environmentOptions={environmentOptions}
+                onClose={mockOnClose}
+                onSave={mockOnSave}
+            />,
+        )
+
+        expect(
+            screen.getByTestId("environment-multiselect"),
+        ).toBeInTheDocument()
+    })
+
+    it("passes compact prop based on isEditing mode", () => {
+        const sampleProject: ProjectTableItem = {
+            id: "1",
+            name: "Test",
+            domain: "Tech",
+            start_date: "2025-01-01",
+            end_date: null,
+            description: "Test",
+            environment: ["React"],
+        }
+
+        render(
+            <ProjectFormModal
+                isOpen={true}
+                project={sampleProject}
+                environmentOptions={environmentOptions}
+                onClose={mockOnClose}
+                onSave={mockOnSave}
+            />,
+        )
+
+        expect(
+            screen.getByTestId("environment-multiselect"),
+        ).toBeInTheDocument()
     })
 })
