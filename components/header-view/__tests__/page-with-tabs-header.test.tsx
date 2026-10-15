@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react"
+import type { ReactNode } from "react"
 
 import { PageWithTabsHeader } from "../page-with-tabs-header"
 import type { HeaderCopy, HeaderTab, HeaderTabsPage, PathMatch } from "../types"
@@ -7,7 +8,7 @@ vi.mock("@/i18n/navigation", () => ({
     Link: (props: {
         href: string
         className?: string
-        "aria-current"?: string
+        "aria-current"?: "page" | "false" | "true"
         children: ReactNode
     }) => (
         <a
