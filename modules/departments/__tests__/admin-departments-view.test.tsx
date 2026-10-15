@@ -57,18 +57,66 @@ vi.mock("@/components/ui/admin-name-crud-page", () => ({
 }))
 
 vi.mock("../ui/create-department-admin-modal", () => ({
-    CreateDepartmentModal: ({ isOpen }: { isOpen: boolean }) =>
-        isOpen ? <div data-testid="create-modal" /> : null,
+    CreateDepartmentModal: ({
+        isOpen,
+        onClose,
+    }: {
+        isOpen: boolean
+        onClose: () => void
+    }) =>
+        isOpen ? (
+            <div data-testid="create-modal">
+                <button
+                    type="button"
+                    onClick={onClose}
+                    data-testid="close-create-modal"
+                >
+                    Close
+                </button>
+            </div>
+        ) : null,
 }))
 
 vi.mock("../ui/edit-department-admin-modal", () => ({
-    EditDepartmentModal: ({ isOpen }: { isOpen: boolean }) =>
-        isOpen ? <div data-testid="edit-modal" /> : null,
+    EditDepartmentModal: ({
+        isOpen,
+        onClose,
+    }: {
+        isOpen: boolean
+        onClose: () => void
+    }) =>
+        isOpen ? (
+            <div data-testid="edit-modal">
+                <button
+                    type="button"
+                    onClick={onClose}
+                    data-testid="close-edit-modal"
+                >
+                    Close
+                </button>
+            </div>
+        ) : null,
 }))
 
 vi.mock("../ui/delete-department-admin-modal", () => ({
-    DeleteDepartmentModal: ({ isOpen }: { isOpen: boolean }) =>
-        isOpen ? <div data-testid="delete-modal" /> : null,
+    DeleteDepartmentModal: ({
+        isOpen,
+        onClose,
+    }: {
+        isOpen: boolean
+        onClose: () => void
+    }) =>
+        isOpen ? (
+            <div data-testid="delete-modal">
+                <button
+                    type="button"
+                    onClick={onClose}
+                    data-testid="close-delete-modal"
+                >
+                    Close
+                </button>
+            </div>
+        ) : null,
 }))
 
 describe("AdminDepartmentsView", () => {
@@ -84,7 +132,7 @@ describe("AdminDepartmentsView", () => {
     const mockHandleUpdate = vi.fn()
     const mockHandleDeleteConfirm = vi.fn()
 
-    const defaultHookReturn = {
+    const defaultHookReturn: ReturnType<typeof useAdminDepartmentsView> = {
         departments: mockInitialDepartments,
         isCreateOpen: false,
         setIsCreateOpen: mockSetIsCreateOpen,
@@ -100,11 +148,7 @@ describe("AdminDepartmentsView", () => {
     beforeEach(() => {
         cleanup()
         vi.clearAllMocks()
-        vi.mocked(useAdminDepartmentsView).mockReturnValue(
-            defaultHookReturn as unknown as ReturnType<
-                typeof useAdminDepartmentsView
-            >,
-        )
+        vi.mocked(useAdminDepartmentsView).mockReturnValue(defaultHookReturn)
     })
 
     afterEach(() => {
@@ -174,13 +218,14 @@ describe("AdminDepartmentsView", () => {
         )
     })
 
-    it("renders respective modals when state flags are active", () => {
+    it("renders respective modals when state flags are active and handles closing", async () => {
+        const user = userEvent.setup()
         vi.mocked(useAdminDepartmentsView).mockReturnValue({
             ...defaultHookReturn,
             isCreateOpen: true,
             editingDepartment: mockInitialDepartments[0],
             deletingDepartment: mockInitialDepartments[1],
-        } as unknown as ReturnType<typeof useAdminDepartmentsView>)
+        })
 
         render(
             <AdminDepartmentsView
@@ -191,5 +236,14 @@ describe("AdminDepartmentsView", () => {
         expect(screen.getByTestId("create-modal")).toBeInTheDocument()
         expect(screen.getByTestId("edit-modal")).toBeInTheDocument()
         expect(screen.getByTestId("delete-modal")).toBeInTheDocument()
+
+        await user.click(screen.getByTestId("close-create-modal"))
+        expect(mockSetIsCreateOpen).toHaveBeenCalledWith(false)
+
+        await user.click(screen.getByTestId("close-edit-modal"))
+        expect(mockSetEditingDepartment).toHaveBeenCalledWith(null)
+
+        await user.click(screen.getByTestId("close-delete-modal"))
+        expect(mockSetDeletingDepartment).toHaveBeenCalledWith(null)
     })
 })

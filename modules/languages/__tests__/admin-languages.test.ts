@@ -99,6 +99,31 @@ describe("Admin Languages Actions", () => {
             ])
         })
 
+        it("falls back to empty string when native_name is missing", async () => {
+            mockGqlClient.request.mockResolvedValueOnce({
+                languages: {
+                    items: [
+                        {
+                            id: "lang-3",
+                            name: "French",
+                            iso2: "fr",
+                        },
+                    ],
+                },
+            })
+
+            const result = await getAdminLanguages()
+
+            expect(result).toEqual([
+                {
+                    id: "lang-3",
+                    name: "French",
+                    iso2: "fr",
+                    nativeName: "",
+                },
+            ])
+        })
+
         it("returns an empty array when language items are missing", async () => {
             mockGqlClient.request.mockResolvedValueOnce({
                 languages: { items: null },

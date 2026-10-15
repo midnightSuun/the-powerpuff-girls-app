@@ -368,10 +368,10 @@ describe("CvsPageView", () => {
             />,
         )
 
-        const sortLink = screen.getByRole("link", { name: "name" })
+        const sortLink = screen.getByRole("link", { name: "name sort arrow" })
         expect(sortLink).toHaveAttribute(
             "href",
-            "/cv?page=1&limit=10&sortBy=name&sortOrder=asc",
+            "/cv?page=1&limit=10&sortBy=name&sortOrder=desc",
         )
         expect(sortLink.parentElement).toHaveAttribute("aria-sort", "ascending")
     })
