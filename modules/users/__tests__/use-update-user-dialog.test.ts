@@ -296,12 +296,12 @@ describe("useUpdateUserDialog Hook", () => {
         const userWithMissingFields: EditableUser = {
             ...sampleUser,
             profile: {
-                first_name: undefined,
-                last_name: undefined,
+                first_name: null,
+                last_name: null,
                 avatar: null,
             },
-            department: undefined,
-            position: undefined,
+            department: null,
+            position: null,
         }
 
         const { result } = renderHook(() =>

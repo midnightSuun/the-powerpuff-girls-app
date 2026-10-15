@@ -53,7 +53,7 @@ vi.mock("../ui/components/user/skill-category", () => ({
         selectedSkills,
     }: {
         title: string
-        skills: Array<{ name: string }>
+        skills: Array<{ name: string; mastery: string }>
         onEditSkill?: (skill: { name: string; mastery: string }) => void
         onSelectSkill?: (skillId: string) => void
         isSelectionMode?: boolean

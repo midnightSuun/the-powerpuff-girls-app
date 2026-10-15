@@ -484,7 +484,12 @@ describe("useUserProfile Hook", () => {
     it("handles failure during assignment update", async () => {
         vi.mocked(updateProfile).mockResolvedValueOnce({
             success: true,
-            data: {},
+            data: {
+                id: "1",
+                first_name: null,
+                last_name: null,
+                full_name: null,
+            },
         })
         vi.mocked(updateUserProfile).mockResolvedValueOnce({
             success: false,

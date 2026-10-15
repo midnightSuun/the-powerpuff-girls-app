@@ -439,7 +439,7 @@ describe("UserProfileForm Component", () => {
             <UserProfileForm
                 user={{
                     ...sampleUser,
-                    created_at: null,
+                    created_at: "" as string,
                 }}
                 currentUserId="user-1"
                 currentUserRole="Employee"
@@ -687,7 +687,11 @@ describe("UserProfileForm Component", () => {
             <UserProfileForm
                 user={{
                     ...sampleUser,
-                    profile: undefined,
+                    profile: {
+                        first_name: null,
+                        last_name: null,
+                        avatar: null,
+                    },
                 }}
                 currentUserId="user-1"
                 currentUserRole="Employee"
