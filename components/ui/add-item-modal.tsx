@@ -119,8 +119,8 @@ export function AddItemModal({
                                                 "relative flex w-full cursor-pointer items-center px-4 py-3 text-sm outline-none transition-colors rounded-none",
                                                 "[&_svg]:hidden pr-4",
                                                 isSelected
-                                                    ? "bg-[#626262] !text-[#F5F5F7] [&_*]:!text-[#F5F5F7] focus:bg-[#626262] dark:bg-[#F5F5F7] dark:!text-[#2E2E2E] dark:[&_*]:!text-[#2E2E2E]"
-                                                    : "text-gray-900 focus:bg-[#AEAEAE] hover:bg-[#AEAEAE] dark:text-foreground dark:focus:bg-[#626262] dark:hover:bg-[#626262]",
+                                                    ? "bg-button-secondary-defaultctext-[#F5F5F7]!text-[#F5F5F7]! **:text-[#F5F5F7]! focus:bg-button-secondary-default dark:bg-[#F5F5F7] dark:text-[#2E2E2E]! dark:**:text-[#2E2E2E]!"
+                                                    : "text-gray-900 focus:bg-[#AEAEAE] hover:bg-[#AEAEAE] dark:text-foreground dark:focus:bg-button-secondary-default dark:hover:bg-button-secondary-default",
                                             )}
                                         >
                                             <span className="font-sans font-normal">
