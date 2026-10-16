@@ -35,24 +35,4 @@ export async function registerAndSkipVerification(page: Page) {
     return { uniqueEmail, password }
 }
 
-export async function loginAsAdmin(page: Page) {
-    const adminEmail = "admin@outlook.com"
-    const adminPassword = "123456789"
-
-    await page.goto("/login")
-    await expect(page).toHaveURL(/.*login/)
-
-    await page.fill('input[type="email"]', adminEmail)
-    await page.fill('input[type="password"]', adminPassword)
-
-    const submitButton = page.getByRole("button", {
-        name: /sign in|login|увійти/i,
-    })
-    await expect(submitButton).toBeVisible()
-    await expect(submitButton).toBeEnabled()
-    await submitButton.click()
-
-    await page.waitForURL(/.*/, { timeout: 15000 })
-
-    return { email: adminEmail, password: adminPassword }
-}
+export { loginAsAdmin } from "./auth-as-admin"
