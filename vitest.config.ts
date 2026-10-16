@@ -7,6 +7,7 @@ export default defineConfig({
     plugins: [react(), tsconfigPaths()],
     test: {
         environment: "happy-dom",
+        exclude: ["**/node_modules/**", "**/.git/**", "e2e-tests/**"],
         globals: true,
         isolate: true,
         setupFiles: "./vitest.setup.ts",
