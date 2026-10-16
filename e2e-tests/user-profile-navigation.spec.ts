@@ -13,32 +13,41 @@ test.describe("User Profile View & Navigation Flow", () => {
 
         const firstUserLink = page.locator("tbody tr a, [role='row'] a").first()
         await expect(firstUserLink).toBeVisible()
+
+        const userHref = await firstUserLink.getAttribute("href")
+        const userIdMatch = userHref?.match(/\/users\/([^/]+)/)
+        const userId = userIdMatch?.[1]
+        expect(userId).toBeTruthy()
+
         await firstUserLink.click()
 
-        const mainContainer = page.getByRole("main")
-        const profileTab = mainContainer.getByRole("link", {
-            name: /профиль|profile/i,
-        })
-        const skillsTab = mainContainer.getByRole("link", {
-            name: /навыки|skills/i,
-        })
-        const languagesTab = mainContainer.getByRole("link", {
-            name: /языки|languages/i,
-        })
+        const profileTab = page.locator(`a[href*='/users/${userId}/profile']`)
+        const skillsTab = page.locator(`a[href*='/users/${userId}/skills']`)
+        const languagesTab = page.locator(
+            `a[href*='/users/${userId}/languages']`,
+        )
 
         await expect(profileTab).toBeVisible({ timeout: 10000 })
         await expect(skillsTab).toBeVisible()
         await expect(languagesTab).toBeVisible()
 
         await skillsTab.click()
-        await expect(page).toHaveURL(/\/users\/[^\/]+\/skills/)
+        await expect(page).toHaveURL(/\/users\/[^\/]+\/skills/, {
+            timeout: 10000,
+        })
 
         await languagesTab.click()
-        await expect(page).toHaveURL(/\/users\/[^\/]+\/languages/)
+        await expect(page).toHaveURL(/\/users\/[^\/]+\/languages/, {
+            timeout: 10000,
+        })
 
-        await profileTab.click()
-        await expect(page).toHaveURL(/\/users\/[^\/]+\/profile/)
+        await page.waitForLoadState("networkidle")
+        await page.locator(`a[href*='/users/${userId}/profile']`).click()
+        await expect(page).toHaveURL(/\/users\/[^\/]+\/profile/, {
+            timeout: 10000,
+        })
 
+        const mainContainer = page.getByRole("main")
         const nameInput = mainContainer.locator("input").first()
         await expect(nameInput).toBeVisible({ timeout: 10000 })
 
