@@ -62,11 +62,13 @@ test.describe("Own profile workflow", () => {
             select: ReturnType<typeof page.getByRole>,
         ) => {
             await select.click()
-            const option = page.getByRole("listbox").getByRole("option").first()
-            await expect(option).toBeVisible()
-            const name = (await option.innerText()).split("\n")[0].trim()
-            await option.click()
-            await expect(select).toContainText(name)
+            const listbox = page.getByRole("listbox")
+            await expect(listbox).toBeVisible()
+            await page.keyboard.press("ArrowDown")
+            await page.keyboard.press("Enter")
+            await expect(listbox).toBeHidden()
+            const name = (await select.innerText()).replace("▼", "").trim()
+            expect(name).not.toMatch(/^select /i)
             return name
         }
 
