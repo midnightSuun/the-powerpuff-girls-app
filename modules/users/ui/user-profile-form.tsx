@@ -232,7 +232,7 @@ export function UserProfileForm({
                     >
                         <SelectTrigger
                             className={clsx(
-                                "w-full !h-12 !min-h-[48px] px-4 flex items-center justify-between shadow-xs transition-colors outline-none focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
+                                "w-full h-12! min-h-12! px-4 flex items-center justify-between shadow-xs transition-colors outline-none focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
                                 "rounded-md border border-input bg-background text-sm text-foreground",
                                 hasSubmitted &&
                                     !departmentId &&
@@ -265,7 +265,7 @@ export function UserProfileForm({
                             sideOffset={0}
                             alignItemWithTrigger={false}
                             className={clsx(
-                                "w-[var(--anchor-width)] max-h-60 overflow-y-auto p-0 shadow-xl rounded-none",
+                                "w-(--anchor-width) max-h-60 overflow-y-auto p-0 shadow-xl rounded-none",
                                 "border border-[#D1D1D1] bg-[#F5F5F7]",
                                 "dark:border-auth-card-border dark:bg-[#454545]",
                             )}
@@ -281,8 +281,8 @@ export function UserProfileForm({
                                             "relative flex w-full cursor-pointer items-center px-4 py-3 text-sm outline-none transition-colors rounded-none",
                                             "[&_svg]:hidden pr-4",
                                             isSelected
-                                                ? "bg-[#626262] !text-[#F5F5F7] [&_*]:!text-[#F5F5F7] focus:bg-[#626262] dark:bg-[#F5F5F7] dark:!text-[#2E2E2E] dark:[&_*]:!text-[#2E2E2E]"
-                                                : "text-gray-900 focus:bg-[#AEAEAE] hover:bg-[#AEAEAE] dark:text-foreground dark:focus:bg-[#626262] dark:hover:bg-[#626262]",
+                                                ? "bg-button-secondary-default text-[#F5F5F7]! **:text-[#F5F5F7]! focus:bg-button-secondary-default dark:bg-[#F5F5F7] dark:text-[#2E2E2E]! dark:**:text-[#2E2E2E]!"
+                                                : "text-gray-900 focus:bg-[#AEAEAE] hover:bg-[#AEAEAE] dark:text-foreground dark:focus:bg-button-secondary-default dark:hover:bg-button-secondary-default",
                                         )}
                                     >
                                         <span className="font-sans font-normal">
@@ -310,7 +310,7 @@ export function UserProfileForm({
                     >
                         <SelectTrigger
                             className={clsx(
-                                "w-full !h-12 !min-h-[48px] px-4 flex items-center justify-between shadow-xs transition-colors outline-none focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
+                                "w-full h-12! min-h-12! px-4 flex items-center justify-between shadow-xs transition-colors outline-none focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
                                 "rounded-md border border-input bg-background text-sm text-foreground",
                                 hasSubmitted && !positionId && "border-red-500",
                             )}
@@ -339,7 +339,7 @@ export function UserProfileForm({
                             sideOffset={0}
                             alignItemWithTrigger={false}
                             className={clsx(
-                                "w-[var(--anchor-width)] max-h-60 overflow-y-auto p-0 shadow-xl rounded-none",
+                                "w-(--anchor-width) max-h-60 overflow-y-auto p-0 shadow-xl rounded-none",
                                 "border border-[#D1D1D1] bg-[#F5F5F7]",
                                 "dark:border-auth-card-border dark:bg-[#454545]",
                             )}
@@ -355,8 +355,8 @@ export function UserProfileForm({
                                             "relative flex w-full cursor-pointer items-center px-4 py-3 text-sm outline-none transition-colors rounded-none",
                                             "[&_svg]:hidden pr-4",
                                             isSelected
-                                                ? "bg-[#626262] !text-[#F5F5F7] [&_*]:!text-[#F5F5F7] focus:bg-[#626262] dark:bg-[#F5F5F7] dark:!text-[#2E2E2E] dark:[&_*]:!text-[#2E2E2E]"
-                                                : "text-gray-900 focus:bg-[#AEAEAE] hover:bg-[#AEAEAE] dark:text-foreground dark:focus:bg-[#626262] dark:hover:bg-[#626262]",
+                                                ? "bg-button-secondary-default text-[#F5F5F7]! **:text-[#F5F5F7]! focus:bg-button-secondary-default dark:bg-[#F5F5F7] dark:text-[#2E2E2E]! dark:**:text-[#2E2E2E]!"
+                                                : "text-gray-900 focus:bg-[#AEAEAE] hover:bg-[#AEAEAE] dark:text-foreground dark:focus:bg-button-secondary-default dark:hover:bg-button-secondary-default",
                                         )}
                                     >
                                         <span className="font-sans font-normal">
