@@ -73,7 +73,7 @@
         "*.{js,jsx,mjs,ts,tsx}": [
             "eslint . --fix",
             "prettier --write",
-            "bash -c 'npx vitest related --run || true'"
+            "node scripts/vitest-related.mjs"
         ],
         "*.{json,css,md,html,yml,yaml}": [
             "prettier --write"
