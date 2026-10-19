@@ -491,8 +491,6 @@ describe("ProjectFormModal", () => {
             />,
         )
 
-        // BaseModal receives the confirmText prop with "update" value
-        // Verify that update title is shown instead of create
         expect(screen.getByText("updateTitle")).toBeInTheDocument()
     })
 
@@ -512,11 +510,9 @@ describe("ProjectFormModal", () => {
             />,
         )
 
-        // Environment should be rendered but without label
         expect(
             screen.getByTestId("environment-multiselect"),
         ).toBeInTheDocument()
-        // The label should NOT appear
         const environmentLabels = screen.queryAllByText("environment")
         expect(environmentLabels).toHaveLength(0)
     })
@@ -539,11 +535,8 @@ describe("ProjectFormModal", () => {
             />,
         )
 
-        // Should render successfully with only startDate
         expect(screen.getByTestId("base-modal")).toBeInTheDocument()
-        // startDate label should appear (not placeholder)
         const startDateElements = screen.queryAllByText("startDate")
-        // Should find at least one (the label when startDate has value)
         expect(startDateElements.length).toBeGreaterThan(0)
     })
 
@@ -603,7 +596,6 @@ describe("ProjectFormModal", () => {
 
     it("clears endDate when startDate is changed to be after endDate", () => {
         const mockSetStartDateWithLogic = vi.fn((newStart) => {
-            // Simulate the logic in the component
             const currentEndDate = "2025-06-01"
             if (currentEndDate && newStart > currentEndDate) {
                 mockSetEndDate("")

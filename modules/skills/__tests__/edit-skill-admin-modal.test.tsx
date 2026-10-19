@@ -324,8 +324,6 @@ describe("EditSkillModal", () => {
     })
 
     it("filters out duplicate category names (same id → same translation key)", () => {
-        // Глобальный мок tSkills возвращает ключ as-is:
-        // Чтобы сработал seenNames.has(), нужно две категории с одинаковым id
         const duplicateCategories = [
             { id: "prog", name: "Programming" },
             { id: "prog", name: "Programming Duplicate" },
@@ -342,7 +340,6 @@ describe("EditSkillModal", () => {
             />,
         )
 
-        // Второй элемент отфильтрован — в DOM только один select item для "prog"
         expect(screen.getAllByTestId("select-item-prog")).toHaveLength(1)
     })
 

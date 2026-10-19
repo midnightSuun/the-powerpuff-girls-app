@@ -50,7 +50,6 @@ vi.mock("@/components/ui/edit-item-modal", () => ({
         ) : null,
 }))
 
-// Мок SkillMasterySelect с кнопкой для вызова onValueChange
 vi.mock("../ui/components/user/skill-mastery-select", () => ({
     SkillMasterySelect: ({
         value,

@@ -65,8 +65,9 @@ test.describe("CV", () => {
         })
 
         test("should edit CV name from list", async ({ page }) => {
-            const cvName = `Test CV ${Date.now()}`
-            const updatedName = `Updated CV ${Date.now()}`
+            const ts = Date.now()
+            const cvName = `Test CV Edit ${ts}`
+            const updatedName = `Updated CV Edit ${ts}`
 
             await createCv(
                 page,
@@ -81,16 +82,14 @@ test.describe("CV", () => {
                 .first()
             await expect(cvRow).toBeVisible({ timeout: 5000 })
 
-            await cvRow.getByRole("button").first().click()
-            await cvRow.getByRole("button", { name: /^Edit$/i }).click()
+            await cvRow.getByRole("button").last().click()
+            await page.getByRole("button", { name: /^Edit$/i }).click()
 
             const editModal = page.locator("[role='dialog']").first()
             await expect(editModal).toBeVisible({ timeout: 5000 })
 
             const nameInput = editModal.getByLabel("Name")
-            await nameInput.focus()
-            await page.keyboard.press("Control+A")
-            await page.keyboard.type(updatedName)
+            await nameInput.fill(updatedName)
 
             const saveBtn = editModal.getByRole("button", { name: /^SAVE$/i })
             await expect(saveBtn).toBeEnabled({ timeout: 5000 })
@@ -104,7 +103,7 @@ test.describe("CV", () => {
         })
 
         test("should delete CV from list", async ({ page }) => {
-            const cvName = `Test CV ${Date.now()}`
+            const cvName = `Test CV Delete ${Date.now()}`
 
             await createCv(
                 page,
@@ -123,8 +122,8 @@ test.describe("CV", () => {
                 .first()
             await expect(cvRow).toBeVisible({ timeout: 5000 })
 
-            await cvRow.getByRole("button").first().click()
-            await cvRow.getByRole("button", { name: /^Delete$/i }).click()
+            await cvRow.getByRole("button").last().click()
+            await page.getByRole("button", { name: /^Delete$/i }).click()
 
             const confirmModal = page.locator("[role='dialog']").first()
             await expect(confirmModal).toBeVisible({ timeout: 5000 })
@@ -242,13 +241,15 @@ test.describe("CV", () => {
 
             await page.getByRole("button", { name: "REMOVE SKILLS" }).click()
 
-            await page
-                .getByRole("button", { name: `Select ${skillName}` })
-                .click()
-
-            await expect(page.locator(".ring-red-500").first()).toBeVisible({
-                timeout: 5000,
+            const selectBtn = page.getByRole("button", {
+                name: `Select ${skillName}`,
             })
+            await expect(selectBtn).toBeVisible({ timeout: 5000 })
+            await selectBtn.click()
+
+            await expect(
+                page.getByRole("button", { name: `Deselect ${skillName}` }),
+            ).toHaveAttribute("aria-pressed", "true", { timeout: 5000 })
 
             await page.getByRole("button", { name: /DELETE \(\d+\)/i }).click()
 

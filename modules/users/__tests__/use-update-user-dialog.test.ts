@@ -245,14 +245,12 @@ describe("useUpdateUserDialog Hook", () => {
 
         const mockEvent = new SubmitEvent("submit", { cancelable: true })
 
-        // Start first submission but don't await it
         const firstSubmission = result.current.handleSubmit(
             mockEvent as unknown as Parameters<
                 typeof result.current.handleSubmit
             >[0],
         )
 
-        // Try second submission immediately (should be blocked)
         const secondResult = await result.current.handleSubmit(
             mockEvent as unknown as Parameters<
                 typeof result.current.handleSubmit
@@ -262,7 +260,6 @@ describe("useUpdateUserDialog Hook", () => {
         expect(secondResult).toBeUndefined()
         expect(updateUser).toHaveBeenCalledTimes(1)
 
-        // Now resolve the first submission
         resolveUpdate({ success: true, data: { id: "user-1" } })
         await firstSubmission
     })

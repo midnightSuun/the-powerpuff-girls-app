@@ -284,7 +284,6 @@ describe("CreateSkillModal", () => {
             />,
         )
 
-        // select-trigger-null вызывает onValueChange(undefined) → val ?? "" → ""
         fireEvent.click(screen.getByTestId("select-trigger-null"))
         expect(mockSetters.setCategoryId).toHaveBeenCalledWith("")
     })

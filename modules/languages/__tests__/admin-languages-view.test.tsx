@@ -269,7 +269,6 @@ describe("AdminLanguagesView", () => {
             <AdminLanguagesView initialLanguages={languagesWithUnknownCodes} />,
         )
 
-        // Intl.DisplayNames will return native name or fallback to "Japanese"
         expect(screen.getByTestId("lang-native-1")).toBeInTheDocument()
     })
 
@@ -289,10 +288,8 @@ describe("AdminLanguagesView", () => {
             />,
         )
 
-        // Intl.DisplayNames returns capitalized result "Xx" for "xx"
         const nativeElement = screen.getByTestId("lang-native-1")
         expect(nativeElement).toBeInTheDocument()
-        // Can be either "Xx" (from Intl) or "Unknown Language" (fallback)
         expect(nativeElement.textContent).toBeTruthy()
     })
 
@@ -332,7 +329,6 @@ describe("AdminLanguagesView", () => {
     it("generates correct searchable string", () => {
         render(<AdminLanguagesView initialLanguages={initialLanguages} />)
 
-        // Check that searchable string includes name, iso2, and nativeName
         expect(screen.getByTestId("searchable-1")).toHaveTextContent("English")
         expect(screen.getByTestId("searchable-1")).toHaveTextContent("EN")
     })
@@ -346,7 +342,6 @@ describe("AdminLanguagesView", () => {
     it("getSortValue returns nativeName or name for nativeName key", () => {
         render(<AdminLanguagesView initialLanguages={initialLanguages} />)
 
-        // First language has nativeName
         expect(screen.getByTestId("sort-nativeName-1")).toHaveTextContent(
             "English",
         )

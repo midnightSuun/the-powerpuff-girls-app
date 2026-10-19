@@ -8,7 +8,6 @@ import {
 } from "../hooks/use-update-user-dialog"
 import { UpdateUserDialog } from "../ui/update-user-dialog"
 
-// Import the mocked module to access it in tests
 const UserFormDialogModule = vi.hoisted(() => ({
     UserFormDialog: vi.fn(),
 }))
@@ -56,7 +55,6 @@ describe("UpdateUserDialog Component", () => {
     beforeEach(() => {
         vi.clearAllMocks()
 
-        // Setup UserFormDialog mock
         UserFormDialogModule.UserFormDialog.mockImplementation(
             ({
                 title,
@@ -168,30 +166,23 @@ describe("UpdateUserDialog Component", () => {
             />,
         )
 
-        // Get the onFieldChange function from the mock calls
         const mockCalls = UserFormDialogModule.UserFormDialog.mock.calls
         expect(mockCalls.length).toBeGreaterThan(0)
 
-        // Get the onFieldChange function from the props passed to UserFormDialog
         const props = mockCalls[mockCalls.length - 1][0]
         const { onFieldChange } = props
 
-        // Clear previous calls to handleChange
         vi.clearAllMocks()
 
-        // Test email field - should be ignored (line 31 condition)
         onFieldChange("email", "newemail@test.com")
         expect(mockHandleChange).not.toHaveBeenCalled()
 
-        // Test password field - should be ignored (line 31 condition)
         onFieldChange("password", "newpass")
         expect(mockHandleChange).not.toHaveBeenCalled()
 
-        // Test valid field - should be forwarded (line 32)
         onFieldChange("firstName", "Bob")
         expect(mockHandleChange).toHaveBeenCalledWith("firstName", "Bob")
 
-        // Test another valid field
         onFieldChange("lastName", "Johnson")
         expect(mockHandleChange).toHaveBeenCalledWith("lastName", "Johnson")
     })

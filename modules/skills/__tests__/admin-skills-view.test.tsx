@@ -295,7 +295,6 @@ describe("AdminSkillsView", () => {
     })
 
     it("handles skills without categoryId using category as fallback", () => {
-        // Ветка: skill.categoryId пустой → fallback на skill.category
         const skillsWithoutCategoryId = [
             {
                 id: "2",
@@ -329,14 +328,12 @@ describe("AdminSkillsView", () => {
     })
 
     it("uses skill.category as type when skill.type is absent", () => {
-        // Ветка: skill.type undefined → skill.type || skill.category
         const skillsNoType = [
             {
                 id: "5",
                 name: "Vue",
                 category: "Frontend",
                 categoryId: "fe",
-                // type не задан
             },
         ]
 
@@ -360,12 +357,10 @@ describe("AdminSkillsView", () => {
             />,
         )
 
-        // type должен стать "Frontend" (= skill.category)
         expect(screen.getByTestId("sort-type")).toHaveTextContent("Frontend")
     })
 
     it("uses General when both skill.type and skill.category are absent", () => {
-        // Ветка: skill.type && skill.category оба falsy → "General"
         const skillsNoTypeNoCategory = [
             {
                 id: "6",
@@ -400,7 +395,6 @@ describe("AdminSkillsView", () => {
     })
 
     it("getSortValue returns empty string for nullish type", () => {
-        // Ветка: skill.type ?? "" когда type пустая строка после формирования
         const skillsEmptyType = [
             {
                 id: "7",
@@ -431,7 +425,6 @@ describe("AdminSkillsView", () => {
             />,
         )
 
-        // type = "General", category = "" → sort-category пустая
         expect(screen.getByTestId("sort-type")).toHaveTextContent("General")
         expect(screen.getByTestId("sort-category")).toBeInTheDocument()
     })
@@ -444,7 +437,6 @@ describe("AdminSkillsView", () => {
             />,
         )
 
-        // These elements are rendered by our mock to trigger the functions
         expect(screen.getByTestId("search-str")).toBeInTheDocument()
         expect(screen.getByTestId("sort-type")).toBeInTheDocument()
         expect(screen.getByTestId("sort-category")).toBeInTheDocument()
@@ -482,7 +474,6 @@ describe("AdminSkillsView", () => {
             />,
         )
 
-        // This should trigger the type ?? "" branch but formattedSkills sets type = skill.category
         expect(screen.getByTestId("sort-type")).toHaveTextContent("Frontend")
     })
 
@@ -494,8 +485,6 @@ describe("AdminSkillsView", () => {
             />,
         )
 
-        // The sort-name div calls getSortValue with "name" key
-        // This tests the final return statement
         expect(screen.getByTestId("sort-name")).toHaveTextContent("TypeScript")
     })
 
@@ -541,7 +530,6 @@ describe("AdminSkillsView", () => {
             />,
         )
 
-        // Verify the search string includes name, type, and category
         const searchStr = screen.getByTestId("search-str").textContent
         expect(searchStr).toContain("TypeScript")
     })

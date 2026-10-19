@@ -67,9 +67,6 @@ describe("UsersTableFrame Component", () => {
     })
 
     it("renders fallback showing previous content when it exists", async () => {
-        // This test verifies the conditional branch: if (previous) { ... }
-        // We'll test the component behavior by checking state changes
-
         const FirstChild = () => (
             <div data-testid="first-child">First Content</div>
         )
@@ -84,22 +81,18 @@ describe("UsersTableFrame Component", () => {
             </UsersTableFrame>,
         )
 
-        // Wait for first child to render (previous state is set)
         await screen.findByTestId("first-child")
 
-        // Rerender with second child
         rerender(
             <UsersTableFrame>
                 <SecondChild />
             </UsersTableFrame>,
         )
 
-        // Second child should render
         const secondChild = await screen.findByTestId("second-child")
         expect(secondChild).toBeInTheDocument()
         expect(secondChild).toHaveTextContent("Second Content")
 
-        // First child should no longer be in document
         expect(screen.queryByTestId("first-child")).not.toBeInTheDocument()
     })
 
@@ -116,10 +109,8 @@ describe("UsersTableFrame Component", () => {
             </UsersTableFrame>,
         )
 
-        // Wait for child to render
         await screen.findByTestId("child-content")
 
-        // Placeholder should never have appeared
         expect(
             screen.queryByTestId("should-not-appear"),
         ).not.toBeInTheDocument()
@@ -162,18 +153,15 @@ describe("UsersTableFrame Component", () => {
             </UsersTableFrame>,
         )
 
-        // Wait for initial render
         const firstRender = await screen.findByTestId("child-content")
         expect(firstRender).toHaveTextContent("Same Content")
 
-        // Rerender with the same children (tests current === children path)
         rerender(
             <UsersTableFrame>
                 <Child />
             </UsersTableFrame>,
         )
 
-        // Content should still be there
         const afterRerender = screen.getByTestId("child-content")
         expect(afterRerender).toHaveTextContent("Same Content")
     })

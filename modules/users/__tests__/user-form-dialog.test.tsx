@@ -154,7 +154,6 @@ describe("UserFormDialog Component", () => {
 
         fireEvent.change(departmentSelect!, { target: { value: "dep-2" } })
 
-        // Check that onFieldChange was called with departmentId as first arg
         expect(mockOnFieldChange).toHaveBeenCalled()
         const calls = mockOnFieldChange.mock.calls
         const departmentCall = calls.find((call) => call[0] === "departmentId")
@@ -169,7 +168,6 @@ describe("UserFormDialog Component", () => {
 
         fireEvent.change(positionSelect!, { target: { value: "pos-2" } })
 
-        // Check that onFieldChange was called with positionId as first arg
         expect(mockOnFieldChange).toHaveBeenCalled()
         const calls = mockOnFieldChange.mock.calls
         const positionCall = calls.find((call) => call[0] === "positionId")
@@ -184,7 +182,6 @@ describe("UserFormDialog Component", () => {
 
         fireEvent.change(roleSelect!, { target: { value: "USER" } })
 
-        // Check that onFieldChange was called with role as first arg
         expect(mockOnFieldChange).toHaveBeenCalled()
         const calls = mockOnFieldChange.mock.calls
         const roleCall = calls.find((call) => call[0] === "role")
@@ -194,7 +191,6 @@ describe("UserFormDialog Component", () => {
     it("includes empty option in department select when showFieldLabels is false", () => {
         render(<UserFormDialog {...defaultProps} showFieldLabels={false} />)
 
-        // includeEmpty should be true when !showFieldLabels
         expect(screen.getByText("Create User")).toBeInTheDocument()
     })
 
@@ -207,7 +203,6 @@ describe("UserFormDialog Component", () => {
             />,
         )
 
-        // includeEmpty should be true when departmentId.length === 0
         expect(screen.getByText("Create User")).toBeInTheDocument()
     })
 
@@ -220,14 +215,12 @@ describe("UserFormDialog Component", () => {
             />,
         )
 
-        // includeEmpty should be true when positionId.length === 0
         expect(screen.getByText("Create User")).toBeInTheDocument()
     })
 
     it("does not include empty option in role select", () => {
         render(<UserFormDialog {...defaultProps} />)
 
-        // includeEmpty is always false for role
         expect(screen.getByText("Create User")).toBeInTheDocument()
     })
 

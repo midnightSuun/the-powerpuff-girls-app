@@ -54,33 +54,16 @@ test.describe("Admin User CRUD Flow", () => {
 
         await expect(dialog).not.toBeVisible({ timeout: 15000 })
 
-        const pageNumberButtons = page
-            .locator("nav a, nav button")
-            .filter({ hasText: /^\d+$/ })
-
-        const count = await pageNumberButtons.count()
-        if (count > 0) {
-            const texts = await pageNumberButtons.allTextContents()
-            const numbers = texts
-                .map((t) => parseInt(t.trim(), 10))
-                .filter((n) => !isNaN(n))
-
-            if (numbers.length > 0) {
-                const maxPage = Math.max(...numbers)
-                const lastPageButton = page
-                    .locator("nav a, nav button")
-                    .filter({ hasText: new RegExp(`^${maxPage}$`) })
-                    .first()
-                await lastPageButton.click()
-            } else {
-                await pageNumberButtons.last().click()
-            }
-        }
+        const searchInput = page.locator('input[type="search"]').first()
+        await expect(searchInput).toBeVisible({ timeout: 10000 })
+        await searchInput.fill(uniqueEmail)
+        await page.waitForURL(/search=/, { timeout: 10000 })
+        await page.waitForLoadState("networkidle")
 
         const userRow = page
             .locator("tr, [role='row']")
             .filter({ hasText: uniqueEmail })
-        await expect(userRow).toBeVisible({ timeout: 10000 })
+        await expect(userRow).toBeVisible({ timeout: 15000 })
 
         const actionsMenuButton = userRow.locator("button").last()
         await expect(actionsMenuButton).toBeVisible()

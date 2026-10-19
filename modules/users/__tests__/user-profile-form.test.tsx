@@ -456,7 +456,7 @@ describe("UserProfileForm Component", () => {
             <UserProfileForm
                 user={{
                     ...sampleUser,
-                    created_at: "1672531200000", // 13-digit milliseconds
+                    created_at: "1672531200000",
                 }}
                 currentUserId="user-1"
                 currentUserRole="Employee"
@@ -473,7 +473,7 @@ describe("UserProfileForm Component", () => {
             <UserProfileForm
                 user={{
                     ...sampleUser,
-                    created_at: "1672531200", // 10-digit seconds
+                    created_at: "1672531200",
                 }}
                 currentUserId="user-1"
                 currentUserRole="Employee"
@@ -504,13 +504,11 @@ describe("UserProfileForm Component", () => {
             />,
         )
 
-        // Simulate hover on avatar div
         const avatarDiv = container.querySelector(
             "div.relative.w-28.h-28",
         ) as HTMLElement
         await userEvent.hover(avatarDiv)
 
-        // Find and click remove button
         const removeButton = container.querySelector(
             "button[aria-label='Remove avatar']",
         ) as HTMLElement
@@ -538,7 +536,6 @@ describe("UserProfileForm Component", () => {
             />,
         )
 
-        // Find file input
         const fileInput = container.querySelector(
             'input[type="file"]',
         ) as HTMLInputElement
@@ -620,7 +617,6 @@ describe("UserProfileForm Component", () => {
             />,
         )
 
-        // Just verify that the hook is called with the expected behavior
         mockSetDepartmentId("dep-2")
         expect(mockSetDepartmentId).toHaveBeenCalled()
     })
