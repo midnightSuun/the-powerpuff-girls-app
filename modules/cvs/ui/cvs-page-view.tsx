@@ -1,6 +1,6 @@
 "use client"
 
-import { MoreVertical } from "lucide-react"
+import { Eye, MoreVertical, Pencil, Trash2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
 import { memo, useCallback } from "react"
@@ -9,6 +9,12 @@ import { useHeaderToolbarAction } from "@/components/header-toolbar-action"
 import { SearchInput } from "@/components/search-input"
 import { SortArrow } from "@/components/sort-arrow"
 import { Button } from "@/components/ui/button"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { Link, usePathname } from "@/i18n/navigation"
 import { buildListSearchParams } from "@/lib/list-search-params"
 import { nextSortOrder, type SortOrder } from "@/lib/sort"
@@ -23,8 +29,6 @@ import { UpdateCvModal } from "./components/update-cv-modal"
 
 interface CvListItemProps {
     cv: CvItem
-    isActiveMenu: boolean
-    onToggleMenu: (id: string) => void
     onView: (id: string) => void
     onEdit: (cv: CvItem) => void
     onDelete: (cv: CvItem) => void
@@ -32,8 +36,6 @@ interface CvListItemProps {
 }
 const CvListItem = memo(function CvListItem({
     cv,
-    isActiveMenu,
-    onToggleMenu,
     onView,
     onEdit,
     onDelete,
@@ -53,37 +55,45 @@ const CvListItem = memo(function CvListItem({
                 </div>
 
                 <div className="relative flex justify-end lg:justify-center items-start">
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        className="min-w-0! p-0! rounded-md! border-transparent! hover:border-transparent! text-muted-foreground hover:text-foreground shrink-0"
-                        onClick={() => onToggleMenu(cv.id)}
-                    >
-                        <MoreVertical className="size-4" />
-                    </Button>
-
-                    {isActiveMenu && (
-                        <div className="absolute right-0 top-full mt-1 w-36 bg-popover border border-border shadow-md rounded-none z-50 py-1 text-sm">
-                            <button
-                                className="w-full text-left px-4 py-2 hover:bg-accent hover:text-accent-foreground"
+                    <DropdownMenu>
+                        <DropdownMenuTrigger
+                            type="button"
+                            aria-label={`Actions for ${cv.name}`}
+                            className="inline-flex size-6 items-center justify-center rounded-full text-muted-foreground outline-none hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
+                        >
+                            <MoreVertical
+                                aria-hidden="true"
+                                className="size-4"
+                            />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent
+                            align="end"
+                            className="min-w-40 rounded-none border border-[#AEAEAE] dark:border-button-secondary-default text-left text-xs"
+                        >
+                            <DropdownMenuItem
                                 onClick={() => onView(cv.id)}
+                                className="gap-2 whitespace-nowrap px-3 py-2"
                             >
+                                <Eye className="size-3" />
                                 {t("view")}
-                            </button>
-                            <button
-                                className="w-full text-left px-4 py-2 hover:bg-accent hover:text-accent-foreground"
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
                                 onClick={() => onEdit(cv)}
+                                className="gap-2 whitespace-nowrap px-3 py-2"
                             >
+                                <Pencil className="size-3" />
                                 {t("edit")}
-                            </button>
-                            <button
-                                className="w-full text-left px-4 py-2 text-destructive hover:bg-destructive/10"
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                variant="destructive"
                                 onClick={() => onDelete(cv)}
+                                className="gap-2 whitespace-nowrap px-3 py-2"
                             >
+                                <Trash2 className="size-3" />
                                 {t("delete")}
-                            </button>
-                        </div>
-                    )}
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
             </div>
 
@@ -137,8 +147,6 @@ export function CvsPageView({
         setEditingCv,
         deletingCv,
         setDeletingCv,
-        activeMenuId,
-        setActiveMenuId,
         isSubmitting,
         error,
         handleCreate,
@@ -146,35 +154,25 @@ export function CvsPageView({
         handleDelete,
     } = useCvsPage({ initialCvs, targetUserId })
 
-    const handleToggleMenu = useCallback(
-        (id: string) => {
-            setActiveMenuId(activeMenuId === id ? null : id)
-        },
-        [activeMenuId, setActiveMenuId],
-    )
-
     const handleView = useCallback(
         (id: string) => {
-            setActiveMenuId(null)
             router.push(`/cv/${id}`)
         },
-        [router, setActiveMenuId],
+        [router],
     )
 
     const handleEdit = useCallback(
         (cv: CvItem) => {
-            setActiveMenuId(null)
             setEditingCv(cv)
         },
-        [setActiveMenuId, setEditingCv],
+        [setEditingCv],
     )
 
     const handleDeleteClick = useCallback(
         (cv: CvItem) => {
-            setActiveMenuId(null)
             setDeletingCv(cv)
         },
-        [setActiveMenuId, setDeletingCv],
+        [setDeletingCv],
     )
 
     const handleOpenCreate = useCallback(() => {
@@ -228,8 +226,6 @@ export function CvsPageView({
                             <CvListItem
                                 key={cv.id}
                                 cv={cv}
-                                isActiveMenu={activeMenuId === cv.id}
-                                onToggleMenu={handleToggleMenu}
                                 onView={handleView}
                                 onEdit={handleEdit}
                                 onDelete={handleDeleteClick}

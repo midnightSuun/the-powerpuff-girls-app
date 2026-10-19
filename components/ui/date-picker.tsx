@@ -179,7 +179,7 @@ export function DatePicker({
                             top: `${coords.top}px`,
                             left: `${coords.left}px`,
                         }}
-                        className="z-9999"
+                        className="z-9999 max-md:hidden"
                     >
                         <Calendar value={value} onChange={handleDateSelect} />
                     </div>,

@@ -98,7 +98,7 @@ export function SkillMasterySelect({
                                     "rounded-none",
                                     "[&>span]:hidden pr-4",
                                     isSelected
-                                        ? "bg-button-secondary-default text-[#F5F5F7] focus:bg-button-secondary-default focus:text-[#F5F5F7] dark:bg-[#F5F5F7] dark:text-[#2E2E2E] dark:focus:bg-[#F5F5F7] dark:focus:text-[#2E2E2E]"
+                                        ? "bg-button-secondary-default text-[#F5F5F7] focus:bg-button-secondary-default focus:text-[#F5F5F7] dark:bg-button-secondary-default dark:text-[#F5F5F7] dark:focus:bg-button-secondary-default dark:focus:text-[#F5F5F7]"
                                         : "text-gray-900 focus:bg-[#AEAEAE] dark:text-foreground dark:focus:bg-button-secondary-default",
                                 )}
                             >
