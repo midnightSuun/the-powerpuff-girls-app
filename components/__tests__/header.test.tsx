@@ -23,10 +23,17 @@ vi.mock("@/modules/cvs/api/get-cv", () => ({
     getCvById: (id: string) => mockGetCvById(id),
 }))
 
+type HeaderPageProps = {
+    type: string
+    path: string
+    showSearch?: boolean
+    tabs?: Array<{ path: string; showSearch?: boolean }>
+}
+
 type HeaderViewProps = {
     isAdmin: boolean
     viewerId: string | null
-    pages: unknown[]
+    pages: HeaderPageProps[]
     loadSecondBreadcrumb: (path: string, id: string) => Promise<string | null>
 }
 
@@ -72,6 +79,49 @@ describe("Header (Server Component)", () => {
 
         expect(capturedHeaderViewProps?.isAdmin).toBe(false)
         expect(capturedHeaderViewProps?.viewerId).toBeNull()
+    })
+
+    it("shows header search on skills and languages only for admins", async () => {
+        mockGetCurrentSession.mockResolvedValueOnce({
+            userId: "admin-1",
+            role: "Admin",
+        })
+
+        render(await Header())
+
+        const pages = capturedHeaderViewProps?.pages ?? []
+        expect(pages.find((page) => page.path === "/skills")?.showSearch).toBe(
+            true,
+        )
+        expect(
+            pages.find((page) => page.path === "/languages")?.showSearch,
+        ).toBe(true)
+
+        const userTabs = pages.find((page) => page.path === "/users/{userId}")
+        expect(
+            userTabs?.tabs?.find((tab) => tab.path === "/skills")?.showSearch,
+        ).toBe(false)
+        expect(
+            userTabs?.tabs?.find((tab) => tab.path === "/languages")
+                ?.showSearch,
+        ).toBe(false)
+    })
+
+    it("hides header search on skills and languages for a regular user", async () => {
+        mockGetCurrentSession.mockResolvedValueOnce({
+            userId: "user-1",
+            role: "Employee",
+        })
+
+        render(await Header())
+
+        const pages = capturedHeaderViewProps?.pages ?? []
+        expect(pages.find((page) => page.path === "/skills")?.showSearch).toBe(
+            false,
+        )
+        expect(
+            pages.find((page) => page.path === "/languages")?.showSearch,
+        ).toBe(false)
     })
 
     describe("loadSecondBreadcrumb server action", () => {

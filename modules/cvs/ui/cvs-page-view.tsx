@@ -182,7 +182,7 @@ export function CvsPageView({
     useHeaderToolbarAction(showSearch ? null : t("create"), handleOpenCreate)
 
     return (
-        <div className="mx-auto max-w-7xl space-y-6 p-6">
+        <div className="w-full space-y-6 px-5">
             {showSearch ? (
                 <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
                     <SearchInput limit={limit} search={search} />

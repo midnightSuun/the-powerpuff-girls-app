@@ -8,7 +8,7 @@ type Props = {
 
 export const CvsListSkeleton = ({ showSearch = true }: Props) => {
     return (
-        <div aria-busy="true" className="mx-auto max-w-7xl space-y-6 p-6">
+        <div aria-busy="true" className="w-full space-y-6 px-5">
             {showSearch ? (
                 <Skeleton className="h-9 w-80 max-w-full rounded-full" />
             ) : null}
