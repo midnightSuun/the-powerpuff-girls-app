@@ -10,8 +10,10 @@ export function MobileScreenBlocker({ children }: { children: ReactNode }) {
 
     return (
         <>
-            <div className="max-md:hidden md:contents">{children}</div>
-            <div className="hidden max-md:block">
+            <div className="max-md:hidden md:contents print:contents">
+                {children}
+            </div>
+            <div className="hidden max-md:block print:hidden">
                 <ErrorTemplate
                     iconSrc="/network-error-icon.svg"
                     title={t("title")}
