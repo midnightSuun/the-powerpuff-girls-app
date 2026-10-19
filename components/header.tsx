@@ -11,6 +11,7 @@ type DefaultPage = {
     path: string
     title: HeaderCopyKey
     showSearch?: boolean
+    showSearchForAdmin?: boolean
 }
 
 type PageWithTabs = {
@@ -42,12 +43,12 @@ const PAGES: (DefaultPage | PageWithTabs)[] = [
     {
         path: "/skills",
         title: "skills",
-        showSearch: false,
+        showSearchForAdmin: true,
     },
     {
         path: "/languages",
         title: "languages",
-        showSearch: false,
+        showSearchForAdmin: true,
     },
     {
         path: "/settings",
@@ -141,7 +142,7 @@ const loadSecondBreadcrumb = async (pagePath: string, id: string) => {
     }
 }
 
-const toClientPages = (): HeaderPage[] =>
+const toClientPages = (isAdmin: boolean): HeaderPage[] =>
     PAGES.map((page) => {
         if (isPageWithTabs(page)) {
             return {
@@ -159,7 +160,7 @@ const toClientPages = (): HeaderPage[] =>
             type: "default",
             path: page.path,
             title: page.title,
-            showSearch: page.showSearch,
+            showSearch: page.showSearchForAdmin ? isAdmin : page.showSearch,
         }
     })
 
@@ -170,7 +171,7 @@ export const Header = async () => {
 
     return (
         <HeaderView
-            pages={toClientPages()}
+            pages={toClientPages(isAdmin)}
             copy={copy}
             breadcrumbLabel={breadcrumbLabel}
             initialBreadcrumb={null}
