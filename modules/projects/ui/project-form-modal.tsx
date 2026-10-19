@@ -22,7 +22,7 @@ interface ProjectFormModalProps {
 }
 
 const fieldClassName = (isEditing: boolean) =>
-    `${isEditing ? "h-10" : "h-8"} rounded-none border-border bg-background px-2.5 text-xs text-foreground shadow-none placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring dark:bg-background`
+    `${isEditing ? "h-10" : "h-8"} rounded-none border-border bg-background px-2.5 !text-xs md:!text-xs placeholder:!text-xs font-normal placeholder:font-normal text-foreground shadow-none placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring dark:bg-background`
 
 export function ProjectFormModal(props: ProjectFormModalProps) {
     const { isOpen, project, environmentOptions, onClose } = props
@@ -151,7 +151,7 @@ export function ProjectFormModal(props: ProjectFormModalProps) {
                         placeholder={
                             Boolean(description) ? undefined : t("description")
                         }
-                        className={`resize-none rounded-none border-border bg-background px-2.5 py-2 text-xs text-foreground shadow-none placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring ${
+                        className={`resize-none rounded-none border-border bg-background px-2.5 py-2 !text-xs md:!text-xs placeholder:!text-xs font-normal placeholder:font-normal text-foreground shadow-none placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring ${
                             isEditing ? "min-h-25.5" : "min-h-20"
                         }`}
                     />
