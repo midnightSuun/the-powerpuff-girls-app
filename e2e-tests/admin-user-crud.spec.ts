@@ -54,12 +54,9 @@ test.describe("Admin User CRUD Flow", () => {
 
         await expect(dialog).not.toBeVisible({ timeout: 15000 })
 
-        // Use search to find the newly created user directly —
-        // the table can have many pages and the user may not be on the last one.
         const searchInput = page.locator('input[type="search"]').first()
         await expect(searchInput).toBeVisible({ timeout: 10000 })
         await searchInput.fill(uniqueEmail)
-        // Wait for the 500 ms debounce + URL update + table re-render
         await page.waitForURL(/search=/, { timeout: 10000 })
         await page.waitForLoadState("networkidle")
 

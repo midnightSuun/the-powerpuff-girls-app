@@ -242,7 +242,6 @@ describe("SettingsPage", () => {
 
         render(<SettingsPage />)
 
-        // Check that password labels are shown when values exist
         expect(
             screen.getByText("passwordSection.currentPlaceholder"),
         ).toBeInTheDocument()

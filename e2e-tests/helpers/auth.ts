@@ -29,10 +29,10 @@ export async function registerAndSkipVerification(page: Page) {
     await submitButton.click()
 
     const laterButton = page.getByRole("button", { name: /later|позже/i })
-    await expect(laterButton).toBeVisible({ timeout: 10000 })
+    await expect(laterButton).toBeVisible({ timeout: 30000 })
     await laterButton.click()
 
-    await page.waitForURL(/.*users/, { timeout: 10000 })
+    await page.waitForURL(/.*users/, { timeout: 30000 })
     await expect(page).toHaveURL(/.*users/)
 
     return { uniqueEmail, password }

@@ -92,17 +92,13 @@ describe("AddSkillButton", () => {
     it("closes modal when close button in AddSkillModal is clicked", async () => {
         const user = await import("@testing-library/user-event")
 
-        // Render the button
         render(<AddSkillButton {...defaultProps} />)
 
-        // Open the modal
         fireEvent.click(screen.getByTestId("add-item-btn"))
         expect(screen.getByTestId("add-skill-modal")).toBeInTheDocument()
 
-        // Close the modal by clicking the close button in the modal
         await user.default.setup().click(screen.getByTestId("modal-close-btn"))
 
-        // The modal should be closed
         expect(screen.queryByTestId("add-skill-modal")).not.toBeInTheDocument()
     })
 })

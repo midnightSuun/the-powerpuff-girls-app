@@ -536,7 +536,6 @@ describe("resolvePage", () => {
     it("joinPaths handles multiple slashes", () => {
         const result = joinPaths("/users/123//", "//settings")
 
-        // joinPaths doesn't normalize multiple slashes, just concatenates
         expect(result).toBe("/users/123///settings")
     })
 

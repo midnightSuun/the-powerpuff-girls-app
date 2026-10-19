@@ -61,14 +61,12 @@ test.describe("Skills - add, update, delete", () => {
 
         await page.getByRole("button", { name: "REMOVE SKILLS" }).click()
 
-        // Wait for selection mode, then click the select button
         const selectBtn = page.getByRole("button", {
             name: `Select ${skillName}`,
         })
         await expect(selectBtn).toBeVisible({ timeout: 5000 })
         await selectBtn.click()
 
-        // Wait for selection to register — aria-pressed flips to true
         await expect(
             page.getByRole("button", { name: `Deselect ${skillName}` }),
         ).toHaveAttribute("aria-pressed", "true", { timeout: 5000 })

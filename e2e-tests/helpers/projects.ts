@@ -1,5 +1,33 @@
 import { expect, Page } from "@playwright/test"
 
+async function pickFirstAvailableDay(
+    page: Page,
+    modal: ReturnType<Page["locator"]>,
+    triggerIndex: number,
+) {
+    const trigger = modal
+        .locator("button[aria-haspopup='dialog']")
+        .nth(triggerIndex)
+    await expect(trigger).toBeVisible({ timeout: 5000 })
+    await trigger.click()
+    await expect(trigger).toHaveAttribute("aria-expanded", "true", {
+        timeout: 5000,
+    })
+
+    const dayButton = page
+        .locator(
+            "body > div[style*='position: fixed'] button[type='button']:not(:disabled)",
+        )
+        .filter({ hasText: /^\d{1,2}$/ })
+        .first()
+    await expect(dayButton).toBeVisible({ timeout: 5000 })
+    await dayButton.click()
+
+    await expect(trigger).toHaveAttribute("aria-expanded", "false", {
+        timeout: 5000,
+    })
+}
+
 export async function addProject(page: Page) {
     await page.getByRole("button", { name: /ADD PROJECT/i }).click()
 
@@ -12,22 +40,13 @@ export async function addProject(page: Page) {
     const projectPopup = page.locator("[data-slot='select-content'][data-open]")
     await expect(projectPopup).toBeVisible({ timeout: 5000 })
 
-    const projectOptions = projectPopup.locator("[role='option']")
-    await projectOptions.first().click()
+    const firstOption = projectPopup.locator("[role='option']").first()
+    const selectedProjectName = ((await firstOption.textContent()) ?? "").trim()
+    await firstOption.click()
     await expect(projectPopup).not.toBeVisible({ timeout: 5000 })
 
-    const rawProjectName = await projectSelect.textContent()
-    const selectedProjectName = rawProjectName?.replace(/▼/g, "").trim()
-
-    await page.waitForTimeout(1000)
-
-    await modal.getByRole("button", { name: "Start date" }).click()
-    await page.waitForTimeout(500)
-    await page.getByText("5", { exact: true }).first().click()
-
-    await modal.getByRole("button", { name: "End date" }).click()
-    await page.waitForTimeout(500)
-    await page.getByText("10", { exact: true }).first().click()
+    await pickFirstAvailableDay(page, modal, 0)
+    await pickFirstAvailableDay(page, modal, 1)
 
     const addButton = modal.getByRole("button", { name: /^ADD$/i })
     await expect(addButton).toBeEnabled({ timeout: 5000 })
