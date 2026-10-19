@@ -88,9 +88,7 @@ test.describe("CV", () => {
             await expect(editModal).toBeVisible({ timeout: 5000 })
 
             const nameInput = editModal.getByLabel("Name")
-            await nameInput.focus()
-            await page.keyboard.press("Control+A")
-            await page.keyboard.type(updatedName)
+            await nameInput.fill(updatedName)
 
             const saveBtn = editModal.getByRole("button", { name: /^SAVE$/i })
             await expect(saveBtn).toBeEnabled({ timeout: 5000 })
@@ -242,13 +240,18 @@ test.describe("CV", () => {
 
             await page.getByRole("button", { name: "REMOVE SKILLS" }).click()
 
-            await page
-                .getByRole("button", { name: `Select ${skillName}` })
-                .click()
-
-            await expect(page.locator(".ring-red-500").first()).toBeVisible({
-                timeout: 5000,
+            // Wait for selection mode to activate (button label changes to "Select …")
+            const selectBtn = page.getByRole("button", {
+                name: `Select ${skillName}`,
             })
+            await expect(selectBtn).toBeVisible({ timeout: 5000 })
+            await selectBtn.click()
+
+            // After click the label flips to "Deselect …" — use aria-pressed as the
+            // stable signal that the item is selected
+            await expect(
+                page.getByRole("button", { name: `Deselect ${skillName}` }),
+            ).toHaveAttribute("aria-pressed", "true", { timeout: 5000 })
 
             await page.getByRole("button", { name: /DELETE \(\d+\)/i }).click()
 

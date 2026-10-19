@@ -11,8 +11,13 @@ test.describe("User Profile View & Navigation Flow", () => {
         const usersTable = page.locator("table, [role='table']").first()
         await expect(usersTable).toBeVisible()
 
-        const firstUserLink = page.locator("tbody tr a, [role='row'] a").first()
-        await expect(firstUserLink).toBeVisible()
+        // Locate the first user link in the table body (skip header/sort links)
+        const firstUserLink = page
+            .locator(
+                "tbody tr td a, [role='rowgroup'] [role='row'] [role='cell'] a",
+            )
+            .first()
+        await expect(firstUserLink).toBeVisible({ timeout: 10000 })
 
         const userHref = await firstUserLink.getAttribute("href")
         const userIdMatch = userHref?.match(/\/users\/([^/]+)/)
@@ -47,14 +52,19 @@ test.describe("User Profile View & Navigation Flow", () => {
             timeout: 10000,
         })
 
+        // Profile inputs must be disabled or readonly for a user viewing another's profile
         const mainContainer = page.getByRole("main")
-        const nameInput = mainContainer.locator("input").first()
-        await expect(nameInput).toBeVisible({ timeout: 10000 })
+        // Target the first named text input in the profile form (first name field),
+        // not the search input which is type="search"
+        const profileInput = mainContainer
+            .locator("input[type='text'], input[type='email']")
+            .first()
+        await expect(profileInput).toBeVisible({ timeout: 10000 })
 
         const isDisabledOrReadonly =
-            (await nameInput.isDisabled()) ||
-            (await nameInput.getAttribute("readonly")) !== null ||
-            (await nameInput.getAttribute("aria-readonly")) === "true"
+            (await profileInput.isDisabled()) ||
+            (await profileInput.getAttribute("readonly")) !== null ||
+            (await profileInput.getAttribute("aria-readonly")) === "true"
 
         expect(isDisabledOrReadonly).toBeTruthy()
     })

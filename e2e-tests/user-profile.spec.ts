@@ -11,7 +11,10 @@ test.describe("Own profile workflow", () => {
 
         const signupTab = page.locator('a[href="/register"]')
         await expect(signupTab).toBeVisible()
-        await signupTab.click()
+        await Promise.all([
+            page.waitForURL(/.*register/, { timeout: 15000 }),
+            signupTab.click(),
+        ])
         await expect(page).toHaveURL(/.*register/)
 
         const uniqueEmail = `test.user.${Date.now()}@example.com`

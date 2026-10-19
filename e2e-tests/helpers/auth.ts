@@ -9,7 +9,10 @@ export async function registerAndSkipVerification(page: Page) {
 
     const signupTab = page.locator('a[href="/register"]')
     await expect(signupTab).toBeVisible()
-    await signupTab.click()
+    await Promise.all([
+        page.waitForURL(/.*register/, { timeout: 15000 }),
+        signupTab.click(),
+    ])
     await expect(page).toHaveURL(/.*register/)
 
     await page.fill('input[type="email"]', uniqueEmail)
