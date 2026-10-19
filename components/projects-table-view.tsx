@@ -246,7 +246,7 @@ export function ProjectsTableView<T extends ProjectTableItem>({
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent
                                                     align="end"
-                                                    className="min-w-40 rounded border border-border text-left text-xs"
+                                                    className="min-w-40 rounded-none border border-[#AEAEAE] dark:border-button-secondary-default text-left text-xs"
                                                 >
                                                     <DropdownMenuItem
                                                         onClick={() =>

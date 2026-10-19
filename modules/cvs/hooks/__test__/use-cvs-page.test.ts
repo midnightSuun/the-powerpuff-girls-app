@@ -83,7 +83,6 @@ describe("useCvsPage", () => {
         expect(result.current.isCreateOpen).toBe(false)
         expect(result.current.editingCv).toBeNull()
         expect(result.current.deletingCv).toBeNull()
-        expect(result.current.activeMenuId).toBeNull()
         expect(result.current.isSubmitting).toBe(false)
         expect(result.current.error).toBeNull()
     })

@@ -91,8 +91,6 @@ describe("CvsPageView", () => {
         setEditingCv: mockSetEditingCv,
         deletingCv: null,
         setDeletingCv: mockSetDeletingCv,
-        activeMenuId: null,
-        setActiveMenuId: mockSetActiveMenuId,
         isSubmitting: false,
         error: null,
         handleCreate: mockHandleCreate,
@@ -206,10 +204,6 @@ describe("CvsPageView", () => {
 
     it("opens action menu and handles view navigation", async () => {
         const user = userEvent.setup()
-        vi.mocked(useCvsPage).mockReturnValue({
-            ...defaultHookReturn,
-            activeMenuId: "cv-1",
-        })
 
         render(
             <CvsPageView
@@ -220,19 +214,19 @@ describe("CvsPageView", () => {
             />,
         )
 
+        const menuButton = screen.getAllByRole("button", {
+            name: /Actions for/i,
+        })[0]
+        await user.click(menuButton)
+
         const viewButton = screen.getByText("view")
         await user.click(viewButton)
 
-        expect(mockSetActiveMenuId).toHaveBeenCalledWith(null)
         expect(mockPush).toHaveBeenCalledWith("/cv/cv-1")
     })
 
     it("opens edit modal and handles edit click", async () => {
         const user = userEvent.setup()
-        vi.mocked(useCvsPage).mockReturnValue({
-            ...defaultHookReturn,
-            activeMenuId: "cv-1",
-        })
 
         render(
             <CvsPageView
@@ -243,19 +237,19 @@ describe("CvsPageView", () => {
             />,
         )
 
+        const menuButton = screen.getAllByRole("button", {
+            name: /Actions for/i,
+        })[0]
+        await user.click(menuButton)
+
         const editButton = screen.getByText("edit")
         await user.click(editButton)
 
-        expect(mockSetActiveMenuId).toHaveBeenCalledWith(null)
         expect(mockSetEditingCv).toHaveBeenCalledWith(mockCvs[0])
     })
 
     it("opens delete modal and handles delete click", async () => {
         const user = userEvent.setup()
-        vi.mocked(useCvsPage).mockReturnValue({
-            ...defaultHookReturn,
-            activeMenuId: "cv-1",
-        })
 
         render(
             <CvsPageView
@@ -266,10 +260,14 @@ describe("CvsPageView", () => {
             />,
         )
 
+        const menuButton = screen.getAllByRole("button", {
+            name: /Actions for/i,
+        })[0]
+        await user.click(menuButton)
+
         const deleteButton = screen.getByText("delete")
         await user.click(deleteButton)
 
-        expect(mockSetActiveMenuId).toHaveBeenCalledWith(null)
         expect(mockSetDeletingCv).toHaveBeenCalledWith(mockCvs[0])
     })
 

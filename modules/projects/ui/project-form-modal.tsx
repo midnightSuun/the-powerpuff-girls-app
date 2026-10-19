@@ -67,7 +67,7 @@ export function ProjectFormModal(props: ProjectFormModalProps) {
             titleClassName="text-sm font-medium md:text-sm md:font-medium"
             footerClassName="mt-1 gap-3"
             cancelButtonClassName="h-10 w-[138px] rounded-full border-foreground px-0 py-0 text-[10px] text-foreground hover:bg-accent"
-            confirmButtonClassName="h-10 w-[138px] rounded-full bg-[#cf2f32] px-0 py-0 text-[10px] text-white hover:bg-[#b92529]"
+            confirmButtonClassName="h-10 w-[138px] rounded-full bg-[#cf2f32] px-0 py-0 text-[10px] text-white hover:bg-transparent"
         >
             <div className="grid grid-cols-1 gap-x-2 gap-y-4 sm:grid-cols-2">
                 <div className="relative flex flex-col pt-4">

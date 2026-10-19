@@ -1,6 +1,6 @@
 "use client"
 
-import { MoreVertical } from "lucide-react"
+import { MoreVertical, Pencil, Trash2 } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl"
 import {
     memo,
@@ -14,6 +14,12 @@ import {
 
 import { useHeaderToolbarAction } from "@/components/header-toolbar-action"
 import { Button } from "@/components/ui/button"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { AddItemButton } from "@/components/ui/list-management-buttons"
 import { useColumnSort } from "@/hooks/use-column-sort"
 import { sortByLocale } from "@/lib/sort"
@@ -32,11 +38,8 @@ export interface Column<T> {
 interface AdminTableRowProps<T> {
     item: T
     columns: Column<T>[]
-    isMenuOpen: boolean
-    onToggleMenu: (id: string | number) => void
     onEditClick?: (item: T) => void
     onDeleteClick?: (item: T) => void
-    menuRef?: React.RefObject<HTMLDivElement | null>
     editText: string
     deleteText: string
 }
@@ -44,11 +47,8 @@ interface AdminTableRowProps<T> {
 function AdminTableRowComponent<T extends { id: string | number }>({
     item,
     columns,
-    isMenuOpen,
-    onToggleMenu,
     onEditClick,
     onDeleteClick,
-    menuRef,
     editText,
     deleteText,
 }: AdminTableRowProps<T>) {
@@ -68,46 +68,39 @@ function AdminTableRowComponent<T extends { id: string | number }>({
             ))}
             {(onEditClick || onDeleteClick) && (
                 <td className="px-4 text-right relative align-middle">
-                    <Button
-                        type="button"
-                        variant="ghost"
-                        className="h-8 min-w-8 p-0 text-muted-foreground hover:text-foreground"
-                        onClick={() => onToggleMenu(item.id)}
-                    >
-                        <MoreVertical className="h-4 w-4" />
-                    </Button>
-
-                    {isMenuOpen && (
-                        <div
-                            ref={menuRef}
-                            className="absolute right-4 top-10 z-50 w-32 border border-border bg-background p-1 shadow-md rounded-none text-left"
+                    <DropdownMenu>
+                        <DropdownMenuTrigger
+                            type="button"
+                            aria-label={`Actions for ${String((item as Record<string, unknown>).name ?? item.id)}`}
+                            className="inline-flex h-8 min-w-8 items-center justify-center p-0 text-muted-foreground hover:text-foreground outline-none"
+                        >
+                            <MoreVertical className="h-4 w-4" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent
+                            align="end"
+                            className="min-w-32 rounded-none border border-[#AEAEAE] dark:border-button-secondary-default text-left text-xs"
                         >
                             {onEditClick && (
-                                <button
-                                    type="button"
-                                    className="w-full text-left px-3 py-1.5 text-sm hover:bg-accent transition-colors"
-                                    onClick={() => {
-                                        onToggleMenu(item.id)
-                                        onEditClick(item)
-                                    }}
+                                <DropdownMenuItem
+                                    onClick={() => onEditClick(item)}
+                                    className="gap-2 whitespace-nowrap px-3 py-2"
                                 >
+                                    <Pencil className="size-3" />
                                     {editText}
-                                </button>
+                                </DropdownMenuItem>
                             )}
                             {onDeleteClick && (
-                                <button
-                                    type="button"
-                                    className="w-full text-left px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
-                                    onClick={() => {
-                                        onToggleMenu(item.id)
-                                        onDeleteClick(item)
-                                    }}
+                                <DropdownMenuItem
+                                    variant="destructive"
+                                    onClick={() => onDeleteClick(item)}
+                                    className="gap-2 whitespace-nowrap px-3 py-2"
                                 >
+                                    <Trash2 className="size-3" />
                                     {deleteText}
-                                </button>
+                                </DropdownMenuItem>
                             )}
-                        </div>
-                    )}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </td>
             )}
         </tr>
@@ -118,7 +111,6 @@ function areRowPropsEqual<T extends { id: string | number }>(
     prev: AdminTableRowProps<T>,
     next: AdminTableRowProps<T>,
 ): boolean {
-    if (prev.isMenuOpen !== next.isMenuOpen) return false
     if (prev.editText !== next.editText) return false
     if (prev.deleteText !== next.deleteText) return false
     if (JSON.stringify(prev.item) !== JSON.stringify(next.item)) return false
@@ -171,20 +163,16 @@ function AdminDataTableInner<T extends { id: string | number }>({
         sortOrder,
         toggleSort,
     } = useColumnSort(defaultSortKey)
-    const [activeMenuId, setActiveMenuId] = useState<string | number | null>(
-        null,
-    )
-
-    const menuRef = useRef<HTMLDivElement | null>(null)
-    const headerActionLabel =
-        !showSearchInput && createButtonLabel && onCreateClick
-            ? createButtonLabel
-            : null
 
     const callbacksRef = useRef({ onCreateClick, onEditClick, onDeleteClick })
     useLayoutEffect(() => {
         callbacksRef.current = { onCreateClick, onEditClick, onDeleteClick }
     })
+
+    const headerActionLabel =
+        !showSearchInput && createButtonLabel && onCreateClick
+            ? createButtonLabel
+            : null
 
     const stableOnCreate = useCallback(
         () => callbacksRef.current.onCreateClick?.(),
@@ -200,31 +188,6 @@ function AdminDataTableInner<T extends { id: string | number }>({
     )
 
     useHeaderToolbarAction(headerActionLabel, stableOnCreate)
-
-    useEffect(() => {
-        const handleClickOutside = (e: MouseEvent) => {
-            if (
-                menuRef.current &&
-                !menuRef.current.contains(e.target as Node)
-            ) {
-                setActiveMenuId(null)
-            }
-        }
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === "Escape") setActiveMenuId(null)
-        }
-
-        document.addEventListener("mousedown", handleClickOutside)
-        document.addEventListener("keydown", handleKeyDown)
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside)
-            document.removeEventListener("keydown", handleKeyDown)
-        }
-    }, [])
-
-    const handleToggleMenu = useCallback((id: string | number) => {
-        setActiveMenuId((prev) => (prev === id ? null : id))
-    }, [])
 
     const processedData = useMemo(() => {
         let result = [...data]
@@ -328,11 +291,8 @@ function AdminDataTableInner<T extends { id: string | number }>({
                                     key={item.id}
                                     item={item}
                                     columns={columns}
-                                    isMenuOpen={activeMenuId === item.id}
-                                    onToggleMenu={handleToggleMenu}
                                     onEditClick={stableOnEdit}
                                     onDeleteClick={stableOnDelete}
-                                    menuRef={menuRef}
                                     editText={tCommon("edit")}
                                     deleteText={tCommon("delete")}
                                 />

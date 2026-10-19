@@ -101,7 +101,7 @@ export const UserRowMenu = ({ label, user }: Props) => {
                     <MoreVertical className="size-4" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
-                    className="w-40 border-[#AEAEAE] dark:border-button-secondary-default dark:bg-[#2E2E2E]"
+                    className="w-40 border-[#AEAEAE] dark:border-button-secondary-default"
                     align="start"
                 >
                     <DropdownMenuGroup>

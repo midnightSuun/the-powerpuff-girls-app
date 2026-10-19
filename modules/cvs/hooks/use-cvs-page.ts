@@ -31,8 +31,6 @@ export function useCvsPage({ initialCvs, targetUserId }: UseCvsPageProps) {
         removeItem,
     } = useAdminCrudState(initialCvs)
 
-    const [activeMenuId, setActiveMenuId] = useState<string | null>(null)
-
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [error, setError] = useState<string | null>(null)
 
@@ -131,8 +129,6 @@ export function useCvsPage({ initialCvs, targetUserId }: UseCvsPageProps) {
         setEditingCv,
         deletingCv,
         setDeletingCv,
-        activeMenuId,
-        setActiveMenuId,
         isSubmitting,
         error,
         handleCreate,
