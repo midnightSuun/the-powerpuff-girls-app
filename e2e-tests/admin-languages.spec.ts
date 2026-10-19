@@ -78,11 +78,13 @@ test.describe("Languages (Admin)", () => {
             .first()
         await expect(languageRow).toBeVisible({ timeout: 5000 })
 
-        await languageRow.locator("button").click()
+        await languageRow
+            .getByRole("button", { name: `Actions for ${languageName}` })
+            .click()
 
-        const editBtn = languageRow.getByRole("button", { name: /^Edit$/i })
-        await expect(editBtn).toBeVisible({ timeout: 5000 })
-        await editBtn.click()
+        const editItem = page.getByRole("menuitem", { name: /^Edit$/i })
+        await expect(editItem).toBeVisible({ timeout: 5000 })
+        await editItem.click()
 
         const editModal = page.locator("[role='dialog']").first()
         await expect(editModal).toBeVisible({ timeout: 5000 })
@@ -118,11 +120,13 @@ test.describe("Languages (Admin)", () => {
             .first()
         await expect(languageRow).toBeVisible({ timeout: 5000 })
 
-        await languageRow.locator("button").click()
+        await languageRow
+            .getByRole("button", { name: `Actions for ${languageName}` })
+            .click()
 
-        const deleteBtn = languageRow.getByRole("button", { name: /^Delete$/i })
-        await expect(deleteBtn).toBeVisible({ timeout: 5000 })
-        await deleteBtn.click()
+        const deleteItem = page.getByRole("menuitem", { name: /^Delete$/i })
+        await expect(deleteItem).toBeVisible({ timeout: 5000 })
+        await deleteItem.click()
 
         const confirmModal = page.locator("[role='dialog']").first()
         await expect(confirmModal).toBeVisible({ timeout: 5000 })

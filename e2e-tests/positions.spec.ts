@@ -53,9 +53,11 @@ test.describe("Positions (Admin)", () => {
             .first()
         await expect(positionRow).toBeVisible({ timeout: 5000 })
 
-        await positionRow.locator("button").click()
+        await positionRow
+            .getByRole("button", { name: `Actions for ${positionName}` })
+            .click()
 
-        await positionRow.getByRole("button", { name: /^Edit$/i }).click()
+        await page.getByRole("menuitem", { name: /^Edit$/i }).click()
 
         const editModal = page.locator("[role='dialog']").first()
         await expect(editModal).toBeVisible({ timeout: 5000 })
@@ -91,9 +93,11 @@ test.describe("Positions (Admin)", () => {
             .first()
         await expect(positionRow).toBeVisible({ timeout: 5000 })
 
-        await positionRow.locator("button").click()
+        await positionRow
+            .getByRole("button", { name: `Actions for ${positionName}` })
+            .click()
 
-        await positionRow.getByRole("button", { name: /^Delete$/i }).click()
+        await page.getByRole("menuitem", { name: /^Delete$/i }).click()
 
         const confirmModal = page.locator("[role='dialog']").first()
         await expect(confirmModal).toBeVisible({ timeout: 5000 })

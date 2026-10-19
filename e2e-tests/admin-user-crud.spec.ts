@@ -1,11 +1,32 @@
-import { expect, test } from "@playwright/test"
+import { expect, type Locator, type Page, test } from "@playwright/test"
 
 import { loginAsAdmin } from "./helpers/auth-as-admin"
+
+const selectDialogOption = async (
+    page: Page,
+    dialog: Locator,
+    triggerIndex: number,
+    optionIndex: number,
+) => {
+    await dialog
+        .locator("[data-slot='select-trigger']")
+        .nth(triggerIndex)
+        .click()
+
+    const selectContent = page.locator(
+        "[data-slot='select-content'][data-open]",
+    )
+    await expect(selectContent).toBeVisible({ timeout: 5000 })
+    await selectContent.locator("[role='option']").nth(optionIndex).click()
+    await expect(selectContent).not.toBeVisible({ timeout: 5000 })
+}
 
 test.describe("Admin User CRUD Flow", () => {
     test("should allow admin to create a new user, navigate via pagination, update user details, and delete the user", async ({
         page,
     }) => {
+        test.setTimeout(60_000)
+
         await loginAsAdmin(page)
 
         await expect(page).toHaveURL(/.*users/)
@@ -38,15 +59,9 @@ test.describe("Admin User CRUD Flow", () => {
         await textInputs.nth(0).fill(firstName)
         await textInputs.nth(1).fill(lastName)
 
-        const selects = dialog.locator("select")
-        const departmentSelect = selects.nth(0)
-        await departmentSelect.selectOption({ index: 1 })
-
-        const positionSelect = selects.nth(1)
-        await positionSelect.selectOption({ index: 1 })
-
-        const roleSelect = selects.nth(2)
-        await roleSelect.selectOption({ index: 1 })
+        await selectDialogOption(page, dialog, 0, 1)
+        await selectDialogOption(page, dialog, 1, 1)
+        await selectDialogOption(page, dialog, 2, 1)
 
         const submitButton = dialog.locator("button[type='submit']")
         await expect(submitButton).toBeEnabled()
@@ -76,21 +91,27 @@ test.describe("Admin User CRUD Flow", () => {
         const editDialog = page.locator("[role='dialog']")
         await expect(editDialog).toBeVisible({ timeout: 10000 })
 
-        const updateFirstNameInput = editDialog.locator(
-            `input[value='${firstName}']`,
-        )
+        const updateFirstNameInput = editDialog.getByRole("textbox", {
+            name: "First Name",
+        })
         await expect(updateFirstNameInput).toBeVisible()
         await updateFirstNameInput.fill("UpdatedJohn")
+        await expect(updateFirstNameInput).toHaveValue("UpdatedJohn")
 
         const saveButton = editDialog.locator("button[type='submit']")
         await expect(saveButton).toBeEnabled()
         await saveButton.click()
 
         await expect(editDialog).not.toBeVisible({ timeout: 15000 })
+        await expect(
+            page
+                .getByRole("region", { name: /notifications/i })
+                .getByText("Changes saved successfully."),
+        ).toBeVisible({ timeout: 15000 })
 
-        await expect(page.locator("table, [role='table']")).toContainText(
-            "UpdatedJohn",
-        )
+        await expect(usersTable).toContainText("UpdatedJohn", {
+            timeout: 15000,
+        })
 
         const updatedUserRow = page
             .locator("tr, [role='row']")

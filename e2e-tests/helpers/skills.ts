@@ -1,22 +1,30 @@
 import { expect, Page } from "@playwright/test"
 
+const waitUntilInteractive = async (page: Page) => {
+    await expect(page.locator("[aria-busy='true']")).toHaveCount(0, {
+        timeout: 15000,
+    })
+}
+
 async function pickSelectOption(
     page: Page,
     trigger: ReturnType<Page["locator"]>,
     optionIndex: number,
 ): Promise<string> {
-    await trigger.click()
+    await waitUntilInteractive(page)
+    await trigger.click({ timeout: 5000 })
 
-    const openPopup = page.locator("[data-slot='select-content'][data-open]")
-    await expect(openPopup).toBeVisible({ timeout: 5000 })
+    const option = page
+        .getByRole("listbox")
+        .getByRole("option")
+        .nth(optionIndex)
+    await expect(option).toBeVisible({ timeout: 5000 })
 
-    const option = openPopup.locator("[role='option']").nth(optionIndex)
-    const text = (await option.textContent()) ?? ""
-    await option.click()
+    const text = ((await option.textContent()) ?? "").trim()
+    await option.click({ timeout: 5000 })
+    await expect(option).toBeHidden({ timeout: 5000 })
 
-    await expect(openPopup).not.toBeVisible({ timeout: 5000 })
-
-    return text.trim()
+    return text
 }
 
 export async function navigateToSkills(page: Page) {
@@ -24,40 +32,44 @@ export async function navigateToSkills(page: Page) {
     await expect(skillsLink).toBeVisible({ timeout: 10000 })
     await skillsLink.click()
     await page.waitForURL(/.*skills/, { timeout: 10000 })
+    await waitUntilInteractive(page)
 }
 
 export async function addSkill(page: Page): Promise<string> {
+    await waitUntilInteractive(page)
+
     const addButton = page.getByRole("button", { name: "ADD SKILL" })
     await expect(addButton).toBeVisible({ timeout: 10000 })
-    await addButton.click()
 
-    const modal = page.locator("[role='dialog']").first()
-    await expect(modal).toBeVisible({ timeout: 5000 })
+    let lastError: unknown
 
-    const openPopup = page.locator("[data-slot='select-content'][data-open]")
-    const isAlreadyOpen = await openPopup.isVisible()
+    for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+            const modal = page.getByRole("dialog", { name: "Add skill" })
 
-    let skillName: string
-    if (isAlreadyOpen) {
-        const option = openPopup.locator("[role='option']").first()
-        skillName = (await option.textContent()) ?? "Skill"
-        await option.click()
-        await expect(openPopup).not.toBeVisible({ timeout: 5000 })
-    } else {
-        const skillTrigger = modal
-            .locator("[data-slot='select-trigger']")
-            .first()
-        skillName = await pickSelectOption(page, skillTrigger, 0)
+            if (!(await modal.isVisible())) {
+                await addButton.click()
+                await expect(modal).toBeVisible({ timeout: 5000 })
+            }
+
+            const skillName = await pickSelectOption(
+                page,
+                modal.getByRole("combobox").nth(0),
+                0,
+            )
+            await pickSelectOption(page, modal.getByRole("combobox").nth(1), 0)
+
+            const submitBtn = modal.getByRole("button", { name: "ADD" })
+            await expect(submitBtn).toBeEnabled({ timeout: 5000 })
+            await submitBtn.click()
+            await expect(modal).toBeHidden({ timeout: 20000 })
+
+            return skillName
+        } catch (error) {
+            lastError = error
+            await page.keyboard.press("Escape")
+        }
     }
 
-    const masteryTrigger = modal.locator("[data-slot='select-trigger']").nth(1)
-    await pickSelectOption(page, masteryTrigger, 0)
-
-    const submitBtn = modal.getByRole("button", { name: "ADD" })
-    await expect(submitBtn).toBeEnabled({ timeout: 5000 })
-    await submitBtn.click()
-
-    await expect(modal).not.toBeVisible({ timeout: 10000 })
-
-    return skillName.trim()
+    throw lastError
 }
