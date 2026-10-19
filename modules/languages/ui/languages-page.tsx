@@ -28,15 +28,9 @@ export function LanguagesPage({
     allSystemLanguages,
     userId,
     canManageLanguages,
-    search = "",
+    search,
 }: LanguagesPageProps) {
     const t = useTranslations("Languages")
-    const normalizedSearch = search.trim().toLocaleLowerCase()
-    const visibleLanguages = normalizedSearch
-        ? initialUserLanguages.filter((language) =>
-              language.name.toLocaleLowerCase().includes(normalizedSearch),
-          )
-        : initialUserLanguages
 
     const {
         isRemovalMode,
@@ -58,6 +52,12 @@ export function LanguagesPage({
         initialUserLanguages,
     })
 
+    const filteredLanguages = search
+        ? initialUserLanguages.filter((lang) =>
+              lang.name.toLowerCase().includes(search.toLowerCase()),
+          )
+        : initialUserLanguages
+
     return (
         <div className="w-full max-w-6xl px-6 py-6 lg:pl-50">
             <div className="w-full">
@@ -65,7 +65,7 @@ export function LanguagesPage({
                     {t("currentLanguages")}
                 </p>
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-12 lg:gap-x-16 gap-y-3.5">
-                    {visibleLanguages.map((language) => (
+                    {filteredLanguages.map((language) => (
                         <ProgressListItem
                             key={language.name}
                             name={language.name}
@@ -88,7 +88,7 @@ export function LanguagesPage({
                             }}
                         />
                     ))}
-                    {visibleLanguages.length === 0 && (
+                    {filteredLanguages.length === 0 && (
                         <p className="col-span-full text-sm text-muted-foreground">
                             {t("empty")}
                         </p>
@@ -106,7 +106,7 @@ export function LanguagesPage({
                                 <RemoveItemsButton
                                     label={t("actions.remove")}
                                     onClick={() => setIsRemovalMode(true)}
-                                    disabled={visibleLanguages.length === 0}
+                                    disabled={initialUserLanguages.length === 0}
                                 />
                             </>
                         ) : (

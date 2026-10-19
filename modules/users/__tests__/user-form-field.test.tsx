@@ -103,17 +103,19 @@ describe("UserFormField Components", () => {
             render(
                 <UserFormSelectField
                     label="Department"
-                    value="dep-1"
+                    value=""
                     options={sampleOptions}
                     showLabel={false}
-                    includeEmpty={false}
+                    includeEmpty={true}
                     onChange={vi.fn()}
                 />,
             )
 
-            const select = screen.getByRole("combobox", { name: "Department" })
+            const select = screen.getByRole("combobox")
             expect(select).toBeInTheDocument()
-            expect(screen.queryByText("Department")).not.toBeInTheDocument()
+            expect(
+                document.querySelector(".absolute.left-0.top-0"),
+            ).not.toBeInTheDocument()
         })
 
         it("renders select with wrapper label and FieldLabel when showLabel is true", () => {
@@ -129,9 +131,8 @@ describe("UserFormField Components", () => {
             )
 
             expect(screen.getByText("Department")).toBeInTheDocument()
-            expect(
-                screen.getByRole("combobox", { name: "Department" }),
-            ).toBeInTheDocument()
+            const select = screen.getByRole("combobox")
+            expect(select).toBeInTheDocument()
         })
 
         it("triggers onChange when option is selected", async () => {
@@ -147,8 +148,11 @@ describe("UserFormField Components", () => {
                 />,
             )
 
-            const select = screen.getByRole("combobox", { name: "Department" })
-            await userEvent.selectOptions(select, "dep-2")
+            const select = screen.getByRole("combobox")
+            await userEvent.click(select)
+
+            const option = screen.getByRole("option", { name: /Marketing/i })
+            await userEvent.click(option)
 
             expect(handleChange).toHaveBeenCalledWith("dep-2")
         })

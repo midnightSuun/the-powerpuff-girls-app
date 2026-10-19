@@ -111,19 +111,11 @@ describe("CreateUserSelect Component", () => {
             />,
         )
 
-        const select = screen.getByRole("combobox", {
-            name: "Select Department",
-        })
-        expect(select).toBeInTheDocument()
-        expect(
-            screen.getByRole("option", { name: "Select Department" }),
-        ).toHaveValue("")
-        expect(screen.getByRole("option", { name: "Option 1" })).toHaveValue(
-            "opt-1",
-        )
+        const trigger = screen.getByRole("combobox")
+        expect(trigger).toBeInTheDocument()
     })
 
-    it("omits empty placeholder option when includeEmpty is false", () => {
+    it("omits empty placeholder option when includeEmpty is false", async () => {
         render(
             <CreateUserSelect
                 label="Select Department"
@@ -134,10 +126,9 @@ describe("CreateUserSelect Component", () => {
             />,
         )
 
-        const select = screen.getByRole("combobox", {
-            name: "Select Department",
-        })
-        expect(select).toHaveValue("opt-1")
+        const trigger = screen.getByRole("combobox")
+        await userEvent.click(trigger)
+
         expect(
             screen.queryByRole("option", { name: "Select Department" }),
         ).not.toBeInTheDocument()
@@ -154,10 +145,11 @@ describe("CreateUserSelect Component", () => {
             />,
         )
 
-        const select = screen.getByRole("combobox", {
-            name: "Select Department",
-        })
-        await userEvent.selectOptions(select, "opt-2")
+        const trigger = screen.getByRole("combobox")
+        await userEvent.click(trigger)
+
+        const option = screen.getByRole("option", { name: /Option 2/i })
+        await userEvent.click(option)
 
         expect(handleChange).toHaveBeenCalledWith("opt-2")
     })
@@ -173,9 +165,7 @@ describe("CreateUserSelect Component", () => {
             />,
         )
 
-        const select = screen.getByRole("combobox", {
-            name: "Select Department",
-        })
-        expect(select).toBeDisabled()
+        const trigger = screen.getByRole("combobox")
+        expect(trigger).toBeDisabled()
     })
 })

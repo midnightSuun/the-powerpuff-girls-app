@@ -24,6 +24,7 @@ type PageWithTabs = {
         label: HeaderCopyKey
         path: string
         requiresUserAdminOrOwner?: boolean
+        showSearch?: boolean
     }[]
 }
 
@@ -41,12 +42,12 @@ const PAGES: (DefaultPage | PageWithTabs)[] = [
     {
         path: "/skills",
         title: "skills",
-        showSearch: true,
+        showSearch: false,
     },
     {
         path: "/languages",
         title: "languages",
-        showSearch: true,
+        showSearch: false,
     },
     {
         path: "/settings",
@@ -86,12 +87,13 @@ const PAGES: (DefaultPage | PageWithTabs)[] = [
         },
         tabs: [
             { label: "profile", path: "/profile" },
-            { label: "skills", path: "/skills" },
-            { label: "languages", path: "/languages" },
+            { label: "skills", path: "/skills", showSearch: false },
+            { label: "languages", path: "/languages", showSearch: false },
             {
                 label: "cvs",
                 path: "/cv",
                 requiresUserAdminOrOwner: true,
+                showSearch: true,
             },
         ],
     },

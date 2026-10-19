@@ -76,25 +76,26 @@ function resolveCategoryId(
     return "other"
 }
 
-const matchesSearch = (value: string, search: string) =>
-    value.toLocaleLowerCase().includes(search)
-
 export async function Skills({
     userSkills,
     role,
     compact = false,
     canManageSkills: canManageSkillsOverride,
-    search = "",
+    search,
 }: SkillsProps) {
     const t = await getTranslations("Skills")
     const canManageSkills = canManageSkillsOverride ?? role === "Employee"
     const availableSkills = canManageSkills ? await getAvailableSkills() : []
-    const normalizedSearch = search.trim().toLocaleLowerCase()
 
     const categoriesByTitle = new Map<
         string,
         { id: string; title: string; skills: Skill[] }
     >()
+
+    const matchesSearch = (text: string, query?: string) => {
+        if (!query) return true
+        return text.toLowerCase().includes(query.toLowerCase())
+    }
 
     for (const skill of userSkills.skills) {
         const categoryId = resolveCategoryId(skill)
@@ -102,6 +103,14 @@ export async function Skills({
         const title = t.has(translationKey)
             ? t(translationKey)
             : t("categories.other")
+
+        const categoryMatchesSearch = search && matchesSearch(title, search)
+        const skillMatchesSearch = !search || matchesSearch(skill.name, search)
+
+        if (search && !categoryMatchesSearch && !skillMatchesSearch) {
+            continue
+        }
+
         const category = categoriesByTitle.get(title)
 
         if (category) {
@@ -115,17 +124,11 @@ export async function Skills({
         }
     }
 
-    const categories = [...categoriesByTitle.values()].flatMap((category) => {
-        if (!normalizedSearch) return [category]
+    let categories = Array.from(categoriesByTitle.values())
 
-        if (matchesSearch(category.title, normalizedSearch)) return [category]
-
-        const skills = category.skills.filter((skill) =>
-            matchesSearch(skill.name, normalizedSearch),
-        )
-
-        return skills.length > 0 ? [{ ...category, skills }] : []
-    })
+    if (search) {
+        categories = categories.filter((cat) => cat.skills.length > 0)
+    }
 
     return (
         <SkillsView

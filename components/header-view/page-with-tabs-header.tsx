@@ -1,10 +1,16 @@
-import { cn } from "cn"
+"use client"
 
+import { cn } from "cn"
+import { Suspense } from "react"
+
+import { useHeaderToolbarActionValue } from "@/components/header-toolbar-action"
+import { SearchInput } from "@/components/search-input"
+import { AddItemButton } from "@/components/ui/list-management-buttons"
 import { Link } from "@/i18n/navigation"
 
 import { ChevronIcon, UserIcon } from "./icons"
 import { fillPath, joinPaths, parentPath } from "./resolve-page"
-import { crumbClassName } from "./styles"
+import { crumbClassName, headerToolbarButtonClassName } from "./styles"
 import type { HeaderCopy, HeaderTab, HeaderTabsPage, PathMatch } from "./types"
 
 type Props = {
@@ -26,6 +32,12 @@ export const PageWithTabsHeader = ({
 }: Props) => {
     const basePath = fillPath(page.path, match.params)
     const activeTab = visibleTabs.find((tab) => tab.path === match.remainder)
+
+    const toolbarAction = useHeaderToolbarActionValue()
+
+    const showSearch = activeTab?.showSearch ?? false
+
+    const showToolbar = Boolean(showSearch || toolbarAction)
 
     return (
         <header className="w-full shrink-0 bg-[#f5f5f7] dark:bg-[#2e2e2e]">
@@ -75,7 +87,7 @@ export const PageWithTabsHeader = ({
                     ) : null}
                 </ol>
             </nav>
-            <div className="flex h-14 items-end overflow-x-auto">
+            <div className="flex h-14 items-end overflow-x-auto px-5">
                 {visibleTabs.map((tab) => {
                     const isActive = tab.path === activeTab?.path
 
@@ -106,6 +118,26 @@ export const PageWithTabsHeader = ({
                     )
                 })}
             </div>
+
+            {showToolbar ? (
+                <div className="flex h-14 items-center px-5 border-t border-border">
+                    {showSearch ? (
+                        <Suspense fallback={<div className="h-10 w-80" />}>
+                            <SearchInput />
+                        </Suspense>
+                    ) : null}
+                    {toolbarAction ? (
+                        <div className="ml-auto">
+                            <AddItemButton
+                                label={toolbarAction.label}
+                                onClick={toolbarAction.onClick}
+                                variant="primaryV2"
+                                className={headerToolbarButtonClassName}
+                            />
+                        </div>
+                    ) : null}
+                </div>
+            ) : null}
         </header>
     )
 }

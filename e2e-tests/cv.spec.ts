@@ -250,7 +250,6 @@ test.describe("CV", () => {
             await expect(
                 page.getByRole("button", { name: `Deselect ${skillName}` }),
             ).toHaveAttribute("aria-pressed", "true", { timeout: 5000 })
-
             await page.getByRole("button", { name: /DELETE \(\d+\)/i }).click()
 
             const confirmModal = page.locator("[role='dialog']").first()

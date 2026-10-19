@@ -144,48 +144,70 @@ describe("UserFormDialog Component", () => {
         expect(mockOnFieldChange).toHaveBeenCalledWith("lastName", "Smith")
     })
 
-    it("triggers onFieldChange for departmentId field", () => {
-        render(<UserFormDialog {...defaultProps} />)
-
-        const departmentSelect = document.querySelector(
-            '[aria-label="department"]',
+    it("triggers onFieldChange for departmentId field", async () => {
+        render(
+            <UserFormDialog
+                {...defaultProps}
+                departments={[
+                    { id: "dep-1", name: "Engineering" },
+                    { id: "dep-2", name: "Marketing" },
+                ]}
+            />,
         )
-        expect(departmentSelect).not.toBeNull()
 
-        fireEvent.change(departmentSelect!, { target: { value: "dep-2" } })
+        const triggers = screen.getAllByRole("combobox")
+        const departmentTrigger = triggers[0]
 
-        expect(mockOnFieldChange).toHaveBeenCalled()
-        const calls = mockOnFieldChange.mock.calls
-        const departmentCall = calls.find((call) => call[0] === "departmentId")
-        expect(departmentCall).toBeDefined()
+        await userEvent.click(departmentTrigger)
+
+        const option = screen.getByRole("option", { name: /Marketing/i })
+        await userEvent.click(option)
+
+        expect(mockOnFieldChange).toHaveBeenCalledWith("departmentId", "dep-2")
     })
 
-    it("triggers onFieldChange for positionId field", () => {
-        render(<UserFormDialog {...defaultProps} />)
+    it("triggers onFieldChange for positionId field", async () => {
+        render(
+            <UserFormDialog
+                {...defaultProps}
+                positions={[
+                    { id: "pos-1", name: "Developer" },
+                    { id: "pos-2", name: "Designer" },
+                ]}
+            />,
+        )
 
-        const positionSelect = document.querySelector('[aria-label="position"]')
-        expect(positionSelect).not.toBeNull()
+        const triggers = screen.getAllByRole("combobox")
+        const positionTrigger = triggers[1]
 
-        fireEvent.change(positionSelect!, { target: { value: "pos-2" } })
+        await userEvent.click(positionTrigger)
 
-        expect(mockOnFieldChange).toHaveBeenCalled()
-        const calls = mockOnFieldChange.mock.calls
-        const positionCall = calls.find((call) => call[0] === "positionId")
-        expect(positionCall).toBeDefined()
+        const option = screen.getByRole("option", { name: /Designer/i })
+        await userEvent.click(option)
+
+        expect(mockOnFieldChange).toHaveBeenCalledWith("positionId", "pos-2")
     })
 
-    it("triggers onFieldChange for role field", () => {
-        render(<UserFormDialog {...defaultProps} />)
+    it("triggers onFieldChange for role field", async () => {
+        render(
+            <UserFormDialog
+                {...defaultProps}
+                roleOptions={[
+                    { id: "ADMIN", name: "Admin" },
+                    { id: "USER", name: "User" },
+                ]}
+            />,
+        )
 
-        const roleSelect = document.querySelector('[aria-label="role"]')
-        expect(roleSelect).not.toBeNull()
+        const triggers = screen.getAllByRole("combobox")
+        const roleTrigger = triggers[2]
 
-        fireEvent.change(roleSelect!, { target: { value: "USER" } })
+        await userEvent.click(roleTrigger)
 
-        expect(mockOnFieldChange).toHaveBeenCalled()
-        const calls = mockOnFieldChange.mock.calls
-        const roleCall = calls.find((call) => call[0] === "role")
-        expect(roleCall).toBeDefined()
+        const option = screen.getByRole("option", { name: /^User$/i })
+        await userEvent.click(option)
+
+        expect(mockOnFieldChange).toHaveBeenCalledWith("role", "USER")
     })
 
     it("includes empty option in department select when showFieldLabels is false", () => {
