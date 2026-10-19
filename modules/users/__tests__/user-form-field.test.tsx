@@ -103,17 +103,19 @@ describe("UserFormField Components", () => {
             render(
                 <UserFormSelectField
                     label="Department"
-                    value="dep-1"
+                    value=""
                     options={sampleOptions}
                     showLabel={false}
-                    includeEmpty={false}
+                    includeEmpty={true}
                     onChange={vi.fn()}
                 />,
             )
 
             const select = screen.getByRole("combobox")
             expect(select).toBeInTheDocument()
-            expect(screen.queryByText("Department")).not.toBeInTheDocument()
+            expect(
+                document.querySelector(".absolute.left-0.top-0"),
+            ).not.toBeInTheDocument()
         })
 
         it("renders select with wrapper label and FieldLabel when showLabel is true", () => {

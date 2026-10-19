@@ -282,7 +282,7 @@ describe("UserRowMenu Component", () => {
         const closeButton = screen.getByTestId("close-delete")
         await userEvent.click(closeButton)
 
-        expect(screen.getByTestId("delete-modal")).toBeInTheDocument()
+        expect(await screen.findByTestId("delete-modal")).toBeInTheDocument()
 
         await vi.waitFor(() => {
             expect(mockSuccessNotification).toHaveBeenCalledWith("deleted")
