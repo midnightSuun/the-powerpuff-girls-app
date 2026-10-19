@@ -281,6 +281,14 @@ npx playwright test --ui
     - Edit project details
     - Delete project
     - Validate required fields
+- `admin-languages.spec.ts`
+    - Create language (with retry on ISO2 code collisions against existing real codes)
+    - Edit language name
+    - Delete language
+- `admin-skills.spec.ts`
+    - Create skill (with mandatory category selection)
+    - Edit skill name
+    - Delete skill
 
 **Settings**
 
