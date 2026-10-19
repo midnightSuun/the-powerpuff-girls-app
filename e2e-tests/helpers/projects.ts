@@ -9,9 +9,7 @@ export async function addProject(page: Page) {
     const projectSelect = modal.locator("[data-slot='select-trigger']").first()
     await projectSelect.click()
 
-    const projectPopup = page.locator(
-        "[data-slot='select-content'][data-open]",
-    )
+    const projectPopup = page.locator("[data-slot='select-content'][data-open]")
     await expect(projectPopup).toBeVisible({ timeout: 5000 })
 
     const projectOptions = projectPopup.locator("[role='option']")

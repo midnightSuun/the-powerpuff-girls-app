@@ -29,10 +29,7 @@ async function createCv(
 }
 
 async function openCvView(page: Page, cvName: string) {
-    const cvRow = page
-        .locator("div.group")
-        .filter({ hasText: cvName })
-        .first()
+    const cvRow = page.locator("div.group").filter({ hasText: cvName }).first()
     await expect(cvRow).toBeVisible({ timeout: 5000 })
     await cvRow.getByRole("button").first().click()
     const viewBtn = cvRow.getByRole("button", { name: /^View$/i })
@@ -62,9 +59,9 @@ test.describe("CV", () => {
                 "Senior fullstack developer with 5 years experience",
             )
 
-            await expect(
-                page.getByText(cvName, { exact: false }),
-            ).toBeVisible({ timeout: 10000 })
+            await expect(page.getByText(cvName, { exact: false })).toBeVisible({
+                timeout: 10000,
+            })
         })
 
         test("should edit CV name from list", async ({ page }) => {
@@ -116,9 +113,9 @@ test.describe("CV", () => {
                 "Senior fullstack developer",
             )
 
-            await expect(
-                page.getByText(cvName, { exact: false }),
-            ).toBeVisible({ timeout: 10000 })
+            await expect(page.getByText(cvName, { exact: false })).toBeVisible({
+                timeout: 10000,
+            })
 
             const cvRow = page
                 .locator("div.group")
@@ -132,7 +129,9 @@ test.describe("CV", () => {
             const confirmModal = page.locator("[role='dialog']").first()
             await expect(confirmModal).toBeVisible({ timeout: 5000 })
 
-            const confirmBtn = confirmModal.getByRole("button", { name: /(CONFIRM|DELETE|Remove)/i })
+            const confirmBtn = confirmModal.getByRole("button", {
+                name: /(CONFIRM|DELETE|Remove)/i,
+            })
             await confirmBtn.click()
 
             await expect(confirmModal).not.toBeVisible({ timeout: 10000 })
@@ -150,7 +149,12 @@ test.describe("CV", () => {
             const cvName = `Test CV ${Date.now()}`
             const updatedName = `Updated CV ${Date.now()}`
 
-            await createCv(page, cvName, "BSc Computer Science", "Some description")
+            await createCv(
+                page,
+                cvName,
+                "BSc Computer Science",
+                "Some description",
+            )
             await openCvView(page, cvName)
 
             const nameInput = page.getByRole("textbox", { name: "Name" })
@@ -164,7 +168,10 @@ test.describe("CV", () => {
             await updateBtn.click()
 
             await expect(
-                page.getByRole("region", { name: /notifications/i }).locator("li").first(),
+                page
+                    .getByRole("region", { name: /notifications/i })
+                    .locator("li")
+                    .first(),
             ).toBeVisible({ timeout: 10000 })
         })
     })
@@ -172,7 +179,12 @@ test.describe("CV", () => {
     test.describe("CV skills", () => {
         test.beforeEach(async ({ page }) => {
             const cvName = `Test CV ${Date.now()}`
-            await createCv(page, cvName, "BSc Computer Science", "Some description")
+            await createCv(
+                page,
+                cvName,
+                "BSc Computer Science",
+                "Some description",
+            )
             await openCvView(page, cvName)
             await page.locator("a[href*='/cv/'][href$='/skills']").click()
             await page.waitForURL(/\/cv\/\d+\/skills/, { timeout: 15000 })
@@ -230,7 +242,6 @@ test.describe("CV", () => {
 
             await page.getByRole("button", { name: "REMOVE SKILLS" }).click()
 
-
             await page
                 .getByRole("button", { name: `Select ${skillName}` })
                 .click()
@@ -239,15 +250,11 @@ test.describe("CV", () => {
                 timeout: 5000,
             })
 
-            await page
-                .getByRole("button", { name: /DELETE \(\d+\)/i })
-                .click()
+            await page.getByRole("button", { name: /DELETE \(\d+\)/i }).click()
 
             const confirmModal = page.locator("[role='dialog']").first()
             await expect(confirmModal).toBeVisible({ timeout: 5000 })
-            await confirmModal
-                .getByRole("button", { name: "CONFIRM" })
-                .click()
+            await confirmModal.getByRole("button", { name: "CONFIRM" }).click()
             await expect(confirmModal).not.toBeVisible({ timeout: 10000 })
 
             await expect(
@@ -259,7 +266,12 @@ test.describe("CV", () => {
     test.describe("CV projects", () => {
         test.beforeEach(async ({ page }) => {
             const cvName = `Test CV ${Date.now()}`
-            await createCv(page, cvName, "BSc Computer Science", "Some description")
+            await createCv(
+                page,
+                cvName,
+                "BSc Computer Science",
+                "Some description",
+            )
             await openCvView(page, cvName)
             await page.locator("a[href*='/cv/'][href$='/projects']").click()
             await page.waitForURL(/\/cv\/\d+\/projects/, { timeout: 15000 })
@@ -289,19 +301,27 @@ test.describe("CV", () => {
             const editModal = page.locator("[role='dialog']").first()
             await expect(editModal).toBeVisible({ timeout: 5000 })
 
-            await editModal.getByRole("button", { name: /^\d{1,2}\/\d{1,2}\/\d{4}$/ }).first().click()
+            await editModal
+                .getByRole("button", { name: /^\d{1,2}\/\d{1,2}\/\d{4}$/ })
+                .first()
+                .click()
             await page.waitForTimeout(500)
 
             await page.getByText("20", { exact: true }).first().click()
 
-            const updateBtn = editModal.getByRole("button", { name: /^UPDATE$/i })
+            const updateBtn = editModal.getByRole("button", {
+                name: /^UPDATE$/i,
+            })
             await expect(updateBtn).toBeEnabled({ timeout: 5000 })
             await updateBtn.click()
 
             await expect(editModal).not.toBeVisible({ timeout: 10000 })
 
             await expect(
-                page.getByRole("region", { name: /notifications/i }).locator("li").first(),
+                page
+                    .getByRole("region", { name: /notifications/i })
+                    .locator("li")
+                    .first(),
             ).toBeVisible({ timeout: 10000 })
         })
 
@@ -347,13 +367,15 @@ test.describe("CV", () => {
             await page.waitForURL(/\/cv\/\d+\/preview/, { timeout: 15000 })
 
             await expect(
-                page.locator("a[href*='/cv/'][href$='/preview'][aria-current='page']")
+                page.locator(
+                    "a[href*='/cv/'][href$='/preview'][aria-current='page']",
+                ),
             ).toBeVisible({
                 timeout: 10000,
             })
 
             await expect(
-                page.getByRole("button", { name: /EXPORT PDF/i })
+                page.getByRole("button", { name: /EXPORT PDF/i }),
             ).toBeVisible({
                 timeout: 10000,
             })

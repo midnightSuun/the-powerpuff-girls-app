@@ -50,9 +50,7 @@ export async function addSkill(page: Page): Promise<string> {
         skillName = await pickSelectOption(page, skillTrigger, 0)
     }
 
-    const masteryTrigger = modal
-        .locator("[data-slot='select-trigger']")
-        .nth(1)
+    const masteryTrigger = modal.locator("[data-slot='select-trigger']").nth(1)
     await pickSelectOption(page, masteryTrigger, 0)
 
     const submitBtn = modal.getByRole("button", { name: "ADD" })

@@ -12,9 +12,9 @@ test.describe("Skills - add, update, delete", () => {
     test("should add a skill with mastery level", async ({ page }) => {
         const skillName = await addSkill(page)
 
-        await expect(
-            page.getByText(skillName, { exact: false }),
-        ).toBeVisible({ timeout: 10000 })
+        await expect(page.getByText(skillName, { exact: false })).toBeVisible({
+            timeout: 10000,
+        })
     })
 
     test("should update mastery of an existing skill", async ({ page }) => {
@@ -55,20 +55,16 @@ test.describe("Skills - add, update, delete", () => {
     test("should delete a skill via selection mode", async ({ page }) => {
         const skillName = await addSkill(page)
 
-
         await expect(page.getByText(skillName, { exact: false })).toBeVisible({
             timeout: 10000,
         })
 
-
         await page.getByRole("button", { name: "REMOVE SKILLS" }).click()
-
 
         await page.getByRole("button", { name: `Select ${skillName}` }).click()
 
         const selectedSkill = page.locator(".ring-red-500").first()
         await expect(selectedSkill).toBeVisible({ timeout: 5000 })
-
 
         const deleteBtn = page.getByRole("button", { name: /DELETE \(\d+\)/i })
         await expect(deleteBtn).toBeVisible({ timeout: 5000 })
@@ -80,7 +76,6 @@ test.describe("Skills - add, update, delete", () => {
         await confirmModal.getByRole("button", { name: "CONFIRM" }).click()
 
         await expect(confirmModal).not.toBeVisible({ timeout: 10000 })
-
 
         await expect(
             page.getByText(skillName, { exact: false }),
