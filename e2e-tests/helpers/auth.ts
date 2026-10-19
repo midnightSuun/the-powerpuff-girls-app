@@ -37,3 +37,5 @@ export async function registerAndSkipVerification(page: Page) {
 
     return { uniqueEmail, password }
 }
+
+export { loginAsAdmin } from "./auth-as-admin"
