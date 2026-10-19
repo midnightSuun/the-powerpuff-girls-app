@@ -63,7 +63,7 @@ async function UserCvsContent({ params, searchParams }: PageProps) {
             : `${locale}/users/${userId}/cv`
 
     return (
-        <main className="min-h-0 w-full flex-1 bg-background px-6 py-6 text-foreground transition-colors duration-300">
+        <main className="min-h-0 w-full flex-1 bg-background text-foreground transition-colors duration-300">
             <CvsPageView
                 key={JSON.stringify(initialCvs)}
                 initialCvs={initialCvs}
@@ -72,6 +72,7 @@ async function UserCvsContent({ params, searchParams }: PageProps) {
                 limit={limit}
                 sortBy={sortBy}
                 sortOrder={sortOrder}
+                showSearch={false}
                 targetUserId={userId}
             />
             <PaginationComponent
@@ -91,8 +92,8 @@ export default function UserCvsPage({ params, searchParams }: PageProps) {
     return (
         <Suspense
             fallback={
-                <main className="min-h-0 w-full flex-1 bg-background px-6 py-6 text-foreground">
-                    <CvsListSkeleton />
+                <main className="min-h-0 w-full flex-1 bg-background text-foreground">
+                    <CvsListSkeleton showSearch={false} />
                 </main>
             }
         >
