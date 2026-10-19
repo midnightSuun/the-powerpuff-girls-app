@@ -222,12 +222,10 @@ describe("getUsers Server Action", () => {
             request: mockRequest,
         } as unknown as Awaited<ReturnType<typeof getGql>>)
 
-        // Request page 2 with limit 10
         const result = await getUsers(10, 2, "", "department", "asc", "en")
 
-        // Should have fetched all items, sliced to page 2
         expect(result.users).toHaveLength(10)
-        expect(result.totalPages).toBe(15) // 150 items / 10 per page = 15 pages
+        expect(result.totalPages).toBe(15)
     })
 
     it("fetches all pages when sorting by position relation", async () => {
@@ -292,7 +290,6 @@ describe("getUsers Server Action", () => {
             "en",
         )
 
-        // Should only fetch first page when total_pages is 1
         expect(mockRequest).toHaveBeenCalledTimes(1)
         expect(result.users).toHaveLength(2)
         expect(result.totalPages).toBe(1)
@@ -316,7 +313,6 @@ describe("getUsers Server Action", () => {
 
         const result = await getUsers(10, 1, "", "email", "asc", "en")
 
-        // Should call API directly with sort params, not fetch all pages
         expect(mockRequest).toHaveBeenCalledTimes(1)
         expect(mockRequest).toHaveBeenCalledWith("GetUsersDocument", {
             params: {

@@ -176,7 +176,6 @@ describe("AdminPositionsView", () => {
 
         render(<AdminPositionsView initialPositions={initialPositions} />)
 
-        // Modal should be visible
         expect(screen.getByTestId("create-modal")).toBeInTheDocument()
     })
 
@@ -188,7 +187,6 @@ describe("AdminPositionsView", () => {
 
         render(<AdminPositionsView initialPositions={initialPositions} />)
 
-        // Modal should be visible
         expect(screen.getByTestId("edit-modal")).toBeInTheDocument()
     })
 
@@ -200,7 +198,6 @@ describe("AdminPositionsView", () => {
 
         render(<AdminPositionsView initialPositions={initialPositions} />)
 
-        // Modal should be visible
         expect(screen.getByTestId("delete-modal")).toBeInTheDocument()
     })
 
@@ -214,7 +211,6 @@ describe("AdminPositionsView", () => {
 
         render(<AdminPositionsView initialPositions={initialPositions} />)
 
-        // All data should be rendered
         expect(screen.getByTestId("admin-name-crud-page")).toBeInTheDocument()
         expect(screen.getByText("Frontend Developer")).toBeInTheDocument()
         expect(screen.getByText("Backend Developer")).toBeInTheDocument()
@@ -236,17 +232,14 @@ describe("AdminPositionsView", () => {
 
         render(<AdminPositionsView initialPositions={manyPositions} />)
 
-        // Verify all positions are rendered
         expect(screen.getByText("Frontend Developer")).toBeInTheDocument()
         expect(screen.getByText("Backend Developer")).toBeInTheDocument()
         expect(screen.getByText("DevOps Engineer")).toBeInTheDocument()
 
-        // Verify edit buttons exist for all
         expect(screen.getByTestId("edit-1")).toBeInTheDocument()
         expect(screen.getByTestId("edit-2")).toBeInTheDocument()
         expect(screen.getByTestId("edit-3")).toBeInTheDocument()
 
-        // Verify delete buttons exist for all
         expect(screen.getByTestId("delete-1")).toBeInTheDocument()
         expect(screen.getByTestId("delete-2")).toBeInTheDocument()
         expect(screen.getByTestId("delete-3")).toBeInTheDocument()
@@ -300,7 +293,6 @@ describe("AdminPositionsView", () => {
 
         render(<AdminPositionsView initialPositions={testPositions} />)
 
-        // Verify existing names are extracted correctly
         expect(screen.getByTestId("admin-name-crud-page")).toBeInTheDocument()
     })
 
@@ -347,7 +339,6 @@ describe("AdminPositionsView", () => {
 
         render(<AdminPositionsView initialPositions={initialPositions} />)
 
-        // Modal should not render when deletingPosition is null
         expect(screen.queryByTestId("delete-modal")).not.toBeInTheDocument()
     })
 })

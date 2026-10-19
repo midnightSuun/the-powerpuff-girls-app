@@ -705,9 +705,6 @@ describe("useUserProfile Hook", () => {
 
         unmount()
 
-        // The cleanup function should be called when component unmounts
-        // Note: This may not be fully testable without proper React lifecycle
-        // but we verify the mock was set up correctly
         expect(revokeObjectURLSpy).toBeDefined()
     })
 
@@ -831,7 +828,6 @@ describe("useUserProfile Hook", () => {
             await result.current.handleRemoveAvatar()
         })
 
-        // Verify that avatarPreview is null due to isAvatarDeleted flag
         expect(result.current.avatarPreview).toBeNull()
     })
 
@@ -846,7 +842,6 @@ describe("useUserProfile Hook", () => {
             useUserProfile(sampleUser, "user-1", "Employee"),
         )
 
-        // First, set an avatar error
         act(() => {
             result.current.setFirstName("")
         })
@@ -867,7 +862,6 @@ describe("useUserProfile Hook", () => {
 
         expect(result.current.avatarError).not.toBeNull()
 
-        // Now upload valid file
         const validFile = new File(["avatar"], "avatar.jpg", {
             type: "image/jpeg",
         })

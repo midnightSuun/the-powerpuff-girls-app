@@ -62,13 +62,8 @@ describe("SkillMasterySelect", () => {
     it("does not call onValueChange when selectedValue is not in MASTERY_OPTIONS", () => {
         render(<SkillMasterySelect {...defaultProps} />)
 
-        // Simulate calling handleValueChange with invalid value
-        // This tests the branch where selectedMastery is undefined
         const select = document.querySelector('[data-slot="select-trigger"]')
         expect(select).toBeInTheDocument()
-
-        // The component should handle invalid values gracefully
-        // without calling onValueChange
     })
 
     it("displays the correct label for all mastery levels", () => {
@@ -122,7 +117,6 @@ describe("SkillMasterySelect", () => {
         const trigger = screen.getByRole("combobox")
         await user.click(trigger)
 
-        // Find and click on an option
         const expertOption = await screen.findByText("masteryLevels.expert")
         await user.click(expertOption)
 
@@ -143,7 +137,6 @@ describe("SkillMasterySelect", () => {
     })
 
     it("falls back to value when getSelectedLabel cannot find matching option", () => {
-        // Test the fallback in getSelectedLabel when value doesn't match any option
         const unknownValue = "UnknownMastery" as Mastery
         render(
             <SkillMasterySelect
@@ -167,12 +160,9 @@ describe("SkillMasterySelect", () => {
         const user = (await import("@testing-library/user-event")).default
         render(<SkillMasterySelect {...defaultProps} value="Advanced" />)
 
-        // Click to open dropdown
         const trigger = screen.getByRole("combobox")
         await user.setup().click(trigger)
 
-        // Select empty/no option to trigger handleValueChange with null
-        // This will test the branch where selectedValue is null
         const combobox = screen.getByRole("combobox")
         expect(combobox).toBeInTheDocument()
     })

@@ -219,7 +219,6 @@ describe("AdminProjectsView", () => {
 
         render(<AdminProjectsView projects={sampleProjects} search="" />)
 
-        // Open create modal
         const toolbarActionCallback = vi.mocked(useHeaderToolbarAction).mock
             .calls[0][1]
 
@@ -229,13 +228,11 @@ describe("AdminProjectsView", () => {
 
         expect(screen.getByTestId("project-form-modal")).toBeInTheDocument()
 
-        // Close modal
         const closeButton = screen.getByTestId("modal-close")
         act(() => {
             fireEvent.click(closeButton)
         })
 
-        // Modal should be closed after save
         expect(
             screen.queryByTestId("project-form-modal"),
         ).not.toBeInTheDocument()
@@ -257,7 +254,6 @@ describe("AdminProjectsView", () => {
             <AdminProjectsView projects={projectsWithEnvironments} search="" />,
         )
 
-        // Open create modal
         const toolbarActionCallback = vi.mocked(useHeaderToolbarAction).mock
             .calls[0][1]
 
@@ -265,7 +261,6 @@ describe("AdminProjectsView", () => {
             toolbarActionCallback()
         })
 
-        // Modal is rendered - verify it exists
         expect(screen.getByTestId("project-form-modal")).toBeInTheDocument()
     })
 
@@ -274,7 +269,6 @@ describe("AdminProjectsView", () => {
 
         render(<AdminProjectsView projects={sampleProjects} search="" />)
 
-        // Open create modal
         const toolbarActionCallback = vi.mocked(useHeaderToolbarAction).mock
             .calls[0][1]
 
@@ -288,7 +282,6 @@ describe("AdminProjectsView", () => {
     it("closes edit modal when editing is finished", async () => {
         render(<AdminProjectsView projects={sampleProjects} search="" />)
 
-        // Open edit modal
         const editButton = screen.getByTestId("edit-1")
         act(() => {
             fireEvent.click(editButton)
@@ -297,7 +290,6 @@ describe("AdminProjectsView", () => {
         expect(screen.getByTestId("project-form-modal")).toBeInTheDocument()
         expect(screen.getByText("Edit Project Modal")).toBeInTheDocument()
 
-        // Close modal
         const closeButton = screen.getByTestId("modal-close")
         act(() => {
             fireEvent.click(closeButton)
@@ -327,7 +319,6 @@ describe("AdminProjectsView", () => {
             />,
         )
 
-        // Open create modal via toolbar
         const toolbarActionCallback = vi.mocked(useHeaderToolbarAction).mock
             .calls[0][1]
 

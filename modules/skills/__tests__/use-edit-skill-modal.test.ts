@@ -113,12 +113,10 @@ describe("useEditSkillModal", () => {
             { initialProps: defaultProps },
         )
 
-        // Сначала устанавливаем ошибку
         act(() => {
             result.current.setMastery("" as Mastery)
         })
 
-        // Меняем skillName → триггерим блок на строках 43-45
         rerender({
             ...defaultProps,
             skillName: "Python",
@@ -149,10 +147,8 @@ describe("useEditSkillModal", () => {
             { initialProps: { ...defaultProps, isOpen: false } },
         )
 
-        // isOpen=false — блок не выполняется
         expect(result.current.mastery).toBe("Intermediate")
 
-        // Открываем модал → !prevSkill.isOpen → блок выполняется
         rerender({ ...defaultProps, isOpen: true })
 
         expect(result.current.mastery).toBe("Intermediate")
@@ -169,7 +165,6 @@ describe("useEditSkillModal", () => {
             result.current.setMastery("Advanced" as Mastery)
         })
 
-        // Те же пропсы → условие false → mastery не сбрасывается
         rerender({ ...defaultProps })
 
         expect(result.current.mastery).toBe("Advanced")

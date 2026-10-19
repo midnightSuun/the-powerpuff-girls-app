@@ -61,10 +61,15 @@ test.describe("Skills - add, update, delete", () => {
 
         await page.getByRole("button", { name: "REMOVE SKILLS" }).click()
 
-        await page.getByRole("button", { name: `Select ${skillName}` }).click()
+        const selectBtn = page.getByRole("button", {
+            name: `Select ${skillName}`,
+        })
+        await expect(selectBtn).toBeVisible({ timeout: 5000 })
+        await selectBtn.click()
 
-        const selectedSkill = page.locator(".ring-red-500").first()
-        await expect(selectedSkill).toBeVisible({ timeout: 5000 })
+        await expect(
+            page.getByRole("button", { name: `Deselect ${skillName}` }),
+        ).toHaveAttribute("aria-pressed", "true", { timeout: 5000 })
 
         const deleteBtn = page.getByRole("button", { name: /DELETE \(\d+\)/i })
         await expect(deleteBtn).toBeVisible({ timeout: 5000 })

@@ -145,7 +145,6 @@ describe("Skills (Server Component)", () => {
     })
 
     it("includes whole category when search matches category title", async () => {
-        // Строка 108: matchesSearch(category.title, search) → вся категория включается
         const jsx = await Skills({
             userSkills: mockUserSkills,
             role: "Employee",
@@ -154,14 +153,12 @@ describe("Skills (Server Component)", () => {
 
         const { container } = render(jsx)
 
-        // Категория "Frontend" совпадает по названию → все скиллы внутри видны
         expect(screen.getByText("Frontend")).toBeInTheDocument()
         expect(screen.getByText("React")).toBeInTheDocument()
         container.remove()
     })
 
     it("excludes categories with no matches in search", async () => {
-        // Строка 108: категория не совпадает, скиллы не совпадают → не рендерится
         const jsx = await Skills({
             userSkills: mockUserSkills,
             role: "Employee",

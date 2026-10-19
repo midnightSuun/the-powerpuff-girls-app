@@ -213,14 +213,12 @@ describe("SkillsView (User)", () => {
     it("passes onEditSkill handler to SkillCategory when canManageSkills is true", () => {
         render(<SkillsView {...defaultProps} canManageSkills={true} />)
 
-        // The SkillCategory should be rendered with onEditSkill handler
         expect(screen.getByTestId("category-Frontend")).toBeInTheDocument()
     })
 
     it("passes undefined for onEditSkill to SkillCategory when canManageSkills is false", () => {
         render(<SkillsView {...defaultProps} canManageSkills={false} />)
 
-        // The SkillCategory should be rendered without onEditSkill handler
         expect(screen.getByTestId("category-Frontend")).toBeInTheDocument()
     })
 

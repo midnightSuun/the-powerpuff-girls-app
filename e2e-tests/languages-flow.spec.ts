@@ -55,7 +55,6 @@ test.describe("Languages Page Management Flow", () => {
             .getByRole("button", { name: /^add$|^добавить$/i })
         await submitAddButton.click()
 
-        // Ждём закрытия диалога и появления языка в списке
         await expect(page.getByRole("dialog")).not.toBeVisible({
             timeout: 10000,
         })
@@ -67,7 +66,6 @@ test.describe("Languages Page Management Flow", () => {
             .first()
         await expect(addedLanguageItem).toBeVisible({ timeout: 10000 })
 
-        // --- 4. РЕДАКТИРОВАНИЕ ЯЗЫКА ---
         await addedLanguageItem.click()
 
         const editModalTitle = page.getByText(
@@ -77,7 +75,6 @@ test.describe("Languages Page Management Flow", () => {
             await editModalTitle.isVisible({ timeout: 4000 }).catch(() => false)
         ) {
             const editDialog = page.getByRole("dialog")
-            // В edit modal два combobox: первый (название языка) disabled, второй (proficiency) активный
             const editProficiencyTrigger = editDialog
                 .locator("button[role='combobox']:not([disabled])")
                 .first()
@@ -96,27 +93,23 @@ test.describe("Languages Page Management Flow", () => {
             })
             await saveButton.click()
 
-            // Ждём закрытия диалога редактирования
             await expect(editDialog).not.toBeVisible({ timeout: 10000 })
         }
 
-        // --- 5. УДАЛЕНИЕ ЯЗЫКА ---
         const removeLanguagesButton = page.getByRole("button", {
             name: /remove languages|удалить языки/i,
         })
-        // Ждём пока кнопка станет активной (список должен быть непустым)
+
         await expect(removeLanguagesButton).toBeEnabled({ timeout: 10000 })
         await removeLanguagesButton.click()
 
         await addedLanguageItem.click()
-        // Ждём что карточка выделена (aria-pressed="true")
         await expect(addedLanguageItem).toHaveAttribute(
             "aria-pressed",
             "true",
             { timeout: 5000 },
         )
 
-        // Ищем кнопку удаления выбранных элементов (текст вида "DELETE (1)" или "УДАЛИТЬ (1)")
         const deleteSelectedButton = page
             .locator("button")
             .filter({ hasText: /delete \(\d+\)|удалить \(\d+\)/i })

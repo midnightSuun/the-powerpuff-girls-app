@@ -56,9 +56,7 @@ test.describe("Departments (Admin)", () => {
         await expect(editModal).toBeVisible({ timeout: 5000 })
 
         const nameInput = editModal.getByPlaceholder("Department name")
-        await nameInput.focus()
-        await page.keyboard.press("Control+A")
-        await page.keyboard.type(updatedName)
+        await nameInput.fill(updatedName)
 
         const saveBtn = editModal.getByRole("button", { name: /^SAVE$/i })
         await expect(saveBtn).toBeEnabled({ timeout: 5000 })

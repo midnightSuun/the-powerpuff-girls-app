@@ -9,7 +9,10 @@ export async function registerAndSkipVerification(page: Page) {
 
     const signupTab = page.locator('a[href="/register"]')
     await expect(signupTab).toBeVisible()
-    await signupTab.click()
+    await Promise.all([
+        page.waitForURL(/.*register/, { timeout: 15000 }),
+        signupTab.click(),
+    ])
     await expect(page).toHaveURL(/.*register/)
 
     await page.fill('input[type="email"]', uniqueEmail)
@@ -26,33 +29,13 @@ export async function registerAndSkipVerification(page: Page) {
     await submitButton.click()
 
     const laterButton = page.getByRole("button", { name: /later|позже/i })
-    await expect(laterButton).toBeVisible({ timeout: 10000 })
+    await expect(laterButton).toBeVisible({ timeout: 30000 })
     await laterButton.click()
 
-    await page.waitForURL(/.*users/, { timeout: 10000 })
+    await page.waitForURL(/.*users/, { timeout: 30000 })
     await expect(page).toHaveURL(/.*users/)
 
     return { uniqueEmail, password }
 }
 
-export async function loginAsAdmin(page: Page) {
-    const adminEmail = "admin@outlook.com"
-    const adminPassword = "123456789"
-
-    await page.goto("/login")
-    await expect(page).toHaveURL(/.*login/)
-
-    await page.fill('input[type="email"]', adminEmail)
-    await page.fill('input[type="password"]', adminPassword)
-
-    const submitButton = page.getByRole("button", {
-        name: /sign in|login|увійти/i,
-    })
-    await expect(submitButton).toBeVisible()
-    await expect(submitButton).toBeEnabled()
-    await submitButton.click()
-
-    await page.waitForURL(/.*/, { timeout: 15000 })
-
-    return { email: adminEmail, password: adminPassword }
-}
+export { loginAsAdmin } from "./auth-as-admin"

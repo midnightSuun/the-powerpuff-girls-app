@@ -159,7 +159,6 @@ describe("useSettings", () => {
 
         const { result } = renderHook(() => useSettings())
 
-        // The default theme value should be set based on current theme
         expect(result.current).toBeDefined()
     })
 
@@ -173,7 +172,6 @@ describe("useSettings", () => {
 
         const { result } = renderHook(() => useSettings())
 
-        // The default theme value should be set based on current theme
         expect(result.current).toBeDefined()
     })
 
@@ -187,7 +185,6 @@ describe("useSettings", () => {
 
         const { result } = renderHook(() => useSettings())
 
-        // The default theme value should be set based on current theme
         expect(result.current).toBeDefined()
     })
 })

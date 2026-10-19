@@ -304,15 +304,11 @@ describe("UserRowMenu Component", () => {
     it("does not trigger action when dropdown opens", async () => {
         render(<UserRowMenu label="Actions" user={sampleUser} />)
 
-        // Simulate opening dropdown (onOpenChangeComplete with true)
         const closeDropdownBtn = screen.getByTestId("close-dropdown")
 
-        // Manually call the mocked DropdownMenu's onOpenChangeComplete with true
-        // This tests the early return: if (open || !pendingActionRef.current) return
         const dropdownMenu = screen.getByTestId("dropdown-menu")
         expect(dropdownMenu).toBeInTheDocument()
 
-        // Delete modal should not be open yet
         expect(screen.queryByTestId("delete-modal")).not.toBeInTheDocument()
         expect(
             screen.queryByTestId("update-user-dialog"),
@@ -322,11 +318,9 @@ describe("UserRowMenu Component", () => {
     it("does not trigger action when no pending action exists", async () => {
         render(<UserRowMenu label="Actions" user={sampleUser} />)
 
-        // Close dropdown without clicking any menu item
         const closeDropdownBtn = screen.getByTestId("close-dropdown")
         await userEvent.click(closeDropdownBtn)
 
-        // No modals should open
         expect(screen.queryByTestId("delete-modal")).not.toBeInTheDocument()
         expect(
             screen.queryByTestId("update-user-dialog"),

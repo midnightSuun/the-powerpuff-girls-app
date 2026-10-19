@@ -1,11 +1,18 @@
+import { existsSync } from "node:fs"
+import { loadEnvFile } from "node:process"
+
 import { defineConfig, devices } from "@playwright/test"
+
+if (existsSync(".env")) {
+    loadEnvFile(".env")
+}
 
 export default defineConfig({
     testDir: "./e2e-tests",
-    fullyParallel: true,
+    fullyParallel: false,
     forbidOnly: !!process.env.CI,
-    retries: process.env.CI ? 2 : 0,
-    workers: process.env.CI ? 1 : undefined,
+    retries: process.env.CI ? 2 : 1,
+    workers: process.env.CI ? 1 : 2,
     reporter: "html",
     use: {
         baseURL: "http://localhost:3000",

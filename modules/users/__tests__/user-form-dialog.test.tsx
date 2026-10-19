@@ -213,7 +213,6 @@ describe("UserFormDialog Component", () => {
     it("includes empty option in department select when showFieldLabels is false", () => {
         render(<UserFormDialog {...defaultProps} showFieldLabels={false} />)
 
-        // includeEmpty should be true when !showFieldLabels
         expect(screen.getByText("Create User")).toBeInTheDocument()
     })
 
@@ -226,7 +225,6 @@ describe("UserFormDialog Component", () => {
             />,
         )
 
-        // includeEmpty should be true when departmentId.length === 0
         expect(screen.getByText("Create User")).toBeInTheDocument()
     })
 
@@ -239,14 +237,12 @@ describe("UserFormDialog Component", () => {
             />,
         )
 
-        // includeEmpty should be true when positionId.length === 0
         expect(screen.getByText("Create User")).toBeInTheDocument()
     })
 
     it("does not include empty option in role select", () => {
         render(<UserFormDialog {...defaultProps} />)
 
-        // includeEmpty is always false for role
         expect(screen.getByText("Create User")).toBeInTheDocument()
     })
 
