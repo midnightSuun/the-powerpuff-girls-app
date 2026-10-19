@@ -34,9 +34,9 @@ test.describe("Departments (Admin)", () => {
 
         await createDepartment(page, deptName)
 
-        await expect(
-            page.getByText(deptName, { exact: false }),
-        ).toBeVisible({ timeout: 10000 })
+        await expect(page.getByText(deptName, { exact: false })).toBeVisible({
+            timeout: 10000,
+        })
     })
 
     test("should edit department name", async ({ page }) => {
@@ -45,10 +45,7 @@ test.describe("Departments (Admin)", () => {
 
         await createDepartment(page, deptName)
 
-        const deptRow = page
-            .locator("tr")
-            .filter({ hasText: deptName })
-            .first()
+        const deptRow = page.locator("tr").filter({ hasText: deptName }).first()
         await expect(deptRow).toBeVisible({ timeout: 5000 })
 
         await deptRow.locator("button").click()
@@ -69,9 +66,9 @@ test.describe("Departments (Admin)", () => {
 
         await expect(editModal).not.toBeVisible({ timeout: 10000 })
 
-        await expect(
-            page.getByText(updatedName, { exact: false }),
-        ).toBeVisible({ timeout: 10000 })
+        await expect(page.getByText(updatedName, { exact: false })).toBeVisible(
+            { timeout: 10000 },
+        )
     })
 
     test("should delete a department", async ({ page }) => {
@@ -79,14 +76,11 @@ test.describe("Departments (Admin)", () => {
 
         await createDepartment(page, deptName)
 
-        await expect(
-            page.getByText(deptName, { exact: false }),
-        ).toBeVisible({ timeout: 10000 })
+        await expect(page.getByText(deptName, { exact: false })).toBeVisible({
+            timeout: 10000,
+        })
 
-        const deptRow = page
-            .locator("tr")
-            .filter({ hasText: deptName })
-            .first()
+        const deptRow = page.locator("tr").filter({ hasText: deptName }).first()
         await expect(deptRow).toBeVisible({ timeout: 5000 })
 
         await deptRow.locator("button").click()
