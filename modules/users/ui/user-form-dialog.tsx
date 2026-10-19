@@ -32,7 +32,7 @@ const primaryButtonClassName =
     "h-10 w-40 rounded-[40px] bg-[#c63031] px-6 py-0 text-sm leading-[24.5px] font-medium tracking-[0.4px] text-[#f5f5f7] uppercase hover:border-transparent hover:bg-[#b02a2b] hover:text-[#f5f5f7] active:border-transparent active:bg-[#c63031] active:text-[#f5f5f7]"
 
 const dialogClassName =
-    "flex max-h-[calc(100%-2rem)] w-full max-w-[calc(100%-2rem)] flex-col gap-6 overflow-y-auto rounded-lg bg-white p-8 text-[#2e2e2e] shadow-[0_8px_32px_rgba(0,0,0,0.18)] ring-0 sm:max-w-[720px] dark:bg-[#2e2e2e] dark:text-[#f5f5f7]"
+    "flex max-h-[calc(100%-2rem)] w-full max-w-[calc(100%-2rem)] flex-col gap-6 overflow-y-auto rounded-none bg-white p-8 text-[#2e2e2e] shadow-[0_8px_32px_rgba(0,0,0,0.18)] ring-0 sm:max-w-[720px] dark:bg-[#2e2e2e] dark:text-[#f5f5f7]"
 
 const closeClassName =
     "inline-flex size-8 shrink-0 items-center justify-center text-[#626262] outline-none hover:text-[#2e2e2e] focus-visible:ring-3 focus-visible:ring-[#c63031]/30 dark:text-[#aeaeae] dark:hover:text-[#f5f5f7]"
@@ -92,7 +92,7 @@ export const UserFormDialog = ({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent
                 showCloseButton={false}
-                overlayClassName="bg-black/50 backdrop-blur-none"
+                overlayClassName="bg-black/50"
                 className={dialogClassName}
             >
                 <DialogHeader className="flex-row items-center justify-between gap-4">

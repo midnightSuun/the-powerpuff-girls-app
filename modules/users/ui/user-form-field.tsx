@@ -39,20 +39,26 @@ export const UserFormTextField = ({
     onChange,
 }: TextFieldProps) => {
     return (
-        <Input
-            type={type}
-            label={showLabel ? label : undefined}
-            aria-label={label}
-            placeholder={disabled || showLabel ? undefined : label}
-            autoComplete="off"
-            value={value}
-            disabled={disabled}
-            onChange={(event) => onChange(event.target.value)}
-            className={cn(
-                createUserFieldClassName,
-                disabled && disabledUserFieldClassName,
+        <div className="relative flex flex-col pt-4">
+            {Boolean(value) && (
+                <span className="absolute left-0 top-0 text-[10px] text-muted-foreground">
+                    {label}
+                </span>
             )}
-        />
+            <Input
+                type={type}
+                aria-label={label}
+                placeholder={disabled || showLabel ? undefined : label}
+                autoComplete="off"
+                value={value}
+                disabled={disabled}
+                onChange={(event) => onChange(event.target.value)}
+                className={cn(
+                    createUserFieldClassName,
+                    disabled && disabledUserFieldClassName,
+                )}
+            />
+        </div>
     )
 }
 
@@ -82,13 +88,20 @@ export const UserFormSelectField = ({
     onChange,
 }: SelectFieldProps) => {
     const select = (
-        <CreateUserSelect
-            label={label}
-            value={value}
-            options={options}
-            includeEmpty={includeEmpty}
-            onChange={onChange}
-        />
+        <div className="relative flex flex-col pt-4">
+            {Boolean(value) && (
+                <span className="absolute left-0 top-0 text-[10px] text-muted-foreground">
+                    {label}
+                </span>
+            )}
+            <CreateUserSelect
+                label={label}
+                value={value}
+                options={options}
+                includeEmpty={includeEmpty}
+                onChange={onChange}
+            />
+        </div>
     )
 
     if (!showLabel) return select
@@ -96,7 +109,13 @@ export const UserFormSelectField = ({
     return (
         <label className="flex flex-col gap-1">
             <FieldLabel>{label}</FieldLabel>
-            {select}
+            <CreateUserSelect
+                label={label}
+                value={value}
+                options={options}
+                includeEmpty={includeEmpty}
+                onChange={onChange}
+            />
         </label>
     )
 }
