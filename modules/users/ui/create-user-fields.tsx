@@ -104,7 +104,7 @@ export const CreateUserSelect = ({
     return (
         <Select
             value={value}
-            onValueChange={(newValue) => onChange(newValue)}
+            onValueChange={(newValue) => onChange(newValue ?? "")}
             disabled={disabled}
         >
             <SelectTrigger
