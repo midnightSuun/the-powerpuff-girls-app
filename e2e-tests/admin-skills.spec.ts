@@ -70,11 +70,13 @@ test.describe("Skills (Admin)", () => {
             .first()
         await expect(skillRow).toBeVisible({ timeout: 5000 })
 
-        await skillRow.locator("button").click()
+        await skillRow
+            .getByRole("button", { name: `Actions for ${skillName}` })
+            .click()
 
-        const editBtn = skillRow.getByRole("button", { name: /^Edit$/i })
-        await expect(editBtn).toBeVisible({ timeout: 5000 })
-        await editBtn.click()
+        const editItem = page.getByRole("menuitem", { name: /^Edit$/i })
+        await expect(editItem).toBeVisible({ timeout: 5000 })
+        await editItem.click()
 
         const editModal = page.locator("[role='dialog']").first()
         await expect(editModal).toBeVisible({ timeout: 5000 })
@@ -110,11 +112,13 @@ test.describe("Skills (Admin)", () => {
             .first()
         await expect(skillRow).toBeVisible({ timeout: 5000 })
 
-        await skillRow.locator("button").click()
+        await skillRow
+            .getByRole("button", { name: `Actions for ${skillName}` })
+            .click()
 
-        const deleteBtn = skillRow.getByRole("button", { name: /^Delete$/i })
-        await expect(deleteBtn).toBeVisible({ timeout: 5000 })
-        await deleteBtn.click()
+        const deleteItem = page.getByRole("menuitem", { name: /^Delete$/i })
+        await expect(deleteItem).toBeVisible({ timeout: 5000 })
+        await deleteItem.click()
 
         const confirmModal = page.locator("[role='dialog']").first()
         await expect(confirmModal).toBeVisible({ timeout: 5000 })

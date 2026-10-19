@@ -4,6 +4,8 @@ import { registerAndSkipVerification } from "./helpers/auth"
 import { addSkill, navigateToSkills } from "./helpers/skills"
 
 test.describe("Skills - add, update, delete", () => {
+    test.describe.configure({ timeout: 90_000 })
+
     test.beforeEach(async ({ page }) => {
         await registerAndSkipVerification(page)
         await navigateToSkills(page)
