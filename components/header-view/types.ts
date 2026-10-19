@@ -19,6 +19,7 @@ export type HeaderTab = {
     label: HeaderCopyKey
     path: string
     requiresUserAdminOrOwner?: boolean
+    showSearch?: boolean
 }
 
 export type HeaderDefaultPage = {
