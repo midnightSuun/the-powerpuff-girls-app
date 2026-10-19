@@ -1,36 +1,111 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CV Builder
 
-## Getting Started
+Веб-приложение для создания и редактирования резюме. Пользователь управляет личным профилем, настраивает разделы CV, просматривает готовое резюме и взаимодействует с данными через GraphQL API.
 
-First, run the development server:
+## Функциональность
+
+- Регистрация, вход, подтверждение email и сброс пароля.
+- Создание и редактирование CV, настройка секций и предпросмотр готового резюме.
+- Профиль пользователя: личные данные и аватар.
+- Справочники навыков, языков, отделов, должностей и проектов.
+- Список сотрудников и просмотр профиля другого пользователя (навыки, языки, CV).
+- Роли: обычный пользователь и администратор (отделы, должности, проекты).
+- Адаптивная вёрстка, переиспользуемые UI-компоненты, маршрутизация и навигация.
+- Формы с валидацией, состояния загрузки и ошибок.
+- Интеграция с backend через GraphQL.
+- Интерфейс на 9 языках (по умолчанию английский) и переключение темы.
+
+## Зависимости
+
+Требуется Node.js 20+ и npm.
+
+Основные зависимости:
+
+| Пакет                                                | Назначение                         |
+| ---------------------------------------------------- | ---------------------------------- |
+| `next` 16.3.6                                        | Фреймворк приложения               |
+| `react`, `react-dom` 19.2.8                          | UI                                 |
+| `typescript`                                         | Типизация                          |
+| `tailwindcss` 4                                      | Стили                              |
+| `graphql`, `graphql-request`                         | Запросы к GraphQL API              |
+| `@graphql-codegen/cli`                               | Генерация типов по схеме           |
+| `next-intl`                                          | Локализация                        |
+| `next-themes`                                        | Тема оформления                    |
+| `react-hook-form`, `zod`, `@hookform/resolvers`      | Формы и валидация                  |
+| `@base-ui/react`, `shadcn`, `lucide-react`, `sonner` | UI-компоненты, иконки, уведомления |
+| `vitest`, `@testing-library/react`                   | Unit-тесты                         |
+
+Полный список с версиями — в `package.json`.
+
+## Запуск
+
+1. Установите зависимости:
+
+```bash
+npm install
+```
+
+1. Создайте файл `.env.local` в корне проекта:
+
+```bash
+GRAPHQL_URL=http://localhost:4000/graphql
+JWT_SECRET=your-secret
+```
+
+`GRAPHQL_URL` — адрес GraphQL API. `JWT_SECRET` — секрет, которым backend подписывает JWT. Он должен совпадать с секретом API, иначе сессия не примется и вход вернёт на страницу логина.
+
+1. Запустите dev-сервер:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Приложение доступно по адресу [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Сборка и production-запуск:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+## Вход
 
-To learn more about Next.js, take a look at the following resources:
+Готовый аккаунт администратора:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Поле   | Значение            |
+| ------ | ------------------- |
+| Email  | `admin@outlook.com` |
+| Пароль | `123456789`         |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Unit-тесты
 
-## Deploy on Vercel
+Однократный прогон (Vitest):
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm test
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Режим наблюдения:
+
+```bash
+npm run test:watch
+```
+
+Отчёт о покрытии:
+
+```bash
+npm run test:coverage
+```
+
+## GraphQL codegen
+
+Сгенерированные типы лежат в `gql/generated/` и коммитятся в репозиторий. Для установки, запуска и сборки `npm run codegen` не нужен.
+
+Запускайте его после изменения запросов в `modules/**/*.graphql` или после изменения схемы API:
+
+```bash
+npm run codegen
+```
+
+Схема читается с `http://127.0.0.1:3001/api/graphql` (`codegen.ts`). На время генерации этот API должен быть доступен.
