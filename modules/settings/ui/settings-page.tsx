@@ -58,7 +58,7 @@ export function SettingsPage() {
     const themeRegistration = register("theme")
     const languageRegistration = register("language")
 
-    const [selectedTheme, setSelectedTheme] = useState<string | null>(null)
+    const [selectedTheme, setSelectedTheme] = useState<string | null>("Light")
 
     const passwordValue = watch("password")
     const newPasswordValue = watch("newPassword")
@@ -162,7 +162,7 @@ export function SettingsPage() {
                                                 "relative flex w-full cursor-pointer items-center px-4 py-3 text-sm outline-none transition-colors rounded-none",
                                                 "[&_svg]:hidden pr-4",
                                                 isSelected
-                                                    ? "bg-button-secondary-defaultcondary-default text-[#F5F5F7]! **:text-[#F5F5F7]! focus:bg-button-secondary-default dark:bg-[#F5F5F7] dark:text-[#2E2E2E]! dark:**:text-[#2E2E2E]!"
+                                                    ? "bg-button-secondary-default text-[#F5F5F7]! **:text-[#F5F5F7]! focus:bg-button-secondary-default dark:bg-[#F5F5F7] dark:text-[#2E2E2E]! dark:**:text-[#2E2E2E]!"
                                                     : "text-gray-900 focus:bg-[#AEAEAE] hover:bg-[#AEAEAE] dark:text-foreground dark:focus:bg-button-secondary-default dark:hover:bg-button-secondary-default",
                                             )}
                                         >

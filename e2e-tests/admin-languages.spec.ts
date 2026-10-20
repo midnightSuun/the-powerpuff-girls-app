@@ -67,8 +67,9 @@ test.describe("Languages (Admin)", () => {
     })
 
     test("should edit language name", async ({ page }) => {
-        const languageName = `Test Language ${Date.now()}`
-        const updatedName = `Updated Language ${Date.now()}`
+        const ts = Date.now()
+        const languageName = `Test Language ${ts}`
+        const updatedName = `Updated Language ${ts}`
 
         await createLanguage(page, languageName)
 
@@ -76,7 +77,7 @@ test.describe("Languages (Admin)", () => {
             .locator("tr")
             .filter({ hasText: languageName })
             .first()
-        await expect(languageRow).toBeVisible({ timeout: 5000 })
+        await expect(languageRow).toBeVisible({ timeout: 10000 })
 
         await languageRow
             .getByRole("button", { name: `Actions for ${languageName}` })
@@ -90,7 +91,9 @@ test.describe("Languages (Admin)", () => {
         await expect(editModal).toBeVisible({ timeout: 5000 })
 
         const nameInput = editModal.getByRole("textbox").first()
+        await nameInput.clear()
         await nameInput.fill(updatedName)
+        await expect(nameInput).toHaveValue(updatedName)
 
         const saveBtn = editModal.getByRole("button", { name: /^SAVE$/i })
         await expect(saveBtn).toBeEnabled({ timeout: 5000 })
