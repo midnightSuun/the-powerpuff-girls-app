@@ -50,7 +50,7 @@ export function CvPreview({ cv }: CvPreviewProps) {
                     ) : null}
                 </header>
 
-                <section className="grid grid-cols-[27%_1fr] gap-8">
+                <section className="cv-columns grid grid-cols-[27%_1fr] gap-8">
                     <aside className="space-y-5 text-xs">
                         {cv.education ? (
                             <div>
@@ -108,75 +108,84 @@ export function CvPreview({ cv }: CvPreviewProps) {
                             {projects.map((project) => (
                                 <article
                                     key={project.id}
-                                    className="cv-project grid grid-cols-[27%_1fr] gap-8 border-l-2 border-[#ed9999] pl-7 dark:border-[#8f4a4a]"
+                                    className="cv-project border-l-2 border-[#ed9999] pl-7 dark:border-[#8f4a4a]"
                                 >
-                                    <div className="text-xs">
-                                        <h3 className="font-semibold uppercase text-[#d7352c]">
-                                            {project.name}
-                                        </h3>
-                                        {project.domain ? (
-                                            <p className="mt-1 text-muted-foreground">
-                                                {project.domain}
-                                            </p>
-                                        ) : null}
-                                        {project.description ? (
-                                            <p className="mt-2 leading-normal text-muted-foreground">
-                                                {project.description}
-                                            </p>
-                                        ) : null}
-                                    </div>
-                                    <div className="space-y-3 text-xs">
-                                        {project.roles.length > 0 ? (
-                                            <div>
-                                                <h3 className="mb-1 font-semibold">
-                                                    {t("projectRoles")}
-                                                </h3>
-                                                <p className="text-muted-foreground">
-                                                    {project.roles.join(", ")}
-                                                </p>
-                                            </div>
-                                        ) : null}
-                                        <div>
-                                            <h3 className="mb-1 font-semibold">
-                                                {t("period")}
+                                    <div className="cv-columns grid grid-cols-[27%_1fr] gap-8">
+                                        <div className="text-xs">
+                                            <h3 className="font-semibold uppercase text-[#d7352c]">
+                                                {project.name}
                                             </h3>
-                                            <p className="text-muted-foreground">
-                                                {getFormattedPeriod(project)}
-                                            </p>
+                                            {project.domain ? (
+                                                <p className="mt-1 text-muted-foreground">
+                                                    {project.domain}
+                                                </p>
+                                            ) : null}
+                                            {project.description ? (
+                                                <p className="mt-2 leading-normal text-muted-foreground">
+                                                    {project.description}
+                                                </p>
+                                            ) : null}
                                         </div>
-                                        {project.responsibilities.length > 0 ? (
+                                        <div className="space-y-3 text-xs">
+                                            {project.roles.length > 0 ? (
+                                                <div>
+                                                    <h3 className="mb-1 font-semibold">
+                                                        {t("projectRoles")}
+                                                    </h3>
+                                                    <p className="text-muted-foreground">
+                                                        {project.roles.join(
+                                                            ", ",
+                                                        )}
+                                                    </p>
+                                                </div>
+                                            ) : null}
                                             <div>
                                                 <h3 className="mb-1 font-semibold">
-                                                    {t("responsibilities")}
-                                                </h3>
-                                                <ul className="list-disc space-y-1 pl-4 text-muted-foreground">
-                                                    {project.responsibilities.map(
-                                                        (
-                                                            responsibility,
-                                                            index,
-                                                        ) => (
-                                                            <li
-                                                                key={`${project.id}-${index}`}
-                                                            >
-                                                                {responsibility}
-                                                            </li>
-                                                        ),
-                                                    )}
-                                                </ul>
-                                            </div>
-                                        ) : null}
-                                        {project.environment.length > 0 ? (
-                                            <div>
-                                                <h3 className="mb-1 font-semibold">
-                                                    {t("environment")}
+                                                    {t("period")}
                                                 </h3>
                                                 <p className="text-muted-foreground">
-                                                    {project.environment.join(
-                                                        ", ",
+                                                    {getFormattedPeriod(
+                                                        project,
                                                     )}
                                                 </p>
                                             </div>
-                                        ) : null}
+                                            {project.responsibilities.length >
+                                            0 ? (
+                                                <div>
+                                                    <h3 className="mb-1 font-semibold">
+                                                        {t("responsibilities")}
+                                                    </h3>
+                                                    <ul className="list-disc space-y-1 pl-4 text-muted-foreground">
+                                                        {project.responsibilities.map(
+                                                            (
+                                                                responsibility,
+                                                                index,
+                                                            ) => (
+                                                                <li
+                                                                    key={`${project.id}-${index}`}
+                                                                >
+                                                                    {
+                                                                        responsibility
+                                                                    }
+                                                                </li>
+                                                            ),
+                                                        )}
+                                                    </ul>
+                                                </div>
+                                            ) : null}
+                                            {project.environment.length > 0 ? (
+                                                <div>
+                                                    <h3 className="mb-1 font-semibold">
+                                                        {t("environment")}
+                                                    </h3>
+                                                    <p className="text-muted-foreground">
+                                                        {project.environment.join(
+                                                            ", ",
+                                                        )}
+                                                    </p>
+                                                </div>
+                                            ) : null}
+                                        </div>
                                     </div>
                                 </article>
                             ))}

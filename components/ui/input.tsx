@@ -65,7 +65,7 @@ function Input({
                 </label>
             )}
 
-            <div className="relative">
+            <div className={cn("relative", disabled && "cursor-not-allowed")}>
                 <InputPrimitive
                     id={inputId}
                     type={type}

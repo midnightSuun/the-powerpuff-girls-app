@@ -48,7 +48,7 @@ export const UserFormTextField = ({
             <Input
                 type={type}
                 aria-label={label}
-                placeholder={showFloatingLabel ? undefined : label}
+                placeholder={disabled || showLabel ? undefined : label}
                 autoComplete="off"
                 value={value}
                 disabled={disabled}

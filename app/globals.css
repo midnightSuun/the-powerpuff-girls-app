@@ -198,8 +198,42 @@
         -webkit-print-color-adjust: exact;
     }
 
-    body:has(.cv-preview) .cv-preview article,
+    body:has(.cv-preview) .cv-columns {
+        display: table !important;
+        width: 100% !important;
+        table-layout: fixed !important;
+        border-collapse: separate !important;
+        border-spacing: 2rem 0 !important;
+    }
+
+    body:has(.cv-preview) .cv-columns > * {
+        display: table-cell !important;
+        vertical-align: top !important;
+        float: none !important;
+        width: auto !important;
+        min-width: 0 !important;
+    }
+
+    body:has(.cv-preview) .cv-columns > :first-child {
+        width: 27% !important;
+    }
+
+    body:has(.cv-preview) .cv-preview table {
+        display: table !important;
+        width: 100% !important;
+    }
+
     body:has(.cv-preview) .cv-preview tr {
+        display: table-row !important;
+        break-inside: avoid;
+    }
+
+    body:has(.cv-preview) .cv-preview th,
+    body:has(.cv-preview) .cv-preview td {
+        display: table-cell !important;
+    }
+
+    body:has(.cv-preview) .cv-project {
         break-inside: avoid;
     }
 

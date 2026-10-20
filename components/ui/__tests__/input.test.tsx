@@ -109,6 +109,7 @@ describe("Input component", () => {
 
         const input = screen.getByPlaceholderText("Disabled input")
         expect(input).toBeDisabled()
+        expect(input.parentElement).toHaveClass("cursor-not-allowed")
     })
 
     it("handles focus and blur events correctly", () => {
