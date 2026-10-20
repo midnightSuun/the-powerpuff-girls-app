@@ -1,9 +1,9 @@
 "use client"
 
 import { cn } from "cn"
-import { ChevronDown, Eye, EyeOff } from "lucide-react"
+import { Eye, EyeOff } from "lucide-react"
 import { useTranslations } from "next-intl"
-import { useState } from "react"
+import { type ReactNode, useState } from "react"
 
 import { Input } from "@/components/ui/input"
 import {
@@ -17,10 +17,21 @@ import {
 import type { SelectOption } from "../select-option"
 
 export const createUserFieldClassName =
-    "h-12 w-full rounded border border-[#aeaeae] bg-transparent px-3 text-base leading-6 tracking-[0.15px] text-[#2e2e2e] shadow-none outline-none placeholder:text-[#626262] focus-visible:border-[#c63031] focus-visible:ring-0 md:text-base dark:bg-transparent dark:text-[#f5f5f7] dark:placeholder:text-[#aeaeae]"
+    "h-12 w-full rounded-none border border-[#aeaeae] bg-transparent px-3 font-normal text-base leading-[23px] tracking-[0.15px] text-[#2e2e2e] shadow-none outline-none placeholder:text-[#c4c4c6] focus-visible:border-[#c63031] focus-visible:ring-0 md:text-base dark:bg-transparent dark:text-[#f5f5f7] dark:placeholder:text-[#aeaeae]"
 
 export const disabledUserFieldClassName =
     "disabled:bg-[#e6e6e6] disabled:text-button-secondary-default disabled:opacity-100 dark:disabled:bg-[#3a3a3a] dark:disabled:text-[#aeaeae]"
+
+export const createUserFloatingLabelClassName =
+    "pointer-events-none absolute top-px left-2 z-10 bg-white px-1 text-xs font-normal leading-[15px] tracking-[0.15px] whitespace-nowrap text-[#626262] dark:bg-[#2e2e2e] dark:text-[#aeaeae]"
+
+export const CreateUserFloatingLabel = ({
+    children,
+}: {
+    children: ReactNode
+}) => {
+    return <span className={createUserFloatingLabelClassName}>{children}</span>
+}
 
 export const CreateUserPasswordInput = ({
     label,
@@ -42,17 +53,17 @@ export const CreateUserPasswordInput = ({
         setIsVisible((current) => !current)
     }
 
+    const showFloatingLabel = showLabel || value.length > 0
+
     return (
-        <div className="relative flex flex-col pt-4">
-            {Boolean(value) && !disabled && (
-                <span className="absolute left-0 top-0 text-[10px] text-muted-foreground">
-                    {label}
-                </span>
+        <div className="relative pt-4">
+            {showFloatingLabel && (
+                <CreateUserFloatingLabel>{label}</CreateUserFloatingLabel>
             )}
             <Input
                 type={isVisible ? "text" : "password"}
                 aria-label={label}
-                placeholder={showLabel || disabled ? undefined : label}
+                placeholder={showFloatingLabel ? undefined : label}
                 autoComplete="new-password"
                 value={value}
                 disabled={disabled}
@@ -90,6 +101,7 @@ export const CreateUserSelect = ({
     options,
     includeEmpty = true,
     disabled = false,
+    showPlaceholder = true,
     onChange,
 }: {
     label: string
@@ -97,6 +109,7 @@ export const CreateUserSelect = ({
     options: SelectOption[]
     includeEmpty?: boolean
     disabled?: boolean
+    showPlaceholder?: boolean
     onChange: (value: string) => void
 }) => {
     const isPlaceholder = value.length === 0
@@ -109,12 +122,13 @@ export const CreateUserSelect = ({
         >
             <SelectTrigger
                 className={cn(
-                    "w-full border border-[#D1D1D1] dark:border-auth-card-border bg-[#ECECEC] dark:bg-[#454545] px-4 py-6 text-sm text-gray-800 dark:text-foreground shadow-none focus:ring-0 rounded-none outline-none transition-colors",
-                    isPlaceholder && "text-muted-foreground",
+                    createUserFieldClassName,
+                    "justify-between gap-1.5 py-0 data-[size=default]:h-12 data-placeholder:text-[#c4c4c6] focus-visible:ring-0 dark:bg-transparent dark:hover:bg-transparent dark:data-placeholder:text-[#aeaeae]",
+                    isPlaceholder && "text-[#c4c4c6] dark:text-[#aeaeae]",
                     disabled && disabledUserFieldClassName,
                 )}
             >
-                <SelectValue placeholder={label}>
+                <SelectValue placeholder={showPlaceholder ? label : undefined}>
                     {value
                         ? options.find((option) => String(option.id) === value)
                               ?.name
@@ -132,7 +146,7 @@ export const CreateUserSelect = ({
                     <SelectItem
                         value=""
                         className={cn(
-                            "relative flex w-full cursor-pointer items-center px-4 py-3 text-sm outline-none transition-colors rounded-none",
+                            "relative flex w-full cursor-pointer items-center rounded-none px-3 py-3 font-normal text-base leading-[23px] tracking-[0.15px] outline-none transition-colors",
                             "[&_svg]:hidden pr-4",
                             value === ""
                                 ? "bg-button-secondary-default text-[#F5F5F7]! **:text-[#F5F5F7]! focus:bg-button-secondary-default dark:bg-[#F5F5F7] dark:text-[#2E2E2E]! dark:**:text-[#2E2E2E]!"
@@ -149,7 +163,7 @@ export const CreateUserSelect = ({
                             key={item.id}
                             value={String(item.id)}
                             className={cn(
-                                "relative flex w-full cursor-pointer items-center px-4 py-3 text-sm outline-none transition-colors rounded-none",
+                                "relative flex w-full cursor-pointer items-center rounded-none px-3 py-3 font-normal text-base leading-[23px] tracking-[0.15px] outline-none transition-colors",
                                 "[&_svg]:hidden pr-4",
                                 isSelected
                                     ? "bg-button-secondary-default text-[#F5F5F7]! **:text-[#F5F5F7]! focus:bg-button-secondary-default dark:bg-[#F5F5F7] dark:text-[#2E2E2E]! dark:**:text-[#2E2E2E]!"

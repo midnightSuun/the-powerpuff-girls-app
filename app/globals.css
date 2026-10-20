@@ -155,60 +155,57 @@
 
 @media print {
     body:has(.cv-preview) {
-        background: #fff !important;
-    }
-
-    body:has(.cv-preview) [data-sidebar="sidebar"] {
-        display: none !important;
-    }
-
-    body:has(.cv-preview) header,
-    body:has(.cv-preview) nav {
-        display: none !important;
-    }
-
-    body:has(.cv-preview) html,
-    body:has(.cv-preview),
-    body:has(.cv-preview) [data-slot="sidebar-inset"],
-    body:has(.cv-preview) main,
-    body:has(.cv-preview) section {
-        display: block !important;
-        overflow: visible !important;
-        height: auto !important;
-        min-height: 0 !important;
-    }
-
-    body:has(.cv-preview)
-        [data-slot="sidebar-inset"]
-        > *:not(:has(.cv-preview)) {
-        display: none !important;
-    }
-
-    body:has(.cv-preview) .cv-preview ~ * {
-        display: none !important;
-    }
-
-    body:has(.cv-preview) .cv-preview {
-        display: block !important;
-        width: 100% !important;
-        max-width: none !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        background: #fff !important;
-        color: #292929 !important;
+        background: #f5f5f7 !important;
         print-color-adjust: exact;
         -webkit-print-color-adjust: exact;
     }
 
-    body:has(.cv-preview) .cv-preview section,
+    html.dark body:has(.cv-preview) {
+        background: #2e2e2e !important;
+    }
+
+    body:has(.cv-preview) [data-slot="sidebar"],
+    body:has(.cv-preview) [data-sidebar="sidebar"],
+    body:has(.cv-preview) [data-sonner-toaster],
+    body:has(.cv-preview)
+        [data-slot="sidebar-inset"]
+        > *:not(:has(.cv-preview)),
+    body:has(.cv-preview) .cv-preview ~ * {
+        display: none !important;
+    }
+
+    body:has(.cv-preview),
+    body:has(.cv-preview) [data-slot="sidebar-wrapper"],
+    body:has(.cv-preview) [data-slot="sidebar-inset"],
+    body:has(.cv-preview) main {
+        display: block !important;
+        overflow: visible !important;
+        width: auto !important;
+        height: auto !important;
+        max-height: none !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    body:has(.cv-preview) .cv-preview {
+        display: block !important;
+        width: 68.75rem !important;
+        max-width: none !important;
+        min-height: 97.321rem;
+        margin: 0 !important;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+
     body:has(.cv-preview) .cv-preview article,
     body:has(.cv-preview) .cv-preview tr {
         break-inside: avoid;
     }
 
     @page {
-        size: A4;
-        margin: 14mm;
+        size: 68.75rem 97.321rem;
+        margin: 0;
     }
 }
 
