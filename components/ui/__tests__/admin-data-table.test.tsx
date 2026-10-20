@@ -213,10 +213,8 @@ describe("AdminDataTable", () => {
             name: /Actions for/i,
         })
 
-        // Menu should not be visible initially
         expect(screen.queryByText("Edit")).not.toBeInTheDocument()
 
-        // Click to open menu
         fireEvent.click(menuButtons[0])
         expect(screen.getByText("Edit")).toBeInTheDocument()
     })

@@ -123,7 +123,7 @@ describe("SettingsPage", () => {
     it("renders settings page form elements correctly", () => {
         render(<SettingsPage />)
 
-        expect(screen.getByText("theme.label")).toBeInTheDocument()
+        expect(screen.getByText("theme.light")).toBeInTheDocument()
         expect(screen.getAllByText("language.label")).toHaveLength(2)
         expect(screen.getByText("passwordSection.title")).toBeInTheDocument()
         expect(
