@@ -32,13 +32,14 @@ vi.mock("../ui/user-avatar", () => ({
 }))
 
 vi.mock("../ui/nav-user-menu-item", () => ({
-    NavUserMenuItem: vi.fn(({ label, onClick, href }) => (
+    NavUserMenuItem: vi.fn(({ label, onClick, href, labelClassName }) => (
         <button
             type="button"
             data-testid={`menu-item-${label.toLowerCase()}`}
             onClick={onClick}
         >
-            {label} {href ? `(${href})` : ""}
+            <span className={labelClassName}>{label}</span>{" "}
+            {href ? `(${href})` : ""}
         </button>
     )),
 }))
@@ -48,9 +49,28 @@ vi.mock("@/components/ui/dropdown-menu", () => ({
     DropdownMenuTrigger: vi.fn(({ children, ...props }) => (
         <div {...props}>{children}</div>
     )),
-    DropdownMenuContent: vi.fn(({ children }) => (
-        <div data-testid="dropdown-content">{children}</div>
-    )),
+    DropdownMenuContent: vi.fn(
+        ({
+            children,
+            className,
+            side,
+            align,
+        }: {
+            children: React.ReactNode
+            className?: string
+            side?: string
+            align?: string
+        }) => (
+            <div
+                data-testid="dropdown-content"
+                className={className}
+                data-side={side}
+                data-align={align}
+            >
+                {children}
+            </div>
+        ),
+    ),
     DropdownMenuGroup: vi.fn(({ children }) => <div>{children}</div>),
     DropdownMenuItem: vi.fn(({ children, ...props }) => (
         <div {...props}>{children}</div>
@@ -177,8 +197,30 @@ describe("NavUserMenu Component", () => {
 
         render(<NavUserMenu user={sampleUser} />)
 
-        expect(screen.getByTestId("dropdown-content")).toBeInTheDocument()
-        expect(screen.getByTestId("menu-item-profile")).toBeInTheDocument()
+        const content = screen.getByTestId("dropdown-content")
+        expect(content).toHaveClass("w-12")
+        expect(content).toHaveAttribute("data-side", "top")
+        expect(screen.getByText("profile")).toHaveClass("sr-only")
+    })
+
+    it("uses the compact menu when the desktop sidebar is collapsed", () => {
+        vi.mocked(useSidebar).mockReturnValue({
+            isMobile: false,
+            isTablet: false,
+            state: "collapsed",
+            setOpenMobile: mockSetOpenMobile,
+        } as unknown as ReturnType<typeof useSidebar>)
+
+        render(<NavUserMenu user={sampleUser} />)
+
+        const content = screen.getByTestId("dropdown-content")
+        expect(content).toHaveClass("w-12")
+        expect(content.className).not.toContain("min-w-56")
+        expect(content).toHaveAttribute("data-side", "top")
+        expect(content).toHaveAttribute("data-align", "center")
+        expect(screen.getByText("profile")).toHaveClass("sr-only")
+        expect(screen.getByText("settings")).toHaveClass("sr-only")
+        expect(screen.getByText("logout")).toHaveClass("sr-only")
     })
 
     it("shows viewProfile text when not on tablet", () => {

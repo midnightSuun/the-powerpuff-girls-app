@@ -225,6 +225,9 @@ describe("UserProfileForm Component", () => {
         )
 
         expect(screen.getByTestId("textfield-firstName")).toBeDisabled()
+        expect(screen.getByTestId("user-avatar").parentElement).toHaveClass(
+            "cursor-not-allowed",
+        )
         expect(
             screen.queryByRole("button", { name: "update" }),
         ).not.toBeInTheDocument()

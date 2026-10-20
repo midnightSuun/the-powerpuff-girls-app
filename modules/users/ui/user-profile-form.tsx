@@ -104,7 +104,12 @@ export function UserProfileForm({
                 <div className="flex items-center justify-center gap-4">
                     <div className="relative inline-block">
                         <div
-                            className="relative w-28 h-28 text-3xl shrink-0 shadow-sm rounded-full overflow-hidden group cursor-pointer"
+                            className={clsx(
+                                "relative w-28 h-28 text-3xl shrink-0 shadow-sm rounded-full overflow-hidden group",
+                                canEdit
+                                    ? "cursor-pointer"
+                                    : "cursor-not-allowed",
+                            )}
                             onMouseEnter={() => setIsHovered(true)}
                             onMouseLeave={() => setIsHovered(false)}
                         >

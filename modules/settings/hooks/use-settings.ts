@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useLocale, useTranslations } from "next-intl"
 import { useTheme } from "next-themes"
-import { useTransition } from "react"
+import { useSyncExternalStore, useTransition } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -18,6 +18,23 @@ import {
 export type SupportedLocale =
     "en" | "fr" | "de" | "it" | "pl" | "pt" | "ru" | "es" | "uk"
 
+export type ThemeOption = "Light" | "Dark" | "Device settings"
+
+const THEME_STORAGE_KEY = "theme"
+
+const subscribe = () => () => {}
+const getSnapshot = () => true
+const getServerSnapshot = () => false
+
+const themeOptionFromPreference = (
+    preference: string | null | undefined,
+): ThemeOption | null => {
+    if (preference === "dark") return "Dark"
+    if (preference === "light") return "Light"
+    if (preference === "system") return "Device settings"
+    return null
+}
+
 export function useSettings() {
     const validation = useTranslations("Settings.validation")
     const t = useTranslations("Settings.messages")
@@ -28,12 +45,16 @@ export function useSettings() {
     const pathname = usePathname()
 
     const [isPending, startTransition] = useTransition()
+    const isThemeReady = useSyncExternalStore(
+        subscribe,
+        getSnapshot,
+        getServerSnapshot,
+    )
 
-    const getInitialTheme = () => {
-        if (theme === "dark") return "Dark"
-        if (theme === "light") return "Light"
-        return "Device settings"
-    }
+    const storedPreference = isThemeReady
+        ? (window.localStorage.getItem(THEME_STORAGE_KEY) ?? theme ?? "system")
+        : undefined
+    const themeOption = themeOptionFromPreference(storedPreference)
 
     const {
         register,
@@ -52,7 +73,7 @@ export function useSettings() {
         ),
         mode: "onChange",
         defaultValues: {
-            theme: getInitialTheme(),
+            theme: themeOption ?? "",
             language: locale,
             password: "",
             newPassword: "",
@@ -96,6 +117,7 @@ export function useSettings() {
         onSubmit,
         errors,
         isValid,
+        themeOption,
         setTheme,
         handleLanguageChange,
         watch,

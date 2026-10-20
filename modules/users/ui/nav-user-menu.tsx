@@ -39,8 +39,8 @@ type Props = {
 export const NavUserMenu = ({ user }: Props) => {
     const { isMobile, isTablet, state, setOpenMobile } = useSidebar()
     const t = useTranslations("User.nav")
+    const isCompactMenu = !isMobile && state === "collapsed"
     const isTabletExpanded = isTablet && state === "expanded"
-    const isTabletCollapsed = isTablet && state === "collapsed"
     const fullName = getUserDisplayName(
         user.firstName,
         user.lastName,
@@ -48,10 +48,10 @@ export const NavUserMenu = ({ user }: Props) => {
     )
     const itemClassName = isTabletExpanded
         ? "rounded-none px-2.5 py-1.5"
-        : isTabletCollapsed
+        : isCompactMenu
           ? "justify-center px-0"
           : undefined
-    const labelClassName = isTabletCollapsed ? "sr-only" : undefined
+    const labelClassName = isCompactMenu ? "sr-only" : undefined
 
     const handleCloseMobileSidebar = () => {
         if (isMobile) {
@@ -111,13 +111,19 @@ export const NavUserMenu = ({ user }: Props) => {
 
                             isTabletExpanded
                                 ? "w-36 min-w-0 p-0"
-                                : isTabletCollapsed
+                                : isCompactMenu
                                   ? "w-12 min-w-0 p-1"
                                   : "min-w-56",
                         )}
-                        side={isMobile ? "bottom" : isTablet ? "top" : "right"}
-                        align={isTabletCollapsed ? "center" : "end"}
-                        sideOffset={isTablet ? 0 : 4}
+                        side={
+                            isMobile
+                                ? "bottom"
+                                : isTablet || isCompactMenu
+                                  ? "top"
+                                  : "right"
+                        }
+                        align={isCompactMenu ? "center" : "end"}
+                        sideOffset={isTablet || isCompactMenu ? 0 : 4}
                     >
                         <DropdownMenuGroup>
                             <NavUserMenuItem
@@ -129,7 +135,7 @@ export const NavUserMenu = ({ user }: Props) => {
                                 onClick={handleCloseMobileSidebar}
                             />
 
-                            {isTablet ? (
+                            {isTablet || isCompactMenu ? (
                                 <DropdownMenuSeparator className="bg-[#AEAEAE] dark:bg-button-secondary-default" />
                             ) : null}
 
@@ -143,7 +149,7 @@ export const NavUserMenu = ({ user }: Props) => {
                             />
                         </DropdownMenuGroup>
 
-                        {!isTablet ? (
+                        {!isTablet && !isCompactMenu ? (
                             <DropdownMenuSeparator className="bg-[#AEAEAE] dark:bg-button-secondary-default" />
                         ) : null}
 
