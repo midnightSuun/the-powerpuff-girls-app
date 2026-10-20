@@ -112,6 +112,7 @@ describe("SettingsPage", () => {
             onSubmit: mockOnSubmit,
             errors: {},
             isValid: true,
+            themeOption: "Light",
             setTheme: mockSetTheme,
             handleLanguageChange: mockHandleLanguageChange,
             watch: vi.fn((_fieldName: string) => {
@@ -133,7 +134,45 @@ describe("SettingsPage", () => {
         ).toBeInTheDocument()
     })
 
+    it("shows the stored theme instead of a hardcoded light value", () => {
+        vi.mocked(useSettings).mockReturnValue({
+            locale: "en",
+            isPending: false,
+            register: mockRegister,
+            handleSubmit: mockHandleSubmit,
+            onSubmit: mockOnSubmit,
+            errors: {},
+            isValid: true,
+            themeOption: "Dark",
+            setTheme: mockSetTheme,
+            handleLanguageChange: mockHandleLanguageChange,
+            watch: vi.fn((_fieldName: string) => {
+                return ""
+            }) as unknown as ReturnType<typeof useSettings>["watch"],
+        })
+
+        render(<SettingsPage />)
+
+        expect(screen.getAllByTestId("select")[0]).toHaveValue("Dark")
+    })
+
     it("handles theme selection change correctly", () => {
+        vi.mocked(useSettings).mockReturnValue({
+            locale: "en",
+            isPending: false,
+            register: mockRegister,
+            handleSubmit: mockHandleSubmit,
+            onSubmit: mockOnSubmit,
+            errors: {},
+            isValid: true,
+            themeOption: "Dark",
+            setTheme: mockSetTheme,
+            handleLanguageChange: mockHandleLanguageChange,
+            watch: vi.fn((_fieldName: string) => {
+                return ""
+            }) as unknown as ReturnType<typeof useSettings>["watch"],
+        })
+
         render(<SettingsPage />)
 
         const themeSelects = screen.getAllByTestId("select")
@@ -180,6 +219,7 @@ describe("SettingsPage", () => {
             onSubmit: mockOnSubmit,
             errors: {},
             isValid: false,
+            themeOption: "Light",
             setTheme: mockSetTheme,
             handleLanguageChange: mockHandleLanguageChange,
             watch: vi.fn((_fieldName: string) => {
@@ -233,6 +273,7 @@ describe("SettingsPage", () => {
             onSubmit: mockOnSubmit,
             errors: {},
             isValid: true,
+            themeOption: "Light",
             setTheme: mockSetTheme,
             handleLanguageChange: mockHandleLanguageChange,
             watch: mockWatchWithValues as unknown as ReturnType<

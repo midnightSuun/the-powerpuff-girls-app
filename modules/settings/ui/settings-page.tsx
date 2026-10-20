@@ -2,7 +2,6 @@
 
 import { cn } from "cn"
 import { useTranslations } from "next-intl"
-import { useState } from "react"
 
 import { PasswordField } from "@/components/password-field"
 import { Button } from "@/components/ui/button"
@@ -50,6 +49,7 @@ export function SettingsPage() {
         onSubmit,
         errors,
         isValid,
+        themeOption,
         setTheme,
         handleLanguageChange,
         watch,
@@ -58,7 +58,7 @@ export function SettingsPage() {
     const themeRegistration = register("theme")
     const languageRegistration = register("language")
 
-    const [selectedTheme, setSelectedTheme] = useState<string | null>("Light")
+    const selectedTheme = themeOption
 
     const passwordValue = watch("password")
     const newPasswordValue = watch("newPassword")
@@ -79,7 +79,7 @@ export function SettingsPage() {
 
     const getThemeLabel = (val: string | null) => {
         if (!val) return t("theme.label")
-        const item = themes.find((t) => t.value === val)
+        const item = themes.find((option) => option.value === val)
         return item ? t(item.labelKey) : val
     }
 
@@ -107,19 +107,17 @@ export function SettingsPage() {
                         <Select
                             value={selectedTheme ?? ""}
                             onValueChange={(value) => {
-                                setSelectedTheme(value)
-                                if (value) {
-                                    themeRegistration.onChange({
-                                        target: {
-                                            name: themeRegistration.name,
-                                            value,
-                                        },
-                                    })
-                                    if (value === "Dark") setTheme("dark")
-                                    else if (value === "Light")
-                                        setTheme("light")
-                                    else setTheme("system")
-                                }
+                                if (!value || value === selectedTheme) return
+
+                                themeRegistration.onChange({
+                                    target: {
+                                        name: themeRegistration.name,
+                                        value,
+                                    },
+                                })
+                                if (value === "Dark") setTheme("dark")
+                                else if (value === "Light") setTheme("light")
+                                else setTheme("system")
                             }}
                         >
                             <SelectTrigger

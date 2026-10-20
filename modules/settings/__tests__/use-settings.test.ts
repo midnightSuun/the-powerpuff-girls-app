@@ -54,6 +54,7 @@ describe("useSettings", () => {
     }
 
     beforeEach(() => {
+        localStorage.clear()
         vi.clearAllMocks()
 
         vi.mocked(useRouter).mockReturnValue({
@@ -159,7 +160,8 @@ describe("useSettings", () => {
 
         const { result } = renderHook(() => useSettings())
 
-        expect(result.current).toBeDefined()
+        expect(result.current.themeOption).toBe("Dark")
+        expect(mockSetTheme).not.toHaveBeenCalled()
     })
 
     it("returns 'Light' when theme is 'light'", () => {
@@ -172,7 +174,7 @@ describe("useSettings", () => {
 
         const { result } = renderHook(() => useSettings())
 
-        expect(result.current).toBeDefined()
+        expect(result.current.themeOption).toBe("Light")
     })
 
     it("returns 'Device settings' when theme is neither dark nor light", () => {
@@ -185,6 +187,22 @@ describe("useSettings", () => {
 
         const { result } = renderHook(() => useSettings())
 
-        expect(result.current).toBeDefined()
+        expect(result.current.themeOption).toBe("Device settings")
+    })
+
+    it("reads the stored light theme when next-themes has not hydrated", () => {
+        localStorage.setItem("theme", "light")
+        vi.mocked(useTheme).mockReturnValue({
+            theme: undefined,
+            setTheme: mockSetTheme,
+            themes: ["dark", "light", "system"],
+            systemTheme: "dark",
+        })
+
+        const { result } = renderHook(() => useSettings())
+
+        expect(result.current.themeOption).toBe("Light")
+        expect(mockSetTheme).not.toHaveBeenCalled()
+        localStorage.removeItem("theme")
     })
 })
