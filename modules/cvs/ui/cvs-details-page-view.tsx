@@ -30,9 +30,9 @@ export function CvsDetailsPageView({
     const { handleUpdateAndRefresh } = useCvDetails({ onUpdate })
 
     return (
-        <main className="w-full min-w-0 px-4 pb-8 sm:px-6">
+        <main className="w-full min-w-0 px-4 pb-8 sm:px-6 print:p-0">
             <div className="w-full min-w-0">
-                <section className="w-full min-w-0 pt-4">
+                <section className="w-full min-w-0 pt-4 print:pt-0">
                     {activeTab === "details" && (
                         <div className="w-full">
                             <CvDetailsForm

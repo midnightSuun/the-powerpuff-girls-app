@@ -1,13 +1,13 @@
 "use client"
 
 import { cn } from "cn"
-import { type ReactNode } from "react"
 
 import { Input } from "@/components/ui/input"
 
 import type { SelectOption } from "../select-option"
 import {
     createUserFieldClassName,
+    CreateUserFloatingLabel,
     CreateUserSelect,
     disabledUserFieldClassName,
 } from "./create-user-fields"
@@ -38,12 +38,12 @@ export const UserFormTextField = ({
     disabled = false,
     onChange,
 }: TextFieldProps) => {
+    const showFloatingLabel = showLabel || value.length > 0
+
     return (
-        <div className="relative flex flex-col pt-4">
-            {Boolean(value) && (
-                <span className="absolute left-0 top-0 text-[10px] text-muted-foreground">
-                    {label}
-                </span>
+        <div className="relative pt-4">
+            {showFloatingLabel && (
+                <CreateUserFloatingLabel>{label}</CreateUserFloatingLabel>
             )}
             <Input
                 type={type}
@@ -71,14 +71,6 @@ type SelectFieldProps = {
     onChange: (value: string) => void
 }
 
-const FieldLabel = ({ children }: { children: ReactNode }) => {
-    return (
-        <span className="text-xs leading-4 text-button-secondary-default dark:text-[#aeaeae]">
-            {children}
-        </span>
-    )
-}
-
 export const UserFormSelectField = ({
     label,
     value,
@@ -87,35 +79,21 @@ export const UserFormSelectField = ({
     includeEmpty,
     onChange,
 }: SelectFieldProps) => {
-    const select = (
-        <div className="relative flex flex-col pt-4">
-            {Boolean(value) && (
-                <span className="absolute left-0 top-0 text-[10px] text-muted-foreground">
-                    {label}
-                </span>
+    const showFloatingLabel = showLabel || value.length > 0
+
+    return (
+        <div className="relative pt-4">
+            {showFloatingLabel && (
+                <CreateUserFloatingLabel>{label}</CreateUserFloatingLabel>
             )}
             <CreateUserSelect
                 label={label}
                 value={value}
                 options={options}
                 includeEmpty={includeEmpty}
+                showPlaceholder={!showFloatingLabel}
                 onChange={onChange}
             />
         </div>
-    )
-
-    if (!showLabel) return select
-
-    return (
-        <label className="flex flex-col gap-1">
-            <FieldLabel>{label}</FieldLabel>
-            <CreateUserSelect
-                label={label}
-                value={value}
-                options={options}
-                includeEmpty={includeEmpty}
-                onChange={onChange}
-            />
-        </label>
     )
 }
