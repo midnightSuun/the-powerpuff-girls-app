@@ -1,0 +1,21 @@
+mutation CreateLanguage($language: CreateLanguageInput!) {
+    createLanguage(language: $language) {
+        id
+        name
+        iso2
+    }
+}
+
+mutation UpdateLanguage($language: UpdateLanguageInput!) {
+    updateLanguage(language: $language) {
+        id
+        name
+        iso2
+    }
+}
+
+mutation DeleteLanguage($language: DeleteLanguageInput!) {
+    deleteLanguage(language: $language) {
+        affected
+    }
+}

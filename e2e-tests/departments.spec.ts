@@ -1,0 +1,106 @@
+import { expect, Page, test } from "@playwright/test"
+
+import { loginAsAdmin } from "./helpers/auth"
+
+async function navigateToDepartments(page: Page) {
+    await page.locator("a[href*='/departments']").first().click()
+    await page.waitForURL(/.*\/departments/, { timeout: 10000 })
+}
+
+async function createDepartment(page: Page, name: string) {
+    await page.getByRole("button", { name: /CREATE DEPARTMENT/i }).click()
+
+    const modal = page.locator("[role='dialog']").first()
+    await expect(modal).toBeVisible({ timeout: 5000 })
+
+    await modal.getByPlaceholder("Department name").fill(name)
+
+    await modal.getByRole("button", { name: /^CREATE$/i }).click()
+    await expect(modal).not.toBeVisible({ timeout: 10000 })
+
+    await expect(page.getByText(name, { exact: false })).toBeVisible({
+        timeout: 10000,
+    })
+}
+
+test.describe("Departments (Admin)", () => {
+    test.beforeEach(async ({ page }) => {
+        await loginAsAdmin(page)
+        await navigateToDepartments(page)
+    })
+
+    test("should create a new department", async ({ page }) => {
+        const deptName = `Test Department ${Date.now()}`
+
+        await createDepartment(page, deptName)
+
+        await expect(page.getByText(deptName, { exact: false })).toBeVisible({
+            timeout: 10000,
+        })
+    })
+
+    test("should edit department name", async ({ page }) => {
+        const deptName = `Test Department ${Date.now()}`
+        const updatedName = `Updated Department ${Date.now()}`
+
+        await createDepartment(page, deptName)
+
+        const deptRow = page.locator("tr").filter({ hasText: deptName }).first()
+        await expect(deptRow).toBeVisible({ timeout: 5000 })
+
+        await deptRow
+            .getByRole("button", { name: `Actions for ${deptName}` })
+            .click()
+
+        await page.getByRole("menuitem", { name: /^Edit$/i }).click()
+
+        const editModal = page.locator("[role='dialog']").first()
+        await expect(editModal).toBeVisible({ timeout: 5000 })
+
+        const nameInput = editModal.getByPlaceholder("Department name")
+        await nameInput.fill(updatedName)
+
+        const saveBtn = editModal.getByRole("button", { name: /^SAVE$/i })
+        await expect(saveBtn).toBeEnabled({ timeout: 5000 })
+        await saveBtn.click()
+
+        await expect(editModal).not.toBeVisible({ timeout: 10000 })
+
+        await expect(page.getByText(updatedName, { exact: false })).toBeVisible(
+            { timeout: 10000 },
+        )
+    })
+
+    test("should delete a department", async ({ page }) => {
+        const deptName = `Test Department ${Date.now()}`
+
+        await createDepartment(page, deptName)
+
+        await expect(page.getByText(deptName, { exact: false })).toBeVisible({
+            timeout: 10000,
+        })
+
+        const deptRow = page.locator("tr").filter({ hasText: deptName }).first()
+        await expect(deptRow).toBeVisible({ timeout: 5000 })
+
+        await deptRow
+            .getByRole("button", { name: `Actions for ${deptName}` })
+            .click()
+
+        await page.getByRole("menuitem", { name: /^Delete$/i }).click()
+
+        const confirmModal = page.locator("[role='dialog']").first()
+        await expect(confirmModal).toBeVisible({ timeout: 5000 })
+
+        const confirmBtn = confirmModal.getByRole("button", {
+            name: /(CONFIRM|DELETE)/i,
+        })
+        await confirmBtn.click()
+
+        await expect(confirmModal).not.toBeVisible({ timeout: 10000 })
+
+        await expect(
+            page.getByText(deptName, { exact: false }),
+        ).not.toBeVisible({ timeout: 10000 })
+    })
+})

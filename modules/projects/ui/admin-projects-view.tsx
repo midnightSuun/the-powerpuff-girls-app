@@ -1,0 +1,102 @@
+"use client"
+
+import { useTranslations } from "next-intl"
+import { useState } from "react"
+
+import { useHeaderToolbarAction } from "@/components/header-toolbar-action"
+import {
+    ProjectsTableView,
+    type ProjectTableItem,
+} from "@/components/projects-table-view"
+import {
+    type ProjectFormData,
+    useAdminProjects,
+} from "@/modules/projects/hooks/use-admin-projects"
+
+import { ProjectFormModal } from "./project-form-modal"
+
+interface AdminProjectsViewProps {
+    projects: ProjectTableItem[]
+    search?: string
+}
+
+export function AdminProjectsView({
+    projects,
+    search = "",
+}: AdminProjectsViewProps) {
+    const [isCreateOpen, setIsCreateOpen] = useState(false)
+    const [editingProject, setEditingProject] =
+        useState<ProjectTableItem | null>(null)
+
+    const t = useTranslations("Admin.projects")
+    useHeaderToolbarAction(t("createProject"), () => {
+        setIsCreateOpen(true)
+    })
+    const {
+        isRemoving,
+        removeError,
+        setRemoveError,
+        handleSave,
+        handleDelete,
+    } = useAdminProjects()
+
+    const onSaveProject = async (
+        project: ProjectTableItem | null,
+        data: ProjectFormData,
+    ) => {
+        await handleSave(project, data)
+        setIsCreateOpen(false)
+        setEditingProject(null)
+    }
+
+    const onDeleteProject = async (
+        project: ProjectTableItem,
+    ): Promise<boolean> => {
+        const success = await handleDelete(project)
+        return Boolean(success)
+    }
+
+    return (
+        <>
+            <ProjectsTableView
+                projects={projects}
+                canManage
+                search={search}
+                onEdit={setEditingProject}
+                onDelete={onDeleteProject}
+                onDeleteClose={() => setRemoveError(null)}
+                isDeleting={isRemoving}
+                deleteError={removeError}
+                emptyMessage={t("empty")}
+                showDates
+                manageCopy={{
+                    edit: t("edit"),
+                    remove: t("remove"),
+                    removeTitle: t("removeTitle"),
+                    removeConfirmation: (name) =>
+                        t("removeConfirmation", { name }),
+                    cancel: t("cancel"),
+                    removing: t("removing"),
+                }}
+            />
+
+            {(isCreateOpen || editingProject) && (
+                <ProjectFormModal
+                    key={editingProject?.id ?? "create"}
+                    isOpen
+                    project={editingProject}
+                    environmentOptions={[
+                        ...new Set(
+                            projects.flatMap((project) => project.environment),
+                        ),
+                    ]}
+                    onClose={() => {
+                        setIsCreateOpen(false)
+                        setEditingProject(null)
+                    }}
+                    onSave={onSaveProject}
+                />
+            )}
+        </>
+    )
+}

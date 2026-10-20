@@ -1,0 +1,28 @@
+query GetDepartments($params: SearchPaginationInput) {
+    departments(params: $params) {
+        items {
+            id
+            name
+        }
+    }
+}
+
+mutation CreateDepartment($department: CreateDepartmentInput!) {
+    createDepartment(department: $department) {
+        id
+        name
+    }
+}
+
+mutation UpdateDepartment($department: UpdateDepartmentInput!) {
+    updateDepartment(department: $department) {
+        id
+        name
+    }
+}
+
+mutation DeleteDepartment($department: DeleteDepartmentInput!) {
+    deleteDepartment(department: $department) {
+        affected
+    }
+}

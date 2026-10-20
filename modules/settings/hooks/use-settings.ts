@@ -1,0 +1,103 @@
+"use client"
+
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useLocale, useTranslations } from "next-intl"
+import { useTheme } from "next-themes"
+import { useTransition } from "react"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+
+import { usePathname, useRouter } from "@/i18n/navigation"
+
+import { updateSettingsPasswordAction } from "../api/update-password"
+import {
+    createSettingsSchema,
+    type SettingsFormValues,
+} from "../schemas/settings"
+
+export type SupportedLocale =
+    "en" | "fr" | "de" | "it" | "pl" | "pt" | "ru" | "es" | "uk"
+
+export function useSettings() {
+    const validation = useTranslations("Settings.validation")
+    const t = useTranslations("Settings.messages")
+    const notifications = useTranslations("Notifications")
+    const { theme, setTheme } = useTheme()
+    const locale = useLocale() as SupportedLocale
+    const router = useRouter()
+    const pathname = usePathname()
+
+    const [isPending, startTransition] = useTransition()
+
+    const getInitialTheme = () => {
+        if (theme === "dark") return "Dark"
+        if (theme === "light") return "Light"
+        return "Device settings"
+    }
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isValid },
+        reset,
+        watch,
+    } = useForm<SettingsFormValues>({
+        resolver: zodResolver(
+            createSettingsSchema({
+                passwordRequired: validation("passwordRequired"),
+                newPasswordRequired: validation("newPasswordRequired"),
+                confirmPasswordRequired: validation("confirmPasswordRequired"),
+                passwordsDoNotMatch: validation("passwordsDoNotMatch"),
+            }),
+        ),
+        mode: "onChange",
+        defaultValues: {
+            theme: getInitialTheme(),
+            language: locale,
+            password: "",
+            newPassword: "",
+            confirmPassword: "",
+        },
+    })
+
+    const handleLanguageChange = (newLocale: SupportedLocale) => {
+        router.replace(pathname, { locale: newLocale })
+    }
+
+    const onSubmit = (data: SettingsFormValues) => {
+        startTransition(async () => {
+            const result = await updateSettingsPasswordAction({
+                password: data.password,
+                newPassword: data.newPassword,
+                confirmPassword: data.confirmPassword,
+            })
+
+            if (result?.error) {
+                toast.error(notifications("error"), {
+                    description: result.error,
+                })
+                return
+            }
+
+            toast.success(notifications("success"), {
+                description: t("updated"),
+                closeButton: true,
+            })
+
+            reset()
+        })
+    }
+
+    return {
+        locale,
+        isPending,
+        register,
+        handleSubmit,
+        onSubmit,
+        errors,
+        isValid,
+        setTheme,
+        handleLanguageChange,
+        watch,
+    }
+}

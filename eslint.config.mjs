@@ -14,7 +14,6 @@ const eslintConfig = defineConfig([
         files: ["**/*.{js,jsx,mjs,ts,tsx}"],
         plugins: {
             prettier,
-            import: importPlugin,
             "simple-import-sort": simpleImportSort,
         },
         settings: {
@@ -46,6 +45,9 @@ const eslintConfig = defineConfig([
         "build/**",
         "next-env.d.ts",
         "gql/**",
+        "playwright-report/**",
+        "test-results/**",
+        "blob-report/**",
     ]),
 ])
 

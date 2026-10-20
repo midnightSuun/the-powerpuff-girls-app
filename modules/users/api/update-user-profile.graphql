@@ -1,0 +1,14 @@
+mutation UpdateUserProfile($user: UpdateUserInput!) {
+    updateUser(user: $user) {
+        id
+        role
+        department {
+            id
+            name
+        }
+        position {
+            id
+            name
+        }
+    }
+}

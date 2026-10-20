@@ -1,0 +1,91 @@
+"use client"
+
+import Link from "next/link"
+import { useTranslations } from "next-intl"
+
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+
+import { useForgotPassword } from "../hooks/use-forgot-password"
+
+export function ForgotPasswordPage() {
+    const t = useTranslations("Auth.ForgotPassword")
+    const {
+        serverError,
+        successMessage,
+        isPending,
+        register,
+        handleSubmit,
+        onSubmit,
+        errors,
+        isValid,
+    } = useForgotPassword()
+
+    return (
+        <main className="min-h-screen w-full flex flex-col items-center justify-center transition-colors duration-300 relative bg-background text-foreground">
+            <div className="w-full max-w-125 px-6 flex flex-col items-center">
+                <div className="text-center mb-10">
+                    <h1 className="text-3xl tracking-tight mb-2">
+                        {t("title")}
+                    </h1>
+                    <p className="text-sm text-muted-foreground">
+                        {t("subtitle")}
+                    </p>
+                </div>
+
+                <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    className="w-full flex flex-col items-center space-y-6"
+                >
+                    <div className="w-full space-y-1">
+                        <Input
+                            id="email"
+                            type="email"
+                            label={t("emailLabel")}
+                            placeholder={t("emailPlaceholder")}
+                            error={errors.email?.message}
+                            {...register("email")}
+                        />
+                    </div>
+
+                    {serverError && (
+                        <p
+                            className="text-xs text-red-400 text-center w-full"
+                            role="alert"
+                        >
+                            {serverError}
+                        </p>
+                    )}
+
+                    {successMessage && (
+                        <p
+                            className="text-xs text-green-600 text-center w-full dark:text-green-400"
+                            role="status"
+                        >
+                            {successMessage}
+                        </p>
+                    )}
+
+                    <div className="w-full flex flex-col items-center pt-6 space-y-6">
+                        <Button
+                            type="submit"
+                            variant="primary"
+                            disabled={!isValid || isPending}
+                        >
+                            {isPending
+                                ? t("submittingButton")
+                                : t("submitButton")}
+                        </Button>
+
+                        <Link
+                            href="/login"
+                            className="text-[11px] font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                            {t("cancelButton")}
+                        </Link>
+                    </div>
+                </form>
+            </div>
+        </main>
+    )
+}

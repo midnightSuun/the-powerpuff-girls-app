@@ -1,6 +1,7 @@
 "use server"
 
 import { redirect } from "next/navigation"
+import { getTranslations } from "next-intl/server"
 
 import { getGql, LoginDocument } from "@/gql"
 
@@ -8,17 +9,19 @@ import { setTokens } from "../helpers/tokens"
 
 export type AuthActionState = {
     error?: string
+    field?: string
 }
 
 export async function login(
     _previousState: AuthActionState,
     formData: FormData,
 ): Promise<AuthActionState> {
+    const t = await getTranslations("Auth.messages")
     const email = String(formData.get("email") ?? "").trim()
     const password = String(formData.get("password") ?? "")
 
     if (!email || !password) {
-        return { error: "Введите email и пароль." }
+        return { error: t("loginRequired") }
     }
 
     let tokens: { accessToken: string; refreshToken: string }
@@ -33,10 +36,14 @@ export async function login(
             accessToken: data.login.access_token,
             refreshToken: data.login.refresh_token,
         }
-    } catch {
-        return { error: "Не удалось войти. Проверьте email и пароль." }
+    } catch (error) {
+        console.error("Login failed:", error)
+        return {
+            error: t("loginFailed"),
+        }
     }
 
     await setTokens(tokens.accessToken, tokens.refreshToken)
+
     redirect("/")
 }

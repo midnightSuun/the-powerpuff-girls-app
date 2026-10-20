@@ -1,0 +1,47 @@
+query GetUserSkills($userId: ID!) {
+    user(userId: $userId) {
+        cvs {
+            id
+            skills {
+                name
+                mastery
+                categoryId
+            }
+        }
+    }
+}
+
+mutation AddSkill($skill: AddCvSkillInput!) {
+    addCvSkill(skill: $skill) {
+        id
+    }
+}
+
+query GetSkills {
+    skills(params: { limit: 100 }) {
+        items {
+            id
+            name
+            category {
+                id
+                name
+            }
+        }
+    }
+}
+
+mutation DeleteCvSkill($skill: DeleteCvSkillInput!) {
+    deleteCvSkill(skill: $skill) {
+        id
+    }
+}
+
+mutation UpdateSkill($skill: UpdateCvSkillInput!) {
+    updateCvSkill(skill: $skill) {
+        id
+        skills {
+            name
+            mastery
+        }
+    }
+}

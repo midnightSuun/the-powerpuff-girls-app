@@ -1,0 +1,50 @@
+query GetProjects {
+    projects(params: { limit: 100 }) {
+        items {
+            id
+            name
+            internal_name
+            domain
+            start_date
+            end_date
+            description
+            environment
+        }
+    }
+}
+
+mutation CreateProject($project: CreateProjectInput!) {
+    createProject(project: $project) {
+        id
+    }
+}
+
+mutation UpdateProject($project: UpdateProjectInput!) {
+    updateProject(project: $project) {
+        id
+    }
+}
+
+mutation DeleteProject($project: DeleteProjectInput!) {
+    deleteProject(project: $project) {
+        affected
+    }
+}
+
+mutation AddCvProject($project: AddCvProjectInput!) {
+    addCvProject(project: $project) {
+        id
+    }
+}
+
+mutation UpdateCvProject($project: UpdateCvProjectInput!) {
+    updateCvProject(project: $project) {
+        id
+    }
+}
+
+mutation RemoveCvProject($project: RemoveCvProjectInput!) {
+    removeCvProject(project: $project) {
+        id
+    }
+}

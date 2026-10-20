@@ -1,0 +1,32 @@
+import { existsSync } from "node:fs"
+import { loadEnvFile } from "node:process"
+
+import { defineConfig, devices } from "@playwright/test"
+
+if (existsSync(".env")) {
+    loadEnvFile(".env")
+}
+
+export default defineConfig({
+    testDir: "./e2e-tests",
+    fullyParallel: false,
+    forbidOnly: !!process.env.CI,
+    retries: process.env.CI ? 2 : 1,
+    workers: process.env.CI ? 1 : 2,
+    reporter: "html",
+    use: {
+        baseURL: "http://localhost:3000",
+        trace: "on-first-retry",
+    },
+    projects: [
+        {
+            name: "chromium",
+            use: { ...devices["Desktop Chrome"] },
+        },
+    ],
+    webServer: {
+        command: "npm run dev",
+        url: "http://localhost:3000",
+        reuseExistingServer: !process.env.CI,
+    },
+})

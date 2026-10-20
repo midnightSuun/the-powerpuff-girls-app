@@ -1,63 +1,100 @@
 "use client"
 
 import Link from "next/link"
-import { useActionState } from "react"
+import { useTranslations } from "next-intl"
 
-import { signup } from "../api/signup"
+import { PasswordField } from "@/components/password-field"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+
+import { useSignup } from "../hooks/use-signup"
+import { AuthTabs } from "./components/authTabs"
 
 export function Signup() {
-    const [state, formAction, isPending] = useActionState(signup, {})
+    const t = useTranslations("Auth.Signup")
+    const {
+        serverError,
+        isPending,
+        register,
+        handleSubmit,
+        onSubmit,
+        errors,
+        isValid,
+    } = useSignup()
 
     return (
-        <main className="mx-auto max-w-md p-6">
-            <h1 className="mb-6 text-2xl font-semibold">Регистрация</h1>
-            <form className="space-y-4" action={formAction}>
-                <p className="space-y-1">
-                    <label htmlFor="email">Email</label>
-                    <input
-                        className="block w-full border px-3 py-2"
-                        id="email"
-                        name="email"
-                        type="email"
-                        required
-                    />
-                </p>
-                <p className="space-y-1">
-                    <label htmlFor="password">Пароль</label>
-                    <input
-                        className="block w-full border px-3 py-2"
-                        id="password"
-                        name="password"
-                        type="password"
-                        required
-                    />
-                </p>
-                <p className="space-y-1">
-                    <label htmlFor="confirmPassword">Подтвердите пароль</label>
-                    <input
-                        className="block w-full border px-3 py-2"
-                        id="confirmPassword"
-                        name="confirmPassword"
-                        type="password"
-                        required
-                    />
-                </p>
-                {state.error && (
-                    <p className="text-sm text-red-700" role="alert">
-                        {state.error}
+        <main className="min-h-screen w-full flex flex-col items-center justify-center transition-colors duration-300 relative bg-background text-foreground">
+            <AuthTabs activeTab="signup" />
+
+            <div className="w-full max-w-125 px-6 flex flex-col items-center mt-12">
+                <div className="text-center mb-10">
+                    <h1 className="text-3xl font-semibold tracking-tight mb-2">
+                        {t("title")}
+                    </h1>
+                    <p className="text-sm text-muted-foreground">
+                        {t("subtitle")}
                     </p>
-                )}
-                <button
-                    className="border px-4 py-2"
-                    type="submit"
-                    disabled={isPending}
+                </div>
+
+                <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    className="w-full flex flex-col items-center space-y-6"
+                    noValidate
                 >
-                    {isPending ? "Регистрируем..." : "Зарегистрироваться"}
-                </button>
-            </form>
-            <p className="mt-4 text-sm">
-                Уже есть аккаунт? <Link href="/login">Войти</Link>
-            </p>
+                    <div className="w-full space-y-1">
+                        <Input
+                            type="email"
+                            label={t("emailPlaceholder")}
+                            placeholder={t("emailPlaceholder")}
+                            error={errors.email?.message}
+                            aria-invalid={!!errors.email}
+                            {...register("email")}
+                        />
+                    </div>
+
+                    <PasswordField
+                        label={t("passwordPlaceholder")}
+                        placeholder={t("passwordPlaceholder")}
+                        error={errors.password?.message}
+                        {...register("password")}
+                    />
+
+                    <PasswordField
+                        label={t("confirmPasswordPlaceholder")}
+                        placeholder={t("confirmPasswordPlaceholder")}
+                        error={errors.confirmPassword?.message}
+                        {...register("confirmPassword")}
+                    />
+
+                    {serverError && (
+                        <p
+                            className="text-xs text-destructive text-center w-full"
+                            role="alert"
+                        >
+                            {serverError}
+                        </p>
+                    )}
+
+                    <div className="w-full flex flex-col items-center pt-6 space-y-6">
+                        <Button
+                            type="submit"
+                            variant="primary"
+                            disabled={!isValid || isPending}
+                        >
+                            {isPending
+                                ? t("submittingButton")
+                                : t("submitButton")}
+                        </Button>
+
+                        <Link
+                            href="/login"
+                            className="text-[11px] font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                            {t("haveAccount")}
+                        </Link>
+                    </div>
+                </form>
+            </div>
         </main>
     )
 }

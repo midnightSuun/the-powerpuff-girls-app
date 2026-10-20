@@ -1,0 +1,47 @@
+query GetAdminSkills {
+    skills(params: { limit: 1000 }) {
+        items {
+            id
+            name
+            category {
+                id
+                name
+            }
+        }
+    }
+}
+
+query GetSkillCategories {
+    skillCategories {
+        id
+        name
+    }
+}
+
+mutation CreateSkill($skill: CreateSkillInput!) {
+    createSkill(skill: $skill) {
+        id
+        name
+        category {
+            id
+            name
+        }
+    }
+}
+
+mutation UpdateAdminSkill($skill: UpdateSkillInput!) {
+    updateSkill(skill: $skill) {
+        id
+        name
+        category {
+            id
+            name
+        }
+    }
+}
+
+mutation DeleteSkill($skill: DeleteSkillInput!) {
+    deleteSkill(skill: $skill) {
+        affected
+    }
+}

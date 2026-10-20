@@ -1,0 +1,756 @@
+{
+    "Admin": {
+        "departments": {
+            "title": "Отделы",
+            "createButton": "СОЗДАТЬ ОТДЕЛ",
+            "empty": "Отделы не найдены",
+            "columns": {
+                "name": "Название"
+            },
+            "create": {
+                "title": "Создать отдел",
+                "departmentName": "Отдел",
+                "departmentPlaceholder": "Название отдела",
+                "alreadyExists": "Отдел с таким названием уже существует",
+                "required": "Укажите название отдела"
+            },
+            "edit": {
+                "title": "Редактировать отдел",
+                "departmentName": "Отдел",
+                "departmentPlaceholder": "Название отдела"
+            },
+            "delete": {
+                "title": "Удалить отдел",
+                "confirmation": "Вы уверены, что хотите удалить отдел «{name}»?",
+                "inUseError": "Невозможно удалить отдел, так как он используется в системе"
+            }
+        },
+        "positions": {
+            "title": "Должности",
+            "createButton": "СОЗДАТЬ ДОЛЖНОСТЬ",
+            "empty": "Должности не найдены",
+            "columns": {
+                "name": "Название"
+            },
+            "create": {
+                "title": "Создать должность",
+                "positionName": "Должность",
+                "positionPlaceholder": "Название должности",
+                "alreadyExists": "Должность с таким названием уже существует",
+                "required": "Укажите название должности"
+            },
+            "edit": {
+                "title": "Редактировать должность",
+                "positionName": "Должность",
+                "positionPlaceholder": "Название должности"
+            },
+            "delete": {
+                "title": "Удалить должность",
+                "confirmation": "Вы уверены, что хотите удалить должность «{name}»?",
+                "inUseError": "Невозможно удалить должность, так как она используется в системе"
+            }
+        },
+        "projects": {
+            "title": "Проекты",
+            "empty": "Проекты не найдены",
+            "search": "Поиск проектов",
+            "searchLabel": "Поиск проектов",
+            "createProject": "СОЗДАТЬ ПРОЕКТ",
+            "edit": "Редактировать",
+            "remove": "Удалить",
+            "removeTitle": "Удалить проект",
+            "removeConfirmation": "Вы уверены, что хотите удалить проект «{name}»?",
+            "cancel": "ОТМЕНА",
+            "removing": "УДАЛЕНИЕ...",
+            "removeError": "Не удалось удалить проект. Попробуйте еще раз.",
+            "form": {
+                "createTitle": "Создать проект",
+                "updateTitle": "Обновить проект",
+                "name": "Название",
+                "domain": "Домен",
+                "startDate": "Дата начала",
+                "endDate": "Дата окончания",
+                "description": "Описание",
+                "environment": "Стек технологий",
+                "addEnvironment": "Добавить технологию",
+                "removeEnvironment": "Удалить {value}",
+                "create": "СОЗДАТЬ",
+                "creating": "СОЗДАНИЕ...",
+                "update": "ОБНОВИТЬ",
+                "saving": "ОБНОВЛЕНИЕ...",
+                "cancel": "ОТМЕНА",
+                "saveError": "Не удалось сохранить проект. Попробуйте еще раз."
+            }
+        },
+        "common": {
+            "search": "Поиск",
+            "edit": "Редактировать",
+            "delete": "Удалить",
+            "cancel": "ОТМЕНА",
+            "confirm": "ПОДТВЕРДИТЬ",
+            "save": "СОХРАНИТЬ",
+            "saving": "СОХРАНЕНИЕ...",
+            "create": "СОЗДАТЬ",
+            "creating": "СОЗДАНИЕ...",
+            "deleting": "УДАЛЕНИЕ..."
+        },
+        "skills": {
+            "title": "Навыки",
+            "createButton": "СОЗДАТЬ НАВЫК",
+            "empty": "Навыки не найдены",
+            "columns": {
+                "name": "Название",
+                "category": "Категория"
+            },
+            "create": {
+                "title": "Создать навык",
+                "skillName": "Навык",
+                "skillPlaceholder": "Навык",
+                "category": "Категория",
+                "categoryPlaceholder": "Категория",
+                "alreadyExists": "Навык уже существует"
+            },
+            "edit": {
+                "title": "Изменить навык",
+                "skillName": "Название навыка",
+                "category": "Категория"
+            },
+            "delete": {
+                "title": "Удалить навык",
+                "confirmation": "Вы уверены, что хотите удалить навык «{name}»?"
+            }
+        },
+        "languages": {
+            "title": "Языки",
+            "createButton": "СОЗДАТЬ ЯЗЫК",
+            "empty": "Языки не найдены",
+            "columns": {
+                "name": "Название",
+                "iso2": "Код ISO"
+            },
+            "create": {
+                "title": "Создать язык",
+                "languageName": "Название языка",
+                "languagePlaceholder": "например: Русский",
+                "iso2": "Код ISO",
+                "iso2Placeholder": "например: ru",
+                "alreadyExists": "Язык уже существует",
+                "invalidIso2": "Код ISO2 должен состоять ровно из 2 символов"
+            },
+            "edit": {
+                "title": "Изменить язык",
+                "languageName": "Название языка",
+                "iso2": "Код ISO"
+            },
+            "delete": {
+                "title": "Удалить язык",
+                "confirmation": "Вы уверены, что хотите удалить язык «{name}»?"
+            }
+        }
+    },
+    "Auth": {
+        "EmailVerification": {
+            "title": "Подтверждение почты",
+            "subtitle": "Введите код подтверждения, который мы отправили на",
+            "fallbackEmail": "вашу почту",
+            "submitButton": "ПОДТВЕРДИТЬ",
+            "submittingButton": "ПРОВЕРКА...",
+            "resendButton": "ПОВТОРИТЬ ОТПРАВКУ",
+            "resendingButton": "ОТПРАВКА...",
+            "laterButton": "ПОЗЖЕ"
+        },
+        "ForgotPassword": {
+            "title": "Забыли пароль",
+            "subtitle": "Мы отправим вам электронное письмо с дальнейшими инструкциями",
+            "emailLabel": "Электронная почта",
+            "emailPlaceholder": "example@email.com",
+            "submitButton": "СБРОСИТЬ ПАРОЛЬ",
+            "submittingButton": "ОТПРАВКА...",
+            "cancelButton": "Отмена"
+        },
+        "Login": {
+            "title": "С возвращением",
+            "subtitle": "Снова здравствуйте! Войдите, чтобы продолжить",
+            "emailPlaceholder": "Электронная почта",
+            "passwordPlaceholder": "Пароль",
+            "submitButton": "ВОЙТИ",
+            "submittingButton": "ВХОД...",
+            "forgotPassword": "ЗАБЫЛИ ПАРОЛЬ",
+            "hidePassword": "Скрыть пароль",
+            "showPassword": "Показать пароль"
+        },
+        "ResetPassword": {
+            "title": "Сброс пароля",
+            "subtitle": "Здесь вы должны ввести новый пароль и подтвердить его",
+            "newPasswordPlaceholder": "Новый пароль",
+            "confirmPasswordPlaceholder": "Подтвердите пароль",
+            "submitButton": "ОТПРАВИТЬ",
+            "submittingButton": "ОТПРАВКА...",
+            "goToSignIn": "ПЕРЕЙТИ К ВХОДУ"
+        },
+        "Signup": {
+            "title": "Регистрация",
+            "subtitle": "Добро пожаловать! Зарегистрируйтесь, чтобы продолжить",
+            "emailPlaceholder": "Электронная почта",
+            "passwordPlaceholder": "Пароль",
+            "confirmPasswordPlaceholder": "Подтвердите пароль",
+            "submitButton": "СОЗДАТЬ АККАУНТ",
+            "submittingButton": "СОЗДАНИЕ...",
+            "haveAccount": "У МЕНЯ ЕСТЬ АККАУНТ"
+        },
+        "Tabs": {
+            "signIn": "ВХОД",
+            "signup": "РЕГИСТРАЦИЯ"
+        },
+        "validation": {
+            "emailRequired": "Требуется указать электронную почту",
+            "invalidEmail": "Пожалуйста, введите правильный адрес электронной почты",
+            "passwordRequired": "Требуется ввести пароль",
+            "passwordMin": "Пароль должен содержать не менее 6 символов",
+            "confirmPassword": "Пожалуйста, подтвердите пароль",
+            "passwordsDoNotMatch": "Пароли не совпадают",
+            "codeLength": "Код подтверждения должен состоять ровно из 6 цифр.",
+            "codeDigits": "Код подтверждения должен содержать только цифры."
+        },
+        "messages": {
+            "loginRequired": "Требуется указать электронную почту и пароль.",
+            "loginFailed": "Не удалось войти. Пожалуйста, проверьте почту и пароль.",
+            "signupRequired": "Пожалуйста, заполните все поля.",
+            "passwordsDoNotMatch": "Пароли не совпадают.",
+            "emailAlreadyTaken": "Этот адрес электронной почты уже занят. Пожалуйста, используйте другой или войдите.",
+            "serverError": "Что-то пошло не так. Попробуйте еще раз.",
+            "unknownError": "Неизвестная ошибка",
+            "signupEmailFailed": "Не удалось зарегистрироваться из-за ошибки почтового сервера. Попробуйте позже.",
+            "forgotFailed": "Не удалось отправить инструкции по сбросу. Попробуйте еще раз.",
+            "forgotAccountNotFound": "Аккаунт с таким адресом электронной почты не найден",
+            "forgotServerError": "Что-то пошло не так. Попробуйте позже",
+            "forgotInstructionsSent": "Инструкции отправлены на вашу электронную почту.",
+            "resetTokenInvalid": "Токен сброса отсутствует или недействителен. Откройте ссылку из письма еще раз.",
+            "resetExpired": "Срок действия этой ссылки истек. Запросите новую.",
+            "resetFailed": "Не удалось сбросить пароль. Попробуйте еще раз.",
+            "verificationEmailUnavailable": "Адрес электронной почты недоступен. Войдите снова.",
+            "verificationSendFailed": "Не удалось отправить письмо для подтверждения. Попробуйте еще раз.",
+            "verificationInvalid": "Код подтверждения недействителен или устарел. Попробуйте еще раз.",
+            "verificationSent": "Новое письмо для подтверждения отправлено.",
+            "sessionExpired": "Срок действия вашей сессии истек. Войдите в систему и попробуйте снова.",
+            "loginSuccess": "Вы успешно вошли в свой аккаунт",
+            "signupVerificationSent": "Письмо с подтверждением отправлено на ваш адрес электронной почты.",
+            "signupEmailNotSent": "Аккаунт создан, и вы вошли в систему, но письмо с подтверждением не удалось отправить. Повторить отправку можно на следующем экране."
+        }
+    },
+    "Common": {
+        "retry": "Повторить",
+        "breadcrumb": "Хлебные крошки",
+        "search": "Поиск",
+        "edit": "Редактировать",
+        "delete": "Удалить",
+        "loading": "Загрузка...",
+        "toggleSidebar": "Переключить боковую панель",
+        "sidebarTitle": "Боковая панель",
+        "sidebarDescription": "Боковая панель навигации"
+    },
+    "Navigation": {
+        "employees": "Сотрудники",
+        "skills": "Навыки",
+        "languages": "Языки",
+        "cvs": "Резюме",
+        "departments": "Отделы",
+        "positions": "Должности",
+        "projects": "Проекты"
+    },
+    "Errors": {
+        "NoInternet": {
+            "title": "Упс",
+            "description": "Что-то пошло не так. Мы уже работаем над устранением.\nПожалуйста, попробуйте еще раз или вернитесь назад.",
+            "actionText": "Повторить"
+        },
+        "NotFound": {
+            "title": "Страница не найдена",
+            "description": "Запрашиваемая вами страница могла быть удалена,\nизменить свое название или временно недоступна.",
+            "actionText": "На главную"
+        },
+        "MobileNotSupported": {
+            "title": "Оу",
+            "description": "Это приложение не поддерживается на мобильных устройствах.\nПожалуйста, откройте его на компьютере или планшете, чтобы продолжить."
+        }
+    },
+    "Settings": {
+        "title": "Настройки",
+        "logout": "Выйти",
+        "theme": {
+            "label": "Тема",
+            "light": "Светлая",
+            "dark": "Темная",
+            "deviceSettings": "Как на устройстве"
+        },
+        "language": {
+            "label": "Язык",
+            "english": "Английский",
+            "french": "Французский",
+            "german": "Немецкий",
+            "italian": "Итальянский",
+            "polish": "Польский",
+            "portuguese": "Португальский",
+            "russian": "Русский",
+            "spanish": "Испанский",
+            "ukrainian": "Украинский"
+        },
+        "passwordSection": {
+            "title": "Изменить пароль",
+            "currentPlaceholder": "Пароль",
+            "newPlaceholder": "Новый пароль",
+            "confirmPlaceholder": "Подтвердите пароль",
+            "submitButton": "ИЗМЕНИТЬ",
+            "submittingButton": "ИЗМЕНЕНИЕ..."
+        },
+        "validation": {
+            "passwordRequired": "Требуется ввести пароль",
+            "newPasswordRequired": "Новый пароль должен содержать не менее 6 символов",
+            "confirmPasswordRequired": "Требуется подтвердить пароль",
+            "passwordsDoNotMatch": "Пароли не совпадают"
+        },
+        "messages": {
+            "updated": "Настройки и пароль успешно обновлены.",
+            "sessionExpired": "Срок действия вашей сессии истек. Пожалуйста, войдите снова.",
+            "passwordUpdateFailed": "Не удалось обновить пароль. Пожалуйста, проверьте текущий пароль."
+        }
+    },
+    "Cvs": {
+        "title": "Резюме"
+    },
+    "Skills": {
+        "title": "Навыки",
+        "loading": "Загрузка навыков профиля...",
+        "masteryPlaceholder": "Уровень владения навыком",
+        "masteryLevels": {
+            "novice": "Новичок",
+            "advanced": "Продвинутый",
+            "competent": "Компетентный",
+            "proficient": "Опытный",
+            "expert": "Эксперт"
+        },
+        "empty": "Здесь пока нет навыков",
+        "categories": {
+            "1": "Языки программирования",
+            "2": "Фронтенд",
+            "3": "Фронтенд",
+            "4": "Фронтенд",
+            "5": "Фронтенд",
+            "6": "Фронтенд",
+            "7": "Фронтенд",
+            "8": "Фронтенд",
+            "9": "Бэкенд",
+            "10": "Бэкенд",
+            "11": "Бэкенд",
+            "12": "Бэкенд",
+            "13": "Фреймворки тестирования",
+            "14": "DevOps",
+            "15": "DevOps",
+            "16": "DevOps",
+            "17": "Системы контроля версий",
+            "18": "Документация",
+            "19": "Графические редакторы",
+            "other": "Общие навыки"
+        },
+        "actions": {
+            "add": "ДОБАВИТЬ НАВЫК",
+            "remove": "УДАЛИТЬ НАВЫКИ",
+            "cancel": "ОТМЕНА",
+            "deleteSelected": "УДАЛИТЬ ({count})"
+        },
+        "add": {
+            "title": "Добавить навык",
+            "skillPlaceholder": "Навык",
+            "allSkillsAdded": "Все доступные навыки добавлены",
+            "cancel": "ОТМЕНА",
+            "submit": "ДОБАВИТЬ",
+            "adding": "ДОБАВЛЕНИЕ...",
+            "errors": {
+                "selectSkill": "Пожалуйста, выберите навык",
+                "selectMastery": "Пожалуйста, выберите уровень владения",
+                "notFound": "Выбранный навык не найден",
+                "alreadyAdded": "Этот навык уже добавлен в ваше резюме.",
+                "failed": "Не удалось добавить навык. Попробуйте еще раз."
+            }
+        },
+        "edit": {
+            "title": "Обновить навык",
+            "skill": "Навык",
+            "mastery": "Уровень владения навыком",
+            "cancel": "ОТМЕНА",
+            "submit": "ОБНОВИТЬ",
+            "updating": "ОБНОВЛЕНИЕ...",
+            "errors": {
+                "masteryRequired": "Требуется указать уровень владения",
+                "failed": "Не удалось обновить навык. Попробуйте еще раз."
+            }
+        },
+        "delete": {
+            "titleSingular": "Удалить навык",
+            "titlePlural": "Удалить навыки",
+            "confirmationText": "Вы уверены, что хотите удалить",
+            "countSkills": "{count, plural, one {# навык} few {# навыка} many {# навыков} other {# навыков}}",
+            "questionMark": "?",
+            "cancel": "ОТМЕНА",
+            "confirm": "ПОДТВЕРДИТЬ",
+            "removing": "УДАЛЕНИЕ...",
+            "errors": {
+                "failed": "Не удалось удалить навыки. Попробуйте еще раз."
+            }
+        },
+        "admin": {
+            "name": "Имя",
+            "category": "Категория",
+            "search": "Поиск",
+            "create": "СОЗДАТЬ НАВЫК",
+            "empty": "Навыки не найдены",
+            "createTitle": "Создать навык",
+            "editTitle": "Редактировать навык",
+            "deleteTitle": "Удалить навык",
+            "skill": "Навык",
+            "duplicate": "Навык уже существует",
+            "cancel": "ОТМЕНА",
+            "save": "СОХРАНИТЬ",
+            "saving": "СОХРАНЕНИЕ...",
+            "creating": "СОЗДАНИЕ...",
+            "confirm": "ПОДТВЕРДИТЬ",
+            "deleting": "УДАЛЕНИЕ...",
+            "deleteConfirmation": "Вы уверены, что хотите удалить навык \"{name}\"?",
+            "createError": "Не удалось создать навык. Попробуйте еще раз.",
+            "updateError": "Не удалось обновить навык. Попробуйте еще раз.",
+            "deleteError": "Не удалось удалить навык. Попробуйте еще раз."
+        }
+    },
+    "CV": {
+        "tabListLabel": "Разделы резюме",
+        "tabs": {
+            "details": "ДЕТАЛИ",
+            "skills": "НАВЫКИ",
+            "projects": "ПРОЕКТЫ",
+            "preview": "ПРЕДПРОСМОТР"
+        },
+        "previewUnavailable": "Предпросмотр резюме пока недоступен.",
+        "preview": {
+            "exportPdf": "ЭКСПОРТ В PDF",
+            "education": "Образование",
+            "languageProficiency": "Знание языков",
+            "domains": "Домены",
+            "profile": "Профессиональный профиль",
+            "noDescription": "Описание профиля не указано.",
+            "projects": "Проекты",
+            "projectRoles": "Роли в проекте",
+            "period": "Период",
+            "responsibilities": "Обязанности",
+            "environment": "Стек технологий",
+            "tillNow": "По настоящее время",
+            "professionalSkills": "Профессиональные навыки",
+            "skills": "Группы навыков",
+            "skillName": "Навык",
+            "mastery": "Уровень владения",
+            "noSkills": "В это резюме еще не добавлены навыки."
+        },
+        "list": {
+            "create": "СОЗДАТЬ РЕЗЮМЕ",
+            "name": "Имя",
+            "education": "Образование",
+            "employee": "Сотрудник",
+            "view": "Просмотр",
+            "edit": "Редактировать",
+            "delete": "Удалить",
+            "noResults": "Резюме не найдены",
+            "empty": "У вас пока нет резюме",
+            "createError": "Не удалось создать резюме. Попробуйте еще раз.",
+            "updateError": "Не удалось обновить резюме. Попробуйте еще раз.",
+            "deleteError": "Не удалось удалить резюме. Попробуйте еще раз.",
+            "fetchError": "Не удалось загрузить резюме. Попробуйте еще раз."
+        },
+        "form": {
+            "name": "Имя",
+            "education": "Образование",
+            "description": "Описание",
+            "update": "ОБНОВИТЬ",
+            "updating": "ОБНОВЛЕНИЕ...",
+            "updateError": "Не удалось обновить резюме. Попробуйте еще раз.",
+            "createTitle": "Создать резюме",
+            "create": "СОЗДАТЬ",
+            "creating": "СОЗДАНИЕ...",
+            "updateTitle": "Обновить резюме",
+            "save": "СОХРАНИТЬ",
+            "saving": "СОХРАНЕНИЕ...",
+            "nameRequired": "Имя обязательно для заполнения",
+            "educationRequired": "Образование обязательно для заполнения",
+            "descriptionRequired": "Описание обязательно для заполнения",
+            "cancel": "ОТМЕНА",
+            "deleteTitle": "Удалить резюме",
+            "deleteConfirmation": "Вы уверены, что хотите удалить резюме \"{name}\"?",
+            "confirm": "ПОДТВЕРДИТЬ",
+            "deleting": "УДАЛЕНИЕ..."
+        },
+        "projects": {
+            "search": "Поиск",
+            "searchLabel": "Поиск проектов",
+            "noAvailableProjects": "Нет доступных проектов для добавления.",
+            "addProject": "ДОБАВИТЬ ПРОЕКТ",
+            "sortByName": "Сортировать проекты по имени ({direction})",
+            "ascending": "по возрастанию",
+            "descending": "по убыванию",
+            "name": "Имя",
+            "domain": "Домен",
+            "startDate": "Дата начала",
+            "endDate": "Дата окончания",
+            "actions": "Действия",
+            "actionsFor": "Действия для {name}",
+            "tillNow": "По настоящее время",
+            "edit": "Редактировать",
+            "remove": "Удалить",
+            "noSearchResults": "Нет проектов, соответствующих вашему запросу.",
+            "empty": "В это резюме еще не добавлены проекты.",
+            "removeTitle": "Удалить проект из резюме",
+            "removeConfirmation": "Вы уверены, что хотите удалить проект <strong>{name}</strong>?",
+            "cancel": "ОТМЕНА",
+            "removing": "УДАЛЕНИЕ...",
+            "removeError": "Не удалось удалить проект. Попробуйте еще раз.",
+            "form": {
+                "editTitle": "Редактировать проект",
+                "addTitle": "Добавить проект",
+                "cancel": "ОТМЕНА",
+                "update": "ОБНОВИТЬ",
+                "add": "ДОБАВИТЬ",
+                "updating": "ОБНОВЛЕНИЕ...",
+                "adding": "ДОБАВЛЕНИЕ...",
+                "project": "Проект",
+                "selectProject": "Выберите проект",
+                "noAvailableProjects": "Нет доступных проектов для добавления.",
+                "duplicateProjectError": "Этот проект уже добавлен в данное резюме.",
+                "domain": "Домен",
+                "startDate": "Дата начала",
+                "endDate": "Дата окончания",
+                "description": "Описание",
+                "environment": "Стек технологий",
+                "roles": "Роли",
+                "responsibilities": "Обязанности",
+                "saveError": "Не удалось сохранить проект. Попробуйте еще раз."
+            }
+        }
+    },
+    "User": {
+        "title": "Профиль пользователя",
+        "loading": "Загрузка...",
+        "email": "Электронная почта",
+        "role": "Роль",
+        "memberSince": "Участник с {date}",
+        "uploadAvatar": "Загрузить изображение аватара",
+        "avatarRequirements": "png, jpg или gif размером не более 5 МБ",
+        "firstName": "Имя",
+        "lastName": "Фамилия",
+        "department": "Отдел",
+        "position": "Должность",
+        "selectDepartment": "Выберите отдел",
+        "selectPosition": "Выберите должность",
+        "verifyEmail": "ПОДТВЕРДИТЬ ПОЧТУ",
+        "sendingVerification": "ОТПРАВКА...",
+        "update": "ОБНОВИТЬ",
+        "updating": "ОБНОВЛЕНИЕ...",
+        "errors": {
+            "firstNameRequired": "Имя обязательно для заполнения",
+            "lastNameRequired": "Фамилия обязательна для заполнения",
+            "departmentRequired": "Отдел обязателен для заполнения",
+            "positionRequired": "Должность обязательна для заполнения",
+            "firstNameTooLong": "Имя не должно быть длиннее 100 символов",
+            "lastNameTooLong": "Фамилия не должна быть длиннее 100 символов",
+            "unsupportedFileType": "Неподдерживаемый тип файла",
+            "fileTooLarge": "Размер файла не должен превышать 5 МБ"
+        },
+        "messages": {
+            "profileUpdated": "Профиль успешно обновлен",
+            "updateFailed": "Не удалось сохранить профиль. Попробуйте еще раз.",
+            "updateForbidden": "Вы можете изменять только свой профиль.",
+            "avatarUploaded": "Аватар успешно загружен",
+            "avatarUploadFailed": "Не удалось загрузить фото профиля. Попробуйте еще раз.",
+            "verificationSent": "Письмо для подтверждения отправлено",
+            "verificationFailed": "Не удалось отправить письмо для подтверждения"
+        },
+        "nav": {
+            "viewProfile": "Посмотреть профиль",
+            "profile": "Профиль",
+            "settings": "Настройки",
+            "logout": "Выйти"
+        }
+    },
+    "Users": {
+        "title": "Сотрудники",
+        "createUser": "Добавить пользователя",
+        "dialog": {
+            "description": "Создание нового пользователя",
+            "password": "Пароль",
+            "cancel": "Отмена",
+            "submit": "Создать",
+            "close": "Закрыть",
+            "employee": "Сотрудник",
+            "admin": "Администратор",
+            "updateTitle": "Обновить пользователя",
+            "updateDescription": "Обновление существующего пользователя",
+            "update": "Обновить",
+            "view": "Просмотр",
+            "delete": "Удалить",
+            "deleteTitle": "Удалить пользователя",
+            "deleteDescription": "Вы уверены, что хотите удалить пользователя <strong>{name}</strong>?",
+            "confirm": "Подтвердить",
+            "deleting": "Удаление..."
+        },
+        "messages": {
+            "createForbidden": "Создавать пользователей может только администратор.",
+            "createFailed": "Не удалось создать пользователя. Попробуйте еще раз.",
+            "updateForbidden": "Обновлять пользователей может только администратор.",
+            "updateFailed": "Не удалось обновить пользователя. Попробуйте еще раз.",
+            "deleteForbidden": "Удалять пользователей может только администратор.",
+            "deleteSelfForbidden": "Нельзя удалить собственную учетную запись.",
+            "deleteFailed": "Не удалось удалить пользователя. Попробуйте еще раз."
+        },
+        "loading": "Загрузка пользователей...",
+        "noResults": "Нет результатов",
+        "columns": {
+            "avatar": "Аватар",
+            "firstName": "Имя",
+            "lastName": "Фамилия",
+            "email": "Электронная почта",
+            "department": "Отдел",
+            "position": "Должность",
+            "sortBy": "Сортировать по: {column}",
+            "openMenu": "Открыть меню"
+        }
+    },
+    "Pagination": {
+        "previous": "Назад",
+        "next": "Вперед",
+        "label": "Пагинация",
+        "previousLabel": "Перейти на предыдущую страницу",
+        "nextLabel": "Перейти на следующую страницу",
+        "morePages": "Больше страниц"
+    },
+    "Languages": {
+        "title": "Языки",
+        "currentLanguages": "Текущие языки",
+        "empty": "Языки еще не добавлены.",
+        "proficiencyPlaceholder": "Уровень владения",
+        "proficiencyLevels": {
+            "A1": "A1 - Начальный",
+            "A2": "A2 - Элементарный",
+            "B1": "B1 - Средний",
+            "B2": "B2 - Выше среднего",
+            "C1": "C1 - Продвинутый",
+            "C2": "C2 - В совершенстве",
+            "Native": "Родной язык"
+        },
+        "actions": {
+            "add": "ДОБАВИТЬ ЯЗЫК",
+            "remove": "УДАЛИТЬ ЯЗЫКИ",
+            "cancel": "ОТМЕНА",
+            "deleteSelected": "УДАЛИТЬ ({count})"
+        },
+        "add": {
+            "title": "Добавить язык",
+            "languagePlaceholder": "Язык",
+            "allLanguagesAdded": "Все доступные языки добавлены",
+            "cancel": "ОТМЕНА",
+            "submit": "ДОБАВИТЬ",
+            "adding": "ДОБАВЛЕНИЕ...",
+            "errors": {
+                "failed": "Не удалось добавить язык. Попробуйте еще раз."
+            }
+        },
+        "edit": {
+            "title": "Обновить язык",
+            "language": "Язык",
+            "proficiency": "Уровень владения",
+            "cancel": "ОТМЕНА",
+            "submit": "ОБНОВИТЬ",
+            "updating": "ОБНОВЛЕНИЕ...",
+            "errors": {
+                "failed": "Не удалось обновить язык. Попробуйте еще раз."
+            }
+        },
+        "delete": {
+            "titleSingular": "Удалить язык",
+            "titlePlural": "Удалить языки",
+            "confirmationText": "Вы уверены, что хотите удалить",
+            "countLanguages": "{count, plural, one {# язык} few {# языка} many {# языков} other {# языков}}",
+            "questionMark": "?",
+            "cancel": "ОТМЕНА",
+            "confirm": "ПОДТВЕРДИТЬ",
+            "removing": "УДАЛЕНИЕ...",
+            "errors": {
+                "failed": "Не удалось удалить языки. Попробуйте еще раз."
+            }
+        },
+        "admin": {
+            "columns": {
+                "name": "Название",
+                "isoCode": "ISO",
+                "nativeName": "Нативное название"
+            },
+            "search": "Поиск",
+            "createButton": "СОЗДАТЬ ЯЗЫК",
+            "empty": "Языки не найдены",
+            "create": {
+                "title": "Создать язык",
+                "languageName": "Название языка",
+                "languagePlaceholder": "напр. Английский",
+                "isoCode": "ISO",
+                "isoCodePlaceholder": "напр. en",
+                "cancel": "ОТМЕНА",
+                "create": "СОЗДАТЬ",
+                "creating": "СОЗДАНИЕ...",
+                "nativeName": "Нативное название",
+                "nativeNamePlaceholder": "Нативное название"
+            },
+            "edit": {
+                "title": "Редактировать язык",
+                "languageName": "Название языка",
+                "languagePlaceholder": "Язык",
+                "isoCode": "ISO-код",
+                "isoCodePlaceholder": "ISO2",
+                "nativeName": "Нативное название",
+                "nativeNamePlaceholder": "Нативное название",
+                "cancel": "ОТМЕНА",
+                "save": "СОХРАНИТЬ",
+                "saving": "СОХРАНЕНИЕ..."
+            },
+            "delete": {
+                "title": "Удалить язык",
+                "confirmation": "Вы уверены, что хотите удалить язык \"{name}\"?",
+                "cancel": "ОТМЕНА",
+                "confirm": "ПОДТВЕРДИТЬ",
+                "deleting": "УДАЛЕНИЕ..."
+            },
+            "errors": {
+                "duplicate": "Язык уже существует",
+                "createFailed": "Не удалось создать язык",
+                "updateFailed": "Не удалось обновить язык",
+                "invalidData": "Неверные данные языка или ISO2-код"
+            }
+        }
+    },
+    "Notifications": {
+        "success": "Успешно",
+        "error": "Ошибка",
+        "warning": "Предупреждение",
+        "info": "Информация",
+        "logoutSuccess": "Вы успешно вышли из системы.",
+        "actions": {
+            "created": "Успешно создано.",
+            "updated": "Изменения успешно сохранены.",
+            "deleted": "Успешно удалено."
+        },
+        "messages": {
+            "verificationSent": "Письмо для подтверждения отправлено.",
+            "profileUpdated": "Профиль успешно обновлён.",
+            "verificationFailed": "Не удалось отправить письмо для подтверждения."
+        }
+    },
+    "Calendar": {
+        "clear": "Сбросить",
+        "today": "Сегодня",
+        "placeholder": "ДД.ММ.ГГГГ"
+    }
+}

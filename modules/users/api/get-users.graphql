@@ -3,6 +3,20 @@ query GetUsers($params: SearchPaginationInput) {
         items {
             id
             email
+            role
+            profile {
+                first_name
+                last_name
+                avatar
+            }
+            department {
+                id
+                name
+            }
+            position {
+                id
+                name
+            }
         }
         limit
         total_pages

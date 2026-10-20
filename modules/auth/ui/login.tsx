@@ -1,53 +1,98 @@
 "use client"
 
 import Link from "next/link"
-import { useActionState } from "react"
+import { useTranslations } from "next-intl"
 
-import { login } from "../api/login"
+import { PasswordField } from "@/components/password-field"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+
+import { useLogin } from "../hooks/use-login"
+import { AuthTabs } from "./components/authTabs"
 
 export function Login() {
-    const [state, formAction, isPending] = useActionState(login, {})
+    const t = useTranslations("Auth.Login")
+    const {
+        serverError,
+        isPending,
+        register,
+        handleSubmit,
+        onSubmit,
+        errors,
+        isValid,
+    } = useLogin()
 
     return (
-        <main className="mx-auto max-w-md p-6">
-            <h1 className="mb-6 text-2xl font-semibold">Вход</h1>
-            <form className="space-y-4" action={formAction}>
-                <p className="space-y-1">
-                    <label htmlFor="email">Email</label>
-                    <input
-                        className="block w-full border px-3 py-2"
-                        id="email"
-                        name="email"
-                        type="email"
-                        required
-                    />
-                </p>
-                <p className="space-y-1">
-                    <label htmlFor="password">Пароль</label>
-                    <input
-                        className="block w-full border px-3 py-2"
-                        id="password"
-                        name="password"
-                        type="password"
-                        required
-                    />
-                </p>
-                {state.error && (
-                    <p className="text-sm text-red-700" role="alert">
-                        {state.error}
+        <main className="min-h-screen w-full flex flex-col items-center justify-center transition-colors duration-300 relative bg-background text-foreground">
+            <AuthTabs activeTab="signin" />
+
+            <div className="w-full max-w-md px-6 flex flex-col items-center mt-12">
+                <div className="text-center mb-10">
+                    <h1 className="text-3xl font-semibold tracking-tight mb-2">
+                        {t("title")}
+                    </h1>
+                    <p className="text-sm text-muted-foreground">
+                        {t("subtitle")}
                     </p>
-                )}
-                <button
-                    className="border px-4 py-2"
-                    type="submit"
-                    disabled={isPending}
+                </div>
+
+                <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    className="w-full flex flex-col items-center space-y-8"
+                    noValidate
                 >
-                    {isPending ? "Входим..." : "Войти"}
-                </button>
-            </form>
-            <p className="mt-4 text-sm">
-                Нет аккаунта? <Link href="/register">Зарегистрироваться</Link>
-            </p>
+                    <div className="w-full">
+                        <Input
+                            type="email"
+                            label={t("emailPlaceholder")}
+                            placeholder={t("emailPlaceholder")}
+                            error={errors.email?.message}
+                            aria-invalid={!!errors.email}
+                            autoComplete="email"
+                            {...register("email")}
+                        />
+                    </div>
+
+                    <div className="w-full">
+                        <PasswordField
+                            label={t("passwordPlaceholder")}
+                            placeholder={t("passwordPlaceholder")}
+                            error={errors.password?.message}
+                            aria-invalid={!!errors.password}
+                            autoComplete="current-password"
+                            {...register("password")}
+                        />
+                    </div>
+
+                    {serverError && (
+                        <p
+                            className="text-xs text-destructive text-center w-full"
+                            role="alert"
+                        >
+                            {serverError}
+                        </p>
+                    )}
+
+                    <div className="w-full flex flex-col items-center pt-2 space-y-6">
+                        <Button
+                            type="submit"
+                            variant="primary"
+                            disabled={!isValid || isPending}
+                        >
+                            {isPending
+                                ? t("submittingButton")
+                                : t("submitButton")}
+                        </Button>
+
+                        <Link
+                            href="/forgot-password"
+                            className="text-[11px] font-medium tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
+                        >
+                            {t("forgotPassword")}
+                        </Link>
+                    </div>
+                </form>
+            </div>
         </main>
     )
 }

@@ -1,0 +1,756 @@
+{
+    "Admin": {
+        "departments": {
+            "title": "Departments",
+            "createButton": "CREATE DEPARTMENT",
+            "empty": "No departments found",
+            "columns": {
+                "name": "Name"
+            },
+            "create": {
+                "title": "Create department",
+                "departmentName": "Department",
+                "departmentPlaceholder": "Department name",
+                "alreadyExists": "Department already exists",
+                "required": "Department name is required"
+            },
+            "edit": {
+                "title": "Edit department",
+                "departmentName": "Department",
+                "departmentPlaceholder": "Department name"
+            },
+            "delete": {
+                "title": "Delete department",
+                "confirmation": "Are you sure you want to delete department \"{name}\"?",
+                "inUseError": "Department cannot be deleted because it is currently in use"
+            }
+        },
+        "positions": {
+            "title": "Positions",
+            "createButton": "CREATE POSITION",
+            "empty": "No positions found",
+            "columns": {
+                "name": "Name"
+            },
+            "create": {
+                "title": "Create position",
+                "positionName": "Position",
+                "positionPlaceholder": "Position name",
+                "alreadyExists": "Position already exists",
+                "required": "Position name is required"
+            },
+            "edit": {
+                "title": "Edit position",
+                "positionName": "Position",
+                "positionPlaceholder": "Position name"
+            },
+            "delete": {
+                "title": "Delete position",
+                "confirmation": "Are you sure you want to delete position \"{name}\"?",
+                "inUseError": "Position cannot be deleted because it is currently in use"
+            }
+        },
+        "projects": {
+            "title": "Projects",
+            "empty": "No projects found",
+            "search": "Search projects",
+            "searchLabel": "Search projects",
+            "createProject": "CREATE PROJECT",
+            "edit": "Edit",
+            "remove": "Delete",
+            "removeTitle": "Delete project",
+            "removeConfirmation": "Are you sure you want to delete project \"{name}\"?",
+            "cancel": "CANCEL",
+            "removing": "DELETING...",
+            "removeError": "Failed to delete project. Please try again.",
+            "form": {
+                "createTitle": "Create project",
+                "updateTitle": "Update project",
+                "name": "Name",
+                "domain": "Domain",
+                "startDate": "Start date",
+                "endDate": "End Date",
+                "description": "Description",
+                "environment": "Environment",
+                "addEnvironment": "Add environment value",
+                "removeEnvironment": "Remove {value}",
+                "create": "CREATE",
+                "creating": "CREATING...",
+                "update": "UPDATE",
+                "saving": "UPDATING...",
+                "cancel": "CANCEL",
+                "saveError": "Failed to save project. Please try again."
+            }
+        },
+        "common": {
+            "search": "Search",
+            "edit": "Edit",
+            "delete": "Delete",
+            "cancel": "CANCEL",
+            "confirm": "CONFIRM",
+            "save": "SAVE",
+            "saving": "SAVING...",
+            "create": "CREATE",
+            "creating": "CREATING...",
+            "deleting": "DELETING..."
+        },
+        "skills": {
+            "title": "Skills",
+            "createButton": "CREATE SKILL",
+            "empty": "No skills found",
+            "columns": {
+                "name": "Name",
+                "category": "Category"
+            },
+            "create": {
+                "title": "Create skill",
+                "skillName": "Skill",
+                "skillPlaceholder": "Skill",
+                "category": "Category",
+                "categoryPlaceholder": "Category",
+                "alreadyExists": "Skill already exists"
+            },
+            "edit": {
+                "title": "Edit skill",
+                "skillName": "Skill Name",
+                "category": "Category"
+            },
+            "delete": {
+                "title": "Delete skill",
+                "confirmation": "Are you sure you want to delete skill \"{name}\"?"
+            }
+        },
+        "languages": {
+            "title": "Languages",
+            "createButton": "CREATE LANGUAGE",
+            "empty": "No languages found",
+            "columns": {
+                "name": "Name",
+                "iso2": "ISO Code"
+            },
+            "create": {
+                "title": "Create language",
+                "languageName": "Language Name",
+                "languagePlaceholder": "e.g. English",
+                "iso2": "ISO Code",
+                "iso2Placeholder": "e.g. en",
+                "alreadyExists": "Language already exists",
+                "invalidIso2": "ISO2 code must be exactly 2 characters"
+            },
+            "edit": {
+                "title": "Edit language",
+                "languageName": "Language Name",
+                "iso2": "ISO Code"
+            },
+            "delete": {
+                "title": "Delete language",
+                "confirmation": "Are you sure you want to delete language \"{name}\"?"
+            }
+        }
+    },
+    "Auth": {
+        "EmailVerification": {
+            "title": "Email verification",
+            "subtitle": "Enter the verification code we sent to",
+            "fallbackEmail": "your email",
+            "submitButton": "CONFIRM",
+            "submittingButton": "CHECKING...",
+            "resendButton": "RESEND EMAIL",
+            "resendingButton": "SENDING...",
+            "laterButton": "LATER"
+        },
+        "ForgotPassword": {
+            "title": "Forgot password",
+            "subtitle": "We will send you an email with further instructions",
+            "emailLabel": "Email",
+            "emailPlaceholder": "example@email.com",
+            "submitButton": "RESET PASSWORD",
+            "submittingButton": "SENDING...",
+            "cancelButton": "Cancel"
+        },
+        "Login": {
+            "title": "Welcome back",
+            "subtitle": "Hello again! Sign in to continue",
+            "emailPlaceholder": "Email",
+            "passwordPlaceholder": "Password",
+            "submitButton": "SIGN IN",
+            "submittingButton": "SIGNING IN...",
+            "forgotPassword": "FORGOT PASSWORD",
+            "hidePassword": "Hide password",
+            "showPassword": "Show password"
+        },
+        "ResetPassword": {
+            "title": "Reset password",
+            "subtitle": "Here you should write a new password and confirm it",
+            "newPasswordPlaceholder": "New password",
+            "confirmPasswordPlaceholder": "Confirm password",
+            "submitButton": "SUBMIT",
+            "submittingButton": "SUBMITTING...",
+            "goToSignIn": "GO TO SIGN IN"
+        },
+        "Signup": {
+            "title": "Sign up now",
+            "subtitle": "Welcome! Sign up to continue",
+            "emailPlaceholder": "Email",
+            "passwordPlaceholder": "Password",
+            "confirmPasswordPlaceholder": "Confirm Password",
+            "submitButton": "CREATE ACCOUNT",
+            "submittingButton": "CREATING...",
+            "haveAccount": "I HAVE AN ACCOUNT"
+        },
+        "Tabs": {
+            "signIn": "SIGN IN",
+            "signup": "SIGN UP"
+        },
+        "validation": {
+            "emailRequired": "Email is required",
+            "invalidEmail": "Please enter a valid email address",
+            "passwordRequired": "Password is required",
+            "passwordMin": "Password must be at least 6 characters long",
+            "confirmPassword": "Please confirm your password",
+            "passwordsDoNotMatch": "Passwords do not match",
+            "codeLength": "Verification code must be exactly 6 digits.",
+            "codeDigits": "Verification code must contain only numbers."
+        },
+        "messages": {
+            "loginRequired": "Email and password are required.",
+            "loginFailed": "Failed to sign in. Please check your email and password.",
+            "signupRequired": "Please fill in all fields.",
+            "passwordsDoNotMatch": "Passwords do not match.",
+            "emailAlreadyTaken": "This email is already taken. Please use a different one or log in.",
+            "serverError": "Something went wrong. Please try again.",
+            "unknownError": "Unknown error",
+            "signupEmailFailed": "Failed to sign up due to mail server error. Please try again later.",
+            "forgotFailed": "Failed to send reset instructions. Please try again.",
+            "forgotAccountNotFound": "No account found with this email address",
+            "forgotServerError": "Something went wrong. Please try again later",
+            "forgotInstructionsSent": "Instructions have been sent to your email.",
+            "resetTokenInvalid": "Reset token is missing or invalid. Open the link from your email again.",
+            "resetExpired": "This reset link has expired. Please request a new one.",
+            "resetFailed": "Failed to reset password. Please try again.",
+            "verificationEmailUnavailable": "Email address is unavailable. Please sign in again.",
+            "verificationSendFailed": "We couldn't send the verification email. Please try again.",
+            "verificationInvalid": "The verification code is invalid or has expired. Please try again.",
+            "verificationSent": "A new verification email has been sent.",
+            "sessionExpired": "Your session expired. Please sign in and try again.",
+            "loginSuccess": "You have successfully logged in to your account",
+            "signupVerificationSent": "A confirmation email has been sent to your email address.",
+            "signupEmailNotSent": "Your account was created and you are signed in, but the verification email could not be sent. You can try again on the next screen."
+        }
+    },
+    "Common": {
+        "retry": "Retry",
+        "breadcrumb": "Breadcrumb",
+        "search": "Search",
+        "edit": "Edit",
+        "delete": "Delete",
+        "loading": "Loading...",
+        "toggleSidebar": "Toggle sidebar",
+        "sidebarTitle": "Sidebar",
+        "sidebarDescription": "Navigation sidebar"
+    },
+    "Navigation": {
+        "employees": "Employees",
+        "skills": "Skills",
+        "languages": "Languages",
+        "cvs": "CVs",
+        "departments": "Departments",
+        "positions": "Positions",
+        "projects": "Projects"
+    },
+    "Errors": {
+        "NoInternet": {
+            "title": "Oops",
+            "description": "Something went wrong. We're already working on fixing it.\nPlease try again or go back.",
+            "actionText": "Retry"
+        },
+        "NotFound": {
+            "title": "Page Not Found",
+            "description": "The page you are looking for might have been removed,\nhad its name changed, or is temporarily unavailable.",
+            "actionText": "Go Home"
+        },
+        "MobileNotSupported": {
+            "title": "Oops",
+            "description": "This app isn't supported on mobile devices.\nPlease open it on a desktop or tablet to continue."
+        }
+    },
+    "Settings": {
+        "title": "Settings",
+        "logout": "Logout",
+        "theme": {
+            "label": "Theme",
+            "light": "Light",
+            "dark": "Dark",
+            "deviceSettings": "Device settings"
+        },
+        "language": {
+            "label": "Language",
+            "english": "English",
+            "french": "French",
+            "german": "German",
+            "italian": "Italian",
+            "polish": "Polish",
+            "portuguese": "Portuguese",
+            "russian": "Russian",
+            "spanish": "Spanish",
+            "ukrainian": "Ukrainian"
+        },
+        "passwordSection": {
+            "title": "Change password",
+            "currentPlaceholder": "Password",
+            "newPlaceholder": "New Password",
+            "confirmPlaceholder": "Confirm Password",
+            "submitButton": "CHANGE",
+            "submittingButton": "CHANGING..."
+        },
+        "validation": {
+            "passwordRequired": "Password is required",
+            "newPasswordRequired": "New password must be at least 6 characters long",
+            "confirmPasswordRequired": "Confirm Password is required",
+            "passwordsDoNotMatch": "Passwords do not match"
+        },
+        "messages": {
+            "updated": "Settings and password successfully updated.",
+            "sessionExpired": "Your session has expired. Please log in again.",
+            "passwordUpdateFailed": "Failed to update password. Please check your current password."
+        }
+    },
+    "Cvs": {
+        "title": "CVs"
+    },
+    "Skills": {
+        "title": "Skills",
+        "loading": "Loading profile skills...",
+        "masteryPlaceholder": "Skill mastery",
+        "masteryLevels": {
+            "novice": "Novice",
+            "advanced": "Advanced",
+            "competent": "Competent",
+            "proficient": "Proficient",
+            "expert": "Expert"
+        },
+        "empty": "No skills here",
+        "categories": {
+            "1": "Programming languages",
+            "2": "Frontend",
+            "3": "Frontend",
+            "4": "Frontend",
+            "5": "Frontend",
+            "6": "Frontend",
+            "7": "Frontend",
+            "8": "Frontend",
+            "9": "Backend",
+            "10": "Backend",
+            "11": "Backend",
+            "12": "Backend",
+            "13": "Testing frameworks",
+            "14": "DevOps",
+            "15": "DevOps",
+            "16": "DevOps",
+            "17": "Source control systems",
+            "18": "Documentation",
+            "19": "Graphic editors",
+            "other": "General Skills"
+        },
+        "actions": {
+            "add": "ADD SKILL",
+            "remove": "REMOVE SKILLS",
+            "cancel": "CANCEL",
+            "deleteSelected": "DELETE ({count})"
+        },
+        "add": {
+            "title": "Add skill",
+            "skillPlaceholder": "Skill",
+            "allSkillsAdded": "All available skills added",
+            "cancel": "CANCEL",
+            "submit": "ADD",
+            "adding": "ADDING...",
+            "errors": {
+                "selectSkill": "Please select a skill",
+                "selectMastery": "Please select skill mastery",
+                "notFound": "Selected skill not found",
+                "alreadyAdded": "This skill has already been added to your CV.",
+                "failed": "Failed to add skill. Please try again."
+            }
+        },
+        "edit": {
+            "title": "Update skill",
+            "skill": "Skill",
+            "mastery": "Skill mastery",
+            "cancel": "CANCEL",
+            "submit": "UPDATE",
+            "updating": "UPDATING...",
+            "errors": {
+                "masteryRequired": "Skill mastery is required",
+                "failed": "Failed to update skill. Please try again."
+            }
+        },
+        "delete": {
+            "titleSingular": "Remove skill",
+            "titlePlural": "Remove skills",
+            "confirmationText": "Are you sure you want to remove",
+            "countSkills": "{count, plural, one {# skill} other {# skills}}",
+            "questionMark": "?",
+            "cancel": "CANCEL",
+            "confirm": "CONFIRM",
+            "removing": "REMOVING...",
+            "errors": {
+                "failed": "Failed to remove skills. Please try again."
+            }
+        },
+        "admin": {
+            "name": "Name",
+            "category": "Category",
+            "search": "Search",
+            "create": "CREATE SKILL",
+            "empty": "No skills found",
+            "createTitle": "Create skill",
+            "editTitle": "Edit skill",
+            "deleteTitle": "Delete skill",
+            "skill": "Skill",
+            "duplicate": "Skill already exists",
+            "cancel": "CANCEL",
+            "save": "SAVE",
+            "saving": "SAVING...",
+            "creating": "CREATING...",
+            "confirm": "CONFIRM",
+            "deleting": "DELETING...",
+            "deleteConfirmation": "Are you sure you want to delete skill \"{name}\"?",
+            "createError": "Failed to create skill. Please try again.",
+            "updateError": "Failed to update skill. Please try again.",
+            "deleteError": "Failed to delete skill. Please try again."
+        }
+    },
+    "CV": {
+        "tabListLabel": "CV sections",
+        "tabs": {
+            "details": "DETAILS",
+            "skills": "SKILLS",
+            "projects": "PROJECTS",
+            "preview": "PREVIEW"
+        },
+        "previewUnavailable": "Resume preview is not available yet.",
+        "preview": {
+            "exportPdf": "EXPORT PDF",
+            "education": "Education",
+            "languageProficiency": "Language proficiency",
+            "domains": "Domains",
+            "profile": "Professional profile",
+            "noDescription": "No profile description provided.",
+            "projects": "Projects",
+            "projectRoles": "Project roles",
+            "period": "Period",
+            "responsibilities": "Responsibilities",
+            "environment": "Environment",
+            "tillNow": "Present",
+            "professionalSkills": "Professional skills",
+            "skills": "Skill groups",
+            "skillName": "Skill",
+            "mastery": "Proficiency",
+            "noSkills": "No skills have been added to this CV yet."
+        },
+        "list": {
+            "create": "CREATE CV",
+            "name": "Name",
+            "education": "Education",
+            "employee": "Employee",
+            "view": "View",
+            "edit": "Edit",
+            "delete": "Delete",
+            "noResults": "No CVs found",
+            "empty": "You have no CVs yet",
+            "createError": "Failed to create CV. Please try again.",
+            "updateError": "Failed to update CV. Please try again.",
+            "deleteError": "Failed to delete CV. Please try again.",
+            "fetchError": "Failed to load CV. Please try again."
+        },
+        "form": {
+            "name": "Name",
+            "education": "Education",
+            "description": "Description",
+            "update": "UPDATE",
+            "updating": "UPDATING...",
+            "updateError": "Failed to update CV. Please try again.",
+            "createTitle": "Create CV",
+            "create": "CREATE",
+            "creating": "CREATING...",
+            "updateTitle": "Update CV",
+            "save": "SAVE",
+            "saving": "SAVING...",
+            "nameRequired": "Name is required",
+            "educationRequired": "Education is required",
+            "descriptionRequired": "Description is required",
+            "cancel": "CANCEL",
+            "deleteTitle": "Delete CV",
+            "deleteConfirmation": "Are you sure you want to delete CV \"{name}\"?",
+            "confirm": "CONFIRM",
+            "deleting": "DELETING..."
+        },
+        "projects": {
+            "search": "Search",
+            "searchLabel": "Search projects",
+            "noAvailableProjects": "There are no available projects to add.",
+            "addProject": "ADD PROJECT",
+            "sortByName": "Sort projects by name ({direction})",
+            "ascending": "ascending",
+            "descending": "descending",
+            "name": "Name",
+            "domain": "Domain",
+            "startDate": "Start Date",
+            "endDate": "End Date",
+            "actions": "Actions",
+            "actionsFor": "Actions for {name}",
+            "tillNow": "Till now",
+            "edit": "Edit",
+            "remove": "Remove",
+            "noSearchResults": "No projects match your search.",
+            "empty": "No projects have been added to this CV yet.",
+            "removeTitle": "Remove CV project",
+            "removeConfirmation": "Are you sure you want to remove project <strong>{name}</strong>?",
+            "cancel": "CANCEL",
+            "removing": "REMOVING...",
+            "removeError": "Failed to remove project. Please try again.",
+            "form": {
+                "editTitle": "Edit project",
+                "addTitle": "Add project",
+                "cancel": "CANCEL",
+                "update": "UPDATE",
+                "add": "ADD",
+                "updating": "UPDATING...",
+                "adding": "ADDING...",
+                "project": "Project",
+                "selectProject": "Select a project",
+                "noAvailableProjects": "There are no projects available to add.",
+                "duplicateProjectError": "This project has already been added to this CV.",
+                "domain": "Domain",
+                "startDate": "Start date",
+                "endDate": "End date",
+                "description": "Description",
+                "environment": "Environment",
+                "roles": "Roles",
+                "responsibilities": "Responsibilities",
+                "saveError": "Failed to save project. Please try again."
+            }
+        }
+    },
+    "User": {
+        "title": "User Profile",
+        "loading": "Loading...",
+        "email": "Email",
+        "role": "Role",
+        "memberSince": "A member since {date}",
+        "uploadAvatar": "Upload avatar image",
+        "avatarRequirements": "png, jpg or gif no more than 5MB",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "department": "Department",
+        "position": "Position",
+        "selectDepartment": "Select department",
+        "selectPosition": "Select position",
+        "verifyEmail": "VERIFY EMAIL",
+        "sendingVerification": "SENDING...",
+        "update": "UPDATE",
+        "updating": "UPDATING...",
+        "errors": {
+            "firstNameRequired": "First name is required",
+            "lastNameRequired": "Last name is required",
+            "departmentRequired": "Department is required",
+            "positionRequired": "Position is required",
+            "firstNameTooLong": "First name must be 100 characters or fewer",
+            "lastNameTooLong": "Last name must be 100 characters or fewer",
+            "unsupportedFileType": "Unsupported file type",
+            "fileTooLarge": "File size must not exceed 5 MB"
+        },
+        "messages": {
+            "profileUpdated": "Profile updated successfully",
+            "updateFailed": "Could not save your profile. Please try again.",
+            "updateForbidden": "You can only update your own profile.",
+            "avatarUploaded": "Avatar uploaded successfully",
+            "avatarUploadFailed": "Could not upload your profile photo. Please try again.",
+            "verificationSent": "Verification email has been sent",
+            "verificationFailed": "Failed to send verification email"
+        },
+        "nav": {
+            "viewProfile": "View profile",
+            "profile": "Profile",
+            "settings": "Settings",
+            "logout": "Log out"
+        }
+    },
+    "Users": {
+        "title": "Employees",
+        "createUser": "Create user",
+        "dialog": {
+            "description": "Create a new user",
+            "password": "Password",
+            "cancel": "Cancel",
+            "submit": "Create",
+            "close": "Close",
+            "employee": "Employee",
+            "admin": "Admin",
+            "updateTitle": "Update user",
+            "updateDescription": "Update an existing user",
+            "update": "Update",
+            "view": "View",
+            "delete": "Delete",
+            "deleteTitle": "Delete user",
+            "deleteDescription": "Are you sure you want to delete user <strong>{name}</strong>?",
+            "confirm": "Confirm",
+            "deleting": "Deleting..."
+        },
+        "messages": {
+            "createForbidden": "Only an administrator can create users.",
+            "createFailed": "Could not create the user. Please try again.",
+            "updateForbidden": "Only an administrator can update users.",
+            "updateFailed": "Could not update the user. Please try again.",
+            "deleteForbidden": "Only an administrator can delete users.",
+            "deleteSelfForbidden": "You cannot delete your own account.",
+            "deleteFailed": "Could not delete the user. Please try again."
+        },
+        "loading": "Loading users...",
+        "noResults": "No results",
+        "columns": {
+            "avatar": "Avatar",
+            "firstName": "First Name",
+            "lastName": "Last Name",
+            "email": "Email",
+            "department": "Department",
+            "position": "Position",
+            "sortBy": "Sort by {column}",
+            "openMenu": "Open menu"
+        }
+    },
+    "Pagination": {
+        "previous": "Previous",
+        "next": "Next",
+        "label": "Pagination",
+        "previousLabel": "Go to previous page",
+        "nextLabel": "Go to next page",
+        "morePages": "More pages"
+    },
+    "Languages": {
+        "title": "Languages",
+        "currentLanguages": "Current languages",
+        "empty": "No languages added yet.",
+        "proficiencyPlaceholder": "Proficiency level",
+        "proficiencyLevels": {
+            "A1": "A1 - Beginner",
+            "A2": "A2 - Elementary",
+            "B1": "B1 - Intermediate",
+            "B2": "B2 - Upper intermediate",
+            "C1": "C1 - Advanced",
+            "C2": "C2 - Proficient",
+            "Native": "Native speaker"
+        },
+        "actions": {
+            "add": "ADD LANGUAGE",
+            "remove": "REMOVE LANGUAGES",
+            "cancel": "CANCEL",
+            "deleteSelected": "DELETE ({count})"
+        },
+        "add": {
+            "title": "Add language",
+            "languagePlaceholder": "Language",
+            "allLanguagesAdded": "All available languages added",
+            "cancel": "CANCEL",
+            "submit": "ADD",
+            "adding": "ADDING...",
+            "errors": {
+                "failed": "Failed to add language. Please try again."
+            }
+        },
+        "edit": {
+            "title": "Update language",
+            "language": "Language",
+            "proficiency": "Proficiency level",
+            "cancel": "CANCEL",
+            "submit": "UPDATE",
+            "updating": "UPDATING...",
+            "errors": {
+                "failed": "Failed to update language. Please try again."
+            }
+        },
+        "delete": {
+            "titleSingular": "Remove language",
+            "titlePlural": "Remove languages",
+            "confirmationText": "Are you sure you want to remove",
+            "countLanguages": "{count, plural, one {# language} other {# languages}}",
+            "questionMark": "?",
+            "cancel": "CANCEL",
+            "confirm": "CONFIRM",
+            "removing": "REMOVING...",
+            "errors": {
+                "failed": "Failed to remove languages. Please try again."
+            }
+        },
+        "admin": {
+            "columns": {
+                "name": "Name",
+                "isoCode": "ISO",
+                "nativeName": "Native name"
+            },
+            "search": "Search",
+            "createButton": "CREATE LANGUAGE",
+            "empty": "No languages found",
+            "create": {
+                "title": "Create language",
+                "languageName": "Language Name",
+                "languagePlaceholder": "e.g. English",
+                "isoCode": "ISO",
+                "isoCodePlaceholder": "e.g. en",
+                "cancel": "CANCEL",
+                "create": "CREATE",
+                "creating": "CREATING...",
+                "nativeName": "Native name",
+                "nativeNamePlaceholder": "Native name"
+            },
+            "edit": {
+                "title": "Edit language",
+                "languageName": "Language Name",
+                "languagePlaceholder": "Language",
+                "isoCode": "ISO Code",
+                "isoCodePlaceholder": "ISO2",
+                "nativeName": "Native name",
+                "nativeNamePlaceholder": "Native name",
+                "cancel": "CANCEL",
+                "save": "SAVE",
+                "saving": "SAVING..."
+            },
+            "delete": {
+                "title": "Delete language",
+                "confirmation": "Are you sure you want to delete language \"{name}\"?",
+                "cancel": "CANCEL",
+                "confirm": "CONFIRM",
+                "deleting": "DELETING..."
+            },
+            "errors": {
+                "duplicate": "Language already exists",
+                "createFailed": "Failed to create language",
+                "updateFailed": "Failed to update language",
+                "invalidData": "Invalid language data or ISO2 code"
+            }
+        }
+    },
+    "Notifications": {
+        "success": "Success",
+        "error": "Error",
+        "warning": "Warning",
+        "info": "Info",
+        "logoutSuccess": "You have successfully logged out.",
+        "actions": {
+            "created": "Created successfully.",
+            "updated": "Changes saved successfully.",
+            "deleted": "Deleted successfully."
+        },
+        "messages": {
+            "verificationSent": "Verification email has been sent.",
+            "profileUpdated": "Profile updated successfully.",
+            "verificationFailed": "Failed to send verification email."
+        }
+    },
+    "Calendar": {
+        "clear": "Clear",
+        "today": "Today",
+        "placeholder": "DD.MM.YYYY"
+    }
+}

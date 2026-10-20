@@ -1,13 +1,17 @@
-import { getUsers } from "../api/get-users"
+import { type PaginationSearchParams } from "@/lib/pagination-search-params"
 
-export async function UsersPage() {
-    const { users } = await getUsers(10, 1, "")
+import { UsersList } from "./users-list"
 
+type Props = PaginationSearchParams
+
+export function UsersPage({ limit, page, search, sortBy, sortOrder }: Props) {
     return (
-        <ul>
-            {users.map((user) => (
-                <li key={user.id}>{user.email}</li>
-            ))}
-        </ul>
+        <UsersList
+            limit={limit}
+            page={page}
+            search={search}
+            sortBy={sortBy}
+            sortOrder={sortOrder}
+        />
     )
 }
